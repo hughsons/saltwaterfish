@@ -1,0 +1,267 @@
+{% include 'admin_header.htm' %}
+{% load tagsfilter %}
+<div style="clear:both" class="white-bg">
+<div style="clear:both; padding-bottom:10px" class="content-bg">
+<table width="100%" border="0">
+  <tr>
+    <td align="left" valign="top"  style="padding-left:10px" class="left-text"><div style="clear:both" class="blue-border-new">
+<div style="clear:both" class="blue-bg-header-new"><div align="center" style="height: 30px;
+	line-height:30px;">Orders</div>
+</div>
+<div style="clear:both" class="resources">
+  
+
+
+
+<div style="clear:both; width:207px" ></div>
+{% for linkitem in order_links %}
+<div style="clear:both; width:187px; padding-top:5px; padding-left:5px;">
+<div style="float:left; padding-top:3px;"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div style="float:left"><a href="/vieworders?order_status={{linkitem.id}}&page=1" >{{linkitem.statustext}}</a></div>
+</div>
+{% endfor %}
+ 
+
+ 
+<div style="clear:both; width:187px; padding-top:5px; padding-left:5px;">
+<div style="float:left; padding-top:3px;"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div style="float:left"><a href="/giftcertificates?page=1"  >Gift Certificates</a></div>
+
+
+</div>
+<div style="clear:both; width:187px; padding-top:5px; padding-left:5px;">
+<div style="float:left; padding-top:3px;"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div style="float:left"><a href="/ordersstatus"  >Order Status </a></div>
+
+
+
+</div>
+<div style="clear:both; width:187px; padding-top:5px; padding-left:5px;">
+<div style="float:left; padding-top:3px;"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div style="float:left"><a href="/exportorders"  >Export </a></div>
+
+
+
+</div>
+</div>
+
+
+</div></td>
+    <td style="width:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+    <td>
+	<table width="100%" border="0">
+  <tr>
+    <td class="left-text" style="padding-top:10px;">Orders > New </td>
+  </tr>
+  <tr>
+    <td style="padding-bottom:2px; padding-top:0px;">
+	<div style="float:left" class="left-text1"> Orders New </div>
+	<div style="float:right; margin-right:15px">
+<div class="search1">
+<div style="float:left; width:230px;"><input name="Input" type="text"  placeholder="Search saltwaterfish.com"/></div>
+<div style="float:left; width:69px;"><input type="submit" name="Submit"  value="Search" /></div>
+</div>
+</div>	</td>
+  </tr>
+   <tr>
+    </tr>
+      
+  <tr>
+    <td style="width:763px; padding-top:10px"><div>
+
+<div style="clear:both; margin-top:9px; margin-bottom:19px" class="gray-line">&nbsp;</div>
+
+<div style="clear:both; padding-top:0px;" class="tabcontent1">
+{% if count > 101 %}
+<div style="clear:both; width:800px; height:21px; line-height:21px; " class="records">Records:<b>{{count}} </b> Page {{page_num}} of {% widthratio count 100 1 %} |&nbsp;Goto Page: <a href="/vieworders?order_status={{order_status}}&page=1">First</a> 
+{% if page_num < 2 %}
+<a href="/vieworders?order_status={{order_status}}&page=1">Previous</a>
+{% elif page_num >= 2 %}
+    <a href="/vieworders?order_status={{order_status}}&page={{page_num|add:-1}}">Previous</a>
+{% endif %}
+
+
+| <a href="/vieworders?order_status={{order_status}}&page={{page_num|add:+1}}">Next </a> &nbsp<a href="/vieworders?order_status={{order_status}}&page={% widthratio count 100 1 %}">Last</a></span>
+</div>
+ {% endif %}
+</div>
+<div style="clear:both; height:20px;">&nbsp;&nbsp;</div>
+<div style="clear:both; padding-top:0px;" class="black-border" >
+
+
+<table width="99%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td style="background-color:#ffbe00; height:28px; border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #000000;">&nbsp;</td>
+      <td class="yellow-bg1">
+	  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td style="width:128px; padding-left:10px;border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #000000;" >Invoice</td>
+    <td style="width:71px; padding-left:10px; border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #000000;">Date</td>
+    <td style=" padding-left:10px;">Name/Shipping	</td>
+  </tr>
+</table>
+</td>
+    <td class="yellow-bg1">
+	
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td style="width:128px; padding-left:10px;border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #000000;" >Delivery Date</td>
+    <td style="width:71px; padding-left:10px; border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #000000;">Details	</td>
+    <td style=" padding-left:10px;"> Weather</td>
+  </tr>
+</table></td>
+  </tr>
+ 
+{% for item in allitems %}
+ 
+<tr class="{%cycle 'rose-bg1' 'blue-bg1' %}">
+    <td align="center" valign="top" style="height:248px;   	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #000000; padding-top:15px"><input type=checkbox name=checkboxed></td>
+   <td class="{%cycle 'rose-bg1' 'blue-bg1' %}">
+   <div style="clear:both; border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #000000; "><table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td  style="width:128px; height:52px; padding-left:10px; padding-top:0px; border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #000000; " class=" new-orders-text"><span style="color: #000000; font-weight:bold;   text-decoration:underline"><a href="orderpage?oid={{item.orderid}}">{{item.invoicenum_prefix}}{{item.invoicenum}}</a></span><br />
+     TBD</td>
+    <td style="width:71px; border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #000000; height:52px; padding-left:10px; padding-top:10px;" class=" new-orders-text">{{item.date_started}}</td>
+    <td style=" padding-left:10px;  height:62px;" class=" new-orders-text">{{item.ofirstname}}  {{item.olastname}}  
+      <br />
+     {{item.oaddress}}  
+{{item.ocity}}, <br />
+{{item.ostate}} {{item.ozip}}</td>
+  </tr>
+</table></div>
+   <div  style="clear:both; height:200px; border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #000000; padding-left:5px; padding-right:5px; padding-top:5px;"><span class="style2"><b>Order Comments</b></span> 
+     <br />
+	{% for crmitems in item.orderid|truncate_chars:1 %}<br>
+    
+     <span class="style3">Cust {{crmitems.datentime}} </span>- {{crmitems.message}}
+<br />
+{% endfor %}
+  
+  
+ </div>   </td>
+    <td class="{%cycle 'rose-bg1' 'blue-bg1' %}">
+   <div style="clear:both; border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #000000; "><table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td style="width:128px; height:52px; padding-left:10px; padding-top:10px; border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #000000; " class=" new-orders-text">TBD</td>
+    <td style="width:71px; border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #000000; height:52px; padding-left:10px; padding-top:0px;" class=" new-orders-text">TBD</td>
+    <td style=" padding-left:10px;  height:62px;" class=" new-orders-text">
+	{% if order_status == "1" %}
+	<img src="http://www.weatherforyou.net/fcgi-bin/hw3/hw3.cgi?config=png&forecast=zone&alt=hwizonemicro&place=fort+lauderdale&state={{item.oshipstate}}&country={{item.oshipcountry}}&hwvbg=&hwvtc=&daysonly=3">
+	{% else %}
+	TBD
+	{% endif %}
+	</td>
+  </tr>
+</table></div>
+   <div  style="clear:both; min-height:200px; border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #000000; padding-left:5px; padding-right:5px; padding-top:5px;"><span class="style2"><b>Staff Comments</b></span><br />
+     <br />
+
+     {% for crmitems in item.orderid|truncate_chars:0 %}<br>
+    
+     <span class="style3">{{crmitems.sendername}}-{{crmitems.datentime}} </span>- {{crmitems.message}}
+<br />
+{% endfor %}
+
+</div>   </td>
+  </tr>
+
+ {% empty %}
+	<em class="formee-req">No Records</em>
+{% endfor %}
+
+   
+</table>
+
+</div>
+<div style="clear:both; height:10px;">&nbsp;</div>
+<div style="clear:both; padding-top:20px;" class="tabcontent1">
+{% if count > 101 %}
+<div style="clear:both; width:800px; height:21px; line-height:21px; " class="records">Records:<b>{{count}} </b> Page {{page_num}} of {% widthratio count 100 1 %} |&nbsp;Goto Page: <a href="/vieworders?order_status={{order_status}}&page=1">First</a> 
+{% if page_num < 2 %}
+<a href="/vieworders?order_status={{order_status}}&page=1">Previous</a>
+{% elif page_num >= 2 %}
+    <a href="/vieworders?order_status={{order_status}}&page={{page_num|add:-1}}">Previous</a>
+{% endif %}
+
+
+| <a href="/vieworders?order_status={{order_status}}&page={{page_num|add:+1}}">Next </a> &nbsp<a href="/vieworders?order_status={{order_status}}&page={% widthratio count 100 1 %}">Last</a></span>
+</div>
+ {% endif %}
+</div>
+ 
+</div>
+<div style="clear:both; height:10px;">&nbsp;</div>
+<div style="clear:both" class="bottom-grey">
+<table width="60%" border="0" cellspacing="0" cellpadding="0" align="left">
+  <tr>
+    <td>&nbsp;</td>
+    <td align="right">Batch Action:</td>
+    <td align="left" style="padding-top:5px; padding-left:5px;"><select name="" class="dropdownlist">
+    <option>With Selected Customer(s)</option>
+
+      <option>Move to Order Status...</option>
+	  {% for linkitem in order_links %}
+		 <option value="{{linkitem.id}}">{{linkitem.statustext}}</option>
+	{% endfor %}
+  
+ <option> ------------------------------</option>
+  <option>Print Invoice</option>
+ <option>Print Packing Slip</option>
+ <option>Print Picking List</option>
+  <option> ------------------------------</option>
+ <option>Delete Selected</option>
+  <option> ------------------------------</option>
+    </select></td>
+    <td style="padding-top:5px;"><img src="misc/images/apply.jpg" width="72" height="20" border="0" /></td>
+  </tr>
+</table>
+
+
+</div>
+  
+ <div style="clear:both; height:20px;">&nbsp;</div> 
+  </div>
+    </td>
+  </tr>
+</table>
+	
+	
+	
+	</td>
+  </tr>
+</table>
+</div>
+</div>
+
+
+
+
+{% include 'admin_footer.html' %}

@@ -1,0 +1,239 @@
+{% include 'header.htm' %}
+<script language="javascript" type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script language="javascript" type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/jquery.validate.min.js"></script>
+<script type="text/javascript">
+$(function() {
+   $( "#form" ).validate({
+           rules: FORM_RULES,
+		   messages: FORM_MESSAGES
+   });
+});
+
+
+FORM_RULES = {
+    '{{ form.email.html_name }}': 'required',
+    '{{ form.password.html_name }}': 'required',
+	'{{ form.first_name.html_name }}': 'required',
+	'{{ form.last_name.html_name }}': 'required',
+	'{{ form.address1.html_name }}': 'required',
+	'{{ form.city.html_name }}': 'required',
+	'{{ form.state.html_name }}': 'required',
+	'{{ form.country.html_name }}': 'required',
+	'{{ form.phone.html_name }}': 'required',
+	'{{ form.recaptcha.html_name }}': 'required'
+};
+ 
+FORM_MESSAGES = {
+    '{{ form.email.html_name }}': '*',
+    '{{ form.password.html_name }}': '*',
+	'{{ form.first_name.html_name }}': '*',
+	'{{ form.last_name.html_name }}': '*',
+	'{{ form.address1.html_name }}': '*',
+	'{{ form.city.html_name }}': '*',
+	'{{ form.state.html_name }}': '*',
+	'{{ form.country.html_name }}': '*',
+	'{{ form.phone.html_name }}': '*',
+	'{{ form.recaptcha.html_name }}': '*'
+};
+ </script>
+<div  class="gray-back-new">
+<div class="width8 float-left">&nbsp;</div>
+<div class="width226 float-left">
+<div class="grey-left-one clr">
+    <div class="padtop81">GREY AREA 
+CMS Admin Control</div>
+</div>
+<div class="height9 clr"></div>
+<div class="blue-border clr">
+<div class="blue-bg-header clr">
+My Account
+</div>
+<form name="form" id="form" action="custlogin" method="post">
+{% csrf_token %}
+<div class="my-account clr">
+<div class="height23 clr">&nbsp;&nbsp;</div>
+<div class=" " >{{ loginform.username }}</div>
+<div class="height12 clr">&nbsp;&nbsp;</div>
+<div class=" " >{{ loginform.password }}</div>
+<div class="height12 clr">&nbsp;&nbsp;</div>
+<div class="wid187 clr">
+<div class="float-left"><input type=image src="misc/images/sign-in.jpg" width="77" height="21" border="0" /></div>
+<div class="new-customer float-right"><a href="/login#forget" class="start">Forgot Password</a></div>
+</form>
+</div>
+<div class="height12 clr">&nbsp;&nbsp;</div>
+<div class="wid157 clr">
+<div class="new-customer float-left">New Customer? </div>
+<div class="start float-right"><a href="/registration" class="start">Start Here</a></div>
+
+</div>
+</div>
+
+
+</div>
+<div class="height9 clr">&nbsp;&nbsp;</div>
+<div class="blue-border clr">
+<div class="blue-bg-header clr">
+Resources
+</div>
+<div class="resources clr">
+<div class="height12 clr">&nbsp;&nbsp;</div>
+<div class="wid207 clr">
+  <select name="websites2" id="websites2" class="wid180">
+    <option name="one" value="msDropDown" selected="selected">Popular Searches</option>
+    <option  name="two" value="PrototypeCombobox">Aquacultured</option>
+    <option value="jQuery Tabs">Care Level Easy</option>
+    <option value="Common Accordion">Invert Safe</option>
+    <option value="jQuery Tabs">Light Level Low to Medium</option>
+    <option value="Common Accordion">On Sale</option>
+    <option value="Common Accordion">Reef</option>
+  </select>
+</div>
+<div class="wid187 clr padtop20">
+<div class="float-left padtop3"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div class="float-left"><a href="http://www.saltwaterfish.com/search.asp?keyword=OnSale&amp;search.x=0&amp;search.y=0" target="_blank">Deep Blue Seas Foundation</a></div>
+</div>
+<div class="wid187 clr padtop10">
+<div class="float-left padtop3"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div class="float-left"><a href="http://www.saltwaterfish.com/Returns-Guarantee_ep_78-1.html" target="_blank">Returns & Guarantee</a></div>
+</div>
+<div class="wid187 clr padtop10">
+<div class="float-left padtop3"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div class="float-left"><a href="http://www.saltwaterfish.com/Gift-Certificate_p_11.html" target="_blank">Gift Certificates</a></div>
+
+
+</div><div class="wid187 clr padtop10">
+<div class="float-left padtop3"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div class="float-left"><a href="http://www.saltwaterfish.com/Sustainability-Mandate_ep_55-1.html" target="_blank">Sustainability Mandate</a></div>
+
+
+</div><div class="wid187 clr padtop10">
+<div class="float-left padtop3"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div class="float-left"><a href="http://www.saltwaterfish.com/Shipping_ep_77-1.html" target="_blank">Shipping</a></div>
+
+
+</div><div class="wid187 clr padtop10">
+<div class="float-left padtop3"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div class="float-left"><a href="http://www.saltwaterfish.com/Free-Shipping-in-FLORIDA_ep_72-1.html" target="_blank">Free Shipping in FLORIDA</a></div>
+
+
+</div><div class="wid187 clr padtop10">
+<div class="float-left padtop3"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div class="float-left"><a href="http://www.saltwaterfish.com/Reef-Rewards_ep_43-1.html" target="_blank">Reef Rewards</a></div>
+
+
+</div><div class="wid187 clr padtop10">
+<div class="float-left padtop3"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div class="float-left"><a href="http://www.saltwaterfish.com/Acclimation_ep_48-1.html" target="_blank">Acclimation</a></div>
+
+
+</div><div class="wid187 clr padtop10">
+<div class="float-left padtop3"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div class="float-left"><a href="http://forums.saltwaterfish.com/" target="_blank">Message Board</a></div>
+
+
+</div><div class="wid187 clr padtop10">
+<div class="float-left padtop3"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div class="float-left"><a href="saltwater.htm" target="_blank">SaltWater Fish School </a></div>
+
+
+
+</div>
+
+</div>
+
+
+</div>
+
+
+</div>
+<div class="width10 float-left">&nbsp;&nbsp;</div>
+<div class="wid748 float-left">
+<div class="height12 clr"></div>
+<div  class="content-bg1 "  style="min-height:400px !important;font-size:14px;">
+   <div class="blue-bg-header " style="width:100% !important;font-size:14px;">
+Registration Form
+</div>
+
+{{ field }}
+{% if field.errors %}
+{# NOTE: must use id_NAME for jquery.validation to overwrite error label #}
+<label class='error' for='id_{{ field.name }}' generated="true">{{ field.errors|join:". " }}</label>
+{% endif %}
+<form method="POST" action="/registeruser" name="form" id="form">
+{% csrf_token %} 
+  <table border="0"  cellpadding="3" cellspacing="1" style="width:70% !important;font-size:14px;" align=center>
+  <tr>
+    <td colspan="2">{% if message or error_message %}
+      <p class="style5">{{ message }} <span class="style8 style1">{{ error_message }}</span></p>
+      {% endif %}</td></tr>
+  <tr bgcolor="#FFFFFF"><td width="68"><span class="style4">EMail</span></td>
+  <td width="435"><span class="style4">{{ form.email }} </span></td>
+  </tr>
+  <tr bgcolor="#FFFFFF"><td><span class="style4">Password</span></td>
+  <td><span class="style4">{{ form.password }} </span></td>
+  </tr>
+  <tr bgcolor="#FFFFFF"><td><span class="style4">First Name</span></td>
+  <td><span class="style4">{{ form.first_name }} </span></td>
+  </tr>
+  <tr bgcolor="#FFFFFF"><td><span class="style4">Last Name</span></td>
+  <td><span class="style4">{{ form.last_name }} </span></td>
+  </tr>
+  <tr bgcolor="#FFFFFF">
+    <td>Tax ID </td>
+    <td><span class="style4">{{ form.account_no }} </span></td>
+  </tr>
+  <tr bgcolor="#FFFFFF"><td><span class="style4">Company</span></td>
+  <td><span class="style4">{{ form.company }} </span></td>
+  </tr>
+  <tr bgcolor="#FFFFFF"><td><span class="style4">Address1</span></td>
+  <td><span class="style4">{{ form.address1 }} </span></td>
+  </tr>
+  <tr bgcolor="#FFFFFF"><td><span class="style4">Address2</span></td>
+  <td><span class="style4">{{ form.address2 }} </span></td>
+  </tr>
+  <tr bgcolor="#FFFFFF"><td><span class="style4">City</span></td>
+  <td><span class="style4">{{ form.city }} </span></td>
+  </tr>
+  <tr bgcolor="#FFFFFF"><td><span class="style4">State</span></td>
+  <td><span class="style4">{{ form.state }} </span></td>
+  </tr>
+  <tr bgcolor="#FFFFFF"><td><span class="style4">Country</span></td>
+  <td><span class="style4">{{ form.country }} </span></td>
+  </tr>
+  <tr bgcolor="#FFFFFF">
+    <td><span class="style4">Zip</span></td>
+    <td><span class="style4">{{ form.zip }}</span></td>
+  </tr>
+  <tr bgcolor="#FFFFFF">
+    <td>Phone</td>
+    <td><span class="style4">{{ form.phone }}</span></td>
+  </tr>
+  <tr bgcolor="#FFFFFF">
+    <td>Comments</td>
+  <td><span class="style4">{{ form.comments }}</span></td>
+  </tr>
+  <tr bgcolor="#FFFFFF">
+    <td colspan="2" align="center"><b><img src="{{ recaptcha }}" /></b></td>
+  </tr>
+  <tr bgcolor="#FFFFFF">
+    <td colspan="2">Please enter recaptcha value: <span class="style4">{{ form.recaptcha }}</span></td>
+  </tr>
+  <tr bgcolor="#FFFFFF"><td colspan="2"><input type="submit" name="btnSubmit" /></td></tr>
+</table>       
+</form>
+</div></div></div>
+</div>
+<div class="height12 clr"></div>
+
+
+
+
+
+
+
+</div>
+<div class="float-left width10"></div>
+
+</div>
+{% include 'footer.htm' %}

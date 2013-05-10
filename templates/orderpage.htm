@@ -1,0 +1,369 @@
+{% include 'admin_header.htm' %}
+{% load tagsfilter %}
+<link href="/misc/css4/style.css" rel="stylesheet" type="text/css" />
+<div style="clear:both" class="white-bg">
+<div style="clear:both; padding-bottom:10px" class="content-bg">
+<table width="100%" border="0">
+  <tr>
+    <td align="left" valign="top"  style="padding-left:10px" class="left-text">
+	<div style="clear:both" class="blue-border-new">
+<div style="clear:both" class="blue-bg-header-new"><div align="center" style="height: 30px;
+	line-height:30px;">Orders</div>
+</div>
+<div style="clear:both" class="resources">
+  
+
+
+
+<div style="clear:both; width:207px" ></div>
+{% for linkitem in order_links %}
+<div style="clear:both; width:187px; padding-top:6px; padding-left:5px;">
+<div style="float:left; padding-top:3px;"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div style="float:left"><a href="/vieworders?order_status={{linkitem.id}}&page=1" >{{linkitem.statustext}}</a></div>
+</div>
+{% endfor %}
+ 
+<div style="clear:both; width:187px; padding-top:6px; padding-left:5px;">
+<div style="float:left; padding-top:3px;"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div style="float:left"><a href="/ordersstatus"  >Order Status </a></div>
+</div>
+
+<div style="clear:both; width:187px; padding-top:6px; padding-left:5px;">
+<div style="float:left; padding-top:3px;"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div style="float:left"><a href="/exportorders"  >Export </a></div>
+</div>
+</div>
+
+
+</div></td>
+    <td style="width:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+    <td>
+	<table width="100%" border="0">
+  <tr>
+    <td class="left-text" style="padding-top:10px;">Orders	 > View/Edit</td>
+  </tr>
+  <tr>
+    <td style="padding-bottom:10px; padding-top:10px;">
+	<div style="float:left" class="left-text1">View/Edit</div>
+	<div style="float:right; margin-right:15px">
+<div class="search1">
+<div style="float:left; width:230px;"><input name="Input" type="text"  placeholder="Search saltwaterfish.com"/></div>
+<div style="float:left; width:69px;"><input type="submit" name="Submit"  value="Search" /></div>
+</div>
+</div>	</td>
+  </tr>
+  <tr>
+    <td style="height:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+  </tr>
+  <tr>
+  <td>
+  <div class="left-text1 style1" style="float:left">Invoice # <span>{{allitems.invoicenum_prefix}}{{allitems.invoicenum}}</span></div><div class="save_btn">
+<div style="float:left; padding-top:5px;  padding-left:5px;"><img src="images/arrow.png" width="13" height="14" /></div>
+<div style="float:left;  padding-top:2px; padding-left:5px;">Save Changes</div></div>
+  </td>
+  </tr>
+    <tr>
+    <td style="height:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+  </tr>
+  
+  <tr>
+    <td style="width:763px; padding-top:10px"><div style="clear:both; padding-top:20px;">
+<div class="clr">
+<div style=" float:left; margin-left:8px;">
+  <div class="clr order_date" style="margin-top:10px;">
+<div class="txt3" style="float:left;"><strong>Order Date:</strong> {{allitems.odate}}</div>
+ 
+</div>
+<div class="clr" style="margin-top:10px;">
+<div style="float:left;"><span class="txt3"><strong>Status:</strong></span></div>
+<div style="float:left; width:220px;"><select class="status" name="">{% for linkitem in order_links %}
+{% if allitems.order_status == linkitem.id %}
+<option value="{{linkitem.id}}" selected>{{linkitem.statustext}}</option>
+{% else %}
+ <option value="{{linkitem.id}}">{{linkitem.statustext}}</option>
+{%endif%}
+		
+	{% endfor %}</select></div>
+<div style="float:left;"><input name="" type="checkbox" value="" /></div>
+<div style="float:left;"><span class="txt3">Notify</span></div>
+
+<div style="float:left; padding-left:50px;"><span class="txt3"><strong>Label:</strong></span></div>
+<div style="float:left; width:57px;">
+<select class="label_color" name="">
+
+<option value="#000000" style="background-color: Black; width:28px;"></option>
+<option value="#808080" style="background-color: Gray;  width:28px;"></option>
+<option value="#A9A9A9" style="background-color: DarkGray;  width:28px;"></option>
+<option value="#D3D3D3" style="background-color: LightGrey;  width:28px;"></option>
+<option value="#FFFFFF" style="background-color: White;  width:28px;"></option>
+<option value="#7FFFD4" style="background-color: Aquamarine;  width:28px;"></option>
+<option value="#0000FF" style="background-color: Blue;  width:28px;"></option>
+<option value="#000080" style="background-color: Navy; width:28px;"></option>
+<option value="#800080" style="background-color: Purple;  width:28px;"></option>
+<option value="#FF1493" style="background-color: DeepPink;  width:28px;"></option>
+<option value="#EE82EE" style="background-color: Violet;  width:28px;"></option>
+<option value="#FFC0CB" style="background-color: Pink;  width:28px;"></option>
+<option value="#006400" style="background-color: DarkGreen;  width:28px;"></option>
+<option value="#008000" style="background-color: Green; width:28px;"></option>
+<option value="#9ACD32" style="background-color: YellowGreen;  width:28px;"></option>
+<option value="#FFFF00" style="background-color: Yellow;  width:28px;"></option>
+<option value="#FFA500" style="background-color: Orange;  width:28px;"></option>
+<option value="#FF0000" style="background-color: Red;  width:28px;"></option>
+<option value="#A52A2A" style="background-color: Brown;  width:28px;"></option>
+<option value="#DEB887" style="background-color: BurlyWood;  width:28px;"></option>
+<option value="#F5F5DC" style="background-color: Beige;  width:28px;"></option>
+</select></div>
+</div>
+<div class="clr">
+<div style="float:left; width:350px; margin-top:17px; margin-right:30px; margin-left:30px;">
+<div  class="clr billing_bg">
+<div style="float:left; padding-left:10px; padding-top:5px;">Billing Information</div>
+<div class="edit_btn">edit</div>
+</div>
+<div class="clr txt4" style="padding-left:30px; padding-top:5px; padding-bottom:5px;"><strong>Name :</strong>&nbsp;&nbsp;&nbsp;{{allitems.ofirstname}} {{allitems.olastname}}</div>
+<div class="clr" style="background-color:#dedede; height:1px;"></div>
+<div class="clr txt4" style="padding-left:30px; padding-top:5px; padding-bottom:5px;"><strong>Company :</strong> {{allitems.ocompany}}</div>
+<div class="clr" style="background-color:#dedede; height:1px;"></div>
+<div class="clr txt4" style="padding-left:30px; padding-top:5px; padding-bottom:5px;"><strong>Address    :</strong>{{allitems.oaddress}}<br>{{allitems.ocity}}, {{allitems.ozip}}<br>{{allitems.ostate}}, {{allitems.ocountry}}</div>
+ <div class="clr" style="background-color:#dedede; height:1px;"></div>
+ <div class="clr txt4" style="padding-left:30px; padding-top:5px; padding-bottom:5px;"><strong>Phone :</strong>&nbsp;&nbsp;&nbsp; {{allitems.ophone}}</div>
+  <div class="clr" style="background-color:#dedede; height:1px;"></div>
+   <div class="clr txt4" style="padding-left:30px; padding-top:5px; padding-bottom:12px;"><strong>Email	     :    </strong>&nbsp;&nbsp;&nbsp;  {{allitems.oemail}}&nbsp;<img src="images/msg-box.jpg" width="18" height="13" /></div>
+   <div class="clr" style="background-color:#dedede; height:1px;"></div>
+    <div class="clr txt4" style="padding-left:30px; padding-top:5px; padding-bottom:12px;"><strong>Payment  :   </strong>&nbsp; Online Credit Card</div>
+ <div class="clr" style="background-color:#dedede; height:5px;"></div>
+<div class="clr">&nbsp;</div>
+</div>
+
+<div style="float:left; width:350px; margin-top:17px;">
+<div  class="clr billing_bg">
+<div style="float:left; padding-left:10px; padding-top:5px;">Shipping Information</div>
+<div class="edit_btn">edit</div>
+</div>
+<div class="clr txt4" style="padding-left:30px; padding-top:5px; padding-bottom:5px;"><strong>Name :</strong>&nbsp;&nbsp;&nbsp;{{allitems.oshipfirstname}}, {{allitems.oshiplastname}}</div>
+<div class="clr" style="background-color:#dedede; height:1px;"></div>
+<div class="clr txt4" style="padding-left:30px; padding-top:5px; padding-bottom:5px;"><strong>Company :</strong>{{allitems.oshipcompany}}</div>
+<div class="clr" style="background-color:#dedede; height:1px;"></div>
+<div class="clr txt4" style="padding-left:30px; padding-top:5px; padding-bottom:5px;"><strong>Address    :</strong>&nbsp;&nbsp;&nbsp; {{allitems.oshipaddress}}<br>{{allitems.oshipcity}}, {{allitems.oshipzip}}<br>{{allitems.oshipstate}}, {{allitems.oshipcountry}}</div>
+ <div class="clr" style="background-color:#dedede; height:1px;"></div>
+<div class="clr txt4" style="padding-left:30px; padding-top:5px; padding-bottom:5px;"><strong>Phone :</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{allitems.oshipphone}}</div>
+  <div class="clr" style="background-color:#dedede; height:1px;"></div>
+   <div class="clr txt4" style="padding-left:30px; padding-top:5px; padding-bottom:5px;"><strong>Method	     :    </strong>&nbsp;&nbsp;&nbsp; {{allitems.oshipmethod}}</div>
+   <div class="clr" style="background-color:#dedede; height:1px;"></div>
+    <div class="clr txt4" style="padding-left:30px; padding-top:5px; padding-bottom:5px;"><strong>Payment  :   </strong>&nbsp; Online Credit Card</div>
+ <div class="clr" style="background-color:#dedede; height:5px;"></div>
+<div class="clr">&nbsp;</div>
+</div>
+
+</div>
+<div class="clr billing_bg"><div style="padding-top:5px; padding-left:10px;">Shipping</div></div>
+<div class="clr" style="margin-top:10px;">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="8%" class="txt4"><strong>Date:</strong></td>
+    <td width="11%"><input name="" type="text"  class="shipping_input" value="{{allitems.date_started}}"/></td>
+    <td width="16%"><img src="images/ship_img.png" /></td>
+    <td width="8%" class="txt4"><strong>Tracking:</strong></td>
+    <td width="16%" ><input name="" type="text"  class="shipping_input1" value="{{allitems.trackingcode}}"/></td>
+    <td width="7%" class="txt4"><strong>?</strong></td>
+    <td width="34%" class="txt4"><strong>Weight:  {{allitems.oweight}} </strong></td>
+  </tr>
+</table>
+
+</div>
+<div class="clr" style="margin-top:15px;">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td class="billing_bg">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="247" style="padding-left:20px;"> Quantity</td>
+    <td width="263" class="cancel_create_btn">Cancel Order and Creare New Order</td>
+	<td>&nbsp;</td>
+    <td width="88" class="update_btn">Update Items</td>
+		<td>&nbsp;</td>
+  </tr>
+</table>
+
+	</td>
+  </tr></table>
+<table width="100%" border="0" align="center" cellpadding="5" cellspacing="1" bgcolor="#cbcbcb">
+  <tr>
+     
+    
+    <td width="4%"> Id</td>
+	<td width="10%" style="padding-left:10px;">Quantity</td>
+    <td width="54%"> Description</td>
+    <td width="11%">Unit Price </td>
+    <td width="6%">Total</td>
+  
+  </tr>
+  {% for oitems in alloiitems %}
+  <tr>
+      <td bgcolor="#FFFFFF" style="padding-left:5px;" class="txt5"> <a href="productinfo?pid={{oitems.catalogid}}">{{oitems.itemid}}</a> </td>
+    <td bgcolor="#FFFFFF" style="padding-left:5px;"><input type=text name=quantity value="{{oitems.numitems}}" style="width:30px;"> </td>
+   
+    <td bgcolor="#FFFFFF" style="padding-left:5px;" class="txt5">{{oitems.itemname}}</td>
+    <td align="center" bgcolor="#f1f1f1"><input type=text name=quantity value="{{oitems.unitprice}}" style="width:40px;"></td>
+    <td align="center" bgcolor="#f1f1f1" class="txt5">${{oitems.unitprice}}</td>
+  </tr>
+ {% endfor %}
+ 
+   
+</table>
+ 
+
+</div>
+<div class="clr">
+<div style="float:right; width:722px;">&nbsp;</div>
+<div style="float:right; width:160px; background-color:#f1f1f1">
+<div class="clr txt5" style="padding:6px 0px 6px 6px;"><span>SubTotal :&nbsp;&nbsp;${{totalamt}}</span></div>
+<div class="clr txt5"  style="padding:6px 0px 6px 6px;"><span>SalesTax :	     $0.00</span></div>
+<div class="clr txt5"  style="padding:6px 0px 6px 6px;"><span>Discount :<span class="txt6">{{allitems.coupondiscount}}</span></span></div>
+<div class="clr txt5"  style="padding:6px 0px 6px 6px;"><span>Shipping :<span class="txt6">{{allitems.oshipcost}}</span></span></div>
+<div class="clr txt5" style="padding:6px 0px 6px 6px;"><span>Total         :	${{finaltotal}}</span></div>
+<div class="clr txt5"  style="padding:6px 0px 6px 6px;"><span>Paid           :	${{transactions.amount}}</span></div>
+<div class="clr txt5"  style="padding:6px 0px 6px 6px;"><span>Balance    :        ${{balance}}</span></div>
+</div>
+</div>
+<div class="clr">&nbsp;</div>
+<div class="clr" style="margin-top:10px;"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+   <td class="billing_bg">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="327" style="padding-left:20px;"> Transactions</td>
+    <td width="260" class="add_btn" style="padding-left:20px;">Add Custom Transaction</td>
+		<td width="11">&nbsp;</td>
+  </tr>
+</table>
+
+	</td>
+  </tr>
+  <tr>
+   <td class="billing_bg">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="39%" style="padding-left:10px;">Date/Time	</td>
+    <td width="10%"> Type         </td>
+    <td width="26%"> Methods	</td>
+    <td width="14%">  Amount     </td>
+    <td width="11%">Details</td>
+  </tr>
+</table>
+
+	</td>
+  </tr>
+  <tr>
+    <td><table width="100%" border="0" align="center" cellpadding="5" cellspacing="1" bgcolor="#cbcbcb">
+  <tr>
+    <td class="txt5" bgcolor="#FFFFFF" style="padding-left:10px;"><span>{{transactions.datetime}}</span></td>
+    <td  bgcolor="#FFFFFF" style="padding-left:10px;" class="txt5"><span>{{transactions.ttype}}</span></td>
+    <td bgcolor="#FFFFFF" style="padding-left:10px;" class="txt5"> <span>{{transactions.paymenttype}} </span> </td>
+    <td bgcolor="#FFFFFF" align="center"  class="txt5"> <span>${{transactions.amount}}</span></td>
+    <td bgcolor="#FFFFFF" align="center"  class="txt5"><span>{{transactions.transactionid}}</span></td>
+  </tr>
+  
+</table></td>
+  </tr>
+</table>
+</div>
+<div class="clr">&nbsp;</div>
+<div class="clr billing_bg" style="padding-left:10px;"><div style="padding-top:5px;">Payment Information</div></div>
+<div class="clr"><table width="100%" border="0" cellpadding="3" cellspacing="1" bgcolor="#cbcbcb">
+  <tr>
+    <td class="txt3" bgcolor="#FFFFFF"><span><strong>Payment Type:</strong>Online Credit Card</span> </td>
+    </tr>
+  <tr>
+    <td class="txt3" bgcolor="#FFFFFF"><span><strong>Autrhorization Code:</strong>{{allitems.oauthorization}}</span> </td>
+    </tr>
+  <tr>
+     <td class="txt3" bgcolor="#FFFFFF"><span><strong>Name on Card:</strong> {{allitems.ocardname}}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span><strong>Card Type:</strong> {{allitems.ocardtype}}</span> </td>
+    </tr>
+  <tr>
+    <td class="txt3"  bgcolor="#FFFFFF"><span><strong>Card Number:</strong> XXXX-XXXX-XXXX-4790	</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span><strong>Expiration Date:</strong> {{allitems.ocardexpiresmonth}}/{{allitems.ocardexpiresyear}}</span></td>
+    </tr>
+</table>
+</div>
+<div class="clr">&nbsp;</div>
+<div class="clr billing_bg" style="padding-left:10px;"><div style="padding-top:5px;">Rewards</div></div>
+<div class="clr txt4" style="padding-top:5px;"><strong>Rewarded points:  24 </strong> [ view customer points details ]</div>
+<div class="clr">&nbsp;</div>
+<div class="clr billing_bg" style="padding-left:10px; margin-bottom:15px;"><div style="padding-top:5px;">Promotions</div></div>
+<div class="clr"><table width="98%" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td class="txt3" style="padding-bottom:10px;"><strong>Name</strong> </td>
+    <td class="txt3"><strong>Description	</strong> </td>
+    <td class="txt3"><strong>Amount</strong> </td>
+  </tr>
+  <tr>
+    <td colspan="3" style="background-color:#cecece; height:1px;"></td>
+    </tr>
+  <tr>
+    <td class="txt3"><span><strong>FREE Shipping with Reef Package <br />
+      Purchase</strong></span></td>
+    <td class="txt3" style="padding-top:10px; padding-bottom:10px;"><span>Purchase any Reef Package and get FREE Shipping<br /> 
+      on your entire marine life order. Be sure tro use<br /> 
+      code code: allfrdd. Offer connont be combined with<br /> 
+      other coupon code related offers including the new <br />
+      customer $0.00 discount and store credits.Use the<br /> 
+      offer that is best for you.<br />
+<br />
+<strong>Valid from: 7/15/2011 - 12/31/2013</strong></span></td>
+    <td class="txt3"><strong>$0.00</strong></td>
+  </tr>
+  <tr>
+    <td colspan="3" style="background-color:#cecece; height:1px;"></td>
+    </tr>
+</table>
+</div>
+<div class="clr">&nbsp;</div>
+<div class="clr billing_bg" style="padding-left:10px; margin-bottom:15px;"><div style="padding-top:5px;">Checkout Questions</div></div>
+<div class="clr txt7"><strong>Step 1 question:</strong><br />
+  <strong>Hold Package FedEx Location</strong><br />
+If you would like your package held at a FedEx location please check here. This option will allow you to pick up your package at your convenience anytime after 9 a.m. on the day it is scheduled to arrive. you must provide the FedEx station address as your delivery address at the time you place you order.if you need to change your delivery address please use the "new address" selection in the Address Book option above.
+Call 1-800-GOFEDEX for the station nearest you or click here to use online FedFx location tool.<br />
+<br />
+Answer: {{allitems.orderid|orderquestions:5}}</div>
+<div class="clr" style="background-color:#cecece; height:1px;"></div>
+<div class="clr txt7"><strong>Step 1 question:</strong><br />
+  <strong>Marine Life Arrival Date</strong><br />
+  <br />
+Unles you request a specific date, we will ship your Marine Life order to arrive at the ealiest possible date. We will notify you by e-mail, if for some reason, your request cannot be honored.<br />
+<br />
+<span>If you select Saturday as your arrival date, then you must choose the FEDEX Shipping - Saturday Delivery (+20.00) Option during the nest steo of the process. if you fail to do so, we will ship your Marine Life order to arrive on the following Tuesday</span><br />
+<br />
+Answer: {{allitems.orderid|orderquestions:2}}
+</div>
+<div class="clr" style="background-color:#cecece; height:1px;"></div>
+<div class="clr billing_bg" style="padding-left:10px; margin-top:10px;">
+<div style="padding-top:5px; float:left;">Order Comments</div>
+<div class="save_comment" style="padding-top:5px; float:right; margin-right:5px; margin-top:1px; padding-left:5px;">Save Comments</div>
+</div>
+<div class="clr txt8" style="background-color:#efefef; padding-left:10px; padding-top:3px; padding-bottom:3px;">Cuatomer Comments</div>
+<div class="clr" style="margin-top:10px;"><textarea  class="text_area"name="" cols="" rows="">&nbsp;</textarea></div>
+<div class="clr txt8" style="background-color:#efefef; padding-left:10px; padding-top:3px; padding-bottom:3px; margin-top:10px;">Internal Comments</div>
+<div class="clr" style="margin-top:10px;"><textarea  class="text_area1"name="" cols="" rows="">&nbsp;</textarea></div>
+<div class="clr txt8" style="background-color:#efefef; padding-left:10px; padding-top:3px; padding-bottom:3px; margin-top:10px;">Send Comments to customer</div>
+<div class="clr" style="margin-top:10px;"><textarea  class="text_area1"name="" cols="" rows="">&nbsp;</textarea></div>
+<div class="clr">&nbsp;</div>
+<div class="clr">&nbsp;</div>
+</div>
+</div>
+		</div>
+    </td>
+  </tr>
+</table>
+	
+	
+	
+	</td>
+  </tr>
+</table>
+</div>
+</div>
+
+
+
+
+{% include 'admin_footer.html' %}

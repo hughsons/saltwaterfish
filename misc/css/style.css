@@ -1,0 +1,236 @@
+body{
+	margin:0;
+	padding:0;
+	font-family: 'PT Sans', sans-serif;
+	font-size:13px;
+	line-height:20px;	
+	color:#434343;
+	text-decoration:none;
+	background-color:#FFFFFF;
+}
+p{
+font-family: 'PT Sans', sans-serif;
+font-size:13px;
+color:#434343;
+line-height:20px;
+padding:10px 0px;
+}
+img { border:0; outline:0;}
+ul{ list-style-type:none;}
+body  a { color:#434343; text-decoration:none; }
+body a:link{ color:#434343; text-decoration:none;}
+body a:visited{ color:#434343; text-decoration:none;}
+body  a:hover { color:#f67720; text-decoration:none; }
+body a:active{ color:#434343; text-decoration:none;}
+input[type="text"]{
+ border:1px solid #c9c9c9;
+ background-color:#FFFFFF;
+ height:22px;
+ margin-bottom:8px;
+}
+label{ float:left; width:26%; text-align:right; padding-right:5px;}
+.clr{ clear:both; width:100%;}
+.float_left{ float:left;}
+.float_right{ float:right;}
+#wrapper{ width:100%; height:auto; margin:0 auto; }
+.container{ width:1000px; margin:0 auto; height:auto;}
+
+.pad_top20{ padding-top:20px;}
+/* Fedex section start */
+.fedexbox{
+	width:283px;
+	border:1px solid #e4e4e4;
+	padding:10px 6px 10px 13px;
+}
+.logo_left{ 
+float:left; 
+width:90%;
+font-family: 'Open Sans', sans-serif;
+font-size:13px;
+color:#434343;
+}
+.logo_right{ float:left; width:10%;}
+.address ul{ clear:both; margin:0; padding:15px 0px 20px 0px;}
+.address li{ padding:3px 0px; list-style-type:none;}
+.button a{
+	float:left;
+	width:auto;
+	padding:5px 15px;
+	font-family: 'Open Sans', sans-serif;	
+	font-size:15px;
+	color:#434343;
+	text-transform:capitalize;
+	border:1px solid #dddddd;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	background-color:#efefef;
+	background: -webkit-gradient(linear, left top, left bottom, from(#efefef), to(#ffffff));
+	background: -moz-linear-gradient(top,  #efefef,  #ffffff);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#efefef', endColorstr='#ffffff');
+	background-repeat:repeat;
+	text-align:center;	
+	margin:0px 10px;
+}
+.button1 a{
+	float:left;
+	width:auto;
+	padding:5px 15px;
+	font-family: 'Open Sans', sans-serif;	
+	font-size:15px;
+	color:#3c9bd1;
+	text-transform:capitalize;
+	border:1px solid #3c9bd1;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	background-color:#efefef;
+	background: -webkit-gradient(linear, left top, left bottom, from(#efefef), to(#ffffff));
+	background: -moz-linear-gradient(top,  #efefef,  #ffffff);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#efefef', endColorstr='#ffffff');
+	background-repeat:repeat;
+	text-align:center;	
+	margin:0px 10px;
+}
+/* //Fedex section */
+
+/* Checkout Login section */
+.login_container{ width:750px; margin:0 auto;}
+.login_left{ float:left; width:40%; height:auto; padding:0 35px; border-right:2px solid #3c9bd1;}
+.login_right{ float:left; width:40%; height:auto; padding:0 35px;}
+.login_heading{
+font-family: 'Open Sans', sans-serif;
+font-size:20px;
+font-weight:500;	
+color:#3c9bd1;
+padding-bottom:10px;
+}
+.login_left input[type="text"]{ float:left; width:203px;}
+.password_link{ clear:both; text-align:right; padding-right:20px;}
+.password_link a:link{ text-decoration:underline;}
+.password_link a:visited{ text-decoration:underline;}
+.password_link a:hover{ text-decoration:none;}
+.password_link a:active{ text-decoration:underline;}
+.login_left .button{ float:right; margin-top:10px;}
+.login_right .button1{ float:left; margin-top:61px;}
+.button1 a:link{ color:#3c9bd1; text-decoration:none; }
+.button1 a:link{ color:#3c9bd1; text-decoration:none;}
+.button1 a:visited{ color:#3c9bd1; text-decoration:none;}
+.button1  a:hover { color:#3c9bd1; text-decoration:none; }
+.button1 a:active{ color:#3c9bd1; text-decoration:none;}
+/* //Checkout Login section */
+
+/* rma request section */
+.rma_heading{
+font-family: 'Open Sans', sans-serif;
+font-size:16px;
+font-weight:700;
+color:#434343;
+height:20px;
+padding-top:7px;
+padding-left:8px;
+}
+.rma_content{
+font-family: 'Open Sans', sans-serif;
+font-size:13px;
+color:#434343;
+padding-left:8px;
+}
+.rma_content1{
+font-family: 'Open Sans', sans-serif;
+font-size:13px;
+color:#434343;
+padding-left:8px;
+text-align:center;
+}
+.blue_bg{ background-color:#dde7f1; }
+
+.border{border:1px solid #d4d4d4;}
+.border1{ border:1px solid #467fcc;}
+.border_top{
+border-top:1px solid #d4d4d4;
+border-left:1px solid #d4d4d4;
+border-right:1px solid #d4d4d4;
+border-bottom:1px solid #467fcc;
+}
+#rma input[type="text"]{ width:135px; margin:2px 5px 2px 0px;}
+/* //rma request section */
+
+/* add to cart section */ 
+.cart_box{
+border:1px solid #a5a5a5;
+width:714px;
+height:auto;
+}
+.cart_top{ clear:both; padding:6px;}
+.cart_left{ float:left; width:55%;}
+.cart_right{ float:left; width:45%;}
+.cart_bottom{ clear:both; padding-top:30px;}
+.cart_bottom_heading{ 
+	font-family: 'Open Sans', sans-serif;	
+	font-size:15px;
+	color:#a5a5a5;
+	padding-bottom:15px;
+	padding-left:20px;
+}
+.cart_heading{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:18px;
+	color:#235478;
+	text-transform:uppercase;
+	padding-top:10px;
+	padding-bottom:14px;
+}
+.cart_img_right{
+	float:right;
+	font-family: 'Open Sans', sans-serif;	
+	font-size:14px;
+	color:#434343;	
+	margin-top:15%;
+	margin-left:10px;
+	width:40%;
+}
+.close{
+	font-family: 'Open Sans', sans-serif;	
+	font-size:14px;
+	color:#434343;	
+	font-weight:700;
+	text-transform:uppercase;
+	float:right;
+}
+.close span img{ padding-left:10px;	vertical-align:middle;}
+.price{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:16px;
+	color:#ef4a00;
+	font-weight:700;	
+}
+.button_top{ clear:both; padding-top:23px;}
+.button_top .button { clear:both; float:right; margin:2px 0px; text-transform:uppercase;}
+.slide_top{
+clear:both;
+background-color:#d7d7d7;
+width:100%;
+padding-top:2px;
+padding-bottom:1px;
+}
+.slide_middle{
+	width:654px; 
+	height:174px; 
+	margin:0 auto;
+	background-color:#faf8e3;
+	background: -webkit-gradient(linear, left top, left bottom, from(#faf8e3), to(#ffffff));
+	background: -moz-linear-gradient(top,  #faf8e3,  #ffffff);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#faf8e3', endColorstr='#ffffff');
+	background-repeat:repeat;
+}
+.slide_middle ul { list-style-type:none;}
+.slide_middle li{ float:left; width:31%; padding:5px; border-right:1px dotted #a5a5a5;}
+.product_heading{
+font-family: 'PT Sans', sans-serif;
+font-size:13px;
+font-weight:700;
+line-height:20px;	
+color:#235478;
+}
+/* //add to cart section */ 

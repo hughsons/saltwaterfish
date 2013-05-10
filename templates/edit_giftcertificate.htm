@@ -1,0 +1,121 @@
+{% include 'admin_header.htm' %}
+<body>
+ 
+ <div style="clear:both" class="white-bg"><div style="clear:both; padding-bottom:10px" class="content-bg"><table width="100%" border="0">
+  <tr>
+    <td align="left" valign="top"  style="padding-left:10px" class="left-text">
+	<div style="clear:both" class="blue-border-new">
+<div style="clear:both" class="blue-bg-header-new"><div align="center" style="height: 30px;
+	line-height:30px;">Orders</div>
+</div>
+<div  class="resources" style="height:340px !important; ">
+  
+
+
+
+<div style="clear:both; width:207px" ></div>
+{% for linkitem in order_links %}
+<div style="clear:both; width:187px; padding-top:6px; padding-left:5px;">
+<div style="float:left; padding-top:3px;"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div style="float:left"><a href="/vieworders?order_status={{linkitem.id}}&page=1" >{{linkitem.statustext}}</a></div>
+</div>
+{% endfor %}
+ <div style="clear:both; width:187px; padding-top:5px; padding-left:5px;">
+<div style="float:left; padding-top:3px;"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div style="float:left"><a href="/giftcertificates?page=1"  >Gift Certificates </a></div>
+</div>
+
+<div style="clear:both; width:187px; padding-top:5px; padding-left:5px;">
+<div style="float:left; padding-top:3px;"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div style="float:left"><a href="/ordersstatus"  >Order Status </a></div>
+</div>
+
+<div style="clear:both; width:187px; padding-top:5px; padding-left:5px;">
+<div style="float:left; padding-top:3px;"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div style="float:left"><a href="/exportorders"  >Export </a></div>
+</div>
+</div>
+
+
+</div>
+
+</td>
+    <td style="width:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+    <td>
+	<table width="100%" border="0">
+  <tr>
+    <td class="left-text" style="padding-top:10px;">Orders	 > Gift Certificates</td>
+  </tr>
+  <tr>
+    <td style="padding-bottom:10px; padding-top:10px;">
+	<div style="float:left" class="left-text1">Edit</div>
+	<div style="float:right; margin-right:15px">
+<div class="search1">
+<div style="float:left; width:230px;"><input name="Input" type="text"  placeholder="Search saltwaterfish.com"/></div>
+<div style="float:left; width:69px;"><input type="submit" name="Submit"  value="Search" /></div>
+</div>
+</div>	</td>
+  </tr>
+  <tr>
+    <td style="height:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+  </tr>
+
+  <tr>
+    <td style="width:763px; padding-top:10px">
+	<form method="post" action="/actiongiftmanager" method=post name="{{allitems.id}}">
+		<input type="hidden" name="id" value="{{allitems.id}}">
+		<input type="hidden" name="action" value="edit">
+			{% csrf_token %}
+	<div class="left-text" style="clear:both; padding-top:20px;">
+    <div style="margin-bottom:10px;">
+	<div style="float:left; width:130px;">Gift Name</div>
+	<div style="float:left;"><input name="certificate_name" type="text" class="text-box3" value="{{allitems.certificate_name}}"/></div>
+	<div style="clear:both; height:1px;"></div></div>
+	<div class="line"></div>
+	<div style="margin:10px 0px;">
+	<div style="float:left; width:130px;">Gift Amount:</div>
+	<div style="float:left;">
+	  <input name="certificate_amount" type="text" class="text-box3" value="{{allitems.certificate_amount}}"/>
+	</div>
+	<div style="clear:both; height:1px;"></div></div>
+	<div class="line"></div>
+	<div style="margin:10px 0px;">
+	<div style="float:left; width:130px;">Total Spent:</div>
+	<div style="float:left;">	  {{allitems.certificate_expenses}}
+	</div>
+	<div style="clear:both; height:1px;"></div></div>
+	<div class="line"></div>
+	<div style="margin:10px 0px;">
+	<div style="float:left; width:130px;"> Balance</div>
+	<div style="float:left;">{{total}}</div>
+	<div style="clear:both; height:1px;"></div></div>
+	<div class="line"></div>
+ 
+	 
+	
+ 
+
+	<div style="margin:10px 0px;">
+	<div style="float:left; width:130px;">&nbsp;</div>
+	<div style="float:left;"><input type="submit"></div>
+	<div style="clear:both; height:1px;"></div></div>
+	<div class="line"></div>
+    </div><br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+ 
+	</td>
+  </tr>
+</table>
+	</td>
+  </tr>
+</table>
+</div></div>
+ 
+ 
+ {% include 'admin_footer.html' %}

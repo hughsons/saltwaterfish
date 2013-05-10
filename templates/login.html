@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>{{ page_title }}</title><link rel="stylesheet" type="text/css" href="misc/css/reset.css" />
+<link href="/misc/css/login.css" rel="stylesheet" type="text/css"/>
+ 
+    <section id="layout">
+	<div id="login">
+	<form  action="/login/" method="post">
+	    <h1>Sign In</h1>
+	    {% if error %}
+		<p><i>{{ error }}</i></p>
+		{% endif %}
+	    <fieldset id="inputs">
+	    	{{ form.as_p }}
+	    </fieldset>
+	    <fieldset id="actions">
+	   <input type="submit" id="submit" value="Log in"><br/><br/>
+	   
+	    </fieldset>
+	</form>
+	</div>
+

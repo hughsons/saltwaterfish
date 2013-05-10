@@ -1,0 +1,142 @@
+{% include 'admin_header.htm' %}
+<script  type="text/javascript" src="/misc/js2/jquery-1.7.2.min.js"></script> 
+<script type="text/javascript"> 
+ $(document).ready(function() {
+	$('#bqtable').click(function() {
+		$("#divAdd").show();
+	});
+});
+</script>
+<div style="clear:both" class="white-bg">
+<div style="clear:both; padding-bottom:10px" class="content-bg">
+  <table width="100%" border="0">
+    <tr>
+      <td align="left" valign="top"  style="padding-left:10px" class="left-text">
+	  	<div style="clear:both" class="blue-border-new">
+<div style="clear:both" class="blue-bg-header-new"><div align="center" style="height: 30px;
+	line-height:30px;">Orders</div>
+</div>
+<div style="clear:both" class="resources">
+  
+
+
+
+<div style="clear:both; width:207px" ></div>
+{% for linkitem in order_links %}
+<div style="clear:both; width:187px; padding-top:5px; padding-left:5px;">
+<div style="float:left; padding-top:3px;"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div style="float:left"><a href="/vieworders?order_status={{linkitem.id}}&page=1" >{{linkitem.statustext}}</a></div>
+</div>
+{% endfor %}
+ 
+
+ 
+<div style="clear:both; width:187px; padding-top:5px; padding-left:5px;">
+<div style="float:left; padding-top:3px;"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div style="float:left"><a href="/giftcertificates?page=1"  >Gift Certificates</a></div>
+
+
+</div>
+<div style="clear:both; width:187px; padding-top:5px; padding-left:5px;">
+<div style="float:left; padding-top:3px;"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div style="float:left"><a href="/ordersstatus"  >Order Status </a></div>
+
+
+
+</div>
+<div style="clear:both; width:187px; padding-top:5px; padding-left:5px;">
+<div style="float:left; padding-top:3px;"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div style="float:left"><a href="/exportorders"  >Export </a></div>
+
+
+
+</div>
+</div>
+
+
+</div>
+	  </td>
+      <td style="width:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+      <td bordercolor="0"><table width="100%" border="0">
+          <tr>
+            <td class="left-text" style="padding-top:10px;" >Orders >Status</td>
+          </tr>
+          <tr>
+            <td style="padding-bottom:10px; padding-top:10px;"><div style="float:left" class="left-text1">Orders Status</div>
+                <div style="float:right; margin-right:15px">
+                  <div class="search1">
+                    <div style="float:left; width:230px;">
+                      <input name="Input" type="text"  placeholder="Search saltwaterfish.com"/>
+                    </div>
+                    <div style="float:left; width:69px;">
+                      <input type="submit" name="Submit"  value="Search" />
+                    </div>
+                  </div>
+                </div></td>
+          </tr>
+          <tr>
+            <td style="height:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+          </tr>
+         
+         
+        </table>
+          
+       <div class="clr">&nbsp;&nbsp;</div> 
+	       <div class="clr"><div class="left-text1 style1" style="float:left"><img src="/misc/images/export-img.jpg" width="19" height="20" border="0" />&nbsp;&nbsp;Edit Order Status</div>
+		 <div class="float-right"><img src="/misc/images/add-new-button.jpg" width="116" height="21" border="0" /></div>
+		   
+		   </div> 
+		   <div class="clr">&nbsp;&nbsp;</div>
+        <div style="clear:both; padding-top:10px">
+	<div id="view2" class="tabcontent1">
+	<div class="head_bg" style="clear:both; padding-top:5px;">
+
+<div  class="order-txt1" style="float:left;  padding-left:10px; width:284px;">Definition</div>
+<div  class="order-txt1" style="float:left; padding-left:20px; width:218px;">Status</div>
+<div  class="order-txt1" style="float:left; padding-left:20px; width:90px;">Sorting</div>
+<div  class="order-txt1" style="float:left; padding-left:20px; width:120px;">Visible</div>
+</div>	
+{% for item in allitems %}
+<form method="post" action="/actionosmanager" name="{{item.id}}">
+		
+		{% csrf_token %} 
+		<input type="hidden" name="action" value="edit">
+		<input type="hidden" name="id" value="{{item.id}}">
+<div style="clear:both; height:1px; background-color:#dedede"></div>
+<div style="clear:both; background-color:#FFFFFF">
+<div class="order-txt2" style="float:left;  padding-left:10px;padding-top:2px; width:244px;   height:40px; border-left:solid 1px #dedede; "><input name="statusdefinition" type="text" class="text-box-status" value="{{item.statusdefinition}}"/></div>
+<div class="order-txt2" style="float:left; padding-left:10px; width:228px;  padding-top:5px;  height:35px; border-left:solid 1px #dedede;"><input name="statustext" type="text" class="text-box-status" value="{{item.statustext}}"/></div>
+<div class="order-txt2" style="float:left; padding-left:10px; width:90px; padding-top:5px;  height:35px; border-left:solid 1px #dedede; "><input name="statusid" type="text" class="text-box1"  value="{{item.statusid}}"/></div>
+<div class="order-txt3" style="float:left ;padding-left:10px; width:145px; padding-top:10px;  height:30px; border-left:solid 1px #dedede;  border-right:solid 1px #dedede;">
+{% if item.visible %}
+	<input name="Visible" type="checkbox" value=1 checked />
+	{% else %}
+	<input name="Visible" type="checkbox" value="0"  />
+	{% endif %} &nbsp;<input type=image src="/misc/images/save-changes.jpg" width="100" height="21" border="0" />
+ </div>
+</div>
+ </form>
+ {% empty %}
+	<em class="formee-req">No Records</em>
+{% endfor %}
+
+
+
+
+
+
+
+
+
+<div class="clr">&nbsp;&nbsp;</div>
+             </div>
+		</div>        </td>
+    </tr>
+  </table>
+</div>
+</div>
+
+
+
+
+{% include 'admin_footer.html' %}

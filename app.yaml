@@ -1,0 +1,57 @@
+application: saltwaterfish-com
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+builtins:
+- remote_api: on
+
+inbound_services:
+- warmup
+
+libraries:
+- name: django
+  version: "1.4"
+
+handlers:
+- url: /(robots\.txt|favicon\.ico)
+  static_files: misc/\1
+  upload: misc/(.*)
+
+- url: /misc
+  static_dir: misc
+
+- url: /_ah/queue/deferred
+  script: djangoappengine.deferred.handler.application
+  login: admin
+
+
+- url: /_ah/stats/.*
+  script: djangoappengine.appstats.application
+
+- url: /media/admin
+  static_dir: django/contrib/admin/media
+  expiration: '0'
+
+- url: /.*
+  script: djangoappengine.main.application
+
+
+skip_files: |
+    ^(.*/)?(
+    (app\.yaml)|
+    (index\.yaml)|
+    (\..*)|
+    (.*\.pyc)|
+    (.*\.bat)|
+    (.*\.psd)|
+    (Thumbs.db)|
+    (.*\.svn/.*)|
+    (.*\.lnk)|
+    (.*\.datastore)|
+    (_darcs/.*)|
+    (assets/.*)|
+    (.*\.swp)|
+    (.*\.log)|
+    )$

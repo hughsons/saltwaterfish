@@ -1,0 +1,121 @@
+{% include 'admin_header.htm' %}
+<div style="clear:both" class="white-bg">
+<div style="clear:both; padding-bottom:10px" class="content-bg">
+  <table width="100%" border="0">
+    <tr>
+      <td align="left" valign="top" width="130" style="padding-left:20px" class="left-text"><span class="left-text1">Products</span><br />
+          <br />
+        <a href="/products?page=1">View/Edit</a><br />
+        Add New<br />
+        Bundles<br />
+        <a href="/categories?page=1">Categories</a><br />
+        Inventtory<br />
+        <a href="/product_wish_list?page=1">Wish List</a><br />
+         <a href="/all_product_reviews?page=1">Reviews</a><br />
+        Import/Export</td>
+      <td style="width:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+      <td><table width="100%" border="0">
+          <tr>
+            <td class="left-text" style="padding-top:10px;">Products	 > Reviews</td>
+          </tr>
+          <tr>
+            <td style="padding-bottom:10px; padding-top:10px;"><div style="float:left" class="left-text1">Reviews</div>
+                <div style="float:right; margin-right:15px">
+                  <div class="search1">
+                    <div style="float:left; width:230px;">
+                      <input name="Input" type="text"  placeholder="Search saltwaterfish.com"/>
+                    </div>
+                    <div style="float:left; width:69px;">
+                      <input type="submit" name="Submit"  value="Search" />
+                    </div>
+                  </div>
+                </div></td>
+          </tr>
+          <tr>
+            <td style="height:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+          </tr>
+         
+         
+        </table>
+          
+        
+        <div style="clear:both;">
+	<div id="view2" class="tabcontent1">
+					
+<div style="clear:both; padding-top:20px;">
+{% if count > 100 %}
+	<div style="clear:both; width:800px; height:21px; line-height:21px; " class="records">
+Records:<b>{{count}} </b>&nbsp;&nbsp;&nbsp; Page {{page_num}} of {% widthratio count 100 1 %} |&nbsp;Goto Page: <a href="/productwish_list_view?itemid={{itemid}}&page=1"><img src="/misc/images/arrow-prv1jpg.jpg" /></a> 
+{% if page_num < 2 %}
+<a href="/productwish_list_view?itemid={{itemid}}&page=1"><img src="/misc/images/arrow-prv2jpg.jpg" /></a>
+{% elif page_num >= 2 %}
+    <a href="/productwish_list_view?itemid={{itemid}}&page={{page_num|add:-1}}"><img src="/misc/images/arrow-prv2jpg.jpg" /></a>
+{% endif %}
+| <a href="/productwish_list_view?itemid={{itemid}}&page={{page_num|add:+1}}"><img src="/misc/images/arrow-nxt1.jpg" /> </a> &nbsp<a href="/productwish_list_view?itemid={{itemid}}&page={% widthratio count 100 1 %}"><img src="/misc/images/arrow-nxt2.jpg" /></a></span>
+</div>
+  {% endif %}
+ 
+</div>
+<div class="head_bg" style="clear:both; padding-top:5px;">
+<div  class="order-txt1" style="float:left; padding-left:20px;width:100px;">ID</div>
+<div  class="order-txt1" style="float:left; padding-left:0px; width:100px;" align="center">Thumb</div>
+<div  class="order-txt1" style="float:left; padding-left:20px; width:220px;" align="center">Product Name</div>
+<div  class="order-txt1" style="float:left; padding-left:20px; width:100px;" align="center">Reviews</div>
+<div  class="order-txt1" style="float:left; padding-left:20px; width:100px;">New Reviews</div>
+<div  class="order-txt1" style="float:left; padding-left:20px; width:100px;">Actions</div>
+</div>
+{% for item in allitems %}
+
+<div style="clear:both; height:1px; background-color:#dedede"></div>
+<div style="clear:both; background-color:#FFFFFF">
+<div class="order-txt2" style="float:left; width:100px; line-height:80px;  height:80px; border-left:solid 1px #dedede; padding:10px;">{{item.id}}</div>
+<div class="order-txt3" style="float:left; width:100px;  height:100px; border-left:solid 1px #dedede; " align="center"><a href="/productinfo?pid={{item.catalogid}}"><img src="{{item.thumbnail}}" width="43" height="36" border="0" /></a></div>
+<div class="order-txt2" style="float:left; width:220px;  height:80px; line-height:80px;  border-left:solid 1px #dedede; padding:10px;" align="center">{{item.name}}<br />
+</div>
+<div  class="order-txt1" style="float:left; height:80px; line-height:80px; border-left:solid 1px #dedede; padding:10px; padding-left:10px; width:100px;" align="center">{{item.dcount}}</div>
+<div  class="order-txt1" style="float:left; height:80px; line-height:80px; border-left:solid 1px #dedede; padding:10px; padding-left:10px; width:100px;" align="center">-</div>
+<div class="order-txt3" style="float:left;   height:80px; border-left:solid 1px #dedede; padding:10px; padding-left:10px; width:100px;" align="center"><a href='/reviews-edit-all?itemid={{item.catalogid}}&page=1'><img src="/misc/images/edit.jpg" width="55" height="24" border="0" vspace="20" /></a></div>
+</div>
+ {% empty %}
+	<em class="formee-req">No Records</em>
+{% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<div style="clear:both; height:1px; background-color:#dedede"></div>
+ 
+
+ 
+             
+		        </td>
+    </tr>
+  </table>
+</div>
+</div>
+{% include 'admin_footer.html' %}

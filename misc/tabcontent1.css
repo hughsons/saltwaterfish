@@ -1,0 +1,101 @@
+﻿
+ul.tabs1
+{
+    padding: 7px 0;
+    font-size: 0;
+    margin:0;
+    list-style-type: none;
+    text-align: left; /*set to left, center, or right to align the tabs as desired*/
+}
+        
+ul.tabs1 li
+{
+    display: inline;
+    margin: 0;
+    margin-right:3px;
+	 /*distance between tabs*/
+}
+        
+ul.tabs1 li a
+{
+    font: normal 12px Verdana;
+    text-decoration: none;
+    position: relative;
+    z-index: 1;
+	font-weight:bold;
+    padding: 7px 16px;
+    border: 1px solid #636363;
+    border-bottom-color:#636363;
+    color: #fff;
+    background: #000 url(image/tabbg.jpg) 0 0 repeat-x;
+    border-radius: 2px 2px 0 0;
+    outline:none;
+}
+        
+ul.tabs1 li a:visited
+{
+    color: #fff;
+}
+        
+ul.tabs1 li a:hover
+{
+    border: 1px solid #636363;
+    background:#F0F0F0 url(image/tabbg-over.jpg) 37px 0 repeat-x;
+	color: #ec5e00;
+	font-weight:bold
+}
+        
+ul.tabs1 li.selected a
+{
+    /*selected tab style */
+    position: relative;
+    top: 0px;
+    font-weight:bold;
+    border: 1px solid #636363;
+    border-bottom-color: #636363;
+	color: #ffffff;
+	  background:#F0F0F0 url(image/tabbg-over.jpg) 37px 0 repeat-x;
+}
+        
+        
+ul.tabs1 li.selected a:hover
+{
+    /*selected tab style */
+    text-decoration: none;
+	
+}
+        
+div.tabcontent1
+{
+	display: block;
+	font-family: "Arial";
+	font-size: 13px;
+	line-height: normal;
+	font-weight: normal;
+	color: #434343;
+	text-decoration: none;
+	text-align:left;
+	background-color:#FFFFFF;
+
+	
+
+}
+
+div.tabcontents1
+{
+
+	border-radius: 0 2px 2px 2px;
+	padding-left:0px;
+	padding-right:0px;
+	padding-bottom:0px;
+	padding-top:0px;
+	background-image:url(images/tab-bg.jpg);
+	background-repeat:repeat-x;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #636363;
+	height:450px;
+	   
+	   
+	
+}

@@ -1,0 +1,56 @@
+{% include 'header.htm' %}
+<div align=center>
+
+<div class="wid748 ">
+<div class="height12 clr"></div>
+<div  class="content-bg1" style="min-height:200px !important;">
+  
+  <div class="blue-bg-header " style="width:100% !important;">
+Returning Customers
+</div>{{ request.session.IsLogin }}
+<form name="form" id="form" action="/custlogin" method="post">
+{% csrf_token %}
+<div class="my-account " style="min-height:200px !important;">
+<div class=" " >{% if message or error_message %}
+      <p class="style5">{{ message }} <span class="style8">{{ error_message }}</span></p>{% endif %}</div>
+<div class="height23 clr">&nbsp;&nbsp;</div>
+<div style="font-size:15px" >Email: {{ form.username }}</div>
+<div class="height12 clr">&nbsp;&nbsp;</div>
+<div style="font-size:15px" >Pass: {{ form.password }}</div>
+<div class="height12 clr">&nbsp;&nbsp;</div>
+<div class=" " ><img src="{{ recaptcha }}" /></div>
+<div class="height12 clr">&nbsp;&nbsp;</div>
+<div style="font-size:15px" >Verify: {{ form.recaptcha }}</div>
+<div class="height12 clr">&nbsp;&nbsp;</div>
+<div class="wid187 clr">
+<div class="float-left"><input type=image src="/misc/images/sign-in.jpg" width="77" height="21" border="0" /></div>
+
+</form>
+</div></div></div>
+<div class="height12 clr"></div>
+<div class="content-bg2" style="min-height:200px !important;">
+ <div class="blue-bg-header " style="width:100% !important">
+Forgot Password
+</div><a name="forget">
+<form action="forgetpassword" method="post" id="form" name="form">
+{% csrf_token %}
+<div class="my-account clr">
+<div class="height23 clr">&nbsp;&nbsp;</div>
+<div class=" " >{% if message or error_message %}
+      <p class="style5">{{ message }} <span class="style8">{{ error_message }}</span></p>{% endif %}</div>
+<div style="font-size:15px" >Email: {{ forgotform.email }}</div>
+<div class="height12 clr">&nbsp;&nbsp;</div>
+<div class=" " ><img src="{{ recaptcha2 }}" /></div>
+<div class="height12 clr">&nbsp;&nbsp;</div>
+<div style="font-size:15px" >Verify: {{ forgotform.recaptcha }}</div>
+<div class="height12 clr">&nbsp;&nbsp;</div>
+<div class="wid187 clr">
+<div class="float-left"><input type=submit value="Reset My Password" width="77" height="21" border="0" /></div>
+
+</form>
+
+</div></div></div>
+
+
+<div class="height12 clr"></div></div></div></div>
+{% include 'footer.htm' %}

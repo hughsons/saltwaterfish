@@ -1,0 +1,115 @@
+{% include 'admin_header.htm' %}
+
+<div style="clear:both" class="white-bg">
+<div style="clear:both; padding-bottom:10px" class="content-bg">
+<table width="100%" border="0">
+  <tr>
+    <td align="left" valign="top" width="130" style="padding-left:20px" class="left-text"><span class="left-text1">Products</span><br />
+          <br />
+        View/Edit<br />
+        Add New<br />
+        Bundles<br />
+        <a href="/categories?page=1">Categories</a><br />
+        Inventtory<br />
+        <a href="/product_wish_list?page=1">Wish List</a><br />
+         <a href="/all_product_reviews?page=1">Reviews</a><br />
+        Import/Export</td>
+ <td style="width:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+    <td>
+	<table width="100%" border="0">
+  <tr>
+    <td class="left-text" style="padding-top:10px;">Products Wish List> View/Edit</td>
+  </tr>
+  <tr>
+    <td style="padding-bottom:10px; padding-top:10px;">
+	<div style="float:left" class="left-text1">View/Edit</div>
+	<div style="float:right; margin-right:15px">
+<div class="search1">
+<div style="float:left; width:230px;"><input name="Input" type="text"  placeholder="Search saltwaterfish.com"/></div>
+<div style="float:left; width:69px;"><input type="submit" name="Submit"  value="Search" /></div>
+</div>
+</div>	</td>
+  </tr>
+    <tr>
+    <td style="height:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+  </tr>
+  
+  <tr>
+    <td style="width:763px;"><div style="clear:both; ">
+<div>
+         <div class="tabcontents1">
+		
+	  
+  <div class="tabcontent1" style="clear:both; margin-top:10px;">
+<div style="float:left; padding-bottom:20px; padding-left:20px;">
+{% if count > 100 %}
+Records:<b>{{count}} </b> Page {{page_num}} of {% widthratio count 100 1 %} |&nbsp;Goto Page: <a href="/product_wish_list?page=1">First</a> 
+{% if page_num < 2 %}
+<a href="/product_wish_list?page=1">Previous</a>
+{% elif page_num >= 2 %}
+    <a href="/product_wish_list?page={{page_num|add:-1}}">Previous</a>
+{% endif %}
+| <a href="/product_wish_list?page={{page_num|add:+1}}">Next </a> &nbsp<a href="/product_wish_list?page={% widthratio count 100 1 %}">Last</a></span>
+  {% endif %}
+</div>
+
+</div>
+
+  
+			<div id="view4" class="tabcontent1 selected">
+                    					
+<div class="head_bg" style="clear:both; padding-top:5px; margin-top:20px;">
+<div  class="order-txt2" style="float:left; padding-left:20px; width:140px;">ProductID</div>
+<div  class="order-txt2" style="float:left; padding-left:20px;width:330px;">Name</div>
+<div  class="order-txt2" style="float:left; padding-left:20px; width:50px;">Stock</div>
+<div  class="order-txt2" style="float:left; padding-left:20px; width:200px;">Customers</div>
+</div>
+{% for item in allitems %}
+<div style="clear:both; height:1px; background-color:#dedede"></div>
+<div style="clear:both; background-color:#FFFFFF">
+<div class="order-txt2" style="float:left; width:150px; height:15px; border-left:solid 1px #dedede; padding:10px;">{{item.id}}</div>
+<div class="order-txt2" style="float:left; width:330px;  height:15px; border-left:solid 1px #dedede; padding:10px;">{{item.name}}</div>
+<div class="order-txt2" style="float:left; width:50px;  height:15px; border-left:solid 1px #dedede; padding:10px;">{{item.current_stock}}</div>
+<div class="order-txt2" style="float:left; width:235px;   height:15px; border-left:solid 1px #dedede;  border-right:solid 1px #dedede;padding:10px;">New:<span class="style2"> 0</span>  &nbsp;&nbsp;Total: {{item.dcount}} &nbsp;&nbsp;<u><a href="/productwish_list_view?itemid={{item.catalogid}}&page=1">view list</a></u></div>
+</div>
+ {% empty %}
+	<em class="formee-req">No Records</em>
+{% endfor %}
+
+
+
+
+
+<div style="clear:both; height:1px; background-color:#dedede"></div>
+<div class="tabcontent1" style="clear:both; margin-top:20px;">
+<div style="float:left; padding-bottom:20px; padding-left:20px;">  </div>
+ 
+</div>
+             </div>
+
+
+
+            </div>
+           
+            
+			
+
+       
+        </div>
+		</div>
+    </td>
+  </tr>
+</table>
+	
+	
+	
+	</td>
+  </tr>
+</table>
+</div>
+</div>
+
+
+
+
+{% include 'admin_footer.html' %}

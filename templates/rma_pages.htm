@@ -1,0 +1,88 @@
+{% include 'admin_header.htm' %}
+{% load tagsfilter %}
+<link type="text/css" rel="stylesheet" href="/misc/css/reset.css" />
+<link type="text/css" rel="stylesheet" href="/misc/css/style.css" />
+<div style="clear:both" class="white-bg">
+<div style="clear:both; padding-bottom:10px" class="content-bg">
+  <table width="100%" border="2">
+    <tr>
+       
+      <td style="width:10px; " ></td>
+      <td bordercolor="0"  ><table width="100%" border="0">
+          <tr>
+            <td class="left-text" style="padding-top:10px;" >View RMA</td>
+          </tr>
+          <tr>
+            <td style="padding-bottom:10px; padding-top:10px;"> 
+                <div style="float:right; margin-right:15px">
+                  <div class="search1">
+                    <div style="float:left; width:230px;">
+                      <input name="Input" type="text"  placeholder="Search saltwaterfish.com"/>
+                    </div>
+                    <div style="float:left; width:69px;">
+                      <input type="submit" name="Submit"  value="Search" />
+                    </div>
+                  </div>
+                </div></td>
+          </tr>
+          <tr>
+            <td style="height:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+          </tr>
+         
+         
+        </table>
+          
+   
+        <div style="clear:both; padding-top:10px">
+	<div id="view2" class="tabcontent1">
+	 <div class="clr " id="rma">
+<div style="clear:both; width:800px; height:21px; line-height:21px; " class="records">Records:<b>{{count}} </b> Page {{page_num}} of {% widthratio count 100 1 %} |&nbsp;Goto Page: <a href="/rmapages?page=1">First</a> 
+{% if page_num < 2 %}
+<a href="/rmapages?page=1">Previous</a>
+{% elif page_num >= 2 %}
+    <a href="/rmapages?page={{page_num|add:-1}}">Previous</a>
+{% endif %}
+
+
+| <a href="/rmapages?page={{page_num|add:+1}}">Next </a> &nbsp<a href="/rmapages?page={% widthratio count 100 1 %}">Last</a></span>
+</div>
+<table width="100%" border="0" cellspacing="4" cellpadding="4">
+  <tr>
+    <td width="236" height="20" align="left" valign="top" class="border1"><div class="rma_content">Customer Name</div></td>
+    <td height="20" align="left" valign="top" class="border1"><div class="rma_content1">Order#</div></td>
+    <td height="20" align="left" valign="top" class="border1"><div class="rma_content1">Claim#</div></td>
+    <td width="142" height="20" align="left" valign="top" class="border1"><div class="rma_content1">Date submitted</div></td>
+    <td width="120" height="20" align="left" valign="top" class="border1"><div class="rma_content1">RMA status</div></td>
+  </tr>
+	{% for item in allitems %}
+<tr>
+    <td width="236" height="20" align="center" valign="top" class="border_top">{{item.orderid|rmaordervalues:"name"}}</td>
+    <td height="20" align="center" valign="top" class="border_top"><a href="/orderpage?oid={{item.orderid}}">{{item.orderid|rmaordervalues:"invoicenum_prefix"}}{{item.orderid}}</a></td>
+    <td height="20" align="center" valign="top" class="border_top"><a href="/rmaview?rmaid={{item.idrma}}">{{item.idrma}}</a></td>
+    <td width="142" height="20" align="center" valign="top" class="border_top">{{item.rmadate}}</td>
+    <td width="120" height="20" align="center" valign="top" class="border_top">{{item.idrmastatus|rmastatus}}</td>
+  </tr>	
+  
+{% endfor %}
+  </table>
+ 
+
+
+
+
+
+
+
+
+<div class="clr">&nbsp;&nbsp;</div>
+             </div>
+		</div>        </td>
+    </tr>
+  </table>
+</div>
+</div>
+
+
+
+
+{% include 'admin_footer.html' %}

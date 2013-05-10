@@ -1,0 +1,119 @@
+{% include 'admin_header.htm' %}
+ <div style="clear:both" class="white-bg"><div style="clear:both; padding-bottom:10px" class="content-bg"><table width="100%" border="0">
+  <tr>
+    <td align="left" valign="top" width="130" style="padding-left:20px" class="left-text"><span class="left-text1">Products</span><br />
+<br />
+ <a href="/products?page=1">View/Edit</a><br />
+        Add New<br />
+        Bundles<br />
+        <a href="/categories?page=1">Categories</a><br />
+        Inventtory<br />
+        <a href="/product_wish_list?page=1">Wish List</a><br />
+         <a href="/all_product_reviews?page=1">Reviews</a><br />
+        Import/Export</td>
+    <td style="width:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+    <td>
+	<table width="100%" border="0">
+  <tr>
+    <td class="left-text" style="padding-top:10px;">Products > Categories</td>
+  </tr>
+  <tr>
+    <td style="padding-bottom:10px; padding-top:10px;">
+	<div style="float:left" class="left-text1">Categories</div>
+	<div style="float:right; margin-right:15px">
+<div class="search1">
+<div style="float:left; width:230px;"><input name="Input" type="text"  placeholder="Search saltwaterfish.com"/></div>
+<div style="float:left; width:69px;"><input type="submit" name="Submit"  value="Search" /></div>
+</div>
+</div>	</td>
+  </tr>
+  <tr>
+    <td style="height:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+  </tr>
+  <tr>
+ <td >Records:<b>{{count}} </b> Page {{page_num}} of {% widthratio count 100 1 %} |&nbsp;Goto Page: <a href="/categories?page=1">First</a> 
+{% if page_num < 2 %}
+<a href="/categories?page=1">Previous</a>
+{% elif page_num >= 2 %}
+    <a href="/categories?page={{page_num|add:-1}}">Previous</a>
+{% endif %}
+
+
+| <a href="/categories?page={{page_num|add:+1}}">Next </a> &nbsp<a href="/categories?page={% widthratio count 100 1 %}">Last</a>
+
+	
+	
+	</td>
+  </tr>
+     
+  
+  <tr>
+    <td style="width:763px; padding-top:10px"><table width="100%">
+  <tr>
+    <td ><table width="100%"  cellpadding="0" cellspacing="0" border="0">
+  <tr>
+    <td style="width:298px;" class="cate">Categories</td>
+    <td style="width:84px;" class="cate">SubCat </td>
+    <td style="width:90px;" class="cate">Sorting</td>
+    <td style="width:53px;" class="cate">Hide</td>
+	  <td class="cate" >&nbsp;</td>
+  </tr>
+</table>
+</td>
+  </tr>
+  {% for item in customers %}
+  <tr>
+    <td><table width="100%" border="1" bordercolor="#f6f2f2" cellspacing="0" cellpadding="0">
+  <tr>
+    <td style="width:288px; padding-left:5px"><input name="" type="text" class="text-box" value="{{item.category_name}}"/></td>
+    <td style="width:74px; padding-left:5px">{{item.category_parent}}</td>
+     <td style="width:80px; padding-left:5px"><input name="" type="text" class="text-box1" value="{{item.sorting}}"/></td>
+    <td style="width:53px; padding-left:5px">
+	{% if customers.hide %}
+	<input name="hide" type="checkbox" checked />
+	{% else %}
+	<input name="hide" type="checkbox" value="" />
+	{% endif %}
+	</td>
+    <td><table width="60%" border="0">
+  <tr>
+    <td width="39%"><img src="/misc/images/options.jpg" width="81" height="26" border="0" /></td>
+    <td width="5%">&nbsp;</td>
+    <td width="56%"><img src="/misc/images/delete.jpg" width="71" height="26" border="0" /></td>
+  </tr>
+</table>
+</td>
+  </tr>
+</table>
+</td>
+  </tr>
+   {% empty %}
+	<em class="formee-req">No Records</em>
+{% endfor %}
+ 
+   
+   
+  
+   
+  
+   
+   
+   
+  
+   
+</table></td>
+  </tr>
+</table></td>
+  </tr>
+</table>
+	
+	
+	
+	</td>
+  </tr>
+</table>
+
+	   
+	   
+</div></div>
+{% include 'admin_footer.html' %}

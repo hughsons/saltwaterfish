@@ -1,0 +1,94 @@
+{% include 'admin_header.htm' %}
+<body>
+ 
+ <div style="clear:both" class="white-bg"><div style="clear:both; padding-bottom:10px" class="content-bg"><table width="100%" border="0">
+  <tr>
+    <td align="left" valign="top"  style="padding-left:10px" class="left-text">
+	{% include 'left_menu_cms.htm' %}
+
+</td>
+    <td style="width:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+    <td>
+	<table width="100%" border="0">
+  <tr>
+    <td class="left-text" style="padding-top:10px;">CMS	 > Pages</td>
+  </tr>
+  <tr>
+    <td style="padding-bottom:10px; padding-top:10px;">
+	<div style="float:left" class="left-text1">View/Edit</div>
+	<div style="float:right; margin-right:15px">
+<div class="search1">
+<div style="float:left; width:230px;"><input name="Input" type="text"  placeholder="Search saltwaterfish.com"/></div>
+<div style="float:left; width:69px;"><input type="submit" name="Submit"  value="Search" /></div>
+</div>
+</div>	</td>
+  </tr>
+  <tr>
+    <td style="height:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+  </tr>
+  <tr>
+  <td>
+  {% if count > 101 %}
+<div style="clear:both; margin-top:19px; margin-bottom:19px" class="gray-line">&nbsp;</div>
+<div style="clear:both; width:800px; height:21px; line-height:21px; " class="records">
+
+Records:<b>{{count}} </b> Page {{page_num}} of {% widthratio count 100 1 %} |&nbsp;Goto Page: <a href="/cmspages?page=1">First</a> 
+{% if page_num < 2 %}
+<a href="/customers?page=1">Previous</a>
+{% elif page_num >= 2 %}
+    <a href="/cmspages?page={{page_num|add:-1}}">Previous</a>
+{% endif %}
+| <a href="/cmspages?page={{page_num|add:+1}}">Next </a> &nbsp<a href="/cmspages?page={% widthratio count 100 1 %}">Last</a></span>
+
+</div>
+
+
+<div style="clear:both; height:20px;">&nbsp;&nbsp;</div>
+  </td>
+  </tr>
+    <tr>
+    <td style="height:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+  </tr>
+  {% endif %}
+  <tr>
+    <td style="width:763px; padding-top:10px">
+	<div style="clear:both; padding-top:0px;" class="black-border">
+<div style="clear:both">
+<div class="yellow-bg-cms"><input type="checkbox" name="checkbox" style="height:29px; line-height:29px" value="checkbox" /></div>
+<div class="cms-bg-1">Title<img src="images/caption-arrow.png" width="14" height="9" border="0" /></div>
+<div class="cms-bg-2">Content</div>
+<div class="cms-bg-3">Date Modified</div>
+<div class="cms-bg-4">Actions</div>
+</div>
+
+{% for item in allpages %}
+
+<div class="{% cycle 'cms' 'cms1' %}">
+<div class="rose"><div class="pad8"><div class="pad8"><input type="checkbox" name="checkbox" value="checkbox" /></div></div></div>
+<div class="rose1"><div class="pad8">{{item.htmlpage}}</div></div>
+<div class="rose2"><div class="pad8">{{item.content|striptags|slice:":130"}}...</div></div>
+<div class="rose3"><div class="pad8">{{item.last_update}}</div></div>
+<div class="rose4">
+<div style="width:25px; float:left">&nbsp;</div>
+<div class="cms-left"><div class="pad8"><a href="/cmspageedit?pageid={{item.id}}"><img src="/misc/images/edi.jpg" width="63" height="19" border="0" /></a></div></div>
+<div style="width:5px; float:left">&nbsp;</div>
+<div class="cms-right"><div class="pad8"><a href="/actioncmsmanager?action=delete&id={{item.id}}" onclick="return confirm('Are you sure you want to delete?')"><img src="/misc/images/del.jpg" width="63" height="19" border="0" /></a></div></div>
+
+<div></div>
+
+</div>
+</div>
+ {% empty %}
+	<em class="formee-req">No Records</em>
+{% endfor %}
+ 
+	</td>
+  </tr>
+</table>
+	</td>
+  </tr>
+</table>
+</div></div>
+ 
+ 
+ {% include 'admin_footer.html' %}

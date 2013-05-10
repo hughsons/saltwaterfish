@@ -1,0 +1,165 @@
+{% include 'admin_header.htm' %}
+<div style="clear:both" class="white-bg">
+<div style="clear:both; padding-bottom:10px" class="content-bg">
+<table width="100%" border="0">
+  <tr>
+    <td align="left" valign="top" width="130" style="padding-left:20px" class="left-text"><span class="left-text1">Products</span><br />
+<br />
+<a href="/products?page=1">View/Edit</a><br />
+        Add New<br />
+        Bundles<br />
+        <a href="/categories?page=1">Categories</a><br />
+        Inventtory<br />
+        <a href="/product_wish_list?page=1">Wish List</a><br />
+         <a href="/products-7-reviews?page=1">Reviews</a><br />
+        Import/Export</td>
+    <td style="width:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+    <td>
+	<table width="100%" border="0">
+  <tr>
+    <td class="left-text" style="padding-top:10px;">Products	 > View/Edit</td>
+  </tr>
+  <tr>
+    <td style="padding-bottom:10px; padding-top:10px;">
+	<div style="float:left" class="left-text1">View/Edit</div>
+	<div style="float:right; margin-right:15px">
+<div class="search1">
+<div style="float:left; width:230px;"><input name="Input" type="text"  placeholder="Search saltwaterfish.com"/></div>
+<div style="float:left; width:69px;"><input type="submit" name="Submit"  value="Search" /></div>
+</div>
+</div>	</td>
+  </tr>
+  <tr>
+    <td style="height:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+  </tr>
+  <tr>
+  <td>
+  <div class="left-text1 style1" style="float:left">Margarita Turbo Snail Grou...</div>
+  <div style="float:right;"><img src="image/delete-button.jpg" style="margin-right:10px;"  /><img src="image/save-button.jpg"  /></div>  </td>
+  </tr>
+    <tr>
+    <td style="height:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+  </tr>
+  
+  <tr>
+    <td style="width:763px; padding-top:10px"><div style="clear:both; padding-top:20px;">
+<div>
+        <ul class="tabs1"  >
+		<li><a href="/productinfo?pid={{allitems.catalogid}}" rel="view1">Information</a></li>
+            <li><a href="productimages?pid=81" rel="view2">Images</a></li>
+            <li><a href="/productrelated?pid={{allitems.catalogid}}" >Related</a></li>
+            <li><a href="/productoptions?pid={{allitems.catalogid}}"  rel="view4">Options</a></li>
+			 <li><a href="/productarticles?pid={{allitems.catalogid}}"  rel="view5">Articles</a></li>
+			 <li><a href="/productreviews?pid={{allitems.catalogid}}"  rel="view6">Reviews</a></li>
+        </ul>
+		
+        <div class="tabcontents1">
+		
+		  <div id="view1" class="tabcontent1 selected">
+<div class="order-txt" style="clear:both; padding-left:15px; padding-top:5px; padding-bottom:5px; background-color:#636363">Product Information</div>
+<table width="100%" border="0">
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td class="cate1"><span style="font-size:16px;">Catalog ID 5486-</span><u>Margarita Turbo Snail Grou...</u></td>
+  </tr>
+    <tr>
+    <td>
+	<div class="clr">
+	<div class="float-left wid14 headingbg2">Related Products</div>
+     <div class="float-right wid15"><img src="/misc/images/add-new-button.jpg" width="116" height="25" border="0" />&nbsp;&nbsp;<img src="/misc/images/save-changes1.jpg" width="152" height="25" /></div>
+		</div>
+		<div class="clr">&nbsp;&nbsp;</div>
+
+<div class="clr">
+<div class="clr product_categories">
+<div class="float-left wid16">
+Thumbnail</div>
+<div class="float-left wid17">ID</div>
+<div class="float-left wid18">Product Name</div>
+<div class="float-left wid19">Price</div>
+<div class="float-left wid20">Sorting</div>
+<div class="float-left">Delete
+</div>
+
+
+
+</div>
+<div class="clr">&nbsp;&nbsp;</div>
+<div class="clr">
+<div class="float-left wid14 export pad28 ">Related Aquarium Supplies products </div>
+<div class="float-right wid15"><div class="float-right wid15"><img src="/misc/images/add-new-button.jpg" width="116" height="25" border="0" />&nbsp;&nbsp;<img src="/misc/images/save-changes1.jpg" width="152" height="25" /></div></div>
+</div>
+<div class="clr">
+<div class="clr product_categories">
+<div class="float-left wid16">
+Thumbnail</div>
+<div class="float-left wid17">ID</div>
+<div class="float-left wid18">Product Name</div>
+<div class="float-left wid19">Price</div>
+<div class="float-left wid20">Sorting</div>
+<div class="float-left">Delete
+</div>
+
+
+
+</div>
+<div class="clr">&nbsp;&nbsp;</div>
+
+
+
+</div>
+
+</div>
+	
+	
+	</td>
+  </tr>
+
+  
+  
+  
+  
+
+  
+  
+
+
+ 
+ 
+</table>
+
+
+ </div>
+ </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div></td>
+  </tr>
+</table>
+	
+	
+	
+	</td>
+  </tr>
+</table>
+</div>
+</div>
+
+
+
+
+{% include 'admin_footer.html' %}

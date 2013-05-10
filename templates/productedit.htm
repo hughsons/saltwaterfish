@@ -1,0 +1,376 @@
+{% include 'admin_header.htm' %}
+<link href="/misc/css4/style.css" rel="stylesheet" type="text/css" />
+    <script src="/misc/tabcontent1.js" type="text/javascript"></script>
+    <link href="/misc/tabcontent1.css" rel="stylesheet" type="text/css" />
+<div style="clear:both" class="white-bg"><div style="clear:both; padding-bottom:10px" class="content-bg"><table width="100%" border="0">
+  <tr>
+    <td align="left" valign="top" width="130" style="padding-left:20px" class="left-text"><span class="left-text1">Products</span><br />
+<br />
+ <a href="/products?page=1">View/Edit</a><br />
+        Add New<br />
+        Bundles<br />
+        <a href="/categories?page=1">Categories</a><br />
+        Inventtory<br />
+        <a href="/product_wish_list?page=1">Wish List</a><br />
+         <a href="/products-7-reviews?page=1">Reviews</a><br />
+        Import/Export</td>
+    <td style="width:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+    <td>
+	<table width="100%" border="0">
+  <tr>
+    <td class="left-text" style="padding-top:10px;">Products > View/Edit</td>
+  </tr>
+  <tr>
+    <td style="padding-bottom:10px; padding-top:10px;">
+	<div style="float:left" class="left-text1">View/Edit</div>
+	<div style="float:right; margin-right:15px">
+<div class="search1">
+<div style="float:left; width:230px;"><input name="Input" type="text"  placeholder="Search saltwaterfish.com"/></div>
+<div style="float:left; width:69px;"><input type="submit" name="Submit"  value="Search" /></div>
+</div>
+</div>	</td>
+  </tr>
+  <tr>
+    <td style="height:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+  </tr>
+  
+    
+  
+  <tr>
+    <td style="width:763px; padding-top:10px"><div >
+
+
+
+<div class="clr" style="margin-top:0px;">
+<div class="product_edit_txt" style="float:left; margin-bottom:10px;width:650px;">{{allitems.name}}</div>
+<div class="gray_btn" style="float:left; width:96px; height:21px; text-align:center; padding-top:3px;"><img src="/misc/images/x_symbol.png"  style="float:left; padding-left:10px;"/>Delete</div>
+<div style="float:left; width:10px;">&nbsp;</div>
+<div class="gray_btn" style="float:left; width:86px; height:21px; text-align:center; padding-top:3px;"><img src="/misc/images/right_symbol.png"  style="float:left; padding-left:10px;"/>Save</div>
+</div>
+<div class="clr" style="background-color:#dddddd; height:4px;"></div>
+<ul class="tabs1"  >
+	<li><a href="/productinfo?pid={{allitems.catalogid}}" rel="view1">Information</a></li>
+	<li><a href="/productimages?pid={{allitems.catalogid}}" rel="view2">Images</a></li>
+	<li><a href="/productrelated?pid={{allitems.catalogid}}"  rel="view3">Related</a></li>
+	<li><a href="/productoptions?pid={{allitems.catalogid}}"  rel="view4">Options</a></li>
+	<li><a href="/productarticles?pid={{allitems.catalogid}}"  rel="view5">Articles</a></li>
+	<li><a href="/productreviews?pid={{allitems.catalogid}}"  rel="view6">Reviews</a></li>
+</ul>
+<div class="clr product_info">Product Information</div>
+
+<div class="clr product_catelog"><span>Catalog ID {{allitems.catalogid}} </span>- {{allitems.name}}</div>
+<div class="clr" style="margin-top:10px;">
+<div class="product_txt1" style="float:left; width:130px">ID/Sku:</div>
+<div style="float:left; width:266px; margin-bottom:10px;"><input name="Input"  class="product_input" type="text"  value="{{allitems.id}}"/></div>
+<div align="right" class="product_txt1" style="float:left; width:130px; padding-right:20px;">MFG ID:</div>
+<div style="float:left; width:266px; margin-bottom:10px;"><input name="Input"  class="product_input"type="text" value="{{allitems.mfgid}}" /></div>
+</div>
+<div class="clr" style="background-color:#dedede; height:1px;"></div>
+<div class="clr" style="margin-top:10px;">
+<div class="product_txt1" style="float:left; width:130px">Name:</div>
+<div style="float:left; width:525px; margin-bottom:10px;"><input name="Input"  class="product_input1"type="text" value="{{allitems.name}}" /></div>
+</div>
+<div class="clr" style="background-color:#dedede; height:1px;"></div>
+<div class="clr" style="margin-top:10px;">
+<div class="product_txt1" style="float:left; width:130px">Scientific Name:</div>
+<div style="float:left; width:525px; margin-bottom:10px;"><input name="Input"  class="product_input1"type="text"  value="{{allitems.description}}"/></div>
+</div>
+<div class="clr" style="background-color:#dedede; height:1px;"></div>
+<div class="clr" style="margin-top:10px;">
+<div class="product_txt1" style="float:left; width:130px">Manufacturer:	</div>
+<div style="float:left; width:525px; margin-bottom:10px;">
+<select name=manufacturer>{% for mitem in manufacturers %}
+{% ifequal allitems.manufacture  mitem.id %}
+<option value="{{mitem.id}}" selected>{{mitem.manufacturer}}</option> 
+{% else %}
+<option value="{{mitem.id}}">{{mitem.manufacturer}}</option>
+{% endifequal  %}{% endfor %}
+
+</select>
+
+</div>
+</div>
+<div class="clr" style="background-color:#dedede; height:1px;"></div>
+
+<div class="clr product_categories" style="margin-top:20px;">Categories</div>
+<div class="clr" style="margin-top:20px;">
+<div style="float:left; width:662px;">
+<textarea  class="product_text_area"name="" cols="" rows="">Search >> Marine Life
+Marine Life >> Invertebrates >> Snails
+Search >> Reef Sate: Yes
+Search >> Nano Tank Marine Life >> Invertebrates
+Search >> Lighting: Medium</textarea>
+</div>
+<div style="float:left; width:120px; margin-left:20px; margin-top:30px;">
+<div class="gray_btn" style="float:left; width:96px; height:21px; text-align:center; padding-top:3px;">Add</div>
+<div class="gray_btn" style="float:left; width:116px; height:21px; text-align:center; padding-top:3px; margin-top:15px;">Remove</div>
+</div>
+</div>
+<div class="clr">&nbsp;</div>
+<div class="clr">
+<div style="float:left; width:393px;">
+<div class="clr  product_categories">Pricing</div>
+<div class="clr">
+<div style="float:left; width:69px;">&nbsp;</div>
+<div style="float:left; width:55px;">
+<div class="clr product_txt2" style="margin-top:10px;">Cost</div>
+<div class="clr" style="margin-top:10px;"><input name="" type="text" class="border_txt" style="width:32px; height:20px;" value="{{allitems.cost}}" /></div>
+<div class="clr product_txt2" style="margin-top:10px;">Price</div>
+<div class="clr" style="margin-top:10px;"><input name="" type="text" class="border_txt" style="width:32px; height:20px;" value="{{allitems.price}}" /></div>
+</div>
+<div style="float:left; width:85px;">&nbsp;</div>
+<div style="float:left; width:90px;">
+<div class="clr product_txt2" style="margin-top:10px;">Retail Price</div>
+<div style="width:55px; margin-left:20px;"><div class="clr" style="margin-top:10px;"><input name="" type="text" class="border_txt" style="width:32px; height:20px;" value="{{allitems.price2}}" /></div></div>
+<div class="clr product_txt2" style="margin-top:10px;">
+      <input type="checkbox" name="checkbox" class="product_chkbox" value="checkbox" />
+  On Sale</div>
+<div style="width:55px; margin-left:20px;"><div class="clr" style="margin-top:10px;"><input name="" type="text" class="border_txt" style="width:32px; height:20px;" value="{{allitems.onsale}}" /></div></div>
+</div>
+<div class="clr">
+<div style="float:left; width:180px;">&nbsp;</div>
+<div style="float:left; width:73px;"><div class="clr product_txt2" style="margin-top:10px;">Start Date<input name="" type="text" class="border_txt" style="width:73px; height:20px;" value="{{allitems.date_created}}"/></div></div>
+<div style="float:left; width:20px;">&nbsp;</div>
+<div style="float:left; width:73px;"><div class="clr product_txt2" style="margin-top:10px;">End Date<input name="" value="{{allitems.date_created}}" type="text" class="border_txt" style="width:73px; height:20px;"/></div></div>
+</div>
+</div>
+</div>
+<div style="width:10px; float:left;">&nbsp;</div>
+<div style="float:left; width:393px;">
+<div class="clr  product_categories">Options</div>
+<div class="clr" style="margin-top:10px;">
+<div style="float:left; width:185px; margin-left:10px;">
+<div class="clr product_txt3" style="padding:10px 0px;"><input name="" type="checkbox" value="" style="border:2px dotted #00f;display:block;background:#ff0000" />Non-Texable	</div>
+<div class="clr product_txt3" style="padding:10px 0px;"><input name="" type="checkbox" value="" />Not For Sale	</div>
+<div class="clr product_txt3" style="padding:10px 0px;"><input name="" type="checkbox" value="" />Hide	</div>
+<div class="clr product_txt3" style="padding:10px 0px;"><input name="" type="checkbox" value="" />Gift Certificate	</div>
+</div>
+
+<div style="float:left; width:185px; margin-left:10px;">
+<div class="clr product_txt3" style="padding:5px 0px;"><input name="" type="checkbox" value="" />Home Special	</div>
+<div class="clr product_txt3" style="padding:5px 0px;"><input name="" type="checkbox" value="" />Category Special	</div>
+<div class="clr product_txt3" style="padding:5px 0px;"><input name="" type="checkbox" value="" />Non-Searchable</div>
+<div class="clr product_txt3" style="padding:5px 0px;"><input name="" type="checkbox" value="" />Fast Track	</div>
+<div class="clr product_txt3" style="padding:5px 0px;"><input name="" type="checkbox" value="" />Reef Package	</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="clr">&nbsp;</div>
+<div class="clr product_categories">Shipping Category</div>
+<div class="clr" style="margin-top:10px;"><select class="product_select" name="">
+<option>Marine Life</option>
+</select></div>
+<div class="clr">&nbsp;</div>
+<div class="clr product_categories">Shipping Oprions</div>
+<div class="clr" style="margin-top:10px;">
+<div style="float:left; width:209px;">
+<div class="clr product_txt3" style="padding-left:10px;">Shipping	</div>
+<div class="clr" style="margin-top:5px; margin-left:10px;"><input name="" type="text" class="border_txt" style="width:32px; height:20px;" value="0.00" /></div>
+</div>
+<div style="float:left; width:53px; margin-right:38px;">&nbsp;</div>
+<div style="float:left; width:53px; margin-right:38px;">
+<div class="clr product_txt3" style="padding-left:10px;">Weight	</div>
+<div class="clr" style="margin-top:5px; margin-left:10px;"><input name="" type="text" class="border_txt" style="width:32px; height:20px;" value="0" /></div>
+</div>
+<div style="float:left; width:53px; margin-right:38px;">
+<div class="clr product_txt3" style="padding-left:10px;">Height	</div>
+<div class="clr" style="margin-top:5px; margin-left:10px;"><input name="" type="text" class="border_txt" style="width:32px; height:20px;" value="{{allitems.height}}" /></div>
+</div>
+<div style="float:left; width:53px; margin-right:38px;">
+<div class="clr product_txt3" style="padding-left:10px;">Width</div>
+<div class="clr" style="margin-top:5px; margin-left:10px;"><input name="" type="text" class="border_txt" style="width:32px; height:20px;" value="{{allitems.width}}" /></div>
+</div>
+<div style="float:left; width:53px; margin-right:65px;">
+<div class="clr product_txt3" style="padding-left:10px;">Depth</div>
+<div class="clr" style="margin-top:5px; margin-left:10px;"><input name="" type="text" class="border_txt" style="width:32px; height:20px;" value="{{allitems.depth}}" /></div>
+</div>
+<div style="float:left; width:114px;">
+<div class="clr product_txt3" style="padding:5px 0px;"><input name="" type="checkbox" value="" />Free Shipping	</div>
+<div class="clr product_txt3" style="padding:5px 0px;"><input name="" type="checkbox" value="" />Ships by itself</div>
+</div>
+</div>
+<div class="clr">&nbsp;</div>
+<div class="clr product_categories">Reward Options</div>
+<div class="clr" style="margin-top:10px;">
+<div class="product_txt3" style="float:left; width:207px; padding-left:10px; margin-bottom:10px;">Redeem Points</div>
+<div class="product_txt3" style="float:left; width:190px;"><input name="" type="checkbox" value="" />Disable purchases </div>
+<div  class="product_txt3"  style="float:left; width:160px;"><input name="" type="checkbox" value="" />Disable Accumulate</div>
+</div>
+<div class="clr product_categories">Inventory Options</div>
+<div class="clr" style="margin-top:10px;">
+<div style="float:left; width:100px; margin-left:15px;">
+<div class="clr product_txt3">Stock</div>
+<div class="clr product_txt3" style="margin-top:15px;">Stock Alert</div>
+</div>
+<div style="float:left; width:54px; margin-right:70px;">
+<div class="clr"><input name="" type="text" class="border_txt" style="width:32px; height:20px;" value="{{allitems.stock}}" /></div>
+<div class="clr" style="margin-top:10px;"><input name="" type="text" class="border_txt" style="width:32px; height:20px;" value="{{allitems.stock_alert}}" /></div>
+</div>
+<div class=" product_txt3" style="float:left; width:122px; margin-right:35px;">Max Per Order</div>
+<div style="float:left; width:54px;"><input name="" type="text" class="border_txt" style="width:32px; height:20px;" value="{{allitems.maximumorder}}" /></div>
+</div>
+<div class="clr">&nbsp;</div>
+<div class="clr product_categories">Title</div>
+<div class="clr" style="margin-left:15px; margin-top:10px;"><textarea  class="product_title_area"name="" cols="" rows="">{{allitems.description}}</textarea></div>
+<div class="clr product_categories" style="margin-top:10px;">
+<div style="float:left;">Description</div>
+<div style="float:right; padding-right:20px;"><u>WYSIWTG Mode on/off</u></div>
+</div>
+<div class="clr"  style="margin-left:15px; margin-top:10px;"><textarea  class="product_description_area"name="" cols="" rows="">{{allitems.extended_description}}</textarea></div>
+<div class="clr">&nbsp;</div>
+<div class="clr product_categories">Keywords</div>
+<div class="clr" style="margin-left:15px; margin-top:10px;"><textarea  class="product_title_area"name="" cols="" rows="">{{allitems.keywords}}</textarea></div>
+<div class="clr">&nbsp;</div>
+<div class="clr product_categories" style="margin-top:10px;">
+<div style="float:left; margin-right:20px;">Custom Fields</div>
+</div>
+<div class="clr" style="margin-top:10px;">
+ <div class="clr">
+<div class="product_txt3" style="float:left; width:50px; padding-right:30px;">Field 4:</div>
+<div style="float:left; width:695px;"><input name="extra_field_5" type="text" class="border_txt" style="width:350px; height:20px;" value="{{allitems.extra_field_4}}" /></div>
+</div>
+</div>
+<div class="clr" style="margin-top:20px;">
+ <div class="clr">
+<div class="product_txt3" style="float:left; width:50px; padding-right:30px;">Field 5:</div>
+<div style="float:left; width:695px;"><input name="extra_field_5" type="text" class="border_txt" style="width:350px; height:20px;" value="{{allitems.extra_field_5}}" /></div>
+</div>
+</div>
+
+<div class="clr" style="margin-top:10px;">
+<div class="product_txt3" style="float:right; padding-right:20px; margin-bottom:20px;"><u>WYSIWTG Mode on/off</u></div>
+</div>
+<div class="clr">
+<div class="product_txt3" style="float:left; width:50px; padding-right:30px;">Field 6:</div>
+<div style="float:left; width:695px;"><textarea class="product_custom_area" name="" cols="" rows="">{{allitems.extra_field_6}}</textarea></div>
+</div>
+<div class="clr" style="margin-top:10px;">
+<div class="product_txt3" style="float:right; padding-right:20px; margin-bottom:20px;"><u>WYSIWTG Mode on/off</u></div>
+</div>
+<div class="clr">
+<div class="product_txt3" style="float:left; width:50px; padding-right:30px;">Field 7:</div>
+<div style="float:left; width:695px;"><textarea class="product_custom_area" name="" cols="" rows="">{{allitems.extra_field_7}}</textarea></div>
+</div>
+<div class="clr" style="margin-top:10px;">
+<div class="product_txt3" style="float:right; padding-right:20px; margin-bottom:20px;"><u>WYSIWTG Mode on/off</u></div>
+</div>
+<div class="clr">
+<div class="product_txt3" style="float:left; width:50px; padding-right:30px;">Field 8:</div>
+<div style="float:left; width:695px;"><textarea class="product_custom_area" name="" cols="" rows="">{{allitems.extra_field_8}}</textarea></div>
+</div>
+<div class="clr" style="margin-top:10px;">
+<div class="product_txt3" style="float:right; padding-right:20px; margin-bottom:20px;"><u>WYSIWTG Mode on/off</u></div>
+</div>
+<div class="clr">
+<div class="product_txt3" style="float:left; width:50px; padding-right:30px;">Field 9:</div>
+<div style="float:left; width:695px;"><textarea class="product_custom_area" name="" cols="" rows="">{{allitems.extra_field_9}}</textarea></div>
+</div>
+<div class="clr" style="margin-top:10px;">
+<div class="product_txt3" style="float:right; padding-right:20px; margin-bottom:20px;"><u>WYSIWTG Mode on/off</u></div>
+</div>
+<div class="clr">
+<div class="product_txt3" style="float:left; width:60px; padding-right:30px;">Field 10:</div>
+<div style="float:left; width:685px;"><textarea class="product_custom_area" name="" cols="" rows="">{{allitems.extra_field_10}}</textarea></div>
+</div>
+
+<div class="clr">&nbsp;</div>
+<div class="clr product_categories">Tank Stats</div>
+<div class="clr">&nbsp;</div>
+<div class="clr">
+<table width="75%" border="0" cellspacing="5" cellpadding="0">
+  <tr>
+    <td>&nbsp;</td>
+    <td class="product_txt3">Name</td>
+    <td>&nbsp;</td>
+    <td class="product_txt3">Value</td>
+  </tr>
+  <tr>
+    <td class="product_txt3">1</td>
+    <td><input name="" type="text"  class="product_name_input" /></td>
+    <td>&nbsp;</td>
+     <td><input name="" type="text"  class="product_name_input" /></td>
+  </tr>
+<tr>
+    <td class="product_txt3">2</td>
+    <td><input name="" type="text"  class="product_name_input" /></td>
+    <td>&nbsp;</td>
+     <td><input name="" type="text"  class="product_name_input" /></td>
+  </tr>
+ <tr>
+    <td class="product_txt3">3</td>
+    <td><input name="" type="text"  class="product_name_input" /></td>
+    <td>&nbsp;</td>
+     <td><input name="" type="text"  class="product_name_input" /></td>
+  </tr>
+ <tr>
+    <td class="product_txt3">4</td>
+    <td><input name="" type="text"  class="product_name_input" /></td>
+    <td>&nbsp;</td>
+     <td><input name="" type="text"  class="product_name_input" /></td>
+  </tr>
+  <tr>
+    <td class="product_txt3">5</td>
+    <td><input name="" type="text"  class="product_name_input" /></td>
+    <td>&nbsp;</td>
+     <td><input name="" type="text"  class="product_name_input" /></td>
+  </tr>
+<tr>
+    <td class="product_txt3">6</td>
+    <td><input name="" type="text"  class="product_name_input" /></td>
+    <td>&nbsp;</td>
+     <td><input name="" type="text"  class="product_name_input" /></td>
+  </tr>
+  <tr>
+    <td class="product_txt3">7</td>
+    <td><input name="" type="text"  class="product_name_input" /></td>
+    <td>&nbsp;</td>
+     <td><input name="" type="text"  class="product_name_input" /></td>
+  </tr>
+ <tr>
+    <td class="product_txt3">8</td>
+    <td><input name="" type="text"  class="product_name_input" /></td>
+    <td>&nbsp;</td>
+     <td><input name="" type="text"  class="product_name_input" /></td>
+  </tr>
+ <tr>
+    <td class="product_txt3">9</td>
+    <td><input name="" type="text"  class="product_name_input" /></td>
+    <td>&nbsp;</td>
+     <td><input name="" type="text"  class="product_name_input" /></td>
+  </tr>
+  <tr>
+    <td class="product_txt3">10</td>
+    <td><input name="" type="text"  class="product_name_input" /></td>
+    <td>&nbsp;</td>
+     <td><input name="" type="text"  class="product_name_input" /></td>
+  </tr>
+</table>
+
+</div>
+<div class="clr">&nbsp;</div>
+<div class="clr">&nbsp;</div>
+<div class="clr">&nbsp;</div>
+<div class="clr product_categories" style="margin-top:10px;">
+ 
+<div class="gray_btn" style="float:right; margin-right:20px; margin-top:5px; width:86px; height:20px;  text-align:center; padding-top:3px;"><img src="images/right_symbol.png"  style="float:left; padding-left:10px;"/><div style="float:left; line-height:18px;">Save</div></div>
+</div>
+<div class="clr">&nbsp;</div>
+<div class="clr">&nbsp;</div>
+<div class="clr">&nbsp;</div>
+</div></td>
+  </tr>
+</table>
+	
+	
+	
+	</td>
+  </tr>
+</table>
+
+	   
+	   
+</div></div>
+{% include 'admin_footer.html' %}

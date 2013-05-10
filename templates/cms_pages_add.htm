@@ -1,0 +1,97 @@
+ {% include 'admin_header.htm' %}
+ <script type="text/javascript" src="/misc/js/nicEdit.js"></script>
+<script type="text/javascript">
+     bkLib.onDomLoaded(function() {
+          var myNicEditor = new nicEditor();
+          myNicEditor.setPanel('myNicPanel');
+          myNicEditor.addInstance('myInstance1');
+     });
+</script>
+<div style="clear:both" class="white-bg"><div style="clear:both; padding-bottom:10px" class="content-bg"><table width="100%" border="0">
+  <tr>
+    <td align="left" valign="top"  style="padding-left:10px" class="left-text">
+{% include 'left_menu_cms.htm' %}
+</td>
+    <td style="width:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+    <td>
+	<table width="100%" border="0">
+  <tr>
+    <td class="left-text" style="padding-top:10px;">CMS > Pages > Edit</td>
+  </tr>
+  <tr>
+    <td style="padding-bottom:10px; padding-top:10px;">
+	<div style="float:left" class="left-text1">Edit Page</div>
+	<div style="float:right; margin-right:15px">
+<div class="search1">
+<div style="float:left; width:230px;"><input name="Input" type="text"  placeholder="Search saltwaterfish.com"/></div>
+<div style="float:left; width:69px;"><input type="submit" name="Submit" value="Search" /></div>
+</div>
+</div>
+	
+	
+	</td>
+  </tr>
+  <tr>
+    <td style="height:2px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+  </tr>
+  <tr>
+    <td style="width:763px; padding-top:10px">
+	<form method="post" action="/actioncmsmanager" method=post name=>
+		
+		<input type="hidden" name="action" value="add">
+		{% csrf_token %} 
+	<table width="100%" border="0" align="left">
+  <tr>
+    <td width="25%" height="40" align="right" valign="middle" class="order-txt-status" style="padding-right:10px;"><span class="required">*</span>Page Title</td>
+    <td width="75%" height="40"><input name="htmlpage" type="text" text-box-cms2  class="text-box-cms2" value="{{allpages.htmlpage}}"/></td>
+  </tr>
+  <tr>
+    <td height="40" align="right" valign="top" style="padding-right:10px;" class="order-txt-status"><span class="required">*</span>Page Description</td>
+    <td height="40">
+      <textarea name="title" class="text-box-cms3">{{allpages.title}}</textarea></td>
+  </tr>
+  <tr>
+    <td height="40" align="right" valign="top" style="padding-right:10px;" class="order-txt-status"><span class="required">*</span>Page Keywords</td>
+    <td height="40"> <textarea name="keywords" class="text-box-cms4">{{allpages.keywords}}</textarea></td>
+  </tr>
+  <tr>
+    <td height="40" align="right" valign="middle" style="padding-right:10px;" class="order-txt-status"><span class="required">*</span>URL Alias</td>
+    <td height="40"><input name="link" type="text"  class="text-box-cms2" value="{{allpages.link}}"/></td>
+  </tr>
+<tr>
+    <td height="40" align="right" valign="bottom" style="padding-right:10px;" class="order-txt-status"><span class="required">*</span>Content</td>
+    <td height="40">&nbsp;</td>
+</tr> 
+	  <tr>
+    <td colspan="2" align="center" valign="middle">
+ 
+	<div id="myNicPanel" style="width: 650px;"></div>
+	  <textarea name="content" cols="" rows="23" id="myInstance1" class="text-box-cms5">{{allpages.content}}</textarea>
+	 	</td>
+    </tr>
+  <tr>
+    <td align="right" valign="middle">&nbsp;</td>
+<td align="center" > <input type="submit" value="Submit Query"></td>
+  </tr>
+</table>
+
+	
+
+	
+	
+	
+	
+	</td>
+  </tr>
+</table>
+	
+	
+	
+	</td>
+  </tr>
+</table>
+
+	   
+	   
+</div></div>
+ {% include 'admin_footer.html' %}

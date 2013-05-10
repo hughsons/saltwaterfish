@@ -1,0 +1,86 @@
+{% include 'admin_header.htm' %}
+ 
+<div style="clear:both" class="white-bg"><div style="clear:both; padding-bottom:10px" class="content-bg"><table width="100%" border="0">
+  <tr>
+    <td align="left" valign="top" width="130" style="padding-left:20px" class="left-text"><span class="left-text1">Products</span><br />
+<br />
+ <a href="/products?page=1">View/Edit</a><br />
+        Add New<br />
+        Bundles<br />
+        <a href="/categories?page=1">Categories</a><br />
+        Inventtory<br />
+        <a href="/product_wish_list?page=1">Wish List</a><br />
+         <a href="/all_product_reviews?page=1">Reviews</a><br />
+        Import/Export</td>
+    <td style="width:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+    <td>
+	<table width="100%" border="0">
+  <tr>
+    <td class="left-text" style="padding-top:10px;">Products > Wish List </td>
+  </tr>
+  <tr>
+    <td style="padding-bottom:10px; padding-top:10px;">
+	<div style="float:left" class="left-text1">Wish List </div>
+	<div style="float:right; margin-right:15px">
+<div class="search1">
+<div style="float:left; width:230px;"><input name="Input" type="text"  placeholder="Search saltwaterfish.com"/></div>
+<div style="float:left; width:69px;"><input type="submit" name="Submit"  value="Search" /></div>
+</div>
+</div>	</td>
+  </tr>
+  
+  
+    <tr>
+    <td style="height:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+  </tr>
+  
+  <tr>
+    <td style="width:763px; padding-top:10px"> 
+	 
+
+<div style="clear:both; height:15px;">&nbsp;&nbsp;</div>
+
+<div style="clear:both; padding-top:0px;" class="black-border"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+
+    <td width="5%" align="center" valign="middle"  class="yell">Rating</td>
+     <td width="13%" align="center" valign="middle"  class="yell">Name</td>
+     <td width="27%" align="center" valign="middle"  class="yell">Short Review</td>
+     <td width="5%" align="center" valign="middle"  class="yell">Approved</td>
+  
+     <td width="13%" align="center" valign="middle"  class="yell">Date</td>
+	 <td width="5%" align="center" valign="middle"  class="yell">Action</td>
+  </tr>
+  {% for item in allitems %}
+  <tr>
+     
+       <td align="left" valign="middle" class="rose-bg" style="padding-left:10px;">{{item.rating}}</td>
+  <td align="left" valign="middle" class="rose-bg" style="padding-left:10px;">{{item.user_name}}</td>
+      <td align="left" valign="middle" class="rose-bg" style="padding-left:10px;">{{item.short_review}}</td>
+     <td align="left" valign="middle" class="rose-bg" style="padding-left:10px;">{{item.approved}}</td>
+      
+     <td align="left" valign="middle" class="rose-bg" style="padding-left:10px;">{{item.review_date}}</td>
+	 <td align="left" valign="middle" class="rose-bg" style="padding-left:10px;"><a href='/reviews-edit-2-edit?itemid={{item.id}}'><img src="/misc/images/edit.jpg" width="55" height="24" border="0" vspace="20" /></a></td>
+
+  </tr>
+  {% empty %}
+	<em class="formee-req">No Records</em>
+{% endfor %}
+</table>
+</div>
+<div style="clear:both; padding-top:20px;" class="tabcontent1">
+ 
+ </td>
+  </tr>
+</table>
+	
+	
+	
+	</td>
+  </tr>
+</table>
+
+	   
+	   
+</div></div>
+{% include 'admin_footer.html' %}

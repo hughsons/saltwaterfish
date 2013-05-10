@@ -1,0 +1,114 @@
+ {% include 'admin_header.htm' %}
+
+<div style="clear:both" class="white-bg"><div style="clear:both; padding-bottom:10px" class="content-bg"><table width="100%" border="0">
+  <tr>
+    <td align="left" valign="top"  style="padding-left:10px" class="left-text">
+	{% include 'left_menu_cms.htm' %}
+</td>
+    <td style="width:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+    <td>
+	<table width="100%" border="0">
+  <tr>
+    <td class="left-text" style="padding-top:10px;">CMS > Email > Edit</td>
+  </tr>
+  <tr>
+    <td style="padding-bottom:10px; padding-top:10px;">
+	<div style="float:left" class="left-text1">Edit Email</div>
+	<div style="float:right; margin-right:15px">
+<div class="search1">
+<div style="float:left; width:230px;"><input name="Input" type="text"  placeholder="Search saltwaterfish.com"/></div>
+<div style="float:left; width:69px;"><input type="submit" name="Submit" value="Search" /></div>
+</div>
+</div>
+	
+	
+	</td>
+  </tr>
+  <tr>
+    <td style="height:2px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+  </tr>
+  <tr>
+    <td style="width:763px; padding-top:10px">
+	<form method="post" action="/actionemailmanager" method=post name=>
+		<input type="hidden" name="id" value="{{allpages.id}}">
+		<input type="hidden" name="action" value="edit">
+		{% csrf_token %} 
+	<table width="100%" border="0" align="left">
+  <tr>
+    <td width="25%" height="40" align="right" valign="middle" class="order-txt-status" style="padding-right:10px;"><span class="required">*</span>Name</td>
+    <td width="75%" height="40"><input name="name" type="text" class="text-box-cms2" value="{{allpages.name}}"/></td>
+  </tr>
+  <tr>
+    <td height="40" align="right" valign="top" style="padding-right:10px;" class="order-txt-status"><span class="required">*</span>Email Subject</td>
+    <td height="40">
+      <textarea name="subject" class="text-box-cms4">{{allpages.subject}}</textarea></td>
+  </tr>
+  <tr>
+    <td height="40" align="right" valign="top" style="padding-right:10px;" class="order-txt-status"><span class="required">*</span>Email Type</td>
+    <td height="40"> <select name="etype">
+		<option value="Text/HTML" selected>Text/HTML
+		<option value="Text">Text
+		<option value="HTML">HTML
+    </select></td>
+  </tr>
+  <tr>
+    <td height="40" align="right" valign="middle" style="padding-right:10px;" class="order-txt-status"><span class="required">*</span>Email Sent to</td>
+    <td height="40"> <select name="to">
+		<option value="customer" selected>customer
+		<option value="merchant">merchant
+		<option value="distributor">distributor
+		<option value="orders">orders
+		<option value="rma">rma
+		<option value="products">products
+		<option value="affiliate">affiliate
+		<option value="gift registry">gift registry
+    </select></td>
+  </tr>
+<tr>
+    <td height="40" align="right" valign="bottom" style="padding-right:10px;" class="order-txt-status"><span class="required">*</span>Text Mail Body</td>
+    <td height="40">&nbsp;</td>
+</tr> 
+	  <tr>
+    <td colspan="2" align="center" valign="middle">
+ 
+	<div id="myNicPanel" style="width: 650px;"></div>
+	  <textarea name="body" cols="80" rows="10" id="myInstance1" >{{allpages.body}}</textarea>
+	 	</td>
+    </tr>
+<tr>
+    <td height="40" align="right" valign="bottom" style="padding-right:10px;" class="order-txt-status"><span class="required">*</span>HTML Mail Body</td>
+    <td height="40">&nbsp;</td>
+</tr> 
+	  <tr>
+    <td colspan="2" align="center" valign="middle">
+ 
+	<div id="myNicPanel" style="width: 650px;"></div>
+	  <textarea name="body_html" cols="80" rows="10" id="myInstance1" >{{allpages.body_html}}</textarea>
+	 	</td>
+    </tr>
+  <tr>
+    <td align="right" valign="middle">&nbsp;</td>
+<td align="center" > <input type="submit" value="Submit Query"></td>
+  </tr>
+</table>
+
+	
+
+	
+	
+	
+	
+	</td>
+  </tr>
+</table>
+	
+	
+	
+	</td>
+  </tr>
+</table>
+
+	   
+	   
+</div></div>
+ {% include 'admin_footer.html' %}

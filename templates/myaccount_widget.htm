@@ -1,0 +1,36 @@
+<div class="height9 clr"></div>
+<div class="blue-border clr">
+<div class="blue-bg-header clr">
+My Account 
+</div>
+{% if request.session.IsLogin %}
+<div class="my-account clr">
+<div class=" clr">&nbsp;&nbsp;</div>
+Welcome <span class="start">{{ request.session.Customer.billing_firstname }} {{ request.session.Customer.billing_lastname }}</span>
+</div>
+{% else %}
+<form name="form" id="form" action="custlogin" method="post">
+{% csrf_token %}
+<div class="my-account clr">
+<div class="height23 clr">&nbsp;&nbsp;</div>
+<div class=" " >{{ form.username }}</div>
+<div class="height12 clr">&nbsp;&nbsp;</div>
+<div class=" " >{{ form.password }}</div>
+<div class="height12 clr">&nbsp;&nbsp;</div>
+<div class="wid187 clr">
+<div class="float-left"><input type=image src="misc/images/sign-in.jpg" width="77" height="21" border="0" /></div>
+<div class="new-customer float-right"><a href="/login#forget" class="start">Forgot Password</a></div>
+
+</div>
+</form>
+
+
+<div class="height12 clr">&nbsp;&nbsp;</div>
+<div class="wid157 clr">
+<div class="new-customer float-left">New Customer? </div>
+<div class="start float-right"><a href="/registration" class="start">Start Here</a></div>
+
+</div>
+</div>
+{% endif %}
+</div>

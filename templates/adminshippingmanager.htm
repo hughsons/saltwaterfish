@@ -1,0 +1,124 @@
+{% include 'admin_header.htm' %}
+ <script src="/misc/tabcontent1.js" type="text/javascript"></script>
+<link href="/misc/menu-style.css" rel="stylesheet" type="text/css" />
+<div style="clear:both" class="white-bg">
+<div style="clear:both; padding-bottom:10px" class="content-bg">
+<table width="100%" border="0">
+  <tr>
+    <td align="left" valign="top"  style="padding-left:10px" class="left-text">
+{% include 'left_menu3.htm' %}
+</td>
+    <td style="width:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+    <td>
+	<table width="100%" border="0">
+  <tr>
+    <td class="left-text" style="padding-top:10px;">Settings	 > Shipping Manager</td>
+  </tr>
+  <tr>
+    <td style="padding-bottom:10px; padding-top:10px;">
+	<div style="float:left" class="left-text1">Shipping Manager</div>
+	<div style="float:right; margin-right:15px">
+<div class="search1">
+<div style="float:left; width:230px;"><input name="Input" type="text"  placeholder="Search saltwaterfish.com"/></div>
+<div style="float:left; width:69px;"><input type="submit" name="Submit"  value="Search" /></div>
+</div>
+</div>	</td>
+  </tr>
+  
+  
+    <tr>
+    <td style="height:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+  </tr>
+   <tr>
+    <td style="height:10px;">&nbsp;</td>
+  </tr>
+    <tr>
+    <td align="right"><a href="adminshippingmanager?mode=add"><img src="misc/images/add-new-button.jpg" width="116" height="21" border="0" /></a></td>
+  </tr> 
+    <tr>
+    <td style="height:10px;">&nbsp;</td>
+  </tr>
+   <tr>
+    <td style="width:763px;" align="center" >
+		
+   
+	{% if mode == "add" %}
+		<form method="post" action="/addshippingmanager" method=post>
+		{% csrf_token %} 
+		<div class="clr" style=" width:375px;" align="left">
+		<div class="head_bg" style="clear:both;padding-top:5px;">
+		<div  class="order-txt1" style="float:left; padding-left:20px; width:180px;">Category Name </div>
+		</div>
+		<div class="clr"><div class="order-txt2" style="float:left; width:180px;   height:30px;border-left:solid 1px #dedede;  padding:10px;">Shipping Category Name</div>
+		<div class="order-txt3" style="float:left; width:152px; height:30px; border-left:solid 1px #dedede;  border-right:solid 1px #dedede;padding:10px;"><input type="text" name="ship_categoryname" value=""></div></div>
+		<div class="clr" style="height:1px; background-color:#dedede; width:375px"></div>
+				
+		<div class="clr"><div class="order-txt2" style="float:left; width:180px;   height:30px;border-left:solid 1px #dedede;  padding:10px;">Status</div>
+		<div class="order-txt3" style="float:left; width:152px; height:30px; border-left:solid 1px #dedede;  border-right:solid 1px #dedede;padding:10px;"> <select name="status">
+			<option value="ACTIVE" selected>ACTIVE
+			<option value="IN-ACTIVE">IN-ACTIVE
+		</select></div></div>
+		<div class="clr" style="height:1px; background-color:#dedede; width:375px"></div>		
+			<div class="clr"><div class="order-txt2" style="float:left; width:180px;   height:30px;border-left:solid 1px #dedede;  padding:10px;"> </div>
+		<div class="order-txt3" style="float:left; width:152px; height:30px; border-left:solid 1px #dedede;  border-right:solid 1px #dedede;padding:10px;">
+		<input type="submit" value=Submit></div></div>
+		<div class="clr" style="height:1px; background-color:#dedede; width:375px"></div>
+		<div class="clr" style="height:1px; background-color:#dedede; width:375px"></div>
+		</div>
+		 </form>
+	{% elif mode == "editform" %}
+		<form method="post" action="/addshippingmanager" method=post>
+		{% csrf_token %} 
+		<div class="clr" style=" width:375px;" align="left">
+		<div class="head_bg" style="clear:both;padding-top:5px;">
+		<div  class="order-txt1" style="float:left; padding-left:20px; width:180px;">Category Name </div>
+		</div>
+		<div class="clr"><div class="order-txt2" style="float:left; width:180px;   height:30px;border-left:solid 1px #dedede;  padding:10px;">Shipping Category Name</div>
+		<div class="order-txt3" style="float:left; width:152px; height:30px; border-left:solid 1px #dedede;  border-right:solid 1px #dedede;padding:10px;"><input type="text" name="ship_categoryname" value=""></div></div>
+		<div class="clr" style="height:1px; background-color:#dedede; width:375px"></div>
+				
+		<div class="clr"><div class="order-txt2" style="float:left; width:180px;   height:30px;border-left:solid 1px #dedede;  padding:10px;">Status</div>
+		<div class="order-txt3" style="float:left; width:152px; height:30px; border-left:solid 1px #dedede;  border-right:solid 1px #dedede;padding:10px;"> <select name="status">
+			<option value="ACTIVE" selected>ACTIVE
+			<option value="IN-ACTIVE">IN-ACTIVE
+		</select></div></div>
+		<div class="clr" style="height:1px; background-color:#dedede; width:375px"></div>		
+			<div class="clr"><div class="order-txt2" style="float:left; width:180px;   height:30px;border-left:solid 1px #dedede;  padding:10px;"> </div>
+		<div class="order-txt3" style="float:left; width:152px; height:30px; border-left:solid 1px #dedede;  border-right:solid 1px #dedede;padding:10px;">
+		<input type="submit" value=Submit></div></div>
+		<div class="clr" style="height:1px; background-color:#dedede; width:375px"></div>
+		<div class="clr" style="height:1px; background-color:#dedede; width:375px"></div>
+		</div>
+		 </form>
+	{% else %}
+
+		<div class="clr" style=" width:375px;" align="left">
+		<div class="head_bg" style="clear:both;padding-top:5px;">
+		<div  class="order-txt1" style="float:left; padding-left:20px; width:180px;">Category Name </div>
+		<div  class="order-txt1" style="float:left; padding-left:20px; width:152px;">Action</div>
+		</div>
+		{% for item in allitems %}
+		<div class="clr"><div class="order-txt2" style="float:left; width:180px;   height:30px;border-left:solid 1px #dedede;  padding:10px;">{{item.ship_categoryname}}</div>
+		<div class="order-txt3" style="float:left; width:152px;   height:30px; border-left:solid 1px #dedede;  border-right:solid 1px #dedede;padding:10px;"><a href="adminshippingmanager?mode=editform&id={{item.id}}"><img src="misc/images/edit.jpg" width="55" height="24" border="0" /></a></div></div>
+		<div class="clr" style="height:1px; background-color:#dedede; width:375px"></div>
+		 {% empty %}
+			<em class="formee-req">No Records</em>
+		{% endfor %}		
+
+		</div>
+	{% endif %}
+	
+	</td>
+  </tr>
+</table>
+	
+	
+	
+	</td>
+  </tr>
+</table>
+</div>
+</div>
+
+
+{% include 'admin_footer.html' %}
