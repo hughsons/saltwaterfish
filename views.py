@@ -69,7 +69,6 @@ class HomePageClass(TemplateView):
             login_is = request.session['IsLogin']
         else:
             login_is = ""
-            
         content = {'page_title': "Summary",
                    'form':LoginForm,
                    'login_is':login_is,
@@ -97,7 +96,6 @@ class ProfileViewClass(LoginRequiredMixin,TemplateView):
 
 
 class MyaccountViewClass(LoginRequiredMixin,TemplateView):
-
     def get(self, request, *args, **kwargs):
         content = {'page_title': "Profile",}
         return render_template(request, "front.htm", content)

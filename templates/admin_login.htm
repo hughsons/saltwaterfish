@@ -1,170 +1,31 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+{% include 'header.htm' %}
+<div align=center>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
-<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Login Saltwaterfish.com</title>
-<link href="/misc/style.css" rel="stylesheet" type="text/css" />
-<link type="text/css" rel="stylesheet" href="css2/reset.css" />
-<link type="text/css" rel="stylesheet" href="/misc/css2/style.css" />
-<!--[if lt IE 9]>
-<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-<![endif]-->
-<style type="text/css">
-<!--
-.arrow{
-	background-image: url(images/arrow.jpg);
-	background-repeat: no-repeat;
-	background-position: left top;
-}
-.new {
-	font-size: 15px;
-	color:#0B5997;
-	background-color:#ffffff;
-	text-decoration:none;
-	font-family: "Trebuchet MS";
-	font-weight:bold;
-	text-align:left;
-	padding-top:15px;
-	padding-bottom:15px;
-	list-style-position: inside;
-	list-style-type: square;
-	}
-.new a:link {
-	text-decoration:none;
-	color: #0B5997;
-}
-.new a:visited {
-	text-decoration:none;
-	color: #0B5997;
-}
-
-.new a:hover {
-	text-decoration:underline;
-	color: #F57D24;
-}
-.new a:active {
-	text-decoration:none;
-	color:#0B5997;
-}
-.but a{
-	float:left;
-	width:auto;
-	padding:5px 15px;
-	font-family: 'Open Sans', sans-serif;	
-	font-size:15px;
-	color:#434343;
-	text-transform:capitalize;
-	border:1px solid #dddddd;
-	-moz-border-radius:5px;
-	-webkit-border-radius:5px;
-	border-radius:5px;
-	background-color:#efefef;
-	background: -webkit-gradient(linear, left top, left bottom, from(#efefef), to(#ffffff));
-	background: -moz-linear-gradient(top,  #efefef,  #ffffff);
-	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#efefef', endColorstr='#ffffff');
-	background-repeat:repeat;
-	text-align:center;	
-	margin:0px 10px;
-}
-.but1 a{
-	float:left;
-	width:auto;
-	padding:5px 15px;
-	font-family: 'Open Sans', sans-serif;	
-	font-size:15px;
-	color:#3c9bd1;
-	text-transform:capitalize;
-	border:1px solid #3c9bd1;
-	-moz-border-radius:5px;
-	-webkit-border-radius:5px;
-	border-radius:5px;
-	background-color:#efefef;
-	background: -webkit-gradient(linear, left top, left bottom, from(#efefef), to(#ffffff));
-	background: -moz-linear-gradient(top,  #efefef,  #ffffff);
-	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#efefef', endColorstr='#ffffff');
-	background-repeat:repeat;
-	text-align:center;	
-	margin:0px 10px;
-}
-.style2 {
-	font-size: 16px;
-	color: #666666;
-}
-.style3 {color: #666666}
-.style4 {color: #333333}
--->
-</style>
-</head>
-
-<body>
-<div align="center">
-<div style="width:100%">
-<div style="width:1440px;" class="shade">
-<div style="width:1002px">
-<div style="clear:both" class="top-area">
-
-<div style="clear:both">
-<div style="float:left" align=""><a href="index.htm"><img src="/misc/images/logo.png" width="426" height="93" border="0" /></a></div>
-<div style="float:right; margin-right:15px">
-
-</div>
-</div>
-<div style="clear:both;"></div>
-<div style="clear:both; margin-left:-30px;">
-
-</div>
-
-
-
-</div>
-<div style="clear:both" class="grey-area">
-<div style="float:left; width:1040px;"> Login
-  <div style="clear:both; height:12px;"></div>
-
-
-
-
-</div></div>
-<div style="clear:both; background-color:#FFFFFF; min-height:400px; height:100%; padding-bottom:20px; overflow:auto"><div style="clear:both;" >
-<div class="clr">
-<div id="wrapper">
-<div class="container">
-<form  action="/adminlogin" method="post" id=form1>
-<div style="width:500px;  margin:0 auto;">
-<div style="margin:30px 0px;">
-<div class="clr">
-{% if error %}
-		<p><i>{{ error }}</i></p>
-		{% endif %}
-		
-		 
-<div class="float_left" style="width:28%; text-align:right; padding-right:10px;">Login:</div>
-<div class="float_left" style="width:35%;"><input type="text" name=username /></div>
-</div>
-
-<div class="clr" >
-<div class="float_left" style="width:28%; text-align:right; padding-right:10px;">Password:</div>
-<div class="float_left" style="width:35%; "><input type="password" name=password /></div>
-</div>
-<div class="clr" style="height:10px;">&nbsp;&nbsp;</div>
-<div class="clr" style="margin-left:35%;"><div class="button"><a href="javascript:;" onclick="document.getElementById('form1').submit();">Login</a></div></div>
-</div>
-</div>
-
-</div>
-</div>
-</div>
+<div class="wid748 ">
+<div class="height12 clr"></div>
+<div  class="content-bg1" style="min-height:200px !important;">
   
+  <div class="blue-bg-header " style="width:100% !important;">
+Staff Login
+</div>{{ request.session.IsLogin }}
+<form name="form" id="form" action="/adminlogin" method="post">
+{% csrf_token %}
+<div class="my-account " style="min-height:200px !important;">
+<div class=" " >{% if message or error_message %}
+      <p class="style5">{{ message }} <span class="style8">{{ error_message }}</span></p>{% endif %}</div>
+<div class="height23 clr">&nbsp;&nbsp;</div>
+<div style="font-size:15px" >Email: {{ form.username }}</div>
+<div class="height12 clr">&nbsp;&nbsp;</div>
+<div style="font-size:15px" >Pass: {{ form.password }}</div>
+<div class="height12 clr">&nbsp;&nbsp;</div>
+
+<div class="wid187 clr">
+<div class="float-left"><input type=image src="/misc/images/sign-in.jpg" width="77" height="21" border="0" /></div>
 
 </form>
-</div>
-<div style="float:left; width:8px;">&nbsp;</div>
-<div style="float:left; width:10px;">&nbsp;&nbsp;</div>
+</div></div></div>
 
-<div style="float:left; width:10px;"></div>
 
-</div>
+
+<div class="height12 clr"></div></div></div></div>
 {% include 'footer.htm' %}

@@ -19,16 +19,13 @@ from django.utils import unittest
 from django.db import connection, transaction
 import logging
 import datetime
+from admin.views import LoginRequiredMixin
 PERPAGE=50
 class CsrfExemptMixin(object):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(CsrfExemptMixin, self).dispatch(request, *args, **kwargs)
 
-class LoginRequiredMixin(object):
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(LoginRequiredMixin, self).dispatch(*args, **kwargs)
 
 @csrf_exempt
 def render_template(request, template, data=None):

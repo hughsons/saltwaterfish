@@ -18,16 +18,35 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import unittest
 from django.db import connection, transaction
 import logging
+import hashlib
 PERPAGE=50
+
+def checkadminlogin_dispatch(f):
+    def wrap(request, *args, **kwargs):
+        if 'IsLogin' in request.session and request.session['IsLogin'] and request.session['Staff'].username !="":
+            staff_list = Admins.objects.filter(username = request.session['Staff_username'], pass_field = hashlib.md5(request.session['Staff_password']).hexdigest())
+            if staff_list:
+                request.session['IsLogin'] = True
+                request.session['Staff'] = staff_list[0]
+                success = True
+            else:
+                return HttpResponseRedirect('/logout')
+            logging.info('Fetch Started::  %s', staff_list[0])
+        else:
+            return HttpResponseRedirect('/logout')
+        return f(request, *args, **kwargs)
+    return wrap
+
+
 class CsrfExemptMixin(object):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(CsrfExemptMixin, self).dispatch(request, *args, **kwargs)
 
 class LoginRequiredMixin(object):
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(LoginRequiredMixin, self).dispatch(*args, **kwargs)
+    @method_decorator(checkadminlogin_dispatch)
+    def dispatch(self,request, *args, **kwargs):
+        return super(LoginRequiredMixin, self).dispatch(request, *args, **kwargs)
 
 @csrf_exempt
 def render_template(request, template, data=None):
@@ -218,7 +237,7 @@ class ProductsReviewEditFormClass(LoginRequiredMixin,TemplateView):
         return render_template(request, "products_7_reviews_edit_2_edit.htm", content)
  
 
-class ApanelViewClass(LoginRequiredMixin,TemplateView):
+class ApanelViewClass(LoginRequiredMixin, TemplateView):
     def get(self, request, *args, **kwargs):
         content = {'page_title': "Profile",}
         return render_template(request, "home-page-admin.htm", content)
