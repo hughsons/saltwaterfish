@@ -1,0 +1,152 @@
+<style type="text/css">
+<!--
+.style12 {color: #FF6600}
+.style13 {color: #FFFFFF}
+-->
+</style>
+{% include 'header.htm' %} 
+<table width="600" border="0" cellpadding="3">
+  <tr>
+    <td colspan="3"><table width="100%" cellpadding="0" cellspacing="0">
+      <tbody>
+        <tr>
+          <td align="left" colspan="2">&nbsp;</td>
+        </tr>
+        <tr>
+          <td align="left" colspan="2"><h2><span class="style3 style12">MY ACCOUNT</span></h2></td>
+        </tr>
+      </tbody>
+    </table>    </td>
+  </tr>
+  <tr>
+    <td colspan="2"><span class="style9">Welcome Back,&nbsp;{{customer.billing_firstname}} {{customer.billing_lastname}} </span><br />
+      If you are not {{customer.billing_firstname}} {{customer.billing_lastname}} click <a href="#">here</a></td>
+    <td bgcolor="#FF6600"><span class="style13">LOGOUT</span></td>
+  </tr>
+  <tr>
+    <td colspan="3"><span class="style11"><strong>Guarantee Request Credits/Gift Certificate Information&nbsp;</strong>(<a href="http://www.saltwaterfish.com/customercredits.asp?email=murthyp@expertsden.com" target="_blank">View Details</a>)</span></td>
+  </tr>
+  <tr>
+    <td width="141"><span class="style11">Billing Information </span></td>
+    <td width="398"><table width="600" border="0" cellpadding="3">
+      <tr>
+        <td class="style11">{{customer.billing_firstname}} {{customer.billing_lastname}} </td>
+      </tr>
+      <tr>
+        <td class="style11">{{customer.billing_address1}} {{customer.billing_address2}} </td>
+      </tr>
+      <tr>
+        <td class="style11"><p>{{customer.billing_city}} {{customer.billing_state}} {{customer.billing_zip}} {{customer.billing_country}} </p></td>
+      </tr>
+      <tr>
+        <td class="style11">{{customer.billing_phone}}</td>
+      </tr>
+    </table></td>
+    <td width="35"><span class="style11"><a href="#">Update Address </a></span></td>
+  </tr>
+  <tr>
+    <td><span class="style11">Shipping Information </span></td>
+    <td><table width="600" border="0" cellpadding="3">
+      <tr>
+        <td class="style11">{{customer.shipping_firstname}} {{customer.shipping_lastname}} </td>
+      </tr>
+      <tr>
+        <td class="style11">{{customer.shipping_address1}} {{customer.shipping_address2}} </td>
+      </tr>
+      <tr>
+        <td class="style11"><p>{{customer.shipping_city}} {{customer.shipping_state}} {{customer.shipping_zip}} {{customer.shipping_country}} </p></td>
+      </tr>
+      <tr>
+        <td class="style11">{{customer.shipping_phone}}</td>
+      </tr>
+    </table></td>
+    <td><span class="style12"><a href="#">Update Address </a></span></td>
+  </tr>
+  <tr>
+    <td colspan="3"><p class="style11">Track Your Recent Orders (Guarantee Requests get submitted here!) (<a href="#">view all</a>) </p>    </td>
+  </tr>
+  <tr>
+    <td colspan="3"><table width="600" border="0" cellpadding="3" cellspacing="1" bgcolor="#CCCCCC">
+      <tr bgcolor="#C4C4C4">
+        <td width="109" class="style11"><span class="style3">Date</span></td>
+        <td width="133" class="style11"><span class="style3">Order #</span> </td>
+        <td width="171" class="style11"><span class="style3">Amount</span></td>
+        <td width="153" bgcolor="#C4C4C4" class="style11"><span class="style3">Status</span></td>
+      </tr>
+      <tr bgcolor="#FFFFFF">
+        <td class="style11">&nbsp;</td>
+        <td class="style11">&nbsp;</td>
+        <td class="style11">&nbsp;</td>
+        <td class="style11">&nbsp;</td>
+      </tr>
+      <tr bgcolor="#FFFFFF">
+        <td class="style11">&nbsp;</td>
+        <td class="style11">&nbsp;</td>
+        <td class="style11">&nbsp;</td>
+        <td class="style11">&nbsp;</td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td colspan="3"><span class="style11">My Address Book <a href="#" class="style7">Add New Address </a></span></td>
+  </tr>
+  <tr>
+    <td colspan="3"><table width="257" border="0" cellpadding="3" cellspacing="1" bgcolor="#CCCCCC">
+      <tr bgcolor="#C4C4C4">
+        <td width="109" class="style11"><span class="style3">Alias</span></td>
+        <td width="133" class="style11"><span class="style3">Details</span> </td>
+        </tr>
+      <tr bgcolor="#FFFFFF">
+        <td class="style11">&nbsp;</td>
+        <td class="style11">&nbsp;</td>
+        </tr>
+      <tr bgcolor="#FFFFFF">
+        <td class="style11">&nbsp;</td>
+        <td class="style11">&nbsp;</td>
+        </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td colspan="3"><span class="style11">My Last Support Requests (30 days) <a href="#" class="style7">Add Support request </a></span></td>
+  </tr>
+  <tr>
+    <td colspan="3"><table width="600" border="0" cellpadding="3" cellspacing="1" bgcolor="#CCCCCC">
+      <tr bgcolor="#C4C4C4">
+        <td width="109" class="style11"><span class="style3">Id</span></td>
+        <td width="133" class="style11"><span class="style3">Dept</span> </td>
+        <td width="171" class="style11"><span class="style3">Subject</span></td>
+        <td width="153" bgcolor="#C4C4C4" class="style11"><span class="style3">Last Action</span></td>
+      </tr>
+      <tr bgcolor="#FFFFFF">
+        <td class="style11">&nbsp;</td>
+        <td class="style11">&nbsp;</td>
+        <td class="style11">&nbsp;</td>
+        <td class="style11">&nbsp;</td>
+      </tr>
+      <tr bgcolor="#FFFFFF">
+        <td class="style11">&nbsp;</td>
+        <td class="style11">&nbsp;</td>
+        <td class="style11">&nbsp;</td>
+        <td class="style11">&nbsp;</td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td colspan="3"><span class="style11">Reef Rewards <a href="#">View Details</a> <a href="#">Redeem</a> </span></td>
+  </tr>
+  <tr>
+    <td colspan="3"><span class="style11">Total Reef Rewards: {{rewards_count}} </span></td>
+  </tr>
+  <tr>
+    <td colspan="3"><span class="style11">My Watch List <a href="#">View Details</a> </span></td>
+  </tr>
+  <tr>
+    <td colspan="3"><table width="600" border="0" cellpadding="3" cellspacing="1" bgcolor="#E8E8E8">
+      <tr bgcolor="#FFFFFF">
+        <td class="style11">Products: {{items_count}}<br />
+          Last Update: {{watch_list_last_update}}</td>
+      </tr>
+    </table></td>
+  </tr>
+</table>
+{% include 'footer.htm' %}

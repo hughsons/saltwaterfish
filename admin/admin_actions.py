@@ -17,8 +17,8 @@ from django.db.models import Count, Min, Sum, Max, Avg
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import unittest
 from django.db import connection, transaction
-import logging
-import datetime
+import logging, datetime, hashlib
+
 from admin.views import LoginRequiredMixin
 PERPAGE=50
 class CsrfExemptMixin(object):
@@ -126,7 +126,9 @@ class CMSManagerActionClass(LoginRequiredMixin,TemplateView):
                 logging.info('LoginfoMessage:: %s',e)
                 return HttpResponseRedirect('/cmspages?page=1&err=Form Field Errors')
 
+
 class EmailManagerActionClass(LoginRequiredMixin,TemplateView):
+    @csrf_exempt
     def post(self, request, *args, **kwargs):
         try:
             t = Emails.objects.get(id=request.POST['id'])
@@ -227,3 +229,156 @@ class OrderStatusActionClass(LoginRequiredMixin,TemplateView):
             except Exception, e:
                 logging.info('LoginfoMessage:: %s',e)
                 return HttpResponseRedirect('/giftcertificates?page=1&err=Form Field Errors')
+
+
+class StaffActionClass(LoginRequiredMixin,TemplateView):
+    def post(self, request, *args, **kwargs):
+        if "action" in request.POST and request.POST['action'] == "edit":
+            try:
+                t = Admins.objects.get(id=request.POST['id'])
+                t.email = request.POST['email']
+                t.ip_restricted = request.POST['ip_restricted']
+                t.name = request.POST['name']
+                t.save()
+                return HttpResponseRedirect('/admins?page=1&err=Successfully Updated the Record')
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+                return HttpResponseRedirect('/admins?page=1&err=Form Field Errors')
+        elif "action" in request.POST and request.POST['action'] == "add":
+            try:
+                t = Admins(email = request.POST['email'], username = request.POST['username'],
+                           userlevel = 0, name = request.POST['name'],
+                           #ip_restricted = request.POST['ip_restricted'],
+                           pass_field = hashlib.md5(request.POST['password']).hexdigest(),
+                           lastchange = datetime.datetime.now())
+                t.save()
+                return HttpResponse('/?page=1&err=Successfully Updated the Record')
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+                return HttpResponse('/admins?page=1&err=Form Field Errors')
+        elif "action" in request.POST and request.POST['action'] == "adminpass":
+            try:
+                staffid = request.POST['id']
+                t = Admins.objects.get(id=staffid,pass_field = hashlib.md5(request.POST['old_pass']).hexdigest())
+                if request.POST['new_pass2'] == request.POST['new_pass1']:
+                    t.pass_field = hashlib.md5(request.POST['new_pass2']).hexdigest()
+                    t.lastchange = datetime.datetime.now()
+                    t.save()
+                    return HttpResponseRedirect('/addadminsform?mode=change&id='+staffid+'&err=Successfully Updated the Record')
+                else:
+                    return HttpResponseRedirect('/addadminsform?mode=change&id='+staffid+'&err=Form Field Errors')
+                
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+                return HttpResponseRedirect('/addadminsform?mode=change&id='+staffid+'&err=Form Field Errors')
+        else:
+            return HttpResponseRedirect('/admins?page=1&err=Form Field Errors')
+
+class CustomerActionClass(LoginRequiredMixin,TemplateView):
+    def post(self, request, *args, **kwargs):
+        if "action" in request.POST and request.POST['action'] == "edit":
+            custid = request.POST['id']
+            try:
+                t = customers.objects.get(contactid=request.POST['id'])
+                #t.email = request.POST['email']
+                t.pass_field = request.POST['pass_field']
+                t.billing_company = request.POST['billing_company']
+                t.billing_firstname = request.POST['billing_firstname']
+                t.billing_lastname = request.POST['billing_lastname']
+                t.billing_address = request.POST['billing_address']
+                t.billing_address2 = request.POST['billing_address2']
+                t.billing_city = request.POST['billing_city']
+                t.billing_state = request.POST['billing_state']
+                t.billing_zip = request.POST['billing_zip']
+                t.billing_country = request.POST['billing_country']
+                t.billing_phone = request.POST['billing_phone']
+                t.shipping_company = request.POST['shipping_company']
+                t.shipping_firstname = request.POST['shipping_firstname']
+                t.shipping_lastname = request.POST['shipping_lastname']
+                t.shipping_address = request.POST['shipping_address']
+                t.shipping_address2 = request.POST['shipping_address2']
+                t.shipping_city = request.POST['shipping_city']
+                t.shipping_state = request.POST['shipping_state']
+                t.shipping_zip = request.POST['shipping_zip']
+                t.shipping_country = request.POST['shipping_country']
+                t.shipping_phone = request.POST['shipping_phone']
+                #t.custenabled = request.POST['custenabled']
+                t.accountno = request.POST['accountno']
+                #logging.info('mailist:: %s',request.POST['maillist'])
+                if "mailist" in request.POST.keys():
+                    t.maillist = 1
+                else:
+                    t.mailist = 0
+                t.comments = request.POST['comments']
+                t.last_update = datetime.datetime.now()
+                
+                t.save()
+                return HttpResponseRedirect('/bcustomersinfo?id='+custid+'&err=Successfully Updated the Record')
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+                return HttpResponseRedirect('/dbcustomersinfo?id='+custid+'&err=Form Field Errors')
+        elif "action" in request.POST and request.POST['action'] == "add":
+            try:
+                t = customers(email = request.POST['email'], pass_field = request.POST['pass_field'] ,
+                              billing_company = request.POST['billing_company'] , billing_firstname = request.POST['billing_firstname'] ,
+                              billing_lastname = request.POST['billing_lastname'] , billing_address = request.POST['billing_address'] ,
+                              billing_address2 = request.POST['billing_address2'] , billing_city = request.POST['billing_city'] ,
+                              billing_state = request.POST['billing_state'] , billing_zip = request.POST['billing_zip'] ,
+                              billing_country = request.POST['billing_country'] , billing_phone = request.POST['billing_phone'] ,
+                              shipping_company = request.POST['shipping_company'] , shipping_firstname = request.POST['shipping_firstname'] ,
+                              shipping_lastname = request.POST['shipping_lastname'] , shipping_address = request.POST['shipping_address'] ,
+                              shipping_address2 = request.POST['shipping_address2'] , shipping_city = request.POST['shipping_city'] ,
+                              shipping_state = request.POST['shipping_state'] , shipping_zip = request.POST['shipping_zip'] ,
+                              shipping_country = request.POST['shipping_country'] , shipping_phone = request.POST['shipping_phone'] ,
+                              custenabled = 1 , accountno = request.POST['accountno'] , comments = request.POST['comments'] , maillist = 1 ,
+                              last_update = datetime.datetime.now())
+                t.save()
+                return HttpResponseRedirect('/customers?page=1&err=Successfully Updated the Record')
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+                return HttpResponseRedirect('/customers?page=1&err=Form Field Errors')
+        elif "action" in request.POST and request.POST['action'] == "addrewards":
+            custid = request.POST['custid']
+            try:
+                t = CustomerRewards(contactid = custid, orderid = request.POST['orderid'],
+                           datentime = datetime.datetime.now(), points = request.POST['points'],)
+                t.save()
+                return HttpResponseRedirect('/bcustomersinfo?id='+custid+'&err=Successfully Updated the Record')
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+                return HttpResponseRedirect('/bcustomersinfo?id='+custid+'&err=Form Field Errors')
+        elif "action" in request.POST and request.POST['action'] == "massdelete" and request.POST['bacthaction'] == 'delete':
+            try:
+                for a in request.POST.getlist('delid'):
+                    customers.objects.filter(contactid=a).delete()
+                    logging.info('Deleting this Record:: %s',a)
+                return HttpResponseRedirect('/customers?page=1&msg=Successfully Deleted the Record')
+                
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+                return HttpResponseRedirect('/customers?page=1&err=Form Field Errors')
+        else:
+            return HttpResponseRedirect('/customers?page=1&err=Form Field Errors')
+
+    def get(self, request, *args, **kwargs):
+        if "action" in request.GET and request.GET['action'] == "deletereward" and request.GET['reid'] != "":
+            custid = request.GET['custid']
+            try:
+                CustomerRewards.objects.filter(id=request.GET['reid']).delete()
+                return HttpResponseRedirect('/bcustomersinfo?id='+custid+'&err=Successfully Deleted')
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+                return HttpResponseRedirect('/bcustomersinfo?id='+custid+'&err=Form Field Errors')
+        if "action" in request.GET and request.GET['action'] == "deletestreward" and request.GET['reid'] != "":
+            custid = request.GET['custid']
+            storereward = request.GET['reid']
+            try:
+                SwfCustomerCreditsLog.objects.filter(id=storereward).delete()
+                logging.info('LoginfoMessage:: %s',storereward)
+                return HttpResponseRedirect('/bcustomersinfo?id='+custid+'&err=Successfully Deleted')
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+                return HttpResponseRedirect('/bcustomersinfo?id='+custid+'&err=Form Field Errors')
+        else:
+            return HttpResponseRedirect('/customers?page=1&err=Form Field Errors')
+

@@ -27,7 +27,7 @@ ul.tabs1 li a
     border: 1px solid #636363;
     border-bottom-color:#636363;
     color: #fff;
-    background: #000 url(image/tabbg.jpg) 0 0 repeat-x;
+    background: #000 url(images/tabbg.jpg) 0 0 repeat-x;
     border-radius: 2px 2px 0 0;
     outline:none;
 }
@@ -40,7 +40,7 @@ ul.tabs1 li a:visited
 ul.tabs1 li a:hover
 {
     border: 1px solid #636363;
-    background:#F0F0F0 url(image/tabbg-over.jpg) 37px 0 repeat-x;
+    background:#F0F0F0 url(images/tabbg-over.jpg) 37px 0 repeat-x;
 	color: #ec5e00;
 	font-weight:bold
 }
@@ -54,7 +54,7 @@ ul.tabs1 li.selected a
     border: 1px solid #636363;
     border-bottom-color: #636363;
 	color: #ffffff;
-	  background:#F0F0F0 url(image/tabbg-over.jpg) 37px 0 repeat-x;
+	  background:#F0F0F0 url(images/tabbg-over.jpg) 37px 0 repeat-x;
 }
         
         

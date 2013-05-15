@@ -1,0 +1,77 @@
+INFO     2013-05-13 17:25:52,528 views.py:34] Fetch Started::  Admins object
+DEBUG    2013-05-13 17:25:52,530 util.py:50] (0.001) SELECT `_customers`.`contac
+tid`, `_customers`.`billing_firstname`, `_customers`.`billing_lastname`, `_custo
+mers`.`billing_address`, `_customers`.`billing_address2`, `_customers`.`billing_
+city`, `_customers`.`billing_state`, `_customers`.`billing_zip`, `_customers`.`b
+illing_country`, `_customers`.`billing_company`, `_customers`.`billing_phone`, `
+_customers`.`email`, `_customers`.`shipping_firstname`, `_customers`.`shipping_l
+astname`, `_customers`.`shipping_address`, `_customers`.`shipping_address2`, `_c
+ustomers`.`shipping_city`, `_customers`.`shipping_state`, `_customers`.`shipping
+_zip`, `_customers`.`shipping_country`, `_customers`.`shipping_company`, `_custo
+mers`.`shipping_phone`, `_customers`.`comments`, `_customers`.`lastlogindate`, `
+_customers`.`website`, `_customers`.`pass`, `_customers`.`discount`, `_customers
+`.`custother1`, `_customers`.`accountno`, `_customers`.`maillist`, `_customers`.
+`type`, `_customers`.`userid`, `_customers`.`last_update`, `_customers`.`custena
+bled`, `_customers`.`additional_field1`, `_customers`.`additional_field2`, `_cus
+tomers`.`additional_field3`, `_customers`.`additional_field4`, `_customers`.`alt
+_contactid` FROM `_customers` WHERE `_customers`.`contactid` = 97 ; args=(97,)
+INFO     2013-05-13 17:25:52,532 admin_actions.py:306] mailist:: None
+DEBUG    2013-05-13 17:25:52,533 util.py:50] (0.000) SELECT (1) AS `a` FROM `_cu
+stomers` WHERE `_customers`.`contactid` = 97  LIMIT 1; args=(97,)
+DEBUG    2013-05-13 17:25:52,536 util.py:50] (0.001) UPDATE `_customers` SET `bi
+lling_firstname` = 'Robert', `billing_lastname` = 'Imhoff', `billing_address` =
+'5328D Park Ave.', `billing_address2` = 'D', `billing_city` = 'Wilmington', `bil
+ling_state` = 'AL', `billing_zip` = '28403', `billing_country` = 'AL', `billing_
+company` = '', `billing_phone` = '910-382-1530', `email` = 'robimhoff@mail2rob.c
+om', `shipping_firstname` = 'Robert', `shipping_lastname` = 'Imhoff', `shipping_
+address` = '5328D Park Ave.', `shipping_address2` = 'D', `shipping_city` = 'Wilm
+ington', `shipping_state` = 'AL', `shipping_zip` = '28403', `shipping_country` =
+ 'AL', `shipping_company` = '', `shipping_phone` = '910-382-1530', `comments` =
+'', `lastlogindate` = '2009-12-02 00:00:00', `website` = NULL, `pass` = 'Robbass
+', `discount` = 0, `custother1` = NULL, `accountno` = '', `maillist` = 0, `type`
+ = 0, `userid` = NULL, `last_update` = '2013-05-13 17:25:52', `custenabled` = 1,
+ `additional_field1` = NULL, `additional_field2` = NULL, `additional_field3` = N
+ULL, `additional_field4` = NULL, `alt_contactid` = '' WHERE `_customers`.`contac
+tid` = 97 ; args=(u'Robert', u'Imhoff', u'5328D Park Ave.', u'D', u'Wilmington',
+ u'AL', u'28403', u'AL', u'', u'910-382-1530', u'robimhoff@mail2rob.com', u'Robe
+rt', u'Imhoff', u'5328D Park Ave.', u'D', u'Wilmington', u'AL', u'28403', u'AL',
+ u'', u'910-382-1530', u'', u'2009-12-02 00:00:00', u'Robbass', 0.0, u'', 0, 0,
+u'2013-05-13 17:25:52', 1, u'', 97)
+DEBUG    2013-05-13 17:25:52,579 util.py:50] (0.000) SAVEPOINT s1_x1; args=()
+DEBUG    2013-05-13 17:25:52,582 util.py:50] (0.001) SELECT (1) AS `a` FROM `dja
+ngo_session` WHERE `django_session`.`session_key` = '58a56dadfc88677d675356d7840
+c32b0'  LIMIT 1; args=('58a56dadfc88677d675356d7840c32b0',)
+DEBUG    2013-05-13 17:25:52,584 util.py:50] (0.000) UPDATE `django_session` SET
+ `session_data` = 'MDFhMmUwYjlmMWE3YzJlOWI5YTg5YTIyYTgxZmE5Nzc5ZTc3YzEyNjqAAn1xA
+ChVB0lzTG9naW5x\nAYhVDlN0YWZmX3Bhc3N3b3JkcQJYCwAAADNkY2FydGFkbWlucQNVBVN0YWZmcQR
+jZGphbmdvLmRi\nLm1vZGVscy5iYXNlCm1vZGVsX3VucGlja2xlCnEFY21vZGVscwpBZG1pbnMKcQZdc
+QdjZGphbmdv\nLmRiLm1vZGVscy5iYXNlCnNpbXBsZV9jbGFzc19mYWN0b3J5CnEIh3EJUnEKfXELKFU
+IdXNlcm5h\nbWVxDFgLAAAAM2RjYXJ0YWRtaW5xDVUEbmFtZXEOWA0AAABBZG1pbmlzdHJhdG9ycQ9VD
+nRlcm1z\nX2FjY2VwdGVkcRBjZGF0ZXRpbWUKZGF0ZXRpbWUKcRFVCgfZCwQAAAAAAABxEoVxE1JxFFU
+KcGFz\nc19maWVsZHEVWCAAAAA2MjQ3YzRmNWE0ODVkMTg3ZGY4M2RmYWY2MzA3MTY5NXEWVQxfb3JpZ
+2lu\nYWxfcGtxF4oBAVUMcmVzZXRwYXNzZXhwcRhOVQZfc3RhdGVxGWNkamFuZ28uZGIubW9kZWxzLmJ
+h\nc2UKTW9kZWxTdGF0ZQpxGimBcRt9cRwoVQZhZGRpbmdxHYlVAmRicR5VB2RlZmF1bHRxH3ViVQVl\
+nbWFpbHEgWBkAAABzaHVnaGVzQHNhbHR3YXRlcmZpc2guY29tcSFVBnVzZXJpcHEiWA0AAAA1MC4x\nO
+TIuMTUxLjQ5cSNVCmxhc3RjaGFuZ2VxJGgRVQoH3QUMFyAZAAAAcSWFcSZScSdVC3VzZXJzZXNz\naW9
+ucShYIAAAAFBxMEJkd29zU2NsQmtuS0g2TFBOQ3I3MWxENjBHYlFUcSlVCWxhc3Rsb2dpbnEq\naBFVC
+gfdBQwXICcAAABxK4VxLFJxLVUJdXNlcmxldmVscS5LA1UMcmVzZXRwYXNza2V5cS9OVQ1p\ncF9yZXN
+0cmljdGVkcTBYAAAAAHExVQJpZHEyigEBVQtwZXJtaXNzaW9uc3EzWCwAAABUS0FJalU5\nNWhnaHRJU
+FlwcHhSSVY4OG1PMnA4bXlOK2hWQXF2UXJsSlJFPXE0dWJVDlN0YWZmX3VzZXJuYW1l\ncTVYCwAAADN
+kY2FydGFkbWlucTZ1Lg==\n', `expire_date` = '2013-05-27 17:25:52' WHERE `django_se
+ssion`.`session_key` = '58a56dadfc88677d675356d7840c32b0' ; args=('MDFhMmUwYjlmM
+WE3YzJlOWI5YTg5YTIyYTgxZmE5Nzc5ZTc3YzEyNjqAAn1xAChVB0lzTG9naW5x\nAYhVDlN0YWZmX3B
+hc3N3b3JkcQJYCwAAADNkY2FydGFkbWlucQNVBVN0YWZmcQRjZGphbmdvLmRi\nLm1vZGVscy5iYXNlC
+m1vZGVsX3VucGlja2xlCnEFY21vZGVscwpBZG1pbnMKcQZdcQdjZGphbmdv\nLmRiLm1vZGVscy5iYXN
+lCnNpbXBsZV9jbGFzc19mYWN0b3J5CnEIh3EJUnEKfXELKFUIdXNlcm5h\nbWVxDFgLAAAAM2RjYXJ0Y
+WRtaW5xDVUEbmFtZXEOWA0AAABBZG1pbmlzdHJhdG9ycQ9VDnRlcm1z\nX2FjY2VwdGVkcRBjZGF0ZXR
+pbWUKZGF0ZXRpbWUKcRFVCgfZCwQAAAAAAABxEoVxE1JxFFUKcGFz\nc19maWVsZHEVWCAAAAA2MjQ3Y
+zRmNWE0ODVkMTg3ZGY4M2RmYWY2MzA3MTY5NXEWVQxfb3JpZ2lu\nYWxfcGtxF4oBAVUMcmVzZXRwYXN
+zZXhwcRhOVQZfc3RhdGVxGWNkamFuZ28uZGIubW9kZWxzLmJh\nc2UKTW9kZWxTdGF0ZQpxGimBcRt9c
+RwoVQZhZGRpbmdxHYlVAmRicR5VB2RlZmF1bHRxH3ViVQVl\nbWFpbHEgWBkAAABzaHVnaGVzQHNhbHR
+3YXRlcmZpc2guY29tcSFVBnVzZXJpcHEiWA0AAAA1MC4x\nOTIuMTUxLjQ5cSNVCmxhc3RjaGFuZ2VxJ
+GgRVQoH3QUMFyAZAAAAcSWFcSZScSdVC3VzZXJzZXNz\naW9ucShYIAAAAFBxMEJkd29zU2NsQmtuS0g
+2TFBOQ3I3MWxENjBHYlFUcSlVCWxhc3Rsb2dpbnEq\naBFVCgfdBQwXICcAAABxK4VxLFJxLVUJdXNlc
+mxldmVscS5LA1UMcmVzZXRwYXNza2V5cS9OVQ1p\ncF9yZXN0cmljdGVkcTBYAAAAAHExVQJpZHEyigE
+BVQtwZXJtaXNzaW9uc3EzWCwAAABUS0FJalU5\nNWhnaHRJUFlwcHhSSVY4OG1PMnA4bXlOK2hWQXF2U
+XJsSlJFPXE0dWJVDlN0YWZmX3VzZXJuYW1l\ncTVYCwAAADNkY2FydGFkbWlucTZ1Lg==\n', u'2013
+-05-27 17:25:52', '58a56dadfc88677d675356d7840c32b0')

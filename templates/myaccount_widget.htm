@@ -1,3 +1,8 @@
+<!--
+.greentext {color: #00CC00; font-size: 12px;}
+.redtext {color: #FF0000; font-size: 12px;}
+label.error { float: none; color: red; padding-left: .5em; vertical-align: top; }
+-->
 <div class="height9 clr"></div>
 <div class="blue-border clr">
 <div class="blue-bg-header clr">
@@ -11,11 +16,16 @@ Welcome <span class="start">{{ request.session.Customer.billing_firstname }} {{ 
 {% else %}
 <form name="form" id="form" action="custlogin" method="post">
 {% csrf_token %}
-<div class="my-account clr">
+<div class="my-account " style="height:100%;min-height:230px;">
 <div class="height23 clr">&nbsp;&nbsp;</div>
+<div class="redtext">{{ error_message }}</div>
 <div class=" " >{{ form.username }}</div>
 <div class="height12 clr">&nbsp;&nbsp;</div>
 <div class=" " >{{ form.password }}</div>
+<div class="height12 clr">&nbsp;&nbsp;</div>
+<div class=" " ><img src="{{ recaptcha }}" /></div>
+<div class="height12 clr">&nbsp;&nbsp;</div>
+<div class=" " >{{ form.recaptcha }}</div>
 <div class="height12 clr">&nbsp;&nbsp;</div>
 <div class="wid187 clr">
 <div class="float-left"><input type=image src="misc/images/sign-in.jpg" width="77" height="21" border="0" /></div>

@@ -3,6 +3,17 @@
 <script language="javascript" type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/jquery.validate.min.js"></script>
 <script type="text/javascript">
 $(function() {
+   $( "#form" ).submit(function() {
+      var thisform = $('#form');
+	  if (thisform.valid()) 
+        return true;
+      else
+	  {
+         alert("Please fill the mandatory fields in the required format");
+	  }
+      return false;
+     });
+	 
    $( "#form" ).validate({
            rules: FORM_RULES,
 		   messages: FORM_MESSAGES

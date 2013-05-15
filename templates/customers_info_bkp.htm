@@ -1,0 +1,551 @@
+{% include 'admin_header.htm' %}
+
+<div style="clear:both" class="white-bg">
+<div style="clear:both; padding-bottom:10px" class="content-bg">
+ 
+<table width="100%" border="0">
+  <tr>
+    <td align="left" valign="top" width="130" style="padding-left:20px" class="left-text"><span class="left-text1">Customers</span><br />
+<br />
+View/Edit<br />
+Add New<br />
+Import/Export</td>
+    <td style="width:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+    <td>
+	<table width="100%" border="0">
+  <tr>
+    <td class="left-text" style="padding-top:10px;">Customers	 > View/Edit</td>
+  </tr>
+  <tr>
+    <td style="padding-bottom:10px; padding-top:10px;">
+	<div style="float:left" class="left-text1">View/Edit</div>
+	<div style="float:right; margin-right:15px">
+<div class="search1">
+<div style="float:left; width:230px;"><input name="Input" type="text"  placeholder="Search saltwaterfish.com"/></div>
+<div style="float:left; width:69px;"><input type="submit" name="Submit"  value="Search" /></div>
+</div>
+</div>	</td>
+  </tr>
+  <tr>
+    <td style="height:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+  </tr>
+  <tr>
+  <td> 
+  <div class="left-text1 style1" style="float:left">{{item.billing_firstname}} {{item.billing_lastname}}</div>
+  <div style="float:right;"><img src="misc/images/delete-customer.jpg"  /><img src="misc/images/save-change.jpg"  /></div>  </td>
+  </tr>
+    <tr>
+    <td style="height:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+  </tr>
+  
+  <tr>
+    <td style="width:763px; padding-top:10px"><div style="clear:both; padding-top:20px;">
+<div>
+        <ul class="tabs1" persist="true">
+		<li><a href="#" rel="view1">Info</a></li>
+            <li><a href="#" rel="view2">Orders</a></li>
+            <li><a href="#"  rel="view3">Wish List</a></li>
+            <li><a href="#"  rel="view4">Rewards</a></li>
+			 <li><a href="#"  rel="view5">Store Credit</a></li>
+        </ul>
+		
+        <div class="tabcontents1">
+		
+		  <div id="view1" class="tabcontent1 selected">
+<div class="order-txt" style="clear:both; padding-left:15px; padding-top:5px; padding-bottom:5px; background-color:#636363">Customer Information</div>
+ 
+
+
+
+<table width="100%" border="0">
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td class="cate1">Login Information</td>
+  </tr>
+  <tr>
+    <td class="text1" style="padding-left:10px;"><table width="90%" border="0" align="left">
+  <tr>
+    <td width="30%">Email</td>
+    <td><input name="" type="text" class="text-box" value="{{customer.email}}"/></td>
+  </tr>
+</table>
+</td>
+  </tr>
+<tr>
+    <td class="text1" style="padding-left:10px; border-bottom:none"><table width="90%" border="0" align="left">
+  <tr>
+     <td width="30%">
+Password</td>
+    <td><input name="" type="text" class="text-box" />&nbsp;&nbsp;&nbsp;&nbsp;<img src="misc/images/login-acc.jpg" /></td>
+  </tr>
+</table>
+</td>
+  </tr>
+  <tr>
+  <td class="cate1">Billing Information</td>
+  </tr>
+<tr>
+    <td class="text1" style="padding-left:10px;"><table width="90%" border="0" align="left">
+  <tr>
+     <td width="30%">Company</td>
+    <td><input name="" type="text" class="text-box" value="{{customer.billing_company}}" /></td>
+  </tr>
+</table>
+</td>
+  </tr>
+<tr>
+    <td class="text1" style="padding-left:10px;"><table width="90%" border="0" align="left">
+  <tr>
+    <td width="30%">
+First Name</td>
+    <td><input name="" type="text" class="text-box" value="{{customer.billing_firstname}}"/></td>
+  </tr>
+</table>
+</td>
+  </tr>
+<tr>
+    <td class="text1" style="padding-left:10px;"><table width="90%" border="0" align="left">
+  <tr>
+  <td width="30%">Last Name</td>
+    <td><input name="" type="text" class="text-box" value="{{customer.billing_lastname}}"/></td>
+  </tr>
+</table>
+</td>
+  </tr>
+  <tr>
+    <td class="text1" style="padding-left:10px;"><table width="90%" border="0" align="left">
+  <tr>
+     <td width="30%">Address</td>
+    <td><input name="" type="text" class="text-box" value="{{customer.billing_address}}"/></td>
+  </tr>
+</table>
+</td>
+  </tr>
+<tr>
+    <td class="text1" style="padding-left:10px;"><table width="90%" border="0" align="left">
+  <tr>
+     <td width="30%">Address2</td>
+    <td><input name="" type="text" class="text-box" value="{{customer.billing_address2}}"/></td>
+  </tr>
+</table>
+</td>
+  </tr>
+<tr>
+    <td class="text1" style="padding-left:10px;"><table width="90%" border="0" align="left">
+  <tr>
+    <td width="30%">City</td>
+    <td><input name="" type="text" class="text-box" value="{{customer.billing_city}}"/></td>
+  </tr>
+</table>
+</td>
+  </tr>
+<tr>
+    <td class="text1" style="padding-left:10px;"><table width="90%" border="0" align="left">
+  <tr>
+    <td width="30%">State</td>
+    <td><select name="" class="text-box" ></select></td>
+  </tr>
+</table>
+</td>
+  </tr>
+<tr>
+    <td class="text1" style="padding-left:10px;"><table width="90%" border="0" align="left">
+  <tr>
+     <td width="30%">Zip Code</td>
+    <td><input name="" type="text" class="text-box" value="{{customer.billing_zip}}"/></td>
+  </tr>
+</table>
+</td>
+  </tr>
+<tr>
+    <td class="text1" style="padding-left:10px;"><table width="90%" border="0" align="left">
+  <tr>
+     <td width="30%">Country</td>
+    <td><input name="" type="text" class="text-box" value="{{customer.billing_country}}"/></td>
+  </tr>
+</table>
+</td>
+  </tr>
+<tr>
+    <td class="text1" style="padding-left:10px;"><table width="90%" border="0" align="left">
+  <tr>
+     <td width="30%">Phone</td>
+    <td><input name="" type="text" class="text-box" value="{{customer.billing_phone}}" /></td>
+  </tr>
+</table>
+</td>
+  </tr>
+ <tr>
+    <td class="text1" style="padding-left:10px; border-bottom:none"><table width="90%" border="0" align="left">
+  <tr>
+     <td width="30%">Tax ID</td>
+    <td><input name="" type="text" class="text-box" value="{{customer.accountno}}" /></td>
+  </tr>
+</table>
+</td>
+  </tr>
+  <tr>
+     <td class="cate1">Shipping Information</td>
+  </tr>
+ <tr>
+    <td class="text1" style="padding-left:10px;"><table width="90%" border="0" align="left">
+
+  <tr>
+     <td width="30%">Company</td>
+    <td><input name="" type="text" class="text-box" value="{{customer.shipping_company}}" /></td>
+  </tr>
+</table>
+</td>
+  </tr>
+<tr>
+    <td class="text1" style="padding-left:10px;"><table width="90%" border="0" align="left">
+  <tr>
+    <td width="30%">
+First Name</td>
+    <td><input name="" type="text" class="text-box" value="{{customer.shipping_firstname}}" /></td>
+  </tr>
+</table>
+</td>
+  </tr>
+<tr>
+    <td class="text1" style="padding-left:10px;"><table width="90%" border="0" align="left">
+  <tr>
+  <td width="30%">Last Name</td>
+    <td><input name="" type="text" class="text-box" value="{{customer.shipping_lastname}}" /></td>
+  </tr>
+</table>
+</td>
+  </tr>
+  <tr>
+    <td class="text1" style="padding-left:10px;"><table width="90%" border="0" align="left">
+  <tr>
+     <td width="30%">Address</td>
+    <td><input name="" type="text" class="text-box" value="{{customer.shipping_address}}" /></td>
+  </tr>
+</table>
+</td>
+  </tr>
+<tr>
+    <td class="text1" style="padding-left:10px;"><table width="90%" border="0" align="left">
+  <tr>
+     <td width="30%">Address2</td>
+    <td><input name="" type="text" class="text-box" value="{{customer.shipping_address2}}" /></td>
+  </tr>
+</table>
+</td>
+  </tr>
+<tr>
+    <td class="text1" style="padding-left:10px;"><table width="90%" border="0" align="left">
+  <tr>
+    <td width="30%">City</td>
+    <td><input name="" type="text" class="text-box" value="{{customer.shipping_city}}"/></td>
+  </tr>
+</table>
+</td>
+  </tr>
+<tr>
+    <td class="text1" style="padding-left:10px;"><table width="90%" border="0" align="left">
+  <tr>
+    <td width="30%">State</td>
+    <td><select name="" class="text-box" ></select></td>
+  </tr>
+</table>
+</td>
+  </tr>
+<tr>
+    <td class="text1" style="padding-left:10px;"><table width="90%" border="0" align="left">
+  <tr>
+     <td width="30%">Zip Code</td>
+    <td><input name="" type="text" class="text-box" value="{{customer.shipping_zip}}"/></td>
+  </tr>
+</table>
+</td>
+  </tr>
+<tr>
+    <td class="text1" style="padding-left:10px;"><table width="90%" border="0" align="left">
+  <tr>
+     <td width="30%">Country</td>
+    <td><input name="" type="text" class="text-box" value="{{customer.shipping_country}}" /></td>
+  </tr>
+</table>
+</td>
+  </tr>
+<tr>
+    <td class="text1" style="padding-left:10px; border-bottom:none"><table width="90%" border="0" align="left">
+  <tr>
+     <td width="30%">Phone</td>
+    <td><input name="" type="text" class="text-box" value="{{customer.shipping_phone}}"/></td>
+  </tr>
+</table>
+</td>
+  </tr>
+ 
+  <tr>
+    <td class="cate1">Other Information</td>
+  </tr>
+<tr>
+    <td class="text1" style="padding-left:10px;"><table width="90%" border="0" align="left">
+  <tr>
+     <td width="30%">Enabled</td>
+    <td>
+	{% if customer.custenabled %}
+	<input name="custenabled" type="checkbox" checked />
+	{% else %}
+	<input name="custenabled" type="checkbox" value="" />
+	{% endif %}
+	</td>
+  </tr>
+</table>
+</td>
+  </tr>
+<tr>
+    <td class="text1" style="padding-left:10px;"><table width="90%" border="0" align="left">
+  <tr>
+     <td width="30%">Mail List</td>
+    <td>{% if customer.mailist %}
+	<input name="mailist" type="checkbox" checked />
+	{% else %}
+	<input name="mailist" type="checkbox" value="" />
+	{% endif %}</td>
+  </tr>
+</table>
+</td>
+  </tr>
+<tr>
+    <td class="text1" style="padding-left:10px;"><table width="90%" border="0" align="left">
+  <tr>
+     <td width="30%">Non Taxable</td>
+    <td>{% if customer.type %}
+	<input name="type" type="checkbox" checked />
+	{% else %}
+	<input name="type" type="checkbox" value="" />
+	{% endif %}</td>
+  </tr>
+</table>
+</td>
+  </tr>
+<tr>
+ <td class="text1" style="padding-left:10px; border-bottom:none"><table width="90%" border="0" align="left">
+  <tr>
+     <td width="30%" valign="top">Comments</td>
+     <td><label>
+       <textarea name="textarea" class="text-box4">{{customer.comments}}</textarea>
+     </label></td>
+  </tr>
+</table>
+</td>
+  </tr>
+   <tr>
+    <td class="cate1" align="right"><table width="30%" border="0">
+  <tr>
+    <td class="back">&nbsp;</td>
+    <td>&nbsp;</td>
+    <td class="save-changes1"><input type=image src="misc/images/save-change.jpg"  /></td>
+  </tr>
+</table></form>
+</td>
+  </tr>
+</table>
+<div style="clear:both; height:1px; "></div>
+ 
+<div style="float:left; padding-bottom:20px; padding-left:20px;"> </div>
+ 
+ 
+  </div>
+  
+            <div id="view2" class="tabcontent1">
+					<div class="order-txt" style="clear:both; padding-left:15px; padding-top:5px; padding-bottom:5px; background-color:#636363">Order History</div>
+<div style="clear:both; padding-top:20px;">
+<!--<div style="float:left; padding-bottom:20px; padding-left:20px;">Rcorders:53  Page1of4|Goto page: <img src="arrow-prv1.jpg" /> <img src="arrow-prv2jpg.jpg" /> [1] 2 3 4 <img src="arrow-nxt1.jpg" /> <img src="arrow-nxt2.jpg" /> </div>
+<div style="float:right;">Display:<select name=""><option>15</option></select></div>-->
+</div>
+<div class="head_bg" style="clear:both; padding-top:5px;">
+<div  class="order-txt1" style="float:left; padding-left:20px; width:100px;">Invoice</div>
+<div  class="order-txt1" style="float:left; padding-left:20px; width:120px;">Date</div>
+<div  class="order-txt1" style="float:left; padding-left:20px;width:100px;">Ship to Name</div>
+<div  class="order-txt1" style="float:left; padding-left:20px; width:80px;">Total</div>
+<div  class="order-txt1" style="float:left; padding-left:20px; width:100px;">Status</div>
+<div  class="order-txt1" style="float:left; padding-left:20px;">Actions</div>
+</div>
+{% for item in customerorders %}
+<div style="clear:both; height:1px; background-color:#dedede"></div>
+<div style="clear:both; background-color:#FFFFFF">
+<div class="order-txt2" style="float:left; width:100px; height:50px; border-left:solid 1px #dedede; padding:10px;"> {{item.invoicenum_prefix}}{{item.invoicenum}}</div>
+<div class="order-txt3" style="float:left; width:100px;  height:50px; border-left:solid 1px #dedede; padding:10px;">{{item.date_started}}</div>
+<div class="order-txt2" style="float:left; width:100px;  height:50px; border-left:solid 1px #dedede; padding:10px;">{{item.ofirstname}} {{item.olastname}}</div>
+<div class="order-txt3" style="float:left; width:100px;  height:50px; border-left:solid 1px #dedede; padding:10px;">${{item.oshipcost}}</div>
+<div class="order-txt3" style="float:left; width:100px;   height:50px;border-left:solid 1px #dedede; padding:10px;">{{item.ostatus}}</div>
+<div class="order-txt3" style="float:left; width:202px;   height:50px; border-left:solid 1px #dedede;  border-right:solid 1px #dedede;padding:10px;"><!--<img src="/misc/images/print.jpg" />--> <a href="orderpage?oid={{item.orderid}}"><img src="/misc/images/edit.jpg" width="55" height="24" /></a> <img src="/misc/images/delete.jpg" width="71" height="24" /></div>
+</div>
+
+ {% empty %}
+	<em class="formee-req">No Records</em>
+{% endfor %}
+
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+<div style="clear:both; padding-top:20px;">
+<!--<div style="float:left; padding-bottom:20px; padding-left:20px;">Rcorders:53  Page1of4|Goto page: <img src="/misc/images/arrow-prv1.jpg" /> <img src="/misc/images/arrow-prv2jpg.jpg" /> [1] 2 3 4 <img src="/misc/images/arrow-nxt1.jpg" /> <img src="/misc/images/arrow-nxt2.jpg" /> </div>-->
+ 
+</div>
+             </div>
+			 
+  
+  
+
+  <div id="view3" class="tabcontent1 selected">
+  <div class="order-txt" style="clear:both; padding-left:15px; padding-top:5px; padding-bottom:5px; background-color:#636363">List </div>
+  <div style="clear:both; padding-top:0px;">
+<!--<div style="float:left; padding-bottom:20px; padding-left:20px;">Rcorders:4  Page1of1</div>
+<div style="float:right;">Display:<select name="">
+<option>15</option>
+</select></div>-->
+</div>
+
+<div class="head_bg" style="clear:both; padding-top:5px; margin-top:20px;">
+<div  class="order-txt1" style="float:left; padding-left:20px; width:70px;">Item ID</div>
+<div  class="order-txt1" style="float:left; padding-left:20px;width:200px;">Product</div>
+<div  class="order-txt1" style="float:left; padding-left:20px; width:170px;">Date</div>
+<div  class="order-txt1" style="float:left; padding-left:20px; width:145px;">unit Price</div>
+<div  class="order-txt1" style="float:left; padding-left:20px; width:105px;">unit stock</div>
+</div>
+
+{% for item in wishlists %}
+<div style="clear:both; background-color:#FFFFFF">
+<div class="order-txt2" style="float:left; width:70px; height:15px; border-left:solid 1px #dedede; padding:10px;">{{item.itemid}}</div>
+<div class="order-txt2" style="float:left; width:200px;  height:15px; border-left:solid 1px #dedede; padding:10px;">{{item.itemname}}</div>
+<div class="order-txt2" style="float:left; width:175px;  height:15px; border-left:solid 1px #dedede; padding:10px;">{{item.date_added}}</div>
+<div class="order-txt2" style="float:left; width:150px;  height:15px; border-left:solid 1px #dedede; padding:10px;">{{item.unitprice}}</div>
+<div class="order-txt3" style="float:left; width:105px;   height:15px; border-left:solid 1px #dedede;  border-right:solid 1px #dedede;padding:10px;">{{item.unitstock}}</div>
+</div>
+{% empty %}
+	<em class="formee-req">No Records</em>
+{% endfor %}
+<div style="clear:both; height:1px; background-color:#dedede"></div>
+<div style="clear:both; padding-top:20px;">
+<!--<div style="float:left; padding-bottom:20px; padding-left:20px;">Rcorders:4  Page1of1</div>
+<div style="float:right;">Display:<select name="">
+<option>15</option>
+</select></div>-->
+</div>
+  </div>
+  
+  
+  
+  
+			<div id="view4" class="tabcontent1">
+                    					<div class="order-txt" style="clear:both; padding-left:15px; padding-top:5px; padding-bottom:5px; background-color:#636363">Rewards Information </div>
+                    
+<div class="head_bg" style="clear:both; padding-top:5px; margin-top:20px;">
+<div  class="order-txt1" style="float:left; padding-left:20px; width:200px;">Date</div>
+<div  class="order-txt1" style="float:left; padding-left:20px;width:110px;">Points</div>
+<div  class="order-txt1" style="float:left; padding-left:20px; width:200px;">Reference</div>
+<div  class="order-txt1" style="float:left; padding-left:20px; width:150px;">OrderId</div>
+</div>
+{% for item in customerrewards %}
+
+ 
+<div style="clear:both; height:1px; background-color:#dedede"></div>
+<div style="clear:both; background-color:#FFFFFF">
+<div class="order-txt2" style="float:left; width:200px; height:15px; border-left:solid 1px #dedede; padding:10px;">{{item.datentime}}</div>
+<div class="order-txt2" style="float:left; width:110px;  height:15px; border-left:solid 1px #dedede; padding:10px;">{{item.points}}</div>
+<div class="order-txt2" style="float:left; width:200px;  height:15px; border-left:solid 1px #dedede; padding:10px;"><u>{{item.reference}}</u></div>
+<div class="order-txt2" style="float:left; width:113px;  height:15px; border-left:solid 1px #dedede; padding:10px;"><u>{{item.orderid}}</u></div>
+<div class="order-txt3" style="float:left; width:102px;   height:15px; border-left:solid 1px #dedede;  border-right:solid 1px #dedede;padding:10px;"><img src="/misc/images/delete.jpg" width="71" height="24" /></div>
+</div>
+
+
+
+{% empty %}
+	<em class="formee-req">No Records</em>
+{% endfor %}
+<div style="clear:both; height:1px; background-color:#dedede"></div>
+<div style="clear:both; background-color:#FFFFFF">
+<div class="order-txt2" style="float:left; width:200px; height:15px; border-left:solid 1px #dedede; padding:10px;">Total Points Available</div>
+<div class="order-txt2" style="float:left; width:200px;  height:15px; border-left:solid 1px #dedede; padding:10px;">{{totalrewards.points__sum}}</div>
+ 
+</div>
+<div style="clear:both; height:1px; background-color:#dedede"></div>
+<div style="clear:both; height:30px; padding-top:10px; background-color:#efefef">
+<div class="order-txt2" style="float:left; padding-left:270px;">Points&nbsp;&nbsp;&nbsp;<input type="text" style="border:solid 1px #999999" size="10" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reference<input type="text" style="border:solid 1px #999999" size="20" />
+&nbsp;&nbsp;</div>
+<div style="float:left;"><img src="/misc/images/insert-points.jpg" /></div>
+</div>
+             </div>
+
+
+
+<div id="view5" class="tabcontent1 ">
+                    					<div class="order-txt" style="clear:both; padding-left:15px; padding-top:5px; padding-bottom:5px; background-color:#636363">Store Credit </div>
+<div class="head_bg" style="clear:both; padding-top:5px; margin-top:20px;">
+<div  class="order-txt1" style="float:left; padding-left:20px; width:200px;">Date</div>
+<div  class="order-txt1" style="float:left; padding-left:20px;width:110px;">Credits</div>
+<div  class="order-txt1" style="float:left; padding-left:20px; width:200px;">PromoCode</div>
+<div  class="order-txt1" style="float:left; padding-left:20px; width:150px;">Credit Type</div>
+</div>
+{% for item in storerewards %}
+
+<div style="clear:both; height:1px; background-color:#dedede"></div>
+<div style="clear:both; background-color:#FFFFFF">
+<div class="order-txt2" style="float:left; width:200px; height:15px; border-left:solid 1px #dedede; padding:10px;">{{item.customers_credit_applied}}</div>
+<div class="order-txt2" style="float:left; width:110px;  height:15px; border-left:solid 1px #dedede; padding:10px;">{{item.customers_credit}}</div>
+<div class="order-txt2" style="float:left; width:200px;  height:15px; border-left:solid 1px #dedede; padding:10px;"><u>{{item.customers_promocode}}</u></div>
+<div class="order-txt2" style="float:left; width:113px;  height:15px; border-left:solid 1px #dedede; padding:10px;"><u>{{item.customers_credit_type}}</u></div><div class="order-txt3" style="float:left; width:92px;   height:15px; border-left:solid 1px #dedede;  border-right:solid 1px #dedede;padding:10px;"><img src="/misc/images/delete.jpg" width="71" height="24" /></div>
+
+
+{% empty %}
+	<em class="formee-req">No Records</em>
+{% endfor %}
+<div style="clear:both; height:1px; background-color:#dedede"></div>
+<div style="clear:both; background-color:#FFFFFF">
+<div class="order-txt2" style="float:left; width:200px; height:15px; border-left:solid 1px #dedede; padding:10px;">Total Available</div>
+<div class="order-txt2" style="float:left; width:200px;  height:15px; border-left:solid 1px #dedede; padding:10px;">&nbsp;</div>
+</div>
+
+
+<div style="clear:both; height:1px; background-color:#dedede"></div>
+<div style="clear:both; height:30px; padding-top:10px; background-color:#efefef">
+<div class="order-txt2" style="float:left; padding-left:270px;">Amounts&nbsp;&nbsp;&nbsp;<input type="text" style="border:solid 1px #999999" size="10" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reference<input type="text" style="border:solid 1px #999999" size="20" />
+&nbsp;&nbsp;</div>
+<div style="float:left;"><img src="/misc/images/insert.jpg" /></div>
+</div>
+             </div>
+            </div>
+           
+            
+			
+
+       
+        </div>
+		</div>
+    </td>
+  </tr>
+</table>
+	
+	  
+	
+	</td>
+  </tr>
+</table>
+</div>
+</div>
+
+
+
+
+</div>
+</div>
+</div>
+{% include 'admin_footer.html' %}

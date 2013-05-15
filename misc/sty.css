@@ -1,0 +1,59 @@
+/* CSS Document */
+
+.customer_info_table{width:763px; padding-top:10px}
+.customer_info_contact{clear:both; padding-left:15px; padding-top:5px; padding-bottom:5px; background-color:#636363}
+.customer_info_bot{border-bottom:none;padding-left:10px;}
+.order_history_bg{clear:both; padding-left:15px; padding-top:5px; padding-bottom:5px; background-color:#636363}
+.order_history_invoice{float:left; padding-left:20px; width:100px;}
+.order_history_date{float:left; padding-left:20px; width:100px;}
+.order_history_name{float:left; padding-left:20px;width:140px;}
+.order_history_total{float:left; padding-left:20px; width:80px;}
+.order_history_status{float:left; padding-left:20px; width:100px;}
+.order_history_action{float:left; padding-left:20px;}
+.order_history_line{clear:both; height:1px; background-color:#dedede}
+.order_history_Whitebg{clear:both; background-color:#FFFFFF;}
+.order_history_graybg{clear:both; background-color:#f2f2f2; height:70px;}
+.order_history_column1{float:left; width:100px; height:50px; border-left:solid 1px #dedede; padding:10px;}
+.order_history_column2{float:left; width:100px;  height:50px; border-left:solid 1px #dedede; padding:10px;}
+.order_history_column3{float:left; width:130px;  height:50px; border-left:solid 1px #dedede; padding:10px;}
+.order_history_column4{float:left; width:80px;  height:50px; border-left:solid 1px #dedede; padding:10px;}
+.order_history_column5{float:left; width:100px;   height:50px;border-left:solid 1px #dedede; padding:10px;}
+.order_history_column6{float:left; width:132px;   height:50px; border-left:solid 1px #dedede;  border-right:solid 1px #dedede;padding:10px;}
+.wish_list{clear:both; padding-left:15px; padding-top:5px; padding-bottom:5px; background-color:#636363}
+.wish_list_item{float:left; padding-left:20px; width:100px;}
+.wish_list_product{float:left; padding-left:20px;width:300px;}
+.wish_list_date{float:left; padding-left:20px; width:190px;}
+.wish_list_message{float:left; padding-left:20px; width:105px;}
+.wish_list_whitebg{clear:both; background-color:#FFFFFF}
+.wish_list_greybg{clear:both; background-color:#f7f7f7}
+.wish_list_line{clear:both; height:1px; background-color:#dedede}
+.wish_list_column1{float:left; width:100px; height:15px; border-left:solid 1px #dedede; padding:10px;}
+.wish_list_column2{float:left; width:300px;  height:15px; border-left:solid 1px #dedede; padding:10px;}
+.wish_list_column3{float:left; width:190px;  height:15px; border-left:solid 1px #dedede; padding:10px;}
+.wish_list_column4{float:left; width:105px;   height:15px; border-left:solid 1px #dedede;  border-right:solid 1px #dedede;padding:10px;}
+.rewards_bg{clear:both; padding-left:15px; padding-top:5px; padding-bottom:5px; background-color:#636363}
+.rewards_date{float:left; padding-left:20px; width:300px;}
+.rewards_points{float:left; padding-left:20px;width:150px;}
+.rewards_refer{float:left; padding-left:20px; width:250px;}
+.rewards_line{clear:both; height:1px; background-color:#dedede}
+.rewards_whitebg{clear:both; background-color:#FFFFFF}
+.ordering3{float:left; width:110px; height:15px; border-left:solid 1px #dedede; padding:10px;}
+.ordering4{float:left; width:300px;  height:15px; border-left:solid 1px #dedede; padding:10px;}
+.ordering5{float:left; width:50px;  height:15px; border-left:solid 1px #dedede; padding:10px;}
+.ordering6{float:left; width:252px;   height:15px; border-left:solid 1px #dedede;  border-right:solid 1px #dedede;padding:10px;}
+.ordering7{clear:both; padding-left:15px; padding-top:5px; padding-bottom:5px; background-color:#636363}
+.wish-red {color: #FF0000}
+.wid-height{width:37px; height:15px;}
+.option-pro{width:190px; background-color:#FFFFFF; height:40px; margin:0px auto}
+.backcolor{background-color:#f7f7f7; clear:both}
+.wid303{ width:303px; }
+.rewards_column1{float:left; width:310px; height:15px; border-left:solid 1px #dedede; padding:10px;}
+.rewards_column2{float:left; width:110px;  height:15px; border-left:solid 1px #dedede; padding:10px;}
+.rewards_column3{float:left; width:213px;  height:15px; border-left:solid 1px #dedede; padding:10px;}
+.rewards_column4{float:left; width:72px;   height:15px; border-left:solid 1px #dedede;  border-right:solid 1px #dedede;padding:10px;}
+.rewards_column5{float:left; width:300px;   height:15px; border-left:solid 1px #dedede;  border-right:solid 1px #dedede;padding:10px;}
+.rewards_col{float:left; width:290px; height:15px; border-left:solid 1px #dedede; padding:10px;}
+.rewards_col1{float:left; width:110px;  height:15px; border-left:solid 1px #dedede; padding:10px;}
+.rewards_col2{float:left; width:110px;  height:15px; border-left:solid 1px #dedede; padding:10px;}
+.rewards_col3{float:left; width:213px;  height:15px; border-left:solid 1px #dedede; padding:10px;}
+.rewards_col4{float:left; width:92px;   height:15px; border-left:solid 1px #dedede;  border-right:solid 1px #dedede;padding:10px;}

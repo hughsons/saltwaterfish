@@ -98,6 +98,8 @@ def rmaordervalues(oid,field):
         for crms in crm_obj:
             if field == "invoicenum_prefix":
                 result = crms.invoicenum_prefix
+            elif field == "invoicenum":
+                result = crms.invoicenum
             else:
                 result = crms.ofirstname + ' ' +crms.olastname
     except Exception as e:
@@ -105,3 +107,18 @@ def rmaordervalues(oid,field):
         logging.info('LoginfoMessage:: %s',e)
     logging.info('LoginfoMessage:: %s',result)
     return result
+
+@register.filter("shippingcountries")
+def shippingcountries(field):
+    logging.info('field name:: %s',field)
+    try:
+        if field == 'states':
+            countries = ShippingStates.objects.all()
+        else:
+            countries = ShippingCountries.objects.all()
+            
+    except Exception as e:
+        countries = e
+        logging.info('LoginfoMessage:: %s',e)
+    return countries
+

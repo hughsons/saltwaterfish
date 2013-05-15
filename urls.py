@@ -20,12 +20,23 @@ urlpatterns = patterns('',
     (r'^logout/$', 'auth_views.logout_view'),
 	url(r'^custlogin', 'auth_views.CustomerLoginClass', name='custlogin'),
     url(r'^admin/', include(admin.site.urls)),
-    
+
+# Murthy URLS STARTS HERE	
     url(r'^myaccount', MyaccountViewClass.as_view(), name='myaccount'),
 	url(r'^registration', RegistrationViewClass.as_view(), name='registration'),
 	url(r'^registeruser', RegistrationActionClass.as_view(), name='registeruser'),
 	url(r'^forgetpassword', ForgetPasswordClass.as_view(), name='forgetpassword'),
+	url(r'^sendpassword', ForgetPasswordActionClass.as_view(), name='sendpassword'),
+    url(r'^productlist$', ProductListViewClass.as_view(), name='ProductList'),
+    url(r'^addtocart', AddToCartActionClass.as_view(), name='AddToCart'),
+    url(r'^viewcart', ViewCartViewClass.as_view(), name='viewcart'),
+    url(r'^cartaction', CartActionsClass.as_view(), name='CartAction'),
+    url(r'^cartconfirmation', CartConfirmClass.as_view(), name='CartConfirmation'),
 
+# Murthy URLS ENDS HERE	
+
+
+# Simon URLS HERE
 
     url(r'^apanel', ApanelViewClass.as_view(), name='apanel'),
     url(r'^customers', CustomersViewClass.as_view(), name='customers'),
@@ -39,6 +50,7 @@ urlpatterns = patterns('',
 	url(r'^addadminsform', AddAdminsFormClass.as_view(), name='AddAdminsFormClass'),
     url(r'^categories$', CategoryViewClass.as_view(), name='categories'),
     url(r'^bcustomersinfo', CustomerInfoClass.as_view(), name='customersinfo'),
+	url(r'^baddcustomer', CustomerAddFormClass.as_view(), name='customersinfo'),
     url(r'^cmspages', CMSClass.as_view(), name='cmspages'),
 	url(r'^titlesandcontent', TitlesContentClass.as_view(), name='cmspages'),
 	url(r'^cmspageedit', CMSEditClass.as_view(), name='CMSEditClass'),
@@ -67,5 +79,16 @@ urlpatterns = patterns('',
 	url(r'^actionemailmanager', EmailManagerActionClass.as_view(), name='EmailManagerActionClass'),
 	url(r'^actiongiftmanager', GiftManagerActionClass.as_view(), name='GiftManagerActionClass'),
 	url(r'^actionosmanager', OrderStatusActionClass.as_view(), name='OrderStatusActionClass'),
+	url(r'^adminactions', StaffActionClass.as_view(), name='StaffActionClass'),
+	url(r'^saveadmin', StaffActionClass.as_view(), name='StaffActionClass'),
+	url(r'^changeadminpass', StaffActionClass.as_view(), name='StaffActionClass'),
+	url(r'^deletecustomer', CustomerActionClass.as_view(), name='CustomerActionClass'),
+	url(r'^editcustomer', CustomerActionClass.as_view(), name='CustomerActionClass'),
+	url(r'^addcustomer', CustomerActionClass.as_view(), name='CustomerActionClass'),
+	url(r'^addrewards', CustomerActionClass.as_view(), name='CustomerActionClass'),
+	url(r'^deletereward', CustomerActionClass.as_view(), name='CustomerActionClass'),
+
+
+
     
 )+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

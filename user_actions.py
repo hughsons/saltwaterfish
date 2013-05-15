@@ -18,6 +18,7 @@ from forms import *
 from models import *
 import random
 from google.appengine.api import mail
+import logging, random, hashlib, datetime
 #from django.db import connection, transaction
 PERPAGE=50
 class CsrfExemptMixin(object):
@@ -41,6 +42,129 @@ def render_template(request, template, data=None):
     return response
 
 
+class ForgetPasswordActionClass(TemplateView):
+
+    def post(self, request, *args, **kwargs):
+      content = {}
+      content = {'page_title': "Customer Forget Password"}
+      form = ForgetPwdForm(request.POST)
+      if form.is_valid():
+          if form.cleaned_data['recaptcha'] == str(request.session['ReCaptcha']):
+            customer_list = customers.objects.filter(email = form.cleaned_data['email'])
+            if customer_list:
+              customer = customer_list[0]
+              success = True
+              store_info_list = StoreSettings2.objects.filter(id__in=[3, 5, 32]).order_by('id')
+              store_name = store_info_list[0].varvalue
+              store_logo = store_info_list[1].varvalue
+              store_url =  store_info_list[2].varvalue
+
+              email = Emails.objects.filter(id = 11)[0]
+              mail_subject = email.subject.replace('[store_name]', store_name)
+              mail_body = email.body.replace('[store_name]', store_name)
+              mail_body = mail_body.replace('[store_url]', store_url)
+              mail_body = mail_body.replace("[oemail]", customer.email)
+              mail_body = mail_body.replace("[password]", customer.pass_field)
+              #test_html = mail_subject + "<br>" + mail_body
+              mail.send_mail(sender="support@saltwaterfish.com", to=customer.email, subject=mail_subject, body=mail_body)
+            else:
+              (success, error_msg) = (False, "Email-id is not found in our records.")
+          else:
+            (success, error_msg) = (False, "Recaptcha is not matched.")
+      else:
+        (success, error_msg) = (False, "Incomplete or invalid form data")
+
+      if  success:
+        content = {'form': form, 'page_title': "Customer Forget Password"}
+        #content['recaptcha'] = "https://chart.googleapis.com/chart?chst=d_text_outline&chld=FFCC33|16|h|FF0000|b|%s" %self.GetRecaptcha(request)
+        content['message'] = "Password has been sent to your EMail. Please check your inbox"
+        content.update(csrf(request))
+        return HttpResponseRedirect('login?message=%s#forget' %content['message'])
+      else:
+        c = {'form': form, 'error_message': error_msg}
+
+      return HttpResponseRedirect('login?error=%s#forget' %error_msg)
+
+
+class CustomerLoginActionClass(TemplateView):
+
+  def post(self, request, *args, **kwargs):
+    if request.method == 'POST':
+        #logout(request)
+        customer_list=""
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            logging.info('Form Is clean')
+            email = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            if form.cleaned_data['recaptcha'] == str(request.session['ReCaptcha']):
+                customer_list = customers.objects.filter(email = email,
+                                                         pass_field= password, custenabled=1)
+                if customer_list:
+                    t = customers.objects.get(email = email,
+                                              pass_field= password, custenabled=1)
+                    t.lastlogindate = datetime.datetime.now()
+                    t.save()
+                    request.session['IsLogin'] = True
+                    request.session['Customer'] = customer_list[0]
+                    success = True
+                    logging.info('LoginfoMessage:: %s',customer_list[0])
+                    return HttpResponseRedirect('/myaccount')
+                else:
+                    return HttpResponseRedirect('/login')
+            else:
+                return HttpResponseRedirect('/?error_message=Racaptcha%20not%20matched')
+        else:
+            return HttpResponseRedirect('/login')
+    return HttpResponseRedirect('/login')
+
+
+class AddToCartActionClass(TemplateView):
+  
+    def get(self, request, *args, **kwargs):
+      html_text = ""
+      item_id = 0
+      cart_items = {}
+      # Checking where item_id is available on the query string or not.
+      if 'item_id' in request.GET:
+        item_id = int(request.GET['item_id'])
+        if "CartItems" in request.session:
+          cart_items = request.session["CartItems"]
+          if item_id in cart_items:
+            cart_items[item_id] += 1
+          else:
+            cart_items[item_id] = 1
+          request.session["CartItems"] = cart_items
+        else:
+          request.session["CartItems"] = {}
+        
+      cart_items = request.session["CartItems"]
+      for key, value in cart_items.items():
+        html_text += "%d - %d<br>\n" %(key, value)
+        
+      return HttpResponseRedirect("cartconfirmation?itemid=%d" %item_id)
+
+
+class CartActionsClass(TemplateView):
+
+    def get(self, request, *args, **kwargs):
+      if "cmdUpdate" in request.GET:
+        item_id = int(request.GET['itemid'])
+        quantity = int(request.GET['quantity'])
+        cart_items = request.session["CartItems"]
+        cart_items[item_id] = quantity
+        request.session["CartItems"] = cart_items
+        
+        #return HttpResponse(request.session["CartItems"][item_id])
+
+      if "cmdRemove" in request.GET:
+        item_id = int(request.GET['itemid'])
+        quantity = int(request.GET['quantity'])
+        cart_items = request.session["CartItems"]
+        del cart_items[item_id]
+        request.session["CartItems"] = cart_items
+
+      return HttpResponseRedirect('viewcart')
 
 class RegistrationActionClass(TemplateView):
 

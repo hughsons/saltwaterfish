@@ -67,6 +67,7 @@ class customers(models.Model):
     alt_contactid = models.CharField(max_length=150, blank=True)
     class Meta:
         app_label = ''
+        ordering = ["-contactid"]
 
     
 class Category(models.Model):
@@ -700,6 +701,27 @@ class ShippingCategory(models.Model):
         db_table = u'shipping_category'
         app_label = ''
         ordering = ["id"]
+
+class ShippingCountries(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=150, blank=True)
+    name_short = models.CharField(max_length=150, db_column='name-short', blank=True) # Field renamed to remove dashes. Field name made lowercase.
+    enabled = models.IntegerField(null=True, blank=True)
+    enabled_billing = models.IntegerField(null=True, blank=True)
+    class Meta:
+        db_table = u'shipping_countries'
+        app_label = ''
+
+class ShippingStates(models.Model):
+    id = models.IntegerField(primary_key=True)
+    country = models.CharField(max_length=150, blank=True)
+    name = models.CharField(max_length=150, blank=True)
+    name_short = models.CharField(max_length=150, db_column='name-short', blank=True) # Field renamed to remove dashes. Field name made lowercase.
+    enabled = models.IntegerField(null=True, blank=True)
+    class Meta:
+        
+        db_table = u'shipping_states'
+        app_label = ''
 
 class SwfCustomerCreditsLog(models.Model):
     id = models.IntegerField()

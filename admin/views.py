@@ -282,6 +282,10 @@ class CategoryViewClass(LoginRequiredMixin,TemplateView):
                    'page_num':page_num,}
         return render_template(request, "categories.htm", content)
 
+class CustomerAddFormClass(LoginRequiredMixin, TemplateView):
+    def get(self, request, *args, **kwargs):
+        content = {'title': "Add Customer",}
+        return render_template(request, "customer_add.htm", content)
 
 class CustomerInfoClass(LoginRequiredMixin,TemplateView):
     #summary = Customers.objects.all()
@@ -294,7 +298,7 @@ class CustomerInfoClass(LoginRequiredMixin,TemplateView):
         #customers_promocode = SwfCustomerCreditsLog.objects.values_list('customers_promocode', flat=True) 
         #customers_promocode = customers_promocode['customers_promocode']
         #storerewards = SwfCustomerCreditsLog.objects.filter(customers_email_address=customeremail)
-        storerewards = SwfCustomerCreditsLog.objects.raw('select * from swf_customer_credits_log , promotions where customers_promocode = coupon AND customers_email_address="'+customeremail+'" AND customers_promocode != ""')
+        storerewards = SwfCustomerCreditsLog.objects.raw('select *,swf_customer_credits_log.id as sid from swf_customer_credits_log , promotions where customers_promocode = coupon AND customers_email_address="'+customeremail+'" AND customers_promocode != ""')
         fulldata = list(storerewards)
         try:
             wish_id = WshWishlist.objects.get(customerid=cid)
@@ -409,14 +413,16 @@ class OrderPageClass(LoginRequiredMixin,TemplateView):
         allitems = Orders.objects.get(orderid=oid)
         try:
             transactions = Transactions.objects.get(orderid=oid)
+            amount = transactions.amount
             totalamt = Oitems.objects.filter(orderid=oid).aggregate(Sum('unitprice'))
             totalamt = totalamt['unitprice__sum']
         except Exception as e:
             transactions = ""
             totalamt = 0
+            amount = 0
         alloiitems = Oitems.objects.all().filter(orderid=oid)
         finaltotal = (totalamt + int(allitems.oshipcost)) - allitems.coupondiscount
-        balance = finaltotal - transactions.amount 
+        balance = finaltotal - amount
         content = {'page_title': "Orders Status",
                    'allitems':allitems,
                    'alloiitems':alloiitems,
@@ -431,10 +437,20 @@ class OrderPageClass(LoginRequiredMixin,TemplateView):
 
 class AddAdminsFormClass(LoginRequiredMixin,TemplateView):
     def get(self, request, *args, **kwargs):
-        allitems = OrderStatus.objects.all()
-        content = {'page_title': "Orders Status",
-                   'allitems':allitems,}
-        return render_template(request, "orders_status.htm", content)
+        allitems = Admins.objects.all()
+        if "mode" in request.GET:
+            mode = request.GET['mode']
+        else:
+            mode = ""
+            allitems = ""
+        if "id" in request.GET:
+            allitems = Admins.objects.get(id=request.GET['id'])
+        else:
+             allitems = ""
+        content = {'page_title': "Add User",
+                   'allitems':allitems,
+                   'mode':mode,}
+        return render_template(request, "admins_add.htm", content)
 
 class RmaPagesClass(LoginRequiredMixin,TemplateView):
     def get(self, request, *args, **kwargs):

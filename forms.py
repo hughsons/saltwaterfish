@@ -3,11 +3,11 @@ from django import forms
 class LoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={'class' : 'txt-box1', 'autocomplete':'OFF', 'placeholder':'Email Address'}),max_length = 50)
     password = forms.CharField(widget=forms.PasswordInput(render_value=False,attrs={'class' : 'txt-box1', 'autocomplete':'OFF', 'placeholder':'Password'}), max_length=50)
-    recaptcha = forms.CharField(max_length = 50, required=False,widget=forms.TextInput(attrs={'class' : 'txt-box1', 'autocomplete':'OFF'}))
+    recaptcha = forms.CharField(max_length = 50, required=False,widget=forms.TextInput(attrs={'class' : 'txt-box1', 'autocomplete':'OFF', 'placeholder':'Enter Above Number'}))
     
 class ForgetPwdForm(forms.Form):
     email = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class' : 'txt-box1', 'autocomplete':'OFF', 'placeholder':'Email Address'}))
-    recaptcha = forms.CharField(max_length = 20L,widget=forms.TextInput(attrs={'class' : 'txt-box1', 'autocomplete':'OFF'}))
+    recaptcha = forms.CharField(max_length = 20L,widget=forms.TextInput(attrs={'class' : 'txt-box1', 'autocomplete':'OFF', 'placeholder':'Enter Above Number'}))
 
 class ContactForm(forms.Form):
     subject = forms.CharField()

@@ -14,7 +14,7 @@ from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import unittest
 from forms import *
-from models import customers
+from models import customers, Products
 import random, logging
 import functools
 from functools import wraps
@@ -63,8 +63,16 @@ class MyAccountWidget(TemplateView):
         return render_template( "myaccount_widget.htm", content)
 
 class HomePageClass(TemplateView):
+    def GetRecaptcha(self, request):
+        value = random.randrange(10000, 99999, 1)
+        request.session['ReCaptcha'] = value
+        return value
     def get(self, request, *args, **kwargs):
-        
+        error_message = ""
+        if "ErrorMessage" in request.session:
+          error_message = request.session["ErrorMessage"]
+          del request.session["ErrorMessage"]
+          
         if 'IsLogin' in request.session and request.session['IsLogin']:
             login_is = request.session['IsLogin']
         else:
@@ -72,6 +80,8 @@ class HomePageClass(TemplateView):
         content = {'page_title': "Summary",
                    'form':LoginForm,
                    'login_is':login_is,
+                   'recaptcha':"https://chart.googleapis.com/chart?chst=d_text_outline&chld=FFCC33|16|h|FF0000|b|%s" %self.GetRecaptcha(request),
+                   'error_message': error_message,
                    }
         return render_template(request, "front.htm", content)
    
@@ -89,23 +99,109 @@ class RegistrationViewClass(TemplateView):
         return render_template(request, "registration.htm", content)
 
 
-class ProfileViewClass(LoginRequiredMixin,TemplateView):
-    def get(self, request, *args, **kwargs):
-        content = {'page_title': "Profile",}
-        return render_template(request, "home.htm", content)
-
-
 class MyaccountViewClass(LoginRequiredMixin,TemplateView):
     def get(self, request, *args, **kwargs):
-        content = {'page_title': "Profile",}
-        return render_template(request, "front.htm", content)
+        content = {'page_title': "Profile"}
+        if request.session["IsLogin"] == False: return HttpResponseRedirect('/')
+        customer = request.session['Customer']
+        content['customer'] = request.session['Customer']
+        #content['customerorders'] = Orders.objects.filter(ocustomerid=customer.contactid).all(),
+        return render_to_response("myaccount.html", content)
+
+    def post(self, request, *args, **kwargs):
+        pass
+
+class ProductListViewClass(TemplateView):
+  def get(self, request, *args, **kwargs):
+    content = {}
+    product_list = Products.objects.all()[:50]
+    content['product_list'] = product_list 
+    return render_to_response('productlist.html', content)
+
     
+class CartItems(object):
+
+  def __init__(self, id, name, price, quantity, shipping, tax, image1, image2, image3):
+      self.id = id
+      self.name = name
+      self.quantity = quantity
+      self.price = price
+      self.subtotal = price * quantity
+      self.shipping = shipping
+      self.tax = tax
+      self.total = float(self.subtotal) + float(shipping) + (float(self.subtotal) * float(tax)/100.0)
+
+      self.image1 = image1
+      self.image2 = image2
+      self.image3 = image3
+
+class CartConfirmClass(TemplateView):
+
+  def get(self, request, *args, **kwargs):
+    id = 0
+    content = {}
+    if "itemid" in request.GET:
+      id = int(request.GET['itemid'])
+    
+    item = Products.objects.filter(catalogid=id)[0]
+    cart_item = CartItems(item.catalogid, item.name, item.price,
+                            1, 0.0, 0.0,
+                            item.image1, item.image2, item.image3)
+
+    if 'CartItems' in request.session:
+      cart_items = request.session["CartItems"]
+      item_count = 0
+      sub_total = 0
+      for key, value in cart_items.items():
+        if key == id:
+          item_count += value
+          sub_total = sub_total + (cart_item.subtotal * value)
+                          
+      content['ItemCount'] = item_count
+      content['subtotal'] = sub_total
+      
+    else:
+      content['ItemsHash'] = {}
+
+    content['item'] = cart_item
+    
+    return render_to_response('CartConfirmation.html', content)
+
+
+class ViewCartViewClass(TemplateView):
+  #Page Url: /viewcart
+
+  def get(self, request, *args, **kwargs):
+    content = {}
+    if 'CartItems' in request.session:
+      cart_items = request.session["CartItems"]
+      content['ItemsHash'] = request.session["CartItems"]
+    else:
+      cart_items = {}
+      content['ItemsHash'] = {}
+
+    item_list = cart_items.keys()
+    mycart = Products.objects.filter(catalogid__in=item_list)
+
+    #Preparing result to render in html page.
+    selected_items = []
+    for item in mycart:
+      cart_item = CartItems(item.catalogid, item.name, item.price,
+                            cart_items[item.catalogid], 0.0, 0.0,
+                            item.image1, item.image2, item.image3)
+      selected_items.append(cart_item)
+      
+    content['MyCart'] = selected_items
+    return render_to_response('ViewCart.html', content)
+
 class ForgetPasswordClass(LoginRequiredMixin,TemplateView):
 
+    @csrf_exempt
     def GetRecaptcha(self, request):
         value = random.randrange(10000, 99999, 1)
         request.session['ReCaptcha'] = value
         return value
+
     @csrf_exempt
     def post(self, request, *args, **kwargs):
       content = {'page_title': "Customer Forget Password"}

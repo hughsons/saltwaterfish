@@ -1,4 +1,96 @@
 {% include 'header.htm' %}
+<style type="text/css">
+<!--
+.greentext {color: #00CC00; font-size: 12px;}
+.redtext {color: #FF0000; font-size: 12px;}
+label.error { float: none; color: red; padding-left: .5em; vertical-align: top; }
+-->
+</style>
+<script language="javascript" type="text/javascript" src="/misc/js/jquery-1.7.2.min.js"></script>
+<script language="javascript" type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/jquery.validate.min.js"></script>
+<script>
+$(function() {
+
+   $( "#form"  ).submit(function() {
+      var thisform = $('#form');
+	  if (thisform.valid()) 
+        return true;
+      else
+	  {
+         alert("Please fill the mandatory fields in the required format");
+	  }
+      return false;
+     });
+
+   $( "#form" ).validate({
+           rules: {
+                   {{ form.username.html_name }}: {
+                           required: true,
+                           maxlength: 30,
+                           customvalidation: true
+                   }
+           },
+           messages: {
+                   {{ form.username.html_name }}: {
+                           required: "*",
+                   }
+           },
+
+           errorPlacement: function(error, element){
+                            error.insertAfter(element);
+                       },
+                   
+           showErrors: function(errorMap, errorList){
+                              this.defaultShowErrors();
+                       }
+   });
+
+
+//------------------------------------------------------------------------------------
+   $( "#forgetpwdform"  ).submit(function() {
+      var thisform = $('#form');
+	  if (thisform.valid()) 
+        return true;
+      else
+	  {
+         alert("Please fill the mandatory fields in the required format");
+	  }
+      return false;
+     });
+
+   $( "#forgetpwdform" ).validate({
+           rules: {
+                   {{ forgotform.email.html_name }}: {
+                           required: true,
+                           maxlength: 30,
+                           customvalidation: true
+                   }
+           },
+           messages: {
+                   {{ forgotform.email.html_name }}: {
+                           required: "*",
+                   }
+           },
+
+           errorPlacement: function(error, element){
+                            error.insertAfter(element);
+                       },
+                   
+           showErrors: function(errorMap, errorList){
+                              this.defaultShowErrors();
+                       }
+   });
+
+   $.validator.addMethod("customvalidation",
+           function(value, element) {
+		     if (element.name == '{{ forgotform.email.html_name }}' || element.name == '{{ form.username.html_name }}')
+                   return /^[A-Za-z\d_\.-]+@[A-Za-z\d_\.-]+\.[A-Za-z\d_\.-]+$/.test(value);
+           },
+   "Must be a valid EMail ID."
+   );
+
+});
+</script>
 <div align=center>
 
 <div class="wid748 ">
@@ -32,12 +124,12 @@ Returning Customers
  <div class="blue-bg-header " style="width:100% !important">
 Forgot Password
 </div><a name="forget">
-<form action="forgetpassword" method="post" id="form" name="form">
+<form action="sendpassword" method="post" id="forgetpwdform" name="forgetpwdform">
 {% csrf_token %}
 <div class="my-account clr">
 <div class="height23 clr">&nbsp;&nbsp;</div>
-<div class=" " >{% if message or error_message %}
-      <p class="style5">{{ message }} <span class="style8">{{ error_message }}</span></p>{% endif %}</div>
+<div class=" " >{% if message2 or error_message2 %}
+      <p class="greentext">{{ message2 }} <span class="redtext">{{ error_message2 }}</span></p>{% endif %}</div>
 <div style="font-size:15px" >Email: {{ forgotform.email }}</div>
 <div class="height12 clr">&nbsp;&nbsp;</div>
 <div class=" " ><img src="{{ recaptcha2 }}" /></div>
@@ -50,7 +142,6 @@ Forgot Password
 </form>
 
 </div></div></div>
-
 
 <div class="height12 clr"></div></div></div></div>
 {% include 'footer.htm' %}

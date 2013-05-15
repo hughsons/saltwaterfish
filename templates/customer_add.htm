@@ -1,63 +1,31 @@
 {% include 'admin_header.htm' %}
 {% load tagsfilter %}
-<link href="/misc/sty.css" rel="stylesheet" type="text/css" />
-<div class="clr white-bg">
-<div class="clr content-bg padbottom10">
+<div class="white-bg clr">
+<div class="content-bg clr padbottom10">
 <table width="100%" border="0">
   <tr>
-    <td align="left" valign="top" class="left-text padleft10">{% include 'left_menu_customers.htm' %}</td>
-    <td  class="ver_line"></td>
-    <td>
-	<table width="100%" border="0">
-  <tr>
-    <td class="left-text padtop10">Cus<span class="style5">tomers	 > V</span>iew/Edit</td>
-  </tr>
-  <tr>
-    <td class="padtop10 padbottom10">
-	<div class="float_left left-text1">View/Edit</div>
-	<div class="float_right marright15">
-<div class="search1">
-<div class="search1_box"><input name="Input" type="text"  placeholder="Search saltwaterfish.com"/></div>
-<div class="search1_submit"><input type="submit" name="Submit"  value="Search" /></div>
+    <td align="left" valign="top"  class="left-text padleft10">{% include 'left_menu_customers.htm' %}</td>
+    <td class="border-line"></td>
+    <td><table width="100%" border="0">
+	<tr><td class="left-text padtop10">Customers > Add New</td></tr>
+<tr><td class="padtop10 padbottom10">
+<div class="left-text1 float-left">Add New</div>
+<div class="float-right marright15"><div class="search1">
+<div class="float-left wid230"><input name="Input" type="text"  placeholder="Search saltwaterfish.com"/></div>
+<div class="float-left wid69"><input type="submit" name="Submit"  value="Search" /></div></div></div>	
+</td></tr> 
+  <tr><td class="border-line">&nbsp;</td></tr>
+  <tr><td class="padtop10 wid763"> <div class="tabcontents1">
+				  <div id="view1" class="tabcontent1 selected">
+<div class="order-txt order-next">Customer Information</div>
+<div class="padtop20 clr">
+ 
+ <form method="post" action="/addcustomer" method=post name="addcustomer">
+{% csrf_token %}
 </div>
-</div>	</td>
-  </tr>
-  <tr>
-    <td class="hor_line"><form method="post" action="/editcustomer" method=post name="editcustomer">
-		
-		
-		{% csrf_token %}</td>
-  </tr>
-  <tr>
-  <td>
-  <div class="float_left left-text1 style1">{{customer.billing_firstname}} {{customer.billing_lastname}}</div>
-  <div class="float_right"><img src="misc/images/delete-customer.jpg"  /><input type="image" src="misc/images/save-change.jpg"  /></div>  </td>
-  </tr>
-    <tr>
-    <td class="hor_line"></td>
-  </tr>
-  
-  <tr>
-    <td class="customer_info_table"><div class="clr padtop20">
-<div>
-        <ul class="tabs1" >
-		<li><a href="#" rel="view1">Info</a></li>
-            <li><a href="#" rel="view2">Orders</a></li>
-            <li><a href="#"  rel="view3">Wish List</a></li>
-            <li><a href="#"  rel="view4">Rewards</a></li>
-			 <li><a href="#"  rel="view5">Store Credit</a></li>
-        </ul>
-		
-        <div class="tabcontents1">
-		
-		  <div id="view1" class="tabcontent1 selected">
-<div class="order-txt customer_info_contact">Customer Information</div>
-
-
-
 <table width="100%" border="0">
   <tr>
-    <td><input type="hidden" name="action" value="edit"><input type="hidden" name="id" value="{{customer.contactid}}"> </td>
+    <td><input type="hidden" name="action" value="add"> </td>
   </tr>
   <tr>
     <td class="cate1">Login Information</td>
@@ -66,7 +34,7 @@
     <td class="text1 padleft10"><table width="90%" border="0" align="left">
   <tr>
     <td width="30%">Email</td>
-    <td><input name="email" type="text" class="text-box-cms" value="{{customer.email}}" readonly /></td>
+    <td><input name="email" type="text" class="text-box-cms" value="{{customer.email}}"  /></td>
   </tr>
 </table>
 </td>
@@ -80,6 +48,7 @@ Password</td>
   </tr>
 </table>
 </td>
+  </tr>
   </tr>
   <tr>
   <td class="cate1">Billing Information</td>
@@ -344,155 +313,15 @@ First Name</td>
 </td>
   </tr>
 </table>
-<div class="product_hor_line"></div>
-<div class="clr padtop20">
+<div class="border-line"></div>
+<div class="clr padtop20"> 
 
-<div class="float_right">&nbsp; </div>
+<div class="float-right">&nbsp;</div>
 </div>
   </div>
-  
-            <div id="view2" class="tabcontent1">
-					<div class="order-txt order_history_bg">Order History</div>
-<div class="clr padtop20">
- 
-</div>
-<div class="head_bg clr padtop5">
-<div  class="order-txt1 order_history_invoice">Invoice</div>
-<div  class="order-txt1 order_history_date">Date</div>
-<div  class="order-txt1 order_history_name">Ship to Name</div>
-<div  class="order-txt1 order_history_total">Total</div>
-<div  class="order-txt1 order_history_status">Status</div>
-<div  class="order-txt1 order_history_action">Actions</div>
-</div>
-{% for item in customerorders %}
-<div class="order_history_line"></div>
-<div class="order_history_Whitebg">
-<div class="order-txt2 order_history_column1">{{item.invoicenum_prefix}}{{item.invoicenum}}</div>
-<div class="order-txt3 order_history_column2">{{item.date_started}}</div>
-<div class="order-txt2 order_history_column3">{{item.ofirstname}} {{item.olastname}}</div>
-<div class="order-txt3 order_history_column4">${{item.oshipcost}}</div>
-<div class="order-txt3 order_history_column5">Shipped</div>
-<div class="order-txt3 order_history_column6"><!--<img src="misc/images/print.jpg" />--> <a href="orderpage?oid={{item.orderid}}"><img src="misc/images/edit.jpg" width="55" height="24" /></a>
- &nbsp;<img src="misc/images/delete.jpg" width="71" height="24" /></div>
-</div>
-
-
- {% empty %}
-	<em class="formee-req">No Records</em>
-{% endfor %}
-
-
-
-
-
-<div class="order_history_line"></div>
-<div class="clr padtop20">
- 
-</div>
-             </div>
-			 
-  
-  
-
-  <div id="view3" class="tabcontent1 selected">
-  <div class="order-txt wish_list">List </div>
-  
-<div class="head_bg clr padtop5 martop20">
-<div  class="order-txt1 wish_list_item">Item ID</div>
-<div  class="order-txt1 wish_list_product">Product</div>
-<div  class="order-txt1 wish_list_date">Date</div>
-<div  class="order-txt1 wish_list_message">Price</div>
-</div>
-{% for item in wishlists %}
-<div class="wish_list_whitebg">
-<div class="order-txt2 wish_list_column1">{{item.itemid}}</div>
-<div class="order-txt2 wish_list_column2">{{item.itemname}}</div>
-<div class="order-txt2 wish_list_column3">{{item.date_added}}</div>
-<div class="order-txt3 wish_list_column4">{{item.unitprice}}</div>
-</div>
-
-{% empty %}
-	<em class="formee-req">No Records</em>
-{% endfor %}
-<div class="wish_list_line"></div>
-<div class="clr padtop20">
- 
-  </div>
-  
-  
-   </div>
-  
-			<div id="view4" class="tabcontent1">
-                    					<div class="order-txt rewards_bg">Rewards Information </div>
-                    
-<div class="head_bg clr padtop5 martop20">
-<div  class="order-txt1 rewards_date">Date</div>
-<div  class="order-txt1 rewards_points">Points</div>
-<div  class="order-txt1 rewards_refer">Reference</div>
-</div>
-{% for item in customerrewards %}
-<div class="rewards_line"></div>
-<div class="rewards_whitebg">
-<div class="order-txt2  rewards_col">{{item.datentime}}</div>
-<div class="order-txt2 rewards_column2 rewards_col1">{{item.points}}</div>
-<div class="order-txt2  rewards_col3"><u>{{item.orderid|rmaordervalues:"invoicenum_prefix"}}{{item.orderid|rmaordervalues:"invoicenum"}}</u></div>
-<div class="order-txt3 rewards_column4"><a href="/deletereward?action=deletereward&reid={{item.id}}&custid={{customer.contactid}}" onclick="return confirm('Are you sure you want to delete?')"><img src="misc/images/delete.jpg" width="71" height="24" /></a></div>
-</div>
- 
-{% empty %}
-	<em class="formee-req">No Records</em>
-{% endfor %}
-<div class="rewards_line"></div>
-<div class="rewards_whitebg">
-<div class="order-txt2  rewards_col">Total Points Available</div>
-<div class="order-txt2  rewards_col2">{{totalrewards.points__sum}}</div>
-
-</div>
-
-<form method="post" action="/addrewards" method=post name="addrewards">
-{% csrf_token %}<input type="hidden" name="action" value="addrewards"><input type="hidden" name="custid" value="{{customer.contactid}}">
-<div class="rewards_line"></div>
-<div class="bg14"><br>&nbsp;<br>
-<div class="order-txt2 float-left padleft270">Points&nbsp;&nbsp;&nbsp;<input type="text" name=points :class="bg15" size="10" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reference<input type="text" name=orderid class="bg15" size="20" />
-&nbsp;&nbsp;</div>
-<div class="float-left"><input type=image src="/misc/images/insert-points.jpg" /></div>
-</div>
-             </div>
-
-</form>
-
-<div id="view5" class="tabcontent1">
- <div class="order-txt adjustments">Store Credit </div>
-                    
-<div class="head_bg clr padtop5 martop5">
-<div class="order-txt1 float-left padleft20 " style="width:240px;">Date</div>
-<div class="order-txt1 float-left padleft20 wid150">Amount</div>
-<div class="order-txt1 order-txt1 float-left padleft20 wid250">Promocode</div>
-</div>
-{% for stitem in storerewards %}
-<div class="rewards_line"></div>
-
-<div class="border-line1">
-<div class="white-back">
-<div class="order-txt2 rewards_col3">{{stitem.customers_credit_applied}}</div>
-<div class="order-txt2 rewards_col2">{{stitem.customers_credit}}</div>
-<div class="order-txt2 rewards_col3"><u>{{stitem.customers_promocode}}</u></div>
-<div class="order-txt3  rewards_col4"><a href="/deletereward?action=deletestreward&reid={{stitem.sid}}&custid={{customer.contactid}}" onclick="return confirm('Are you sure you want to delete?')"><img src="misc/images/delete.jpg" width="71" height="24" /></a></div>
-</div>
- 
-{% empty %}
-	<em class="formee-req">No Records</em>
-{% endfor %}
-
-<div class="rewards_line"></div>
-<div class="rewards_whitebg">
-<div class="order-txt2  rewards_col3">Total Points Available</div>
-<div class="order-txt2  rewards_col2">&nbsp;</div>
-
-</div>
-<div class="rewards_line"></div>
-
- 
+              </div>
+           
+            
 			
 
        
@@ -509,6 +338,7 @@ First Name</td>
 </table>
 </div>
 </div>
+
 
 
 

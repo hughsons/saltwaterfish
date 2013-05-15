@@ -1,0 +1,74 @@
+<style type="text/css">
+<!--
+.style1 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-weight: bold;
+}
+.style2 {
+	color: #FF6600;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+.style7 {font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10; }
+.style8 {font-size: 10}
+-->
+</style>
+<table width="592" border="0" cellpadding="3">
+  <tr>
+    <td width="512"><table width="527" border="0" cellpadding="3">
+	{% if not MyCart %}
+	  <tr><td>Cart is Empty</td></tr>
+	{% endif %}  
+	
+	{% for key, value in ItemsHash %}
+	{{key.value }}
+	{% endfor %}
+
+	{% for item in MyCart %}
+    <tr>
+       <td width="255"><form name="form{{item.id}}" method="get" action="cartaction"><table width="512" border="0" cellpadding="3">
+          <tr>
+            <td colspan="4"><span class="style1">{{item.name}}</span>
+              <input type="hidden" name="itemid" value="{{item.id}}"></td>
+          </tr>
+          <tr>
+            <td width="255" rowspan="3"><img src="http://www.saltwaterfish.com/{{item.image1}}" width="100px" height="87" /></td>
+            <td width="-4" rowspan="3">&nbsp;</td>
+            <td width="138" height="39"><input name="quantity" type="text" maxlength="4" value="{{ item.quantity }}">
+            </td>
+            <td width="104" rowspan="3"><span class="style2">${{item.price}}</span></td>
+          </tr>
+          <tr>
+            <td height="48"><input type="submit" name="cmdUpdate" value="Update">
+              <input type="submit" name="cmdRemove" value="Remove" /></td>
+          </tr>
+          <tr>
+            <td height="42">&nbsp;</td>
+          </tr>
+          <tr>
+            <td colspan="4" align="right"><table width="147" border="0" cellpadding="3">
+              <tr>
+                <td width="86"><span class="style7">Sub total </span></td>
+                <td width="43"><span class="style7">{{item.subtotal}}</span></td>
+              </tr>
+              <tr>
+                <td><span class="style7">Est.Shipping</span></td>
+                <td><span class="style8"></span></td>
+              </tr>
+              <tr>
+                <td><span class="style7">Est. Tax</span></td>
+                <td><span class="style8"></span></td>
+              </tr>
+              <tr>
+                <td><span class="style7">Total</span></td>
+                <td><span class="style7">{{item.total}}</span></td>
+              </tr>
+          </table></td>
+        </tr>
+        </table></form></td>
+      </tr>
+	  <tr><td colspan="3"><hr /></td></tr>
+     {% endfor %}
+    </table></td>
+    <td width="62">&nbsp;</td>
+  </tr>
+</table>

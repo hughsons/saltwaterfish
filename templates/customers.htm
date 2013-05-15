@@ -1,55 +1,35 @@
 {% include 'admin_header.htm' %}
-      <style type="text/css">
-<!--
-.style1 {
-	color: #000000;
-	text-decoration:underline;
-	
-}
-.style3{
-color:#000000;
-text-transform:none
-}
-.style2 {
-	color: #000000;
-	font-family: "Open Sans Light";
-	font-size: 12px;
-	font-weight: bold;
-}
-.new-orders-text {
-	color: #000000;
-	font-weight: normal;
-	font-family: "Open Sans Light";
-	font-size: 13px;
-	text-decoration: none;
-}
-
--->
-</style>
- 
-     <div style="clear:both" class="white-bg">
-<div style="clear:both; padding-bottom:10px" class="content-bg">
+<div class="clr white-bg">
+<div class="clr content-bg padbottom10">
 <table width="100%" border="0">
   <tr>
-    <td align="left" valign="top" width="130" style="padding-left:20px" class="left-text"><span class="left-text1">Customers</span><br />
-<br />
-View/Edit<br />
-Add New<br />
-Import/Export</td>
-    <td style="width:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+    <td align="left" valign="top" class="left-text">
+	{% include 'left_menu_customers.htm' %}
+	</td>
+    <td class="ver_line"></td>
     <td>
 	<table width="100%" border="0">
-   
   <tr>
-    <td style="padding-bottom:10px; padding-top:10px;">
-<div style="width:810px;">
-<div style="clear:both" class="custom-head">Customers > View/Edit </div>
- 
-<div style="float:left;" class="custom-view">View/Edit</div>
-<div style="float:right"><input name="" type="text" class="search-box-field" /></div>
+    <td class="left-text padtop10">Customers	 > View/Edit</td>
+  </tr>
+  <tr>
+    <td class="padtop10 padbottom10">
+	<div class="float_left left-text1">View/Edit</div>
+	<div class="float_right marright15">
+<div class="search1">
+<div class="search1_box"><input name="Input" type="text"  placeholder="Search saltwaterfish.com"/></div>
+<div class="search1_submit"><input type="submit" name="Submit"  value="Search" /></div>
 </div>
-<div style="clear:both; margin-top:19px; margin-bottom:19px" class="gray-line">&nbsp;</div>
-<div style="clear:both; width:800px; height:21px; line-height:21px; " class="records">Records:<b>{{count}} </b> Page {{page_num}} of {% widthratio count 100 1 %} |&nbsp;Goto Page: <a href="/customers?page=1">First</a> 
+</div>	</td>
+  </tr>
+  
+  
+    <tr>
+    <td class="hor_line"></td>
+  </tr>
+   <tr>
+   
+    <td class="clr padtop5"><div style="clear:both; width:800px; height:21px; line-height:21px; " class="records">Records:<b>{{count}} </b> Page {{page_num}} of {% widthratio count 100 1 %} |&nbsp;Goto Page: <a href="/customers?page=1">First</a> 
 {% if page_num < 2 %}
 <a href="/customers?page=1">Previous</a>
 {% elif page_num >= 2 %}
@@ -58,81 +38,97 @@ Import/Export</td>
 
 
 | <a href="/customers?page={{page_num|add:+1}}">Next </a> &nbsp<a href="/customers?page={% widthratio count 100 1 %}">Last</a></span>
-</div>
-<div style="clear:both; height:20px;">&nbsp;&nbsp;</div>
-<div style="clear:both; padding-top:0px;" class="black-border">
-
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td width="3%" align="center" valign="middle"  class="yellow-bg"><img src="misc/images/check-box.png" width="14" height="13" border="0" /></td>
-    <td width="20%" align="center" valign="middle"  class="yellow-bg">Name&nbsp;<img src="misc/images/caption-arrow.png" width="14" height="9" border="0" /></td>
-     <td width="13%" align="center" valign="middle"  class="yellow-bg">Company</td>
-     <td width="27%" align="center" valign="middle"  class="yellow-bg">Email</td>
-     <td width="16%" align="center" valign="middle"  class="yellow-bg">Phone</td>
-     <td width="8%" align="center" valign="middle"  class="yellow-bg">Enabled</td>
-     <td width="20%" align="center" valign="middle"  class="yellow-bg">Actions</td>
+</div></td>
   </tr>
-   
-{% for item in customers %}
+  
+  
+   <tr>
+    <td  class="customers_edit_table black-brdr"><form method="post" action="/deletecustomer" method=post>
+		{% csrf_token %} 
+		<input type="hidden" name="action" value="massdelete"><table width="100%" border="1" cellspacing="0" cellpadding="0">
   <tr>
-    <td align="center" valign="middle" class="blue-bg"><input type=checkbox></td>
-    <td align="left" valign="middle"class="blue-bg" style="padding-left:10px"><a href="/bcustomersinfo?id={{item.contactid}}">{{item.billing_firstname}} {{item.billing_lastname}}</a></td>
-    <td align="left" valign="middle"class="blue-bg" style="padding-left:10px">{{item.billing_company}}</td>
-    <td align="left" valign="middle"class="blue-bg" style="padding-left:10px">{{item.email}}</td>
-   <td align="left" valign="middle"class="blue-bg" style="padding-left:10px">{{item.billing_phone}}</td>
-    <td align="left" valign="middle"class="blue-bg" style="padding-left:10px">{{item.custenabled}}</td>
- <td align="left" valign="middle"class="blue-bg" style="padding-left:10px"><table width="80%" border="0" align="center" cellpadding="0" cellspacing="0">
+    <td width="3%"  align="center" valign="middle" class="yell-bg" ><img src="misc/images/check-box.png" width="14" height="13" border="0" /></td>
+    <td width="13%"  align="center" valign="middle" class="yell-bg" >Name&nbsp;<img src="misc/images/caption-arrow.png" width="14" height="9" border="0" /></td>
+     <td width="11%" align="center" valign="middle" class="yell-bg" >Company</td>
+     <td width="29%" align="center" valign="middle" class="yell-bg"  >Email</td>
+     <td width="13%"  align="center" valign="middle"  class="yell-bg" >Phone</td>
+     <td width="9%"  align="center" valign="middle" class="yell-bg"  >Enabled</td>
+     <td width="22%"  align="center" valign="middle" class="yell-bg" >Actions</td>
+  </tr>
+  {% for item in customers %}
+  <tr class="{% cycle 'rose-bg' 'blue-bg' %}">
+       <td align="center" valign="middle"  ><input type=checkbox name="delid" value="{{item.contactid}}"></td>
+       <td align="left" valign="middle"  ><span class="padleft10"><a href="/bcustomersinfo?id={{item.contactid}}">{{item.billing_firstname}} {{item.billing_lastname}}</a></span></td>
+  <td align="left" valign="middle"  ><span class="padleft10">{{item.billing_company}}</span></td>
+      <td align="left" valign="middle"   ><span class="padleft10">{{item.email}}</span></td>
+     <td align="left" valign="middle"  ><span class="">{{item.billing_phone}}</span></td>
+      <td align="left" valign="middle"  ><span class="padleft10">{{item.custenabled}}</span></td>
+  <td align="left" valign="middle" class=" "><table width="80%" border="0" align="center" cellpadding="0" cellspacing="0">
   <tr>
-    <td><img src="misc/images/edit.jpg" width="63" height="19" border="0" /></td>
+    <td><a href="/bcustomersinfo?id={{item.contactid}}"><img src="misc/images/edit.jpg" width="63" height="19" border="0" /></a></td>
     <td>&nbsp;</td>
     <td><img src="misc/images/placeholder.jpg" /></td>
   </tr>
-</table></td>
+</table>
+</td>
+
   </tr>
  
-  {% empty %}
+   
+  
+   
+  
+   
+   
+   
+   
+   
+   
+   
+  
+   {% empty %}
 	<em class="formee-req">No Records</em>
 {% endfor %}
- 
-  
-</table>
-</div>
-<div style="clear:both; height:10px;">&nbsp;</div>
-<div style="clear:both; width:800px; height:25px; line-height:25px; " class="records1">Records:<b>{{count}} </b> Page {{page_num}} of {% widthratio count 100 1 %} |&nbsp;Goto Page: <a href="/customers?page=1">First</a> 
+   
+</table></td>
+  </tr><tr>
+   
+    <td class="clr padtop5">
+	<div style="clear:both; width:800px; height:21px; line-height:21px; " class="records">Records:<b>{{count}} </b> Page {{page_num}} of {% widthratio count 100 1 %} |&nbsp;Goto Page: <a href="/customers?page=1">First</a> 
 {% if page_num < 2 %}
 <a href="/customers?page=1">Previous</a>
 {% elif page_num >= 2 %}
     <a href="/customers?page={{page_num|add:-1}}">Previous</a>
 {% endif %}
- | <a href="/customers?page={{page_num|add:+1}}">Next </a> &nbsp<a href="/customers?page={% widthratio count 100 1 %}">Last</a></span>
-</div>
-<div style="clear:both; height:10px;">&nbsp;</div>
-<div style="clear:both" class="bottom-grey">
-<table width="100%" border="0" cellspacing="0" cellpadding="0" align="left">
+
+
+| <a href="/customers?page={{page_num|add:+1}}">Next </a> &nbsp<a href="/customers?page={% widthratio count 100 1 %}">Last</a></span>
+</div></td>
+  </tr>
+  <tr>
+   
+    <td class="clr padtop5">
+	<div style="clear:both; width:800px; height:21px; line-height:21px; " class="records"><table width="100%" border="0" cellspacing="0" cellpadding="0" align="left">
   <tr>
     <td>&nbsp;</td>
     <td align="right">Batch Action:</td>
-    <td align="left" style="padding-top:5px; padding-left:5px;"><select name="" class="dropdownlist">
+    <td align="left" style="padding-top:5px; padding-left:5px;"><select name="bacthaction" class="dropdownlist">
     <option>With Selected Customer(s)</option>
-     <option>Delete Selected</option>
+     <option value=delete>Delete Selected</option>
     </select></td>
-    <td style="padding-top:5px;"><img src="misc/images/apply.jpg" width="72" height="20" border="0" /></td>
+    <td style="padding-top:5px;"><input type=image src="misc/images/apply.jpg" width="72" height="20" border="0" /></td>
+  </tr>
+</table></form>
+</div></td>
   </tr>
 </table>
-
-</td>
-  </tr>
-</table></td>
+	
+	
+	
+	</td>
   </tr>
 </table>
 </div>
-  
-  
-</div></div>
+</div>
 
-
-
-
- 
- 
 {% include 'admin_footer.html' %}

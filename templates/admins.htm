@@ -3,11 +3,13 @@
 <div style="clear:both; padding-bottom:10px" class="content-bg">
 <table width="100%" border="0">
   <tr>
-    <td align="left" valign="top"  style="padding-left:10px" class="left-text"><div style="clear:both" class="blue-border-new">
-<div style="clear:both" class="blue-bg-header-new"><div align="center" style="height: 30px;
+    <td align="left" valign="top"  style="padding-left:10px" class="left-text">
+	<div style="clear:both;" class="blue-border-new">
+<div style="clear:both" class="blue-bg-header-new">
+  <div align="center" style="height: 30px;
 	line-height:30px;">Users</div>
 </div>
-<div style="clear:both" class="resources" style="height:100px;">
+<div style="clear:both" class="resources1">
   
 
 
@@ -15,7 +17,20 @@
 <div style="clear:both; width:207px" ></div>
 <div style="clear:both; width:187px; padding-top:5px; padding-left:5px;">
 <div style="float:left; padding-top:3px;"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
-<div style="float:left"><a href="/admins" >View/Edit</a></div>
+<div style="float:left"><a href="/admins" >
+View Users</a></div>
+</div>
+
+<div style="clear:both; width:187px; padding-top:10px; padding-left:5px;">
+<div style="float:left; padding-top:3px;"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div style="float:left"><a href="/addadminsform?mode=add" >Add User</a></div>
+
+
+</div>
+ 
+</div>
+
+
 </div></td>
     <td style="width:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
     <td>
@@ -25,7 +40,7 @@
   </tr>
   <tr>
     <td style="padding-bottom:10px; padding-top:10px;">
-	<div style="float:left" class="left-text1">View/Edit Users</div>
+	<div style="float:left" class="left-text1 style1"><img src="/misc/images/tax-circle.jpg" width="20" height="19" border="0" />&nbsp;&nbsp;Administrator Access </div>
 	<div style="float:right; margin-right:15px">
 <div class="search1">
 <div style="float:left; width:230px;"><input name="Input" type="text"  placeholder="Search saltwaterfish.com"/></div>
@@ -38,48 +53,50 @@
     <tr>
     <td style="height:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
   </tr>
-   <tr>
+   <!--<tr>
     <td style="height:10px;">&nbsp;</td>
   </tr>
     <tr>
     <td><div class="clr">
 		 <div class="left-text1 style1" style="float:left"><img src="/misc/images/tax-circle.jpg" width="20" height="19" border="0" />&nbsp;&nbsp;Administrator Access </div>
-		 <div class="float-right"><img src="/misc/images/add-new-button.jpg" /></div>
+		 <div class="float-right"><a href="/addadminsform?mode=add"><img src="misc/images/add-new-button.jpg" width="116" height="21" border="0" /></a></div>
 		   
 		   </div></td>
-  </tr>
-    <tr>
-    <td style="height:10px;">&nbsp;</td>
-  </tr>
+  </tr>-->
+    
 
    {% for item in customers %}
    <tr>
-    <td style="width:763px;" ><div class="clr" style="height:1px; background-color:#d9d9d9; background-repeat:repeat-y"></div>
+    <td style="width:763px;" class="pwid15">
+	<form method="post" action="/adminactions" method=post name={{item.id}}>
+		{% csrf_token %} <input type="hidden" name="id" value="{{item.id}}">
+		<input type="hidden" name="action" value="edit">
+	<div class="clr" style="height:3px; background-color:#d9d9d9; background-repeat:repeat-y"></div>
 	<div class="clr">
 	<div class="clr">
 	<div class="clr users-bg cate-new1">
 	<div class="float-left" style="width:300px;">
-	<div class="clr" style="height:23px;">{{item.username}}</div>
+	<div class="clr" style="height:23px;"><span class="start">{{item.username}}</a></div>
 	<div class="clr"></div>
 	
 	</div>
 	<div class="float-right" style="width:300px;">
-		<div class="clr"><img src="/misc/images/save-change.jpg" width="154" height="23" border="0" class="float-right" /></div>
-			<div class="clr float-right" style="height:32px;"><div style="padding-top:8px;"><u>Change Password</u>&nbsp;&nbsp;   <u>Permissions</u>&nbsp;&nbsp;  <u>Log</u></div></div>
+		<div class="clr"><input type=image src="/misc/images/save-change.jpg" width="154" height="23" border="0" class="float-right" /></div>
+			<div class="clr float-right" style="height:32px;"><div style="padding-top:8px;"><u><a href="addadminsform?mode=change&id={{item.id}}">Change Password</a></u>&nbsp;&nbsp;   <u>Permissions</u>&nbsp;&nbsp;  <u>Log</u></div></div>
 	</div>
 	
 	</div>
 	<div class="clr">
 	<div class="float-left" style="width:440px;">
 	<div class="float-left headingtext-new1" style=" width:130px ; height:40px; line-height:40px; " >Email:</div>
-	<div class="float-left" style="width:300px; padding-top:5px;"><input name="" type="text" class="text-box-final" value="{{item.email}}"/></div>
+	<div class="float-left" style="width:300px; padding-top:5px;"><input name="email" type="text" class="text-box-final" value="{{item.email}}"/></div>
 	
 	
 	</div>
 		<div class="float-right" style="width:300px;">
 		<div class="clr">
 			<div class="float-left headingtext-new1" style=" width:80px ; height:40px; line-height:40px; " >Name:</div>
-		<div class="float-right" style="width:220px; padding-top:5px;"><input name="" type="text" class="text-box-final1" value="{{item.name}}"/></div>
+		<div class="float-right" style="width:220px; padding-top:5px;"><input name="name" type="text" class="text-box-final1" value="{{item.name}}"/></div>
 		
 		</div>
 		<div class="clr"></div>
@@ -92,7 +109,7 @@
 	<div class="clr" style="height:1px; background-color:#d9d9d9; background-repeat:repeat-y"></div>
 	<div class="clr"><div class="float-left" style="width:440px;">
 	<div class="float-left headingtext-new1" style=" width:130px ; height:40px; line-height:40px; " >IP Restriction:</div>
-	<div class="float-left headingtext-new1" style="width:310px;  padding-top:5px;"><input name="" type="text" class="text-box-final" />&nbsp;&nbsp;<u>Get IP</u></div>
+	<div class="float-left headingtext-new1" style="width:310px;  padding-top:5px;"><input name="ip_restricted" type="text" class="text-box-final" value="{{item.ip_restricted}}"/>&nbsp;&nbsp;<!--<u>Get IP</u>--></div>
 	
 	
 	</div>
@@ -113,19 +130,8 @@
  	</div>
 	
 	 
-	 
- 
-	 
-	 
-	 
-	
-	 
-	
- 
-	
-	</div>
-	
-	
+<div class="clr">&nbsp;<br></div>
+	</form>
 	</td>
   </tr>  {% empty %}
 	<em class="formee-req">No Records</em>

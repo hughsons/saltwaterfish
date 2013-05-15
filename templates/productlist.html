@@ -1,0 +1,34 @@
+<html>
+<head>
+<link type="text/css" rel="stylesheet" herf="http://saltwater2013.dev.mvisolutions.com/sitemap/css3/reset.css" />
+<link type="text/css" rel="stylesheet" herf="http://saltwater2013.dev.mvisolutions.com/sitemap/css3/style.css" />
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic,700italic' rel='stylesheet' type='text/css'/>
+</head>
+<body>
+<table width="778" border="0" cellpadding="3" cellspacing="1" bgcolor="#EFEFEF">
+  <tr bgcolor="#003333">
+    <td width="173"><span class="style1">ID</span></td>
+    <td width="332"><span class="style1">Name</span></td>
+    <td width="247"><span class="style1">Add to Cart </span></td>
+  </tr>
+  {% for item in product_list %}
+  <tr bgcolor="#FFFFFF">
+    <td>{{item.catalogid}}</td>
+    <td><table width="100%" border="0">
+      <tr>
+        <td><div align="center">{{item.name}}</div></td>
+      </tr>
+      <tr>
+        <td><div align="center"><img src="http://www.saltwaterfish.com/{{item.image1}}" /></div></td>
+      </tr>
+      <tr>
+        <td>Price: ${{item.price}} </td>
+      </tr>
+    </table></td>
+    <td><a href="addtocart?item_id={{item.catalogid}}">Add to Cart</a></td>
+  </tr>
+  {% endfor %}
+</table>
+</body>
+</html>
