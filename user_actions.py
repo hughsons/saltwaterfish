@@ -1,5 +1,4 @@
 from django.http import *
-from forms import UploadForm
 from django.template.loader import get_template
 from django.template import Context, RequestContext
 from django.utils.decorators import method_decorator
@@ -10,13 +9,12 @@ from django.views.generic.base import TemplateView, View
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.sessions.models import Session
 from django.contrib.auth.models import User, Group, Permission
-#from models import Person
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import unittest
 from django.core.context_processors import csrf
 from forms import *
+from views import LoginRequiredMixin
 from models import *
-import random
 from google.appengine.api import mail
 import logging, random, hashlib, datetime
 #from django.db import connection, transaction
@@ -26,10 +24,7 @@ class CsrfExemptMixin(object):
     def dispatch(self, request, *args, **kwargs):
         return super(CsrfExemptMixin, self).dispatch(request, *args, **kwargs)
 
-class LoginRequiredMixin(object):
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(LoginRequiredMixin, self).dispatch(*args, **kwargs)
+ 
 
 @csrf_exempt
 def render_template(request, template, data=None):
@@ -66,12 +61,19 @@ class ForgetPasswordActionClass(TemplateView):
               mail_body = mail_body.replace("[oemail]", customer.email)
               mail_body = mail_body.replace("[password]", customer.pass_field)
               #test_html = mail_subject + "<br>" + mail_body
-              mail.send_mail(sender="support@saltwaterfish.com", to=customer.email, subject=mail_subject, body=mail_body)
+              try:
+                mail.send_mail(sender="support@saltwaterfish.com", to=customer.email, subject=mail_subject, body=mail_body)
+              except Exception:
+                request.session["ErrorMessage2"] = "Sorry, Unable to send an e-mail"
+                (success, error_msg) = (False, "Sorry, Unable to send an e-mail")
             else:
+              request.session["ErrorMessage2"] = "Email-id is not found in our records."
               (success, error_msg) = (False, "Email-id is not found in our records.")
           else:
+            request.session["ErrorMessage2"] = "Recaptcha is not matched."
             (success, error_msg) = (False, "Recaptcha is not matched.")
       else:
+        request.session["ErrorMessage2"] = "Invalid or Incomplete form data."
         (success, error_msg) = (False, "Incomplete or invalid form data")
 
       if  success:
@@ -170,7 +172,7 @@ class RegistrationActionClass(TemplateView):
 
     def SaveFormData(self, p_form):
           c = customers()
-          c.contactid = 2
+          #c.contactid = 2
           c.email = p_form.cleaned_data['email']
           c.pass_field = p_form.cleaned_data['password']
           c.shipping_firstname = c.billing_firstname = c.first_name = p_form.cleaned_data['first_name']
@@ -234,8 +236,8 @@ class RegistrationActionClass(TemplateView):
 
       if  success:
         content = {'page_title': "Customer Registration",
-                       'customer': customer
-                      }
+                   'customer': customer
+                   }
 
         email_template = Emails.objects.filter(id=22)[0]
         recent_customer = customers.objects.latest("contactid")
@@ -276,3 +278,80 @@ class RegistrationActionClass(TemplateView):
       content.update(csrf(request))
       return render_to_response('registration.htm', content)
 
+class UpdateAddressActionClass(LoginRequiredMixin,TemplateView):
+
+  def get(self, request, *args, **kwargs):
+    logging.info('\n\nUpdating Address\n\n')
+    content = {}
+    form = AddressForm(request.GET)
+
+    if form.is_valid():
+      address_type = form.cleaned_data['address_type'].strip()
+    else:
+      logging.info('\n\nForm is not valid\n\n')
+
+    customer = request.session['Customer']
+    html = "Billing Address is updated"
+    if address_type == "billing":
+      logging.info('\n\n   Updating Billing Address\n\n')
+      customer.billing_firstname = form.cleaned_data['first_name'].strip()
+      customer.billing_lastname = form.cleaned_data['last_name'].strip()
+      customer.billing_address = form.cleaned_data['address1'].strip()
+      customer.billing_address2 = form.cleaned_data['address2'].strip()
+      customer.billing_city = form.cleaned_data['city'].strip()
+      customer.billing_state = form.cleaned_data['state'].strip()
+      customer.billing_country = form.cleaned_data['country'].strip()
+      customer.billing_zip = form.cleaned_data['zip'].strip()
+      customer.billing_company = form.cleaned_data['company'].strip()
+      customer.billing_phone = form.cleaned_data['phone'].strip()
+      customer.save()
+      request.session['Customer'] = customer
+      html = "<h4>Billing Address is updated</h4>"
+    elif address_type == "shipping":
+      logging.info('\n\n   Updating Billing Address\n\n')
+      customer.shipping_firstname = form.cleaned_data['first_name'].strip()
+      customer.shipping_lastname = form.cleaned_data['last_name'].strip()
+      customer.shipping_address = form.cleaned_data['address1'].strip()
+      customer.shipping_address2 = form.cleaned_data['address2'].strip()
+      customer.shipping_city = form.cleaned_data['city'].strip()
+      customer.shipping_state = form.cleaned_data['state'].strip()
+      customer.shipping_country = form.cleaned_data['country'].strip()
+      customer.shipping_zip = form.cleaned_data['zip'].strip()
+      customer.shipping_company = form.cleaned_data['company'].strip()
+      customer.shipping_phone = form.cleaned_data['phone'].strip()
+      customer.save()
+      request.session['Customer'] = customer
+     
+      html = "<h4>Shipping Address is updated</h4>"
+    return HttpResponse(html)
+
+class ChangePwdActionClass(TemplateView):
+
+  def post(self, request, *args, **kwargs):
+    form = ChangePwdForm(request.POST)
+    if form.is_valid():
+      customer = request.session["Customer"]
+      email = form.cleaned_data['username']
+      old_password = form.cleaned_data['old_password']
+      new_password = form.cleaned_data['new_password']
+      logging.info("\n\n\nEMail:%s" %email)
+      logging.info("OldPassword: %s" %old_password)
+      logging.info("New Password: %s\n\n\n" %new_password)
+      customer_list = customers.objects.filter(contactid = customer.contactid, pass_field = old_password)
+      logging.info("\n\n\n\n\nNumber of Customers %d\n\n\n\n" %len(customer_list))
+      if not customer_list:
+        logging.info("\n\n\n\n\nError\n\n\n\n")
+        request.session["ErrorMessage"] = "Authentication failed. Current password is not matched."
+        return HttpResponseRedirect('/changepwd')
+
+      customer = customer_list[0]
+      customer.pass_field = new_password
+      customer.save()
+      request.session['Customer'] = customer
+      request.session["Message"] = "Your password is successfully changed."
+      return HttpResponseRedirect('/myaccount')
+    else:
+      request.session["ErrorMessage"] = "Incomplete Form Data"
+      return HttpResponseRedirect('/changepwd')
+
+    return HttpResponseRedirect('/myaccount')

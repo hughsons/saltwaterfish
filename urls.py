@@ -32,10 +32,17 @@ urlpatterns = patterns('',
     url(r'^viewcart', ViewCartViewClass.as_view(), name='viewcart'),
     url(r'^cartaction', CartActionsClass.as_view(), name='CartAction'),
     url(r'^cartconfirmation', CartConfirmClass.as_view(), name='CartConfirmation'),
+    url(r'^getaddress', AddressFormViewClass.as_view(), name='GetAddress'),
+    url(r'^updateaddress', UpdateAddressActionClass.as_view(), name='GetAddress'),
+    url(r'^changepwd', ChangePwdViewClass.as_view(), name='GetAddress'),
+    url(r'^setnewpassword', ChangePwdActionClass.as_view(), name='GetAddress'),
 
 # Murthy URLS ENDS HERE	
 
-
+# Simon URLS FRONT END HERE
+	url(r'^quicklist', QuickListClass.as_view(), name='quicklist'),
+	url(r'^category', ViewCategoryClass.as_view(), name='maincategory'),
+	url(r'^pages', ViewPagesClass.as_view(), name='pages'),
 # Simon URLS HERE
 
     url(r'^apanel', ApanelViewClass.as_view(), name='apanel'),
@@ -87,6 +94,7 @@ urlpatterns = patterns('',
 	url(r'^addcustomer', CustomerActionClass.as_view(), name='CustomerActionClass'),
 	url(r'^addrewards', CustomerActionClass.as_view(), name='CustomerActionClass'),
 	url(r'^deletereward', CustomerActionClass.as_view(), name='CustomerActionClass'),
+	url(r'^acrm', CRMViewClass.as_view(), name='crm'),
 
 
 

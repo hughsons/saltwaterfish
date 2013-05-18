@@ -1,3 +1,4 @@
+{% include 'header.htm' %}
 <style type="text/css">
 <!--
 .style1 {
@@ -12,17 +13,23 @@
 .style8 {font-size: 10}
 -->
 </style>
+  
+{% include 'myaccount_widget.htm' %}
+ 
+<div class="width10 float-left">&nbsp;&nbsp;</div>
+<div class="wid748 float-left">
+<div class="height12 clr"></div>
+<div  class=" clr">
+  <div >
+
 <table width="592" border="0" cellpadding="3">
   <tr>
     <td width="512"><table width="527" border="0" cellpadding="3">
 	{% if not MyCart %}
 	  <tr><td>Cart is Empty</td></tr>
+	  <tr><td colspan="3"><hr /></td></tr>
 	{% endif %}  
 	
-	{% for key, value in ItemsHash %}
-	{{key.value }}
-	{% endfor %}
-
 	{% for item in MyCart %}
     <tr>
        <td width="255"><form name="form{{item.id}}" method="get" action="cartaction"><table width="512" border="0" cellpadding="3">
@@ -35,7 +42,7 @@
             <td width="-4" rowspan="3">&nbsp;</td>
             <td width="138" height="39"><input name="quantity" type="text" maxlength="4" value="{{ item.quantity }}">
             </td>
-            <td width="104" rowspan="3"><span class="style2">${{item.price}}</span></td>
+            <td width="104" rowspan="3"><span class="style2">${{item.price}}</span>{% if item.saleprice > 0 %} <span class="style2"><br>Sale Price: ${{ item.saleprice }}</span> {% endif %}</td>
           </tr>
           <tr>
             <td height="48"><input type="submit" name="cmdUpdate" value="Update">
@@ -72,3 +79,8 @@
     <td width="62">&nbsp;</td>
   </tr>
 </table>
+</div></div></div>
+<div class="float-left width10"></div>
+
+</div>
+{% include 'footer.htm' %}

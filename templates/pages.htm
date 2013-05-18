@@ -1,0 +1,26 @@
+{% include 'header.htm' %}
+
+<link href="/misc/css4/style.css" rel="stylesheet" type="text/css" />
+
+{% include 'myaccount_widget.htm' %}
+{% load tagsfilter %}
+ 
+<div class="wid748 float-left">
+<div class="height12 clr"></div>
+<div  class="  clr">
+  <div class="container">
+ 
+<div class="home-txt padleft10 padbottom10 clr">
+Home <span class="home-txt-arrow">&gt; </span> {{allpages.htmlpage}} </div>
+<div class="orange-txt padleft10 clr">{{allpages.htmlpage}}<br></div>
+<!--image starts-->
+<div class="padtop15 padleft10 clr" align=left><table width="100%" border="0" cellspacing="0" cellpadding="5" class="table-bg" ><tr>
+				<td class="table-text">{{allpages.content|safe}}</td>
+		  </tr>
+		</table>
+</div>
+ </div></div></div></div>
+<div class="float-left width10"></div>
+
+</div>
+{% include 'footer.htm' %}

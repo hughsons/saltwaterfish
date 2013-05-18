@@ -128,6 +128,7 @@ class Crm(models.Model):
     class Meta:
         db_table = u'crm'
         app_label = ''
+        ordering = ["-id"]
 
 class CrmDepartment(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -719,9 +720,17 @@ class ShippingStates(models.Model):
     name_short = models.CharField(max_length=150, db_column='name-short', blank=True) # Field renamed to remove dashes. Field name made lowercase.
     enabled = models.IntegerField(null=True, blank=True)
     class Meta:
-        
         db_table = u'shipping_states'
         app_label = ''
+
+class StoreSettings2(models.Model):
+    id = models.IntegerField()
+    varname = models.CharField(max_length=150, blank=True)
+    varvalue = models.TextField(blank=True)
+    class Meta:
+        db_table = u'store_settings2'
+        app_label = ''
+
 
 class SwfCustomerCreditsLog(models.Model):
     id = models.IntegerField()

@@ -120,7 +120,7 @@ body {
 	border:solid 1px #e3e3e3;	
 }
 .billing_bg{
-	background-image: url(images//billing_bg.png);
+	background-image: url(../images/billing_bg.png);
 	background-repeat: repeat-x;
 	background-position: left top;
 	height:27px;
@@ -341,7 +341,7 @@ body {
 	height:86px;
 	padding-left:0px;
 	line-height:86px;
-	padding-left:40px;
+	padding-left:20px;
 	padding-top:10px;
 	padding-right:10px
 }
@@ -376,8 +376,8 @@ body {
 	font-family:Arial, Helvetica, sans-serif;
 	font-size:17px;
 	color:#999;
-	font-weight:bold;
-	text-transform: capitalize;
+	font-weight:normal;
+	text-transform: none;
 	padding-left:10px;
 	padding-top:10px;
 	padding-right:10px
@@ -393,11 +393,11 @@ body {
 	border-bottom-width: 1px;
 	border-bottom-style: solid;
 	border-bottom-color: #dedede;
-	font-family:Arial, Helvetica, sans-serif;
+    font-family:Arial, Helvetica, sans-serif;
 	font-size:17px;
 	color:#999;
-	font-weight:bold;
-	text-transform: capitalize;
+	font-weight:normal;
+	text-transform: none;
 	padding-left:10px;
 	padding-top:10px;
 	padding-right:10px
@@ -438,7 +438,7 @@ body {
 	text-decoration:none;
 }
 .product_categories{
-	background-image: url(images//product_bg1.jpg);
+	background-image: url(../images/product_bg1.jpg);
 	background-repeat: repeat-x;
 	background-position: left top;
 	height: 33px;
@@ -560,7 +560,7 @@ body {
 .wrapper-left{ float:left; width:745px; background-color:#fff; }
 .wrapper-right{ float:left; width:180px; margin-top:560px; margin-left:-18px;}
 .feature-bg{
-	background-image: url(images//feature-bg.png);
+	background-image: url(../images/feature-bg.png);
 	background-repeat: no-repeat;
 	background-position: left top;
 	width:225px;
@@ -576,7 +576,7 @@ body {
 	float:left;
 	width:215px;
 	background-color: #ffcd80;
-	background-image: url(images//quick-image-bg.jpg);
+	background-image: url(../images/quick-image-bg.jpg);
 	background-repeat: repeat-x;
 	background-position: left top;
 
@@ -608,7 +608,7 @@ body {
 	color: #ec5e00;
 }
 .blue-button{
-	background-image: url(images//add-to-tank.png);
+	background-image: url(../images/add-to-tank.png);
 	background-repeat: no-repeat;
 	background-position: left top;
 	height: 25px;
@@ -628,7 +628,7 @@ body {
 .blue-button a:active{ color:#ffffff; text-decoration:none; }
 
 .hash-button{
-	background-image: url(images//quick-more-bg.png);
+	background-image: url(../images/quick-more-bg.png);
 	background-repeat: no-repeat;
 	background-position: left top;
 	float: right;
@@ -647,7 +647,7 @@ body {
 .hash-button a:active{ color: #434343; text-decoration:none; }
 
 .table-topicbg{
-	background-image: url(images//anemones-bg.png);
+	background-image: url(../images/anemones-bg.png);
 	background-repeat: no-repeat;
 	background-position: left top;
 	height: 34px;
@@ -659,7 +659,7 @@ body {
 	text-align:center;
 }
 .table-topbg{
-	background-image: url(images//quick-table-topbg.png);
+	background-image: url(../images/quick-table-topbg.png);
 	background-repeat: no-repeat;
 	background-position: left top;
 	height: 55px;
@@ -673,7 +673,7 @@ body {
 }
 .table-bg{
 	background-color: #FFFFFF;
-	background-image: url(images//quick-table-bg.jpg);
+	background-image: url(../images/quick-table-bg.jpg);
 	background-repeat: repeat-x;
 	background-position: left top;
 	width:728px;
@@ -694,7 +694,7 @@ body {
 .table-text a:active{ color: #434343; }
 
 .wish-button{
-	background-image:url(images//wish-list.png);
+	background-image:url(../images/wish-list.png);
 	background-repeat: no-repeat;
 	background-position: left top;
 	height: 25px;

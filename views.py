@@ -14,10 +14,11 @@ from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import unittest
 from forms import *
-from models import customers, Products
+from models import customers, Products, Extrapages, Category
 import random, logging
 import functools
 from functools import wraps
+from django.core.context_processors import csrf
 PERPAGE=50
 class CsrfExemptMixin(object):
     @method_decorator(csrf_exempt)
@@ -98,15 +99,69 @@ class RegistrationViewClass(TemplateView):
                    }
         return render_template(request, "registration.htm", content)
 
+class QuickListClass(TemplateView):
+    def GetRecaptcha(self, request):
+        value = random.randrange(10000, 99999, 1)
+        request.session['ReCaptcha'] = value
+        return value
+
+    def get(self, request, *args, **kwargs):
+        if request.method == 'GET' and 'cat' in request.GET:
+            cat=request.GET['cat']
+        else:
+            cat = 15
+        content = {'title': "Quick List",
+                   'cat': cat,
+                   'form':LoginForm,
+                   'recaptcha':"https://chart.googleapis.com/chart?chst=d_text_outline&chld=FFCC33|16|h|FF0000|b|%s" %self.GetRecaptcha(request),
+                    }
+        return render_template(request, "quick_list.htm", content)
+
+class ViewCategoryClass(TemplateView):
+    def GetRecaptcha(self, request):
+        value = random.randrange(10000, 99999, 1)
+        request.session['ReCaptcha'] = value
+        return value
+
+    def get(self, request, *args, **kwargs):
+        if request.method == 'GET' and 'id' in request.GET:
+            cat=request.GET['id']
+        else:
+            cat = ""
+        category = Category.objects.get(id=cat)
+        content = {'title': "Quick List",
+                   'cat': category,
+                   'form':LoginForm,
+                   'recaptcha':"https://chart.googleapis.com/chart?chst=d_text_outline&chld=FFCC33|16|h|FF0000|b|%s" %self.GetRecaptcha(request),
+                    }
+        return render_template(request, "category.htm", content)
+
+class ViewPagesClass(TemplateView):
+    def GetRecaptcha(self, request):
+        value = random.randrange(10000, 99999, 1)
+        request.session['ReCaptcha'] = value
+        return value
+
+    def get(self, request, *args, **kwargs):
+        pageid = request.GET['pageid']
+        allpages = Extrapages.objects.get(id=pageid)
+        content = {'page_title': "Summary",
+                   'allpages':allpages,
+                   'form':LoginForm,
+                   'recaptcha':"https://chart.googleapis.com/chart?chst=d_text_outline&chld=FFCC33|16|h|FF0000|b|%s" %self.GetRecaptcha(request),
+                   }
+        return render_template(request, "pages.htm", content)
+
 
 class MyaccountViewClass(LoginRequiredMixin,TemplateView):
     def get(self, request, *args, **kwargs):
         content = {'page_title': "Profile"}
-        if request.session["IsLogin"] == False: return HttpResponseRedirect('/')
-        customer = request.session['Customer']
-        content['customer'] = request.session['Customer']
         #content['customerorders'] = Orders.objects.filter(ocustomerid=customer.contactid).all(),
-        return render_to_response("myaccount.html", content)
+        content = {'page_title': "Summary",
+                   'customer':request.session['Customer'],
+                   'form':LoginForm,
+                   }
+        return render_template(request, "myaccount.html", content)
 
     def post(self, request, *args, **kwargs):
         pass
@@ -118,15 +173,89 @@ class ProductListViewClass(TemplateView):
     content['product_list'] = product_list 
     return render_to_response('productlist.html', content)
 
+class ChangePwdViewClass(LoginRequiredMixin, TemplateView):
+    @csrf_exempt
+    def get(self, request, *args, **kwargs):
+        content = {'page_title': "Profile - Password Change"}
+
+        error_message = ""
+        if "ErrorMessage" in request.session:
+          logging.info("\n\nErrors on page submit\n\n")
+          error_message = request.session["ErrorMessage"]
+          del request.session["ErrorMessage"]
+
+        if request.session["IsLogin"] == False: return HttpResponseRedirect('/')
+        customer = request.session['Customer']
+        prefill_data = {'username':customer.email}
+        form = ChangePwdForm(prefill_data)
+        content = {'page_title': "Summary",
+                   'customer':request.session['Customer'],
+                   'form':form,
+                   'error_message':error_message,
+                   }
+        return render_template(request, "ChangePwd.html", content)
+        #content['form'] = form
+        #content['error_message'] = error_message     
+        #content.update(csrf(request))
+        #return render_to_response("ChangePwd.html", content)
+
+class AddressFormViewClass(LoginRequiredMixin,TemplateView):
+    """ Page Name: /GetAddress """
+    @csrf_exempt
+    def get(self, request, *args, **kwargs):
+        if request.session["IsLogin"] == False: return HttpResponseRedirect('/')
+        address_type = request.GET['address_type']
+        customer = request.session['Customer']
+        d = {}
+        if address_type == 'billing':
+          d = {'contact_id':customer.contactid,
+               'first_name':customer.billing_firstname,
+               'last_name':customer.billing_lastname,
+               'address1':customer.billing_address,
+               'address2':customer.billing_address2,
+               'city': customer.billing_city,
+               'state': customer.billing_state,
+               'zip': customer.billing_zip,
+               'country': customer.billing_country,
+               'company': customer.billing_company,
+               'phone': customer.billing_phone,
+               'address_type': 'billing'}
+        elif address_type == 'shipping':
+          d = {'contact_id':customer.contactid,
+               'first_name':customer.shipping_firstname,
+               'last_name':customer.shipping_lastname,
+               'address1':customer.shipping_address,
+               'address2':customer.shipping_address2,
+               'city': customer.shipping_city,
+               'state': customer.shipping_state,
+               'zip': customer.shipping_zip,
+               'country': customer.shipping_country,
+               'company': customer.shipping_company,
+               'phone': customer.shipping_phone,
+               'address_type': 'shipping'}
+
+            
+        content = {}
+        content['customer'] = customer
+        form = AddressForm(d)
+
+        content['form'] = form
+        content.update(csrf(request))
+        return render_to_response("AddressForm.html", content)
     
 class CartItems(object):
 
-  def __init__(self, id, name, price, quantity, shipping, tax, image1, image2, image3):
+  def __init__(self, id, name, price, saleprice, quantity, shipping, tax, image1, image2, image3):
       self.id = id
       self.name = name
       self.quantity = quantity
       self.price = price
-      self.subtotal = price * quantity
+      self.saleprice = saleprice,
+      if saleprice <= 0 :
+          self.subtotal = price * quantity
+      else:
+          self.subtotal = saleprice * quantity
+
       self.shipping = shipping
       self.tax = tax
       self.total = float(self.subtotal) + float(shipping) + (float(self.subtotal) * float(tax)/100.0)
@@ -144,8 +273,14 @@ class CartConfirmClass(TemplateView):
       id = int(request.GET['itemid'])
     
     item = Products.objects.filter(catalogid=id)[0]
+    if item.stock == 0:
+       cart_items = request.session["CartItems"]
+       del cart_items[id]
+       request.session["CartItems"] = cart_items
+       return HttpResponse("<h3>Quantity out of stock. Click <a href='productlist'>here</a> to continue shopping.</h3>")
+    
     cart_item = CartItems(item.catalogid, item.name, item.price,
-                            1, 0.0, 0.0,
+                          float(item.saleprice), 1, 0.0, 0.0,
                             item.image1, item.image2, item.image3)
 
     if 'CartItems' in request.session:
@@ -165,7 +300,7 @@ class CartConfirmClass(TemplateView):
 
     content['item'] = cart_item
     
-    return render_to_response('CartConfirmation.html', content)
+    return render_template(request,'CartConfirmation.html', content)
 
 
 class ViewCartViewClass(TemplateView):
@@ -186,13 +321,14 @@ class ViewCartViewClass(TemplateView):
     #Preparing result to render in html page.
     selected_items = []
     for item in mycart:
-      cart_item = CartItems(item.catalogid, item.name, item.price,
+      cart_item = CartItems(item.catalogid, item.name, item.price, float(item.saleprice),
                             cart_items[item.catalogid], 0.0, 0.0,
                             item.image1, item.image2, item.image3)
       selected_items.append(cart_item)
       
     content['MyCart'] = selected_items
-    return render_to_response('ViewCart.html', content)
+    return render_template(request,'ViewCart.html', content)
+
 
 class ForgetPasswordClass(LoginRequiredMixin,TemplateView):
 
@@ -230,7 +366,7 @@ class ForgetPasswordClass(LoginRequiredMixin,TemplateView):
         content['recaptcha'] = "https://chart.googleapis.com/chart?chst=d_text_outline&chld=FFCC33|16|h|FF0000|b|%s" %self.GetRecaptcha(request)
         content['message'] = "Password has been sent to your EMail. Please check your inbox"
         content.update(csrf(request))
-        return render_to_response('login.htm', content)
+        return render_template(request,'login.htm', content)
       else:
         c = {'form': form, 'error_message': error_msg}
 

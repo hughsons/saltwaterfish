@@ -1,0 +1,45 @@
+<style type="text/css">
+label.error { float: none; color: red; padding-left: .5em; vertical-align: top; }
+</style>
+<script language="javascript" type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script language="javascript" type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/jquery.validate.min.js"></script>
+<script type="text/javascript">
+$(function() {
+   $( "#form" ).validate({
+           rules: FORM_RULES,
+		   messages: FORM_MESSAGES
+   });
+});
+
+<!-- Begin Form Validations -->
+
+FORM_RULES = {
+    'email': 'required',
+    'recaptcha': 'required'
+};
+ 
+FORM_MESSAGES = {
+    'email': 'This field is required.',
+	'recaptcha': 'Recaptcha is required.',
+};
+<!-- End Form Validations -->
+</script>
+
+<form action="forgetpassword" method="post" id="form" name="form">
+{% csrf_token %}
+<table border="0" bgcolor="#E4E4E4" cellpadding="3" cellspacing="1">
+  <tr>
+    <td colspan="2">{% if message or error_message %}
+      <p class="style5">{{ message }} <span class="style8">{{ error_message }}</span></p>{% endif %}</td></tr>
+  <tr bgcolor="#FFFFFF"><td width="68"><span class="style4">EMail</span></td>
+  <td width="259"><span class="style4">{{ form.email }} </span></td>
+  </tr>
+  <tr bgcolor="#FFFFFF">
+    <td colspan="2" align="center"><b><img src="{{ recaptcha }}" /></b></td>
+  </tr>
+  <tr bgcolor="#FFFFFF">
+    <td colspan="2">Please enter recaptcha value: <span class="style4">{{ form.recaptcha }}</span></td>
+  </tr>
+  <tr bgcolor="#FFFFFF"><td colspan="2"><input type="submit" name="btnSubmit" /></td></tr>
+</table>
+</form>

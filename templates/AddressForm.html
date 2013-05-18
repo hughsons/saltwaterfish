@@ -1,0 +1,105 @@
+<script language="javascript" type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script language="javascript" type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/jquery.validate.min.js"></script>
+
+<script>
+$(document).ready(function(){
+  $("#cmdUpdateAddress").click(function(){
+	var formData = $('#AddressForm').serialize();
+    if (address_type == 1)
+	{
+	   var html = "";
+	   formData = formData
+	   $("#BillingAddressForm").load("/updateaddress", formData, function(responseText, textStatus, xmlHttpRequest) {
+          html = responseText;
+       });
+	   $("#BillingAddressForm").html(html);
+	}
+	else if (address_type = 2)
+	{
+	   var html = "";
+	   formData = formData
+	   $("#ShippingAddressForm").load("/updateaddress", formData, function(responseText, textStatus, xmlHttpRequest) {
+          html = responseText;
+       });
+	   $("#ShippingAddressForm").html(html);
+	}
+    $("#BillingAddressView").show();
+    $("#ShippingAddressView").show();
+
+	return false;
+  });
+
+  $("#cmdCancel").click(function(){
+    if (address_type == 1)
+	{
+	   var html = "&nbsp;";
+	   $("#BillingAddressForm").html(html);
+	}
+	else if (address_type = 2)
+	{
+	   var html = "&nbsp;";
+	   $("#ShippingAddressForm").html(html);
+	}
+    $("#BillingAddressView").show();
+    $("#ShippingAddressView").show();
+
+	return false;
+  });
+
+});
+</script>
+<form  id="AddressForm" name="AddressForm" method="post" action="#">
+{% csrf_token %}
+  <table width="498" border="0" cellpadding="3" cellspacing="1" bgcolor="#F0F0F0">
+    <tr>
+      <td colspan="3" bgcolor="#FFFFFF">&nbsp;</td>
+    </tr>
+
+    <tr>
+      <td colspan="3" bgcolor="#FFFFFF"><table width="100%" border="0">
+        <tr>
+          <td>First Name </td>
+          <td><span class="style4">{{ form.first_name }}{{ form.contact_id }}{{ form.address_type }}</span></td>
+          <td>Last Name </td>
+          <td><span class="style4">{{ form.last_name }}</span></td>
+        </tr>
+      </table></td>
+    </tr>
+    <tr>
+      <td width="87" bgcolor="#FFFFFF">Company</td>
+      <td width="396" bgcolor="#FFFFFF"><span class="style4">{{ form.company }} </span></td>
+    </tr>
+    <tr>
+      <td bgcolor="#FFFFFF">Address1</td>
+      <td bgcolor="#FFFFFF"><span class="style4">{{ form.address1 }} </span></td>
+    </tr>
+    <tr>
+      <td bgcolor="#FFFFFF">Address2</td>
+      <td bgcolor="#FFFFFF"><span class="style4">{{ form.address2 }}</span></td>
+    </tr>
+    <tr>
+      <td bgcolor="#FFFFFF">City</td>
+      <td bgcolor="#FFFFFF"><span class="style4">{{ form.city }} </span></td>
+    </tr>
+    <tr>
+      <td bgcolor="#FFFFFF">State</td>
+      <td bgcolor="#FFFFFF"><span class="style4">{{ form.state }} </span></td>
+    </tr>
+    <tr>
+      <td bgcolor="#FFFFFF">Country</td>
+      <td bgcolor="#FFFFFF"><span class="style4">{{ form.country }} </span></td>
+    </tr>
+    <tr>
+      <td bgcolor="#FFFFFF">Zip</td>
+      <td bgcolor="#FFFFFF"><span class="style4">{{ form.zip }}</span></td>
+    </tr>
+    <tr>
+      <td bgcolor="#FFFFFF">Phone</td>
+      <td bgcolor="#FFFFFF"><span class="style4">{{ form.phone }}</span></td>
+    </tr>
+    <tr>
+      <td bgcolor="#FFFFFF">&nbsp;</td>
+      <td bgcolor="#FFFFFF"><button id="cmdUpdateAddress">Update Address</button>&nbsp;<button id="cmdCancel">Cancel</button></td>
+    </tr>
+  </table>
+</form>

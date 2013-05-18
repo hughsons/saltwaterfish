@@ -1,0 +1,116 @@
+{% include 'header.htm' %}
+<style type="text/css">
+<!--
+.greentext {color: #00CC00; font-size: 12px;}
+.redtext {color: #FF0000; font-size: 12px;}
+label.error { float: none; color: red; padding-left: .5em; vertical-align: top; }
+-->
+</style>
+<script language="javascript" type="text/javascript" src="/misc/js/jquery-1.7.2.min.js"></script>
+<script language="javascript" type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/jquery.validate.min.js"></script>
+<script>
+$(function() {
+
+   $( "#form"  ).submit(function() {
+      var thisform = $('#form');
+	  if (thisform.valid()) 
+        return true;
+      else
+	  {
+         alert("Please fill the mandatory fields in the required format");
+	  }
+      return false;
+     });
+
+   $( "#form" ).validate({
+           rules: {
+                   {{ form.username.html_name }}: {
+                           required: true,
+                           maxlength: 30,
+                           customvalidation: true
+                   },
+
+                   {{ form.old_password.html_name }}: {
+                       required: true,
+                       maxlength: 30,
+                   },
+                   
+                   {{ form.new_password.html_name }}: {
+                       required: true,
+                       maxlength: 30,
+                   }
+
+           },
+
+           messages: {
+                   {{ form.username.html_name }}: {
+                           required: "*",
+                   },
+                   
+                   {{ form.old_password.html_name }}: {
+                       required: "*",
+                   },
+
+                   {{ form.new_password.html_name }}: {
+                       required: "*",
+                   }
+
+           },
+
+           errorPlacement: function(error, element){
+                            error.insertAfter(element);
+                       },
+                   
+           showErrors: function(errorMap, errorList){
+                              this.defaultShowErrors();
+                       }
+   });
+
+   $.validator.addMethod("customvalidation",
+           function(value, element) {
+		     if (element.name == '{{ form.username.html_name }}')
+	                   return /^[A-Za-z\d_\.-]+@[A-Za-z\d_\.-]+\.[A-Za-z\d_\.-]+$/.test(value);
+           },
+   ""
+   );
+
+});
+</script>
+{% include 'myaccount_widget.htm' %}
+<div class="wid748 float-left">
+<div class="height12 clr"></div>
+<div  class="  clr">
+<div class="height9 clr"></div>
+<div class="blue-border clr" style="width:90% !important;">
+<div class="blue-bg-header clr" >
+Password Change
+</div>
+ <div class="my-account clr">
+ 
+    
+       
+      <form name="form" id="form" action="/setnewpassword" method="post">
+        {% csrf_token %}
+        
+        <div class=" " >{% if message or error_message %}
+          <p class="greentext">{{ message }} <span class="redtext">{{ error_message }}</span></p>
+          {% endif %}</div>
+        <div class="height23 clr">&nbsp;&nbsp;</div>
+        <div style="font-size:15px" >Email: {{ form.username }}</div>
+        <div class="height12 clr">&nbsp;&nbsp;</div>
+        <div style="font-size:15px" >Old Password: {{ form.old_password }}</div>
+        <div class="height12 clr">&nbsp;&nbsp;</div>
+        <div style="font-size:15px" >New Password: {{ form.new_password }}</div>
+        <div class="height12 clr">&nbsp;&nbsp;</div>
+        <div class="float-center"><input type=submit value="Change My Password" width="77" height="21" border="0" /></div>
+        <div class="wid187 clr">
+      </form>
+    </div>
+  </div>
+</div>
+ </div>
+</div>
+<div class="float-left width10"></div>
+
+</div>
+{% include 'footer.htm' %} 

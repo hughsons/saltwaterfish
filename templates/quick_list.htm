@@ -1,314 +1,100 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>Quick List</title>
-<link href="css4/style.css" rel="stylesheet" type="text/css" />
-</head>
+{% include 'header.htm' %}
 
-<body>
-<div id="tab-wrapper">
+<link href="/misc/css4/style.css" rel="stylesheet" type="text/css" />
+
+{% include 'myaccount_widget.htm' %}
+{% load tagsfilter %}
+ 
+<div class="wid748 float-left">
+<div class="height12 clr"></div>
+<div  class="  clr">
+  <div class=" ">
+<div id="tab-wrapper" style="width:760px !important;">
 <div class="wrapper-left">
-<div class="feature-bg">Featured Products</div>
+<div class="home-txt padleft20 padbottom5 clr">
+Home <span class="home-txt-arrow">&gt; </span>Marine Life     </div>
 <!--image starts-->
-<div style="margin:20px auto;">
-<div class="image-bg" style="margin-right:40px;">
-<div class="image-topic">Purple Tang - Red Sea<br /><span>Zebrasoma xanthurum</span></div>
-<div align="center" style="padding:20px 0px;"><img src="images/quick-image1.jpg" /></div>
-<div style="padding-left:25px;">
-<div class="image-text"><strong>Sale:</strong> $199.99  <span> $179.99</span></div>
-<div><img src="images/quick-sale-img.png" /></div>
-<!--div close--><div style="clear:both; height:1px;"></div></div>
-<div style="margin:10px 0px 20px 0px;">
-<div class="blue-button" style="margin-left:12px;"><a href="#">Add to Tank</a></div>
-<div class="hash-button"><a href="#">more details...</a></div>
-<!--div close--><div style="clear:both; height:1px;"></div></div>
-<!--image bg close--></div>
+{% if cat|categoriesdisplay|length < 1 %}
+	<div align=left class=padleft7>
+	   <div class="clr height15">&nbsp;&nbsp;</div>
+	 </div>
 
-<div class="image-bg" style="margin-right:40px;">
-<div class="image-topic">Sailfin Tang<br /><span>Zebrasoma veliferum</span></div>
-<div align="center" style="padding:20px 0px;"><img src="images/quick-image2.jpg" /></div>
-<div style="padding-left:25px;">
-<div class="image-text"><strong>Sale:</strong>$36.99<span> $29.99</span></div>
-<div><img src="images/quick-sale-img.png" /></div>
-<!--div close--><div style="clear:both; height:1px;"></div></div>
-<div style="margin:10px 0px 20px 0px;">
-<div class="blue-button" style="margin-left:12px;"><a href="#">Add to Tank</a></div>
-<div class="hash-button"><a href="#">more details...</a></div>
-<!--div close--><div style="clear:both; height:1px;"></div></div>
-<!--image bg close--></div>
+	<div class=padleft7><table width="100%" border="0" cellspacing="0" cellpadding="10">
+	  <tr  class="table-topbg ">
+		<td width="40%" align="left">Description</td>
+		   <td width="28%" align="left">Price</td>
+		<td width="20%" align="left">Status</td>
+	  </tr>
+	</table>
+	</div>
+	<div> <table width="100%" border="0" cellspacing="0" cellpadding="10" class="table-bg" >
+		{% for products in cat|productsdisplay %}
+			  <tr>
+				<td width="336" class="table-text"><a href="/product?pid={{ products.catalogid }}">{{ products.name }}</a></td>
+				<td width="207">
+				{% if products.onsale == 1 %}
+					<img src="/misc/images/quick-sale-img.png" width="33" height="21" border="0"  />
+				{% else %}
+					${{products.price|floatformat:2}}
+				{% endif %}</td>
+					<td width="153">
+					{% if products.stock >= 1 %}
+					<div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
+				{% else %}
+					<div class="wish-button"><a href="/addtocart?item_id={{ products.catalogid }}">WISH LIST</a></div>
+				{% endif %}
+					 
+					
+					</td>
+				</tr>
+			  
+			   <tr><td colspan="4"><div class="bg7"> </div></td></tr>
+		   {% endfor %}
+	</table></div>
+{% else %}
+	{% for cats in cat|categoriesdisplay %}
+		<div align=left class=padleft7>
+		   <div class="clr height15">&nbsp;&nbsp;</div>
+		<div class="table-topicbg padbottom15 ">{{ cats.category_name }}</div>
+		</div>
+		<div class=padleft7><table width="100%" border="0" cellspacing="0" cellpadding="10">
+		  <tr  class="table-topbg ">
+			<td width="40%" align="left">Description</td>
+			   <td width="28%" align="left">Price</td>
+			<td width="20%" align="left">Status</td>
+		  </tr>
+		</table>
+		</div>
+		<div><table width="100%" border="0" cellspacing="0" cellpadding="10" class="table-bg" >
 
-<div class="image-bg">
-<div class="image-topic">Yellow Tang<br /><span>Zebrasoma flavescens</span></div>
-<div align="center" style="padding:20px 0px;"><img src="images/quick-image3.jpg" /></div>
-<div style="padding-left:25px;">
-<div class="image-text"><strong>Sale:</strong>$49.99 <span>$34.99</span></div>
-<div><img src="images/quick-sale-img.png" /></div>
-<!--div close--><div style="clear:both; height:1px;"></div></div>
-<div style="margin:10px 0px 20px 0px;">
-<div class="blue-button" style="margin-left:12px;"><a href="#">Add to Tank</a></div>
-<div class="hash-button"><a href="#">more details...</a></div>
-<!--div close--><div style="clear:both; height:1px;"></div></div>
-<!--image bg close--></div>
-<!--image close--><div style="clear:both; height:1px;"></div></div>
+		{% for products in cats.id|productsdisplay %}
+			  <tr>
+				<td width="336" class="table-text"><a href="/product?pid={{ products.catalogid }}">{{ products.name }}</a></td>
+				<td width="187">
+				{% if products.onsale == 1 %}
+					<img src="/misc/images/quick-sale-img.png" width="33" height="21" border="0"  />
+				{% else %}
+					${{products.price|floatformat:2}}
+				{% endif %}
+					</td>
+				<td width="203">{% if products.stock >= 1 %}
+					<div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
+				{% else %}
+					<div class="wish-button"><a href="/addtocart?item_id={{ products.catalogid }}">WISH LIST</a></div>
+				{% endif %}
+					 </td>
+			  </tr>
+			  
+			   <tr><td colspan="4"><div class="bg7"> </div></td></tr>
+		 {% endfor %}
+		</table></div>
+	{% endfor %}
+{% endif %}
 
-<div class="table-topicbg" style="padding-bottom:15px;">ANEMONES</div>
 
-<div><table width="100%" border="0" cellspacing="0" cellpadding="10">
-  <tr  class="table-topbg">
-    <td>Description ANEMONES</td>
-    <td>Size</td>
-    <td>Price</td>
-    <td>Status</td>
-  </tr>
-</table>
+
+</div></div></div></div></div></div>
+<div class="float-left width10"></div>
+
 </div>
-
-<div><table width="100%" border="0" cellspacing="0" cellpadding="10" class="table-bg" >
-
-  <tr>
-    <td class="table-text"><a href="#">Atlantic Carpet Anemone</a></td>
-    <td>3-4 inches</td>
-    <td><div style="float:left;">$15.99 <span>$19.99</span></div>
-    <div style="float:left; padding-left:3px;"><img src="images/quick-sale-img.png"  /></div></td>
-    <td><div class="blue-button"><a href="#">Add to Tank</a></div></td>
-  </tr>
-  
-   <tr><td colspan="4"><div style="height:1px; background-color:#d1d1d1;"> </div></td></tr>
-   
-  <tr>
-    <td class="table-text"><a href="#">Bule Carpet Anemone</a></td>
-    <td>4-6 inches</td>
-    <td>$156.99</td>
-    <td><div class="blue-button">Add to Tank</div></td>
-  </tr>
-  
-   <tr><td colspan="4"><div style="height:1px; background-color:#d1d1d1;"></div></td></tr>
-   
-  <tr>
-    <td class="table-text"><a href="#">Bubble Tip Anemone</a></td>
-    <td>3-4 inches</td>
-    <td>$39.99</td>
-    <td><div class="blue-button">Add to Tank</div></td>
-  </tr>
-  
-   <tr><td colspan="4"><div style="height:1px; background-color:#d1d1d1;"></div></td></tr>
-   
-  <tr>
-    <td class="table-text"><a href="#">Bubble Tip Anemone-Green Tip</a></td>
-    <td>2-5 inches</td>
-    <td>$62.99</td>
-    <td><div class="blue-button">Add to Tank</div></td>
-  </tr>
-  
-   <tr><td colspan="4"><div style="height:1px; background-color:#d1d1d1;"></div></td></tr>
-   
-  <tr>
-    <td class="table-text"><a href="#">Bubble Tip Anemone-Large</a></td>
-    <td>3.5-6 inches</td>
-    <td>$54.99</td>
-    <td><div class="blue-button">Add to Tank</div></td>
-  </tr>
-  
-   <tr><td colspan="4"><div style="height:1px; background-color:#d1d1d1;"></div></td></tr>
-   
-  <tr>
-    <td class="table-text"><a href="#">Bulb Anemone</a></td>
-    <td>3-6 inches</td>
-    <td>$27.99</td>
-    <td><div class="blue-button">Add to Tank</div></td>
-  </tr>
-  
-   <tr><td colspan="4"><div style="height:1px; background-color:#d1d1d1;"></div></td></tr>
-   
-  <tr>
-    <td class="table-text"><a href="#">Carpet Anemone-white</a></td>
-    <td>8-12 inches</td>
-    <td>$84.99</td>
-    <td><div class="blue-button">Add to Tank</div></td>
-  </tr>
-  
-   <tr><td colspan="4"><div style="height:1px; background-color:#d1d1d1;"></div></td></tr>
-   
-  <tr>
-    <td class="table-text"><a href="#">Curly Q Anemone-Group of 3</a></td>
-    <td>2-4 inches</td>
-    <td>$13.99</td>
-    <td><div class="blue-button">Add to Tank</div></td>
-  </tr>
-  
-   <tr><td colspan="4"><div style="height:1px; background-color:#d1d1d1;"></div></td></tr>
-   
-  <tr>
-    <td class="table-text"><a href="#">Florida Condi Anemone</a></td>
-    <td>2-4 inches</td>
-    <td>$10.99</td>
-    <td><div class="wish-button"><a href="#">Wish List</a></div></td>
-  </tr>
-  
-   <tr><td colspan="4"><div style="height:1px; background-color:#d1d1d1;"></div></td></tr>
-   
-  <tr>
-    <td class="table-text"><a href="#">Green Carpet Anemone</a></td>
-    <td>4-6 inches</td>
-    <td>$104.99</td>
-    <td><div class="wish-button"><a href="#">Wish List</a></div></td>
-  </tr>
-  
-   <tr><td colspan="4"><div style="height:1px; background-color:#d1d1d1;"></div></td></tr>
-   
-  <tr>
-    <td class="table-text"><a href="#">Haddoni Carpet Anemone</a></td>
-    <td>3-6 inches</td>
-    <td>$44.99</td>
-    <td><div class="wish-button"><a href="#">Wish List</a></div></td>
-  </tr>
-  
-   <tr><td colspan="4"><div style="height:1px; background-color:#d1d1d1;"></div></td></tr>
-   
-  <tr>
-    <td class="table-text"><a href="#">Hawaiian Rad Anemone</a></td>
-    <td>2-6 inches</td>
-    <td>$105.99</td>
-    <td><div class="wish-button"><a href="#">Wish List</a></div></td>
-  </tr>
-  
-   <tr><td colspan="4"><div style="height:1px; background-color:#d1d1d1;"></div></td></tr>
-   
-  <tr>
-    <td class="table-text"><a href="#">Heteractis Magnifica</a></td>
-    <td>5-10 inches</td>
-    <td>$79.99</td>
-    <td><div class="wish-button"><a href="#">Wish List</a></div></td>
-  </tr>
-  
-   <tr><td colspan="4"><div style="height:1px; background-color:#d1d1d1;"></div></td></tr>
-   
-  <tr>
-    <td class="table-text"><a href="#">Long Tentacle Anemone</a></td>
-    <td>3-6 inches</td>
-    <td>$31.99</td>
-    <td><div class="wish-button"><a href="#">Wish List</a></div></td>
-  </tr>
-  
-   <tr><td colspan="4"><div style="height:1px; background-color:#d1d1d1;"></div></td></tr>
-   
-  <tr>
-    <td class="table-text"><a href="#">Malu Aenmone</a></td>
-    <td>2-3 inches</td>
-    <td>$36.99</td>
-    <td><div class="wish-button"><a href="#">Wish List</a></div></td>
-  </tr>
-</table>
-</div>
-
-<div class="table-topicbg" style="margin:15px 0px;">CRABS</div>
-
-<div><table width="100%" border="0" cellspacing="0" cellpadding="10">
-  <tr  class="table-topbg">
-    <td>Description ANEMONES</td>
-    <td>Size</td>
-    <td>Price</td>
-    <td>Status</td>
-  </tr>
-</table>
-</div>
-
-
-<div><table width="100%" border="0" cellspacing="0" cellpadding="10" class="table-bg" >
-
-  <tr>
-    <td class="table-text"><a href="#">Red Leg Hermit Crab- Group of 10 - Mexico</a></td>
-    <td>3-4 inches</td>
-    <td>$19.99</td>
-    <td><div class="blue-button">Add to Tank</div></td>
-  </tr>
-  
-  <tr><td colspan="4"><div style="height:1px; background-color:#d1d1d1;"></div></td></tr>
-  
-  <tr>
-    <td class="table-text"><a href="#">Adopted Emerald Crabs</a></td>
-    <td>4-6 inches</td>
-    <td>$156.99</td>
-    <td><div class="blue-button">Add to Tank</div></td>
-  </tr>
-  
-  <tr><td colspan="4"><div style="height:1px; background-color:#d1d1d1;"></div></td></tr>
-  
-  <tr>
-    <td class="table-text"><a href="#">Porcelain Crab - Limit 3</a></td>
-    <td>3-4 inches</td>
-    <td>$39.99</td>
-    <td><div class="blue-button">Add to Tank</div></td>
-  </tr>
-  
-  <tr><td colspan="4"><div style="height:1px; background-color:#d1d1d1;"></div></td></tr>
-  
-  <tr>
-    <td class="table-text"><a href="#">Dwarf White Leg Hermit Crabs - Group of 10</a></td>
-    <td>2-5 inches</td>
-    <td>$62.99</td>
-    <td><div class="blue-button">Add to Tank</div></td>
-  </tr>
-  
-  <tr><td colspan="4"><div style="height:1px; background-color:#d1d1d1;"></div></td></tr>
-  
-  <tr>
-    <td class="table-text"><a href="#">Blue leg Hermit Crab</a></td>
-    <td>3.5-6 inches</td>
-    <td>$54.99</td>
-    <td><div class="blue-button">Add to Tank</div></td>
-  </tr>
-  
-  <tr><td colspan="4"><div style="height:1px; background-color:#d1d1d1;"></div></td></tr>
-  
-  <tr>
-    <td class="table-text"><a href="#">Blue Leg Hermit Crab - Group of 10</a></td>
-    <td>3-6 inches</td>
-    <td>$27.99</td>
-    <td><div class="blue-button">Add to Tank</div></td>
-  </tr>
-  
-  <tr><td colspan="4"><div style="height:1px; background-color:#d1d1d1;"></div></td></tr>
-  
-  <tr>
-    <td class="table-text"><a href="#">100 Empty Hermit Crab Shells</a></td>
-    <td>8-12 inches</td>
-    <td>$84.99</td>
-    <td><div class="blue-button">Add to Tank</div></td>
-  </tr>
-  
-  <tr><td colspan="4"><div style="height:1px; background-color:#d1d1d1;"></div></td></tr>
-  
-    <tr>
-    <td class="table-text"><a href="#">Blue Leg Hermit Crab - Group of 20</a></td>
-    <td>2-4 inches</td>
-    <td>$13.99</td>
-    <td><div class="blue-button">Add to Tank</div></td>
-  </tr>
-  
-  <tr><td colspan="4"><div style="height:1px; background-color:#d1d1d1;"></div></td></tr>
-  
-  <tr>
-    <td class="table-text"><a href="#">Emerald Crab - Super Special - $2.50 - Limit 5</a></td>
-    <td>2-4 inches</td>
-    <td>$10.99</td>
-    <td><div class="wish-button"><a href="#">Wish List</a></div></td>
-  </tr>
-  
-  <tr><td colspan="4"><div style="height:1px; background-color:#d1d1d1;"></div></td></tr>
-  
-  <tr>
-    <td class="table-text"><a href="#">Horseshoe Crab</a></td>
-    <td>4-6 inches</td>
-    <td>$104.99</td>
-    <td><div class="wish-button"><a href="#">Wish List</a></div></td>
-  </tr>
-</table>
-</div>
-<!--wrapper left close--><div style="clear:both; height:1px;"></div></div>
-
-<div class="wrapper-right"><img src="images/quick-right-image.png" /></div>
-<!--tab-wrapper close--><div style="clear:both; height:1px;"></div></div>
-</body>
-</html>
+{% include 'footer.htm' %}

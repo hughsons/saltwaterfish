@@ -258,6 +258,26 @@ class CustomersViewClass(LoginRequiredMixin,TemplateView):
                    }
         return render_template(request, "customers.htm", content)
 
+class CRMViewClass(LoginRequiredMixin,TemplateView):
+    def get(self, request, *args, **kwargs):
+        count = Crm.objects.count()
+        if request.GET['page'] == "":
+            page_num = 1
+        else:
+            page_num = request.GET['page']
+        if 'status' in request.GET and request.GET['status'] != "":
+            status = request.GET['status']
+        else:
+            status = 1
+        page_num = int(page_num)
+        offset = page_num * 100
+        content = {'page_title': "Profile",
+                   'customers':Crm.objects.all().filter(status=status)[offset-100:offset],
+                   'count':count,
+                   'page_num':page_num,
+                   }
+        return render_template(request, "crm.htm", content)
+
 class StaffViewClass(LoginRequiredMixin,TemplateView):
     def get(self, request, *args, **kwargs):
         content = {'page_title': "Site Staff",

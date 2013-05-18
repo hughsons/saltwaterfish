@@ -1,0 +1,93 @@
+{% include 'header.htm' %}
+
+<link href="/misc/css3/style.css" rel="stylesheet" type="text/css" />
+<link href="/misc/css3/style.css" rel="stylesheet" type="text/css" />
+
+{% load tagsfilter %}
+<div  class="gray-back-new">
+<div class="width8 float-left">&nbsp;</div>
+ 
+<div class="height12 clr"></div>
+ 
+   
+<div id="wrapper padleft20" align=left>
+<div class="container padleft20" align=left >
+<div class="clr">
+<div class="home-txt padleft20  padbottom20"><a href="#">Home</a> > <a href="#">{{cat.category_name}} </a></div>
+<div class="clr">
+<div class="button"><a href="#">{{cat.category_name}}</a></div>
+</div>
+<div class="clr pad-tb">
+ {{cat.category_header|safe}}
+</div>
+<div class="clr">
+<div class="button"><a href="#">Featured Products</a></div>
+</div>
+
+<div class="clr padtop20 padbottom20">
+<div class="clr">
+{% for products in cat.id|productsdisplay %}
+	 {% if products.categoryspecial >= 1 %}
+		<div class="float_left orange_box " align="center">
+		<div class="clr product_heading product-align">{{ products.name }}</div>
+		<div class="clr product-align">{{ products.description }}</div>
+		<div class="clr pad-tb"><span class="clr pad-tb"><img src="misc/images/category_img1.jpg" width="125" height="125" /></span></div>
+		<div class="clr "><strong>Sale:&nbsp;</strong><span class="line-through">$199.99&nbsp;</span><strong class="orange_text">&nbsp;${{products.price|floatformat:2}}</strong></div>
+		<div class="clr pad-tb">
+				{% if products.stock >= 1 %}
+					<div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
+				{% else %}
+					<div class="wish-button"><a href="/addtocart?item_id={{ products.catalogid }}">WISH LIST</a></div>
+				{% endif %}
+		<div class="hash-button"><a href="#">more details...</a></div>
+		</div>
+		</div>
+	{% endif %}
+{% endfor %}
+
+ 
+
+</div>
+<div class="clr"></div>
+</div>
+
+<div class="clr"><div class="heading_bg">{{cat.id|productsdisplay|length}} {{cat.category_name}}</div></div>
+<div class="clr padtop20 padbottom20">
+<div class="clr">
+{% for products in cat.id|productsdisplay %}
+<div class="float_left blue_box" align="center">
+<div class="clr product_heading product-align">{{ products.name|slice:":27" }}..</div>
+<div class="clr pad-tb product-align">{{ products.description }}&nbsp;</div>
+<div class="clr pad-tb"><span class="clr pad-tb"><img src="{{ products.thumbnail }}" width="125" height="125" /></span></div>
+<div class="clr "><strong>Sale:&nbsp;</strong><strong class="orange_text">&nbsp;${{products.price|floatformat:2}}</strong></div>
+<div class="clr pad-tb">
+				{% if products.stock >= 1 %}
+					<div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
+				{% else %}
+					<div class="wish-button"><a href="/addtocart?item_id={{ products.catalogid }}">WISH LIST</a></div>
+				{% endif %}
+ <div class="hash-button"><a href="#">more details...</a></div>
+</div>
+</div>
+{% endfor %}
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+
+</div>
+
+</div>
+</div>
+</div></div> 
+<div class="float-left width10"></div>
+
+</div>
+{% include 'footer.htm' %}

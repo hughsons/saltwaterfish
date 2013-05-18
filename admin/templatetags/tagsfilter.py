@@ -122,3 +122,30 @@ def shippingcountries(field):
         logging.info('LoginfoMessage:: %s',e)
     return countries
 
+@register.filter("categoriesdisplay")
+def categoriesdisplay(parent):
+    logging.info('category name:: %s',parent)
+    try:
+        if parent != '':
+            result = Category.objects.all().filter(category_parent = parent).order_by('category_name')
+        else:
+            result = Category.objects.all()
+            
+    except Exception as e:
+        result = e
+        logging.info('LoginfoMessage:: %s',e)
+    return result
+
+@register.filter("productsdisplay")
+def productsdisplay(category):
+    logging.info('field name:: %s',category)
+    try:
+        if category != '':
+            result = Products.objects.raw('select * from product_category,products where product_category.catalogid=products.catalogid and categoryid = %s',category)
+        else:
+            result = Products.objects.all()
+            
+    except Exception as e:
+        result = e
+        logging.info('LoginfoMessage:: %s',e)
+    return result

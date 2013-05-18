@@ -3,6 +3,49 @@
 .redtext {color: #FF0000; font-size: 12px;}
 label.error { float: none; color: red; padding-left: .5em; vertical-align: top; }
 -->
+<script language="javascript" type="text/javascript" src="/misc/js/jquery-1.7.2.min.js"></script>
+<script language="javascript" type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/jquery.validate.min.js"></script>
+<script type="text/javascript">
+$(function() {
+   $( "#form" ).submit(function() {
+      var thisform = $('#form');
+	  if (thisform.valid()) 
+        return true;
+      else
+	  {
+         alert("Please fill the mandatory fields in the required format");
+	  }
+      return false;
+     });
+	 
+   $( "#form" ).validate({
+           rules: FORM_RULES,
+		   messages: FORM_MESSAGES
+   });
+});
+
+
+
+FORM_RULES = {
+    '{{ form.username.html_name }}': 'required',
+    '{{ form.password.html_name }}': 'required',
+    '{{ form.recaptcha.html_name }}': 'required'
+};
+ 
+FORM_MESSAGES = {
+    '{{ form.username.html_name }}': '<br>This field is required.',
+	'{{ form.password.html_name }}': 'Password is required.',
+	'{{ form.recaptcha.html_name }}': 'Recaptacha is required.',
+};
+
+ </script>
+ <div  class="gray-back-new">
+<div class="width8 float-left">&nbsp;</div>
+<div class="width226 float-left">
+<div class="grey-left-one clr">
+    <div class="padtop81">GREY AREA 
+CMS Admin Control</div>
+</div>
 <div class="height9 clr"></div>
 <div class="blue-border clr">
 <div class="blue-bg-header clr">
@@ -43,4 +86,80 @@ Welcome <span class="start">{{ request.session.Customer.billing_firstname }} {{ 
 </div>
 </div>
 {% endif %}
+</div>
+<div class="height9 clr">&nbsp;&nbsp;</div>
+<div class="blue-border clr">
+<div class="blue-bg-header clr">
+Resources
+</div>
+<div class="resources clr">
+<div class="height12 clr">&nbsp;&nbsp;</div>
+<div class="wid207 clr">
+  <select name="websites2" id="websites2" class="wid180">
+    <option name="one" value="msDropDown" selected="selected">Popular Searches</option>
+    <option  name="two" value="PrototypeCombobox">Aquacultured</option>
+    <option value="jQuery Tabs">Care Level Easy</option>
+    <option value="Common Accordion">Invert Safe</option>
+    <option value="jQuery Tabs">Light Level Low to Medium</option>
+    <option value="Common Accordion">On Sale</option>
+    <option value="Common Accordion">Reef</option>
+  </select>
+</div>
+<div class="wid187 clr padtop20">
+<div class="float-left padtop3"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div class="float-left"><a href="/pages?pageid=92"  >Deep Blue Seas Foundation</a></div>
+</div>
+<div class="wid187 clr padtop10">
+<div class="float-left padtop3"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div class="float-left"><a href="/pages?pageid=78"  >Returns & Guarantee</a></div>
+</div>
+<div class="wid187 clr padtop10">
+<div class="float-left padtop3"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div class="float-left"><a href="/pages?pageid=11"  >Gift Certificates</a></div>
+
+
+</div><div class="wid187 clr padtop10">
+<div class="float-left padtop3"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div class="float-left"><a href="/pages?pageid=55"  >Sustainability Mandate</a></div>
+
+
+</div><div class="wid187 clr padtop10">
+<div class="float-left padtop3"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div class="float-left"><a href="/pages?pageid=77"  >Shipping</a></div>
+
+
+</div><div class="wid187 clr padtop10">
+<div class="float-left padtop3"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div class="float-left"><a href="/pages?pageid=72"  >Free Shipping in FLORIDA</a></div>
+
+
+</div><div class="wid187 clr padtop10">
+<div class="float-left padtop3"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div class="float-left"><a href="/pages?pageid=43"  >Reef Rewards</a></div>
+
+
+</div><div class="wid187 clr padtop10">
+<div class="float-left padtop3"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div class="float-left"><a href="/pages?pageid=48"  >Acclimation</a></div>
+
+
+</div><div class="wid187 clr padtop10">
+<div class="float-left padtop3"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div class="float-left"><a href="http://forums.saltwaterfish.com/"  >Message Board</a></div>
+
+
+</div><div class="wid187 clr padtop10">
+<div class="float-left padtop3"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
+<div class="float-left"><a href="saltwater.htm"  >SaltWater Fish School </a></div>
+
+
+
+</div>
+
+</div>
+
+
+</div>
+
+
 </div>
