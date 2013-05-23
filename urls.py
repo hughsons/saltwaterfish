@@ -41,7 +41,7 @@ urlpatterns = patterns('',
     url(r'^deletewishlist', DeleteWishListActionClass.as_view(), name='AddToWathList'),
     url(r'^wishlistitems', WishListItemsViewClass.as_view(), name='WishListItems'),
     url(r'^deletecartitem', DeleteCartItemActionClass.as_view(), name='DeleteCartItem'),
-	#url(r'^orderconfirmation', OrderConfirmationView.as_view(), name = 'OrderConfirmation'),
+	url(r'^orderconfirmation', OrderConfirmationView.as_view(), name = 'OrderConfirmation'),
 
 # Murthy URLS ENDS HERE	
 
@@ -56,9 +56,9 @@ urlpatterns = patterns('',
 	url(r'^products', ProductsViewClass.as_view(), name='customers'),
 	url(r'^productinfo', ProductViewClass.as_view(), name='productinfo'),
 	url(r'^productrelated', ProductRelatedClass.as_view(), name='productinfo'),
-	url(r'^productoptions', ProductViewClass.as_view(), name='productinfo'),
+	url(r'^productoptions', ProductOptionEditViewClass.as_view(), name='ProductOptionEditViewClass'),
 	url(r'^productarticles', ProductArticleViewClass.as_view(), name='productinfo'),
-	url(r'^productreviews', ProductViewClass.as_view(), name='productinfo'),
+	url(r'^productreviews', ProductReviewsViewClass.as_view(), name='productinfo'),
     url(r'^admins$', StaffViewClass.as_view(), name='admins'),
 	url(r'^addadminsform', AddAdminsFormClass.as_view(), name='AddAdminsFormClass'),
     url(r'^categories$', CategoryViewClass.as_view(), name='categories'),
@@ -105,6 +105,7 @@ urlpatterns = patterns('',
 	url(r'^crmactions', CRMActionClass.as_view(), name='CRMActionClass'),
 	url(r'^productactions', ProductsctionClass.as_view(), name='ProductsctionClass'),
 	url(r'^particleedit', ProductArticleEditViewClass.as_view(), name='ProductArticleEditViewClass'),
+	url(r'^addprodarticle', ProductArticleAddFormClass.as_view(), name='ProductArticleAddFormClass'),
 
     
 )+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

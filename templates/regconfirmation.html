@@ -1,0 +1,47 @@
+<style type="text/css">
+<!--
+.style1 {font-weight: bold}
+-->
+</style>
+
+{% include 'header.htm' %}
+<form name="form1" method="post" action="">
+  <p>{% csrf_token %}
+  <span class="style1">Registration Confirmation</span></p>
+  <p>Thank you for registering with us!</p>
+  <p>Click <a href="#">here</a>, to access your account.</p>
+  <p>Account approval may be subject to revision, in this case we'll notify you once your account is active. Feel free to contact us if you have any questions.</p>
+  <p><strong>Customer Information</strong></p>
+  <table width="392" border="0" cellpadding="3">
+    <tr>
+      <td  colspan="2">{{ customer.first_name}}&nbsp;{{ customer.last_name }}</td>
+    </tr>
+    <tr>
+      <td colspan="2">{{ customer.address1 }}</td>
+    </tr>
+    <tr>
+      <td colspan="2">{{ customer.address2 }}</td>
+    </tr>
+    <tr>
+      <td colspan="2">{{ customer.city }}&nbsp;{{ customer.state }}&nbsp;{{ customer.zip }}&nbsp;{{ customer.country }}</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>EMail: </td>
+      <td>{{ customer.email }}</td>
+    </tr>
+    <tr>
+      <td>Company</td>
+      <td>{{ customer.company }}</td>
+    </tr>
+    <tr>
+      <td>Tax ID </td>
+      <td>{{ customer.accountno }}</td>
+    </tr>
+  </table>
+  <p>&nbsp; </p>
+</form>
+{% include 'footer.htm' %}

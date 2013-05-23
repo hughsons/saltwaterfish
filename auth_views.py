@@ -43,12 +43,16 @@ def CustomerLoginClass(request):
                     logging.info('LoginfoMessage:: %s',customer_list[0])
                     return HttpResponseRedirect('/myaccount')
                 else:
+                    request.session['ErrorMessage'] = "Invalid User name or Password."
                     return HttpResponseRedirect('/login')
             else:
+                request.session['ErrorMessage'] = "Recaptcha is not matched."
                 return HttpResponseRedirect('/login')
         else:
+            request.session['ErrorMessage'] = "Invalid Form data."
             return HttpResponseRedirect('/login')
     else:
+        request.session['ErrorMessage'] = "Form submission is not as expected."
         return HttpResponseRedirect('/login')
 
 @csrf_exempt

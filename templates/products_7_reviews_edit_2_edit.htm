@@ -3,18 +3,14 @@
 <div style="clear:both; padding-bottom:10px" class="content-bg">
 <table width="100%" border="0">
   <tr>
-    <td align="left" valign="top" width="130" style="padding-left:20px" class="left-text"><span class="left-text1">Products</span><br />
-<br />
-		<a href="/products?page=1">View/Edit</a><br />
-        Add New<br />
-        Bundles<br />
-        <a href="/categories?page=1">Categories</a><br />
-        Inventtory<br />
-        <a href="/product_wish_list?page=1">Wish List</a><br />
-         <a href="/all_product_reviews?page=1">Reviews</a><br />
-        Import/Export</td>
+    <td align="left" valign="top" width="130" style="padding-left:0px" class="left-text">{% include 'lef_menu_products.htm' %}</td>
     <td style="width:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
     <td>
+	<form method="post" action="/productactions" method=post>
+	{% csrf_token %} 
+		<input type="hidden" name="id" value="{{allitems.id}}">
+		<input type="hidden" name="action" value="editreview">
+
 	<table width="100%" border="0">
   <tr>
     <td class="left-text" style="padding-top:10px;">Products > Reviews</td>
@@ -35,7 +31,7 @@
   <tr>
   <td>
   <div class="left-text1 style1" style="float:left"><img src="/misc/images/edit-icon.jpg" />&nbsp;&nbsp;Edit Reviews</div>
-  <div style="float:right;"><img src="/misc/images/save-change.jpg" /></div>  </td>
+  <div style="float:right;"><input type=image src="/misc/images/save-change.jpg" /></div>  </td>
   </tr>
     <tr>
     <td style="height:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
@@ -47,48 +43,48 @@
 	<div class="left-text" style="clear:both; padding-top:20px;">
     <div style="margin-bottom:10px;">
 	<div style="float:left; width:130px;">Username:</div>
-	<div style="float:left;"><input name="" type="text" class="text-box3" value="{{allitems.user_name}}"/></div>
+	<div style="float:left;"><input name="user_name" type="text" class="text-box3" value="{{allitems.user_name}}"/></div>
 	<div style="clear:both; height:1px;"></div></div>
 	<div class="line"></div>
 	<div style="margin:10px 0px;">
 	<div style="float:left; width:130px;">User email:</div>
 	<div style="float:left;">
-	  <input name="Input2" type="text" class="text-box3" value="{{allitems.user_email}}"/>
+	  <input name="user_email" type="text" class="text-box3" value="{{allitems.user_email}}"/>
 	</div>
 	<div style="clear:both; height:1px;"></div></div>
 	<div class="line"></div>
 	<div style="margin:10px 0px;">
 	<div style="float:left; width:130px;">User Location:</div>
-	<div style="float:left;">	  <input name="Input3" type="text" class="text-box3" value="{{allitems.user_city}}"/>
+	<div style="float:left;">	  <input name="user_city" type="text" class="text-box3" value="{{allitems.user_city}}"/>
 	</div>
 	<div style="clear:both; height:1px;"></div></div>
 	<div class="line"></div>
 	<div style="margin:10px 0px;">
 	<div style="float:left; width:130px;">Title:</div>
-	<div style="float:left;"><input name="" type="text" class="text-box3" value="{{allitems.short_review}}"/></div>
+	<div style="float:left;"><input name="short_review" type="text" class="text-box3" value="{{allitems.short_review}}"/></div>
 	<div style="clear:both; height:1px;"></div></div>
 	<div class="line"></div>
 	<div style="margin:10px 0px;">
 	<div style="float:left; width:130px;">Review:</div>
-	<div style="float:left; width:400px;"><textarea style="width:400px; height:60px;">{{allitems.long_review}}</textarea></div>
+	<div style="float:left; width:400px;"><textarea name=long_review style="width:400px; height:60px;">{{allitems.long_review}}</textarea></div>
 	<div style="clear:both; height:1px;"></div></div>
 	<div class="line"></div>
 	<div style="margin:10px 0px;">
 	<div style="float:left; width:130px;">Rating:</div>
-	<div style="float:left;"><input name="" type="text" class="text-box1" value="{{allitems.rating}}"/></div>
+	<div style="float:left;"><input name="rating" type="text" class="text-box1" value="{{allitems.rating}}"/></div>
 	<div style="clear:both; height:1px;"></div></div>
 	<div class="line"></div>
 	<div style="margin:10px 0px;">
 	<div style="float:left; width:130px;">Date:</div>
 	<div style="float:left;">
-	<div style="float:left; width:180px;"><input name="" type="text" class="text-box2" value="{{allitems.review_date}}"/></div>
+	<div style="float:left; width:180px;"><input name="review_date" type="text" class="text-box2" value="{{allitems.review_date}}"/></div>
 	<div style="float:left; margin-top:-3px;"><img src="/misc/images/calen-icon.jpg" /></div>
 	<div style="clear:both; height:1px;"></div></div>
 	<div style="clear:both; height:1px;"></div></div>
 	<div class="line"></div>
 	<div style="margin:10px 0px;">
 	<div style="float:left; width:130px;">Approved:</div>
-	<div style="float:left;"><input name="" type="checkbox" value="" /></div>
+	<div style="float:left;"><input name="approved" type="checkbox" value="1" /></div>
 	<div style="clear:both; height:1px;"></div></div>
 	<div class="line"></div>
     </div><br />
@@ -103,7 +99,7 @@
 </tr>
 </table>
 	
-	
+	</form>
 	
 	</td>
   </tr>

@@ -127,22 +127,26 @@ class AddToCartActionClass(TemplateView):
       html_text = ""
       item_id = 0
       cart_items = {}
-      # Checking where item_id is available on the query string or not.
+      # Checking whether the item_id is available on the query string or not.
       if 'item_id' in request.GET:
         item_id = int(request.GET['item_id'])
+        # Checking whether cart itmes are in the session or not
         if "CartItems" in request.session:
           cart_items = request.session["CartItems"]
+          # If item is already added to the cart, incrementing the quantity
+          # to the partiuclar item. Else assigning initial quantity as 1.
           if item_id in cart_items:
             cart_items[item_id] += 1
           else:
             cart_items[item_id] = 1
           request.session["CartItems"] = cart_items
         else:
-          request.session["CartItems"] = {}
+          cart_items = {item_id:1}
+          request.session["CartItems"] = cart_items
         
       cart_items = request.session["CartItems"]
-      for key, value in cart_items.items():
-        html_text += "%d - %d<br>\n" %(key, value)
+      #for key, value in cart_items.items():
+      #  html_text += "%d - %d<br>\n" %(key, value)
         
       return HttpResponseRedirect("cartconfirmation?itemid=%d" %item_id)
 
@@ -169,10 +173,10 @@ class CartActionsClass(TemplateView):
       return HttpResponseRedirect('viewcart')
 
 class RegistrationActionClass(TemplateView):
+    '''Page: /registeruser '''
 
     def SaveFormData(self, p_form):
           c = customers()
-          #c.contactid = 2
           c.email = p_form.cleaned_data['email']
           c.pass_field = p_form.cleaned_data['password']
           c.shipping_firstname = c.billing_firstname = c.first_name = p_form.cleaned_data['first_name']
@@ -231,6 +235,10 @@ class RegistrationActionClass(TemplateView):
   
         if is_human:
           (success, error_msg, msg, customer) = self.SaveFormData(form)
+          if success:
+             request.session['Message'] = "Customer successfully registered."
+          else:
+             request.session['ErrorMessage'] = "You are already a registered customer. Duplicate registrations are not allowed."
       else:
         success = False
         error_msg = "Incomplete or invalid form data" 
@@ -263,15 +271,31 @@ class RegistrationActionClass(TemplateView):
         mail_body = mail_body.replace("[store_name]", store_name)
         mail_body = mail_body.replace("[store_url]", store_url)
 
-        mail.send_mail(sender="support@saltwaterfish.com",
-              to=customer.email,
-              subject="Saltwaterfish.com: Customer Registration",
-              body=mail_body)
+        try:
+          mail.send_mail(sender="support@saltwaterfish.com",
+                to=customer.email,
+                subject="Saltwaterfish.com: Customer Registration",
+                body=mail_body)
+        except Exception:
+          request.session['ErrorMessage'] = "Unable to send confirmation email."
 
+        message = ''
+        error_message = ''
+        if 'Message' in request.session:
+          message = request.session['Message']
+          del request.session['Message']
+
+        if 'ErrorMessage' in request.session:
+          error_message = request.session['ErrorMessage']
+          del request.session['ErrorMessage']
+
+        content['message'] = message
+        content['error_message'] = error_message
+        
         content.update(csrf(request))
-        return  render_to_response('regconfirmation.htm', content)
+        return  render_to_response('regconfirmation.html', content)
       else:
-        content = {'form': form, 
+        content = {'form': form,
                    'page_title': "Customer Registration",
                    'error_message': error_msg,
                    'recaptcha':"https://chart.googleapis.com/chart?chst=d_text_outline&chld=FFCC33|16|h|FF0000|b|%s" %self.GetRecaptcha(request)

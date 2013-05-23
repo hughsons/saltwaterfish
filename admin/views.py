@@ -574,15 +574,57 @@ class ProductArticleViewClass(LoginRequiredMixin,TemplateView):
                    }
         return render_template(request, "product_articles.htm", content)
 
-
 class ProductArticleEditViewClass(LoginRequiredMixin, TemplateView):
-    
     def get(self, request, *args, **kwargs):
-         
         pid = request.GET['id']
         allpages = ProductArticle.objects.get(id=pid)
         content = {'page_title': "Admin :: Edit Article",
-                   'allpages':allpages,
-                   }
+                   'allpages':allpages,}
         return render_template(request, "product_article_edit.htm", content)
 
+class ProductArticleAddFormClass(LoginRequiredMixin, TemplateView):
+    def get(self, request, *args, **kwargs):
+        pid = request.GET['pid']
+        content = {'page_title': "Admin :: Add Article",
+                   'pid':pid,}
+        return render_template(request, "product_article_add.htm", content)
+
+class ProductReviewsViewClass(LoginRequiredMixin,TemplateView):
+    def get(self, request, *args, **kwargs):
+        pid = request.GET['pid']
+        prod = Products.objects.get(catalogid=pid)
+        allitems = ProductReview.objects.filter(catalogid=pid).all()
+        count = allitems.count()
+        content = {'page_title': "Admin: Product Articles",
+                   'allitems':allitems,
+                   'prod':prod,
+                   'count':count,
+                   }
+        return render_template(request, "product_reviews.htm", content)
+
+class ProductOptionEditViewClass(LoginRequiredMixin, TemplateView):
+    def get(self, request, *args, **kwargs):
+        pid = request.GET['pid']
+        allpages = Products.objects.get(catalogid=pid)
+        content = {'page_title': "Admin :: Edit Options",
+                   'allpages':allpages,
+                   'prod':pid,}
+        return render_template(request, "product_options_edit.htm", content)
+
+class SiteBannerClass(LoginRequiredMixin, TemplateView):
+    
+    def get(self, request, *args, **kwargs):
+        count = Extrapages.objects.count()
+        if request.GET['page'] == "":
+            page_num = 1
+        else:
+            page_num = request.GET['page']
+        page_num = int(page_num)
+        offset = page_num * 100
+        allpages = Extrapages.objects.all()[offset-100:offset]
+        content = {'page_title': "Summary",
+                   'allpages':allpages,
+                   'count':count,
+                   'page_num':page_num,
+                   }
+        return render_template(request, "cms_pages.htm", content)

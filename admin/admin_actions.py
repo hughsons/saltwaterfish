@@ -461,5 +461,43 @@ class ProductsctionClass(LoginRequiredMixin,TemplateView):
             except Exception, e:
                 logging.info('LoginfoMessage:: %s',e)
                 return HttpResponseRedirect('/productarticles?pid='+str(t.catalogid)+'&err=Form Field Errors')
+        elif "action" in request.POST and request.POST['action'] == "addarticle":
+            try:
+                pid = request.POST['catalog']
+                t = ProductArticle(catalogid=pid,
+                                   article_title = request.POST['article_title'],
+                                   long_review = request.POST['long_review'],
+                                   review_date = datetime.datetime.now())
+                t.save()
+                logging.info('update this Record:: %s',pid)
+                return HttpResponseRedirect('/productarticles?pid='+str(pid)+'&msg=Successfully Deleted the Record')
+                
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+                return HttpResponseRedirect('/productarticles?pid='+str(pid)+'&err=Form Field Errors')
+        elif "action" in request.POST and request.POST['action'] == "editreview":
+            try:
+                pid = request.POST['id']
+                t = ProductReview.objects.get(id=pid)
+                t.user_name = request.POST['user_name']
+                t.user_email = request.POST['user_email']
+                t.user_city = request.POST['user_city']
+                t.short_review = request.POST['short_review']
+                t.rating = request.POST['rating']
+                if "approved" in request.POST:
+                    t.approved = 1
+                else:
+                    t.approved = 0
+                    
+                t.long_review = request.POST['long_review']
+                t.review_date = datetime.datetime.now()
+                t.save()
+                logging.info('update this Record:: %s',pid)
+                return HttpResponseRedirect('/productreviews?pid='+str(t.catalogid)+'&msg=Successfully Deleted the Record')
+                
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+                return HttpResponseRedirect('/productreviews?pid='+str(t.catalogid)+'&err=Form Field Errors')
+
         else:
             return HttpResponseRedirect('/products?page=1&err=Form Field Errors')

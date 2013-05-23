@@ -17,12 +17,12 @@ $(function() {
         return true;
       else
 	  {
-         alert("Please fill the mandatory fields in the required format");
+         alert("Please fill all the mandatory fields.");
 	  }
       return false;
      });
 
-   $( "#form" ).validate({
+   $( "#changepwdform" ).validate({
            rules: {
                    {{ form.username.html_name }}: {
                            required: true,
@@ -89,7 +89,7 @@ Password Change
  
     
        
-      <form name="form" id="form" action="/setnewpassword" method="post">
+      <form name="changepwdform" id="changepwdform" action="/setnewpassword" method="post">
         {% csrf_token %}
         
         <div class=" " >{% if message or error_message %}

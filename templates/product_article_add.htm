@@ -1,0 +1,88 @@
+ {% include 'admin_header.htm' %}
+ <script type="text/javascript" src="/misc/js/nicEdit.js"></script>
+<script type="text/javascript">
+     bkLib.onDomLoaded(function() {
+          var myNicEditor = new nicEditor();
+          myNicEditor.setPanel('myNicPanel');
+          myNicEditor.addInstance('myInstance1');
+     });
+</script>
+<div style="clear:both" class="white-bg"><div style="clear:both; padding-bottom:10px" class="content-bg"><table width="100%" border="0">
+  <tr>
+    <td align="left" valign="top"  style="padding-left:10px" class="left-text">
+	{% include 'lef_menu_products.htm' %}
+</td>
+    <td style="width:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+    <td>
+	<table width="100%" border="0">
+  <tr>
+    <td class="left-text" style="padding-top:10px;">Product > Article > Add</td>
+  </tr>
+  <tr>
+    <td style="padding-bottom:10px; padding-top:10px;">
+	<div style="float:left" class="left-text1">
+Add Article</div>
+	<div style="float:right; margin-right:15px">
+<div class="search1">
+<div style="float:left; width:230px;"><input name="Input" type="text"  placeholder="Search saltwaterfish.com"/></div>
+<div style="float:left; width:69px;"><input type="submit" name="Submit" value="Search" /></div>
+</div>
+</div>
+	
+	
+	</td>
+  </tr>
+  <tr>
+    <td style="height:2px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+  </tr>
+  <tr>
+    <td style="width:763px; padding-top:10px">
+<form method="post" action="/productactions" method=post>
+		<input type="hidden" name="catalog" value="{{pid}}">
+		<input type="hidden" name="action" value="addarticle">
+		{% csrf_token %} 
+	<table width="100%" border="0" align="left">
+  <tr>
+    <td width="25%" height="40" align="right" valign="middle" class="order-txt-status" style="padding-right:10px;"><span class="required">*</span>Article Title</td>
+    <td width="75%" height="40"><input name="article_title" type="text" text-box-cms2  class="text-box-cms2" value="{{allpages.article_title}}"/></td>
+  </tr>
+   
+  
+   
+<tr>
+    <td height="40" align="right" valign="bottom" style="padding-right:10px;" class="order-txt-status"><span class="required">*</span>Content</td>
+    <td height="40">&nbsp;</td>
+</tr> 
+	  <tr>
+    <td colspan="2" align="center" valign="middle">
+ 
+	<div id="myNicPanel" style="width: 650px;"></div>
+	  <textarea name="long_review" cols="" rows="23" id="myInstance1" class="text-box-cms5">{{allpages.long_review}}</textarea>
+	 	</td>
+    </tr>
+  <tr>
+    <td align="right" valign="middle">&nbsp;</td>
+<td align="center" > <input type="submit" value="Submit Query"></td>
+  </tr>
+</table>
+
+	
+
+	
+	
+	
+	
+	</td>
+  </tr>
+</table>
+	
+	
+	
+	</td>
+  </tr>
+</table>
+
+	   
+	   
+</div></div>
+ {% include 'admin_footer.html' %}
