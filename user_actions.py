@@ -355,3 +355,91 @@ class ChangePwdActionClass(TemplateView):
       return HttpResponseRedirect('/changepwd')
 
     return HttpResponseRedirect('/myaccount')
+
+"""
+class AddToWatchActionClass(TemplateView):
+
+    def get(self, request, *args, **kwargs):
+      wsh_id = -1
+      item_id = int(request.GET['itemid'])
+      if 'Customer' not  in request.session:
+          return HttpResponseRedirect("login?target=addtowatchlist?itemid=%d" %item_id)
+
+      customer = request.session['Customer']
+      if "WSH_ID" not in request.session:
+        wishList = WshWishlist()
+        wishList.customerid = customer.contactid
+        wishList.wsh_name = "WISHLIST"
+        wishList.wsh_created = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        wishList.save()
+        last_item = WshWishlist.objects.latest('wsh_id')
+        wsh_id = last_item.wsh_id
+        request.session['WSH_ID'] = last_item.wsh_id
+        #request.session["Message"] = "Your Item has been added to 'Default Wish List'"
+      else:
+        wsh_id =  request.session['WSH_ID']
+
+      # Checking whether the item is already added in the wishlist or not.
+      object_list = WsiWishlistitems.objects.filter(wsh_id = wsh_id, catalogid = item_id)
+
+      if object_list:
+        request.session["ErrorMessage"] = "Item is already in your wishlist."
+        return HttpResponseRedirect('/productlist')
+      
+      # Adding items to the detail table.
+      wish_list_item = WsiWishlistitems()
+      wish_list_item.wsh_id = wsh_id
+      wish_list_item.catalogid = item_id
+      wish_list_item.save()
+
+      request.session["Message"] = "Item is added to your wish list"
+
+      return HttpResponseRedirect('/mywishlist')
+"""
+class AddToWatchActionClass(LoginRequiredMixin,TemplateView):
+
+    def get(self, request, *args, **kwargs):
+        try:
+            item_id = int(request.GET['itemid'])
+            t = ProductWaitinglist.objects.filter(catalogid=item_id, userid=request.session['Customer'].contactid)
+            count = t.count()
+            if count <= 0:
+                logging.info('count:: %s',count)
+                s = ProductWaitinglist(userid=request.session['Customer'].contactid, catalogid=item_id ,
+                                user_email = request.session['Customer'].email, record_date = datetime.datetime.now())
+                s.save()
+                return HttpResponseRedirect('/mywishlist?err=Item is added to your wish list')
+            else:
+                logging.info('count:: %s',count)
+                return HttpResponseRedirect('/mywishlist?err=Item Already Exists')
+        except Exception, e:
+            logging.info('LoginfoMessage:: %s',e)
+            return HttpResponseRedirect('/mywishlist?err=Item Already Exists')
+
+
+class DeleteCartItemActionClass(TemplateView):
+
+  def get(self, request, *args, **kwargs):
+    id = int(request.GET['wsh_id'])
+    productid = int(request.GET['catalogid'])
+    WsiWishlistitems.objects.filter(wsh_id = id, catalogid=productid).delete()
+    request.session["Message"] = "Your item is successfully deleted";
+    return HttpResponseRedirect('/mywishlist');
+
+class DeleteWishListActionClass(LoginRequiredMixin,TemplateView):
+    
+    def get(self, request, *args, **kwargs):
+        
+        if "catalogid" in request.GET and request.GET['catalogid'] != "":
+            try:
+                logging.info('LoginfoMessage:: %s',request.GET['catalogid'])
+                deletewish = ProductWaitinglist.objects.filter(catalogid=request.GET['catalogid'], userid=request.session['Customer'].contactid).delete()
+                return HttpResponseRedirect('/mywishlist?page=1&err=Successfully Deleted')
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+                return HttpResponseRedirect('/mywishlist?&err=Problem occured while deleting')
+        else:
+            return HttpResponseRedirect('/mywishlist?&err=Problem occured while deleting')
+
+
+

@@ -149,3 +149,52 @@ def productsdisplay(category):
         result = e
         logging.info('LoginfoMessage:: %s',e)
     return result
+
+@register.filter("crmdepartment")
+def crmdepartment(department):
+    logging.info('department name:: %s',department)
+    try:
+        if department != '':
+            result = CrmDepartment.objects.all().filter(id = department)
+            #result = result['department]
+        else:
+            result = CrmDepartment.objects.all()
+            
+    except Exception as e:
+        result = e
+        logging.info('LoginfoMessage:: %s',e)
+    return result
+
+
+@register.filter("crmlastmessage")
+def crmlastmessage(crmid,limits=""):
+    logging.info('crmid name:: %s',limits)
+    
+    try:
+        if crmid != '':
+            if limits != "all":
+                result = CrmMessages.objects.all().filter(crmid = crmid).order_by('-id')[0:1]
+            else:
+                result = CrmMessages.objects.all().filter(crmid = crmid).order_by('-id')
+        else:
+            result = CrmMessages.objects.all()
+    except Exception as e:
+        result = e
+        logging.info('LoginfoMessage:: %s',e)
+    return result
+
+@register.filter("fetchproduct")
+def fetchproduct(pid):
+    logging.info('product name:: %s',id)
+    final_result= {}
+    try:
+        if pid != '':
+            result = Products.objects.raw("select * from products where catalogid=%s",pid )
+        else:
+            result = Products.objects.all()
+            
+    except Exception as e:
+        result = e
+        logging.info('LoginfoMessage:: %s',e)
+    logging.info('filter tag result:: %s',result)
+    return result

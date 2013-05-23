@@ -1,0 +1,44 @@
+{% include 'header.htm' %}
+{% include 'myaccount_widget.htm' %}
+{% load tagsfilter %}
+ <link type="text/css" rel="stylesheet" href="/misc/sty.css" />
+ <link type="text/css" rel="stylesheet" href="/misc/category.css" />
+ 
+ 
+<div class="width10 float-left">&nbsp;&nbsp;</div>
+<div class="wid748 float-left">
+<div class="height12 clr"></div>
+<div  class=" clr">
+<div>
+<div class="clr pad-tb product-align1 marleft10 master-link">My Wish List Items</div>
+{% if error_message %}
+  <b>{{ error_message }} </b>
+{% endif %}
+{% if message %}
+  <b>{{ message }} </b>
+{% endif %}
+{% if product_list %}
+<table width="748" border="0" cellpadding="3" cellspacing="1" bgcolor="#EFEFEF">
+  <tr>
+    <td width="73">&nbsp;</td>
+    <td width="500">Item Name</td>
+    <td width="100">Price</td>
+    <td width="90">Action</td>
+	<td width="100">Add to Cart </td>
+  </tr>
+{% for item in product_list %}
+	<tr bgcolor="#FFFFFF"><td align=center><img src="{{item.thumbnail}}" width="55" height="55" /></td><td>{{item.name}}</td><td>${{item.price|floatformat:"2"}}</td><td><a href='/deletewishlist?wsh_id={{item.id}}&catalogid={{item.catalogid}}' onclick="javascript: return confirm('Are you sure you want to delete this item ?');">Delete</a></td><td><div class="blue-button"><a href="/addtocart?item_id={{ item.catalogid }}">Add to Tank</a></div></td></tr>
+{% endfor %}
+</table>
+{% endif %}
+</div>
+ <div class="clr"></div>
+</div>
+
+ 
+
+
+</div>
+
+<div class="float-left"></div></div>
+{% include 'footer.htm' %}

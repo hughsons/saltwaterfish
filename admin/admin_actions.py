@@ -382,3 +382,84 @@ class CustomerActionClass(LoginRequiredMixin,TemplateView):
         else:
             return HttpResponseRedirect('/customers?page=1&err=Form Field Errors')
 
+class CRMActionClass(LoginRequiredMixin,TemplateView):
+    def post(self, request, *args, **kwargs):
+        if "action" in request.POST and request.POST['action'] == "massaction":
+            logging.info('status type:: %s',request.POST['status'])
+            try:
+                if "status" in request.POST and request.POST['status'] == "delete":
+                    for a in request.POST.getlist('delid'):
+                        Crm.objects.filter(id=a).delete()
+                        logging.info('Deleting this Record:: %s',a)
+                    return HttpResponseRedirect('/acrm?page=1&err=Successfully Updated the Record')
+                elif "status" in request.POST and request.POST['status'] >= 1:
+                    for a in request.POST.getlist('delid'):
+                        t = Crm.objects.get(id=a)
+                        t.status = request.POST['status']
+                        t.save()
+                        logging.info('updating this Record:: %s',a)
+                    return HttpResponseRedirect('/acrm?page=1&err=Successfully Updated the Record')
+                else:
+                    return HttpResponseRedirect('/acrm?page=1&err=Form Field Errors')
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+                return HttpResponseRedirect('/acrm?page=1&err=Form Field Errors')
+        elif "action" in request.POST and request.POST['action'] == "editcrm":
+            crmid = request.POST['id']
+            try:
+                t = Crm.objects.get(id=crmid)
+                t.custemail = request.POST['custemail']
+                t.customer = request.POST['customer']
+                t.phone = request.POST['phone']
+                t.status = request.POST['status']
+                t.save()
+                return HttpResponseRedirect('/crmedit?id='+crmid+'&err=Successfully Updated the Record')
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+                return HttpResponseRedirect('/crmedit?id='+crmid+'&err=Form Field Errors')
+        elif "action" in request.POST and request.POST['action'] == "addresponse":
+            crmid = request.POST['id']
+            try:
+                t = Crm.objects.get(id=crmid)
+                t.status = request.POST['status']
+                t.save()
+                s = CrmMessages(crmid = crmid, sendername = request.POST['sendername'] ,
+                                sender = 0 , message = request.POST['message'] ,
+                                datentime = datetime.datetime.now())
+                s.save()
+                return HttpResponseRedirect('/crmedit?id='+crmid+'&err=Successfully Updated the Record')
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+                return HttpResponseRedirect('/crmedit?id='+crmid+'&err=Form Field Errors')
+        else:
+            return HttpResponseRedirect('/acrm?page=1&err=Form Field Errors')
+
+class ProductsctionClass(LoginRequiredMixin,TemplateView):
+    def post(self, request, *args, **kwargs):
+        if "action" in request.POST and request.POST['action'] == "massdelete" and request.POST['bacthaction'] == 'delete':
+            try:
+                for a in request.POST.getlist('delid'):
+                    Products.objects.filter(catalogid=a).delete()
+                    logging.info('Deleting this Record:: %s',a)
+                return HttpResponseRedirect('/products?page=1&msg=Successfully Deleted the Record')
+                
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+                return HttpResponseRedirect('/products?page=1&err=Form Field Errors')
+        elif "action" in request.POST and request.POST['action'] == "editarticle":
+            try:
+                pid = request.POST['id']
+                t = ProductArticle.objects.get(id=pid)
+                t.article_title = request.POST['article_title']
+                t.long_review = request.POST['long_review']
+                t.review_date = datetime.datetime.now()
+                
+                t.save()
+                logging.info('update this Record:: %s',pid)
+                return HttpResponseRedirect('/productarticles?pid='+str(t.catalogid)+'&msg=Successfully Deleted the Record')
+                
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+                return HttpResponseRedirect('/productarticles?pid='+str(t.catalogid)+'&err=Form Field Errors')
+        else:
+            return HttpResponseRedirect('/products?page=1&err=Form Field Errors')

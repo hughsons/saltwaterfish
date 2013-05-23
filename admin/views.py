@@ -23,7 +23,7 @@ PERPAGE=50
 
 def checkadminlogin_dispatch(f):
     def wrap(request, *args, **kwargs):
-        if 'IsLogin' in request.session and request.session['IsLogin'] and request.session['Staff'].username !="":
+        if 'IsLogin' in request.session and request.session['IsLogin'] and 'Staff' in request.session and request.session['Staff'].username !="":
             staff_list = Admins.objects.filter(username = request.session['Staff_username'], pass_field = hashlib.md5(request.session['Staff_password']).hexdigest())
             if staff_list:
                 request.session['IsLogin'] = True
@@ -260,7 +260,7 @@ class CustomersViewClass(LoginRequiredMixin,TemplateView):
 
 class CRMViewClass(LoginRequiredMixin,TemplateView):
     def get(self, request, *args, **kwargs):
-        count = Crm.objects.count()
+        
         if request.GET['page'] == "":
             page_num = 1
         else:
@@ -269,14 +269,26 @@ class CRMViewClass(LoginRequiredMixin,TemplateView):
             status = request.GET['status']
         else:
             status = 1
+        count = Crm.objects.filter(status=status).count()
         page_num = int(page_num)
         offset = page_num * 100
         content = {'page_title': "Profile",
-                   'customers':Crm.objects.all().filter(status=status)[offset-100:offset],
+                   'allitems':Crm.objects.all().filter(status=status)[offset-100:offset],
                    'count':count,
                    'page_num':page_num,
                    }
         return render_template(request, "crm.htm", content)
+
+class CRMEditViewClass(LoginRequiredMixin,TemplateView):
+    def get(self, request, *args, **kwargs):
+        crmid = request.GET['id']
+        allitems = Crm.objects.get(id=crmid)
+        categories = ProductCategory.objects.all()
+        content = {'page_title': "Profile",
+                   'allitems':allitems,
+                   'manufacturers':Manufacturer.objects.all(),
+                   'categories': categories,}
+        return render_template(request, "crm_edit.htm", content)
 
 class StaffViewClass(LoginRequiredMixin,TemplateView):
     def get(self, request, *args, **kwargs):
@@ -548,4 +560,29 @@ class EditGiftCertificateClass(LoginRequiredMixin,TemplateView):
                    'order_links':OrderStatus.objects.all().filter(visible='1'),
                    'total':total}
         return render_template(request, "edit_giftcertificate.htm", content)
+
+class ProductArticleViewClass(LoginRequiredMixin,TemplateView):
+    def get(self, request, *args, **kwargs):
+        pid = request.GET['pid']
+        prod = Products.objects.get(catalogid=pid)
+        allitems = ProductArticle.objects.all().filter(catalogid=pid)
+        count = allitems.count()
+        content = {'page_title': "Admin: Product Articles",
+                   'allitems':allitems,
+                   'prod':prod,
+                   'count':count,
+                   }
+        return render_template(request, "product_articles.htm", content)
+
+
+class ProductArticleEditViewClass(LoginRequiredMixin, TemplateView):
+    
+    def get(self, request, *args, **kwargs):
+         
+        pid = request.GET['id']
+        allpages = ProductArticle.objects.get(id=pid)
+        content = {'page_title': "Admin :: Edit Article",
+                   'allpages':allpages,
+                   }
+        return render_template(request, "product_article_edit.htm", content)
 

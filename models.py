@@ -430,6 +430,22 @@ class ProductAccessories(models.Model):
         db_table = u'product_accessories'
         app_label = ''
 
+class ProductArticle(models.Model):
+    id = models.IntegerField(primary_key=True)
+    catalogid = models.IntegerField(null=True, blank=True)
+    article_title = models.CharField(max_length=150, blank=True)
+    short_review = models.CharField(max_length=450, blank=True)
+    long_review = models.TextField(blank=True)
+    rating = models.IntegerField(null=True, blank=True)
+    review_date = models.DateTimeField(null=True, blank=True)
+    approved = models.IntegerField(null=True, blank=True)
+    userid = models.IntegerField(null=True, blank=True)
+    userip = models.CharField(max_length=150, blank=True)
+    class Meta:
+        db_table = u'product_article'
+        app_label = ''
+
+
 class ProductBoxes(models.Model):
     id = models.IntegerField(primary_key=True)
     catalogid = models.IntegerField(null=True, blank=True)

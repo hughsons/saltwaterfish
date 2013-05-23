@@ -36,6 +36,12 @@ urlpatterns = patterns('',
     url(r'^updateaddress', UpdateAddressActionClass.as_view(), name='GetAddress'),
     url(r'^changepwd', ChangePwdViewClass.as_view(), name='GetAddress'),
     url(r'^setnewpassword', ChangePwdActionClass.as_view(), name='GetAddress'),
+	url(r'^mywishlist', MyWishListViewClass.as_view(), name='MyWishList'),
+    url(r'^addtowatchlist', AddToWatchActionClass.as_view(), name='AddToWathList'),
+    url(r'^deletewishlist', DeleteWishListActionClass.as_view(), name='AddToWathList'),
+    url(r'^wishlistitems', WishListItemsViewClass.as_view(), name='WishListItems'),
+    url(r'^deletecartitem', DeleteCartItemActionClass.as_view(), name='DeleteCartItem'),
+	#url(r'^orderconfirmation', OrderConfirmationView.as_view(), name = 'OrderConfirmation'),
 
 # Murthy URLS ENDS HERE	
 
@@ -51,7 +57,7 @@ urlpatterns = patterns('',
 	url(r'^productinfo', ProductViewClass.as_view(), name='productinfo'),
 	url(r'^productrelated', ProductRelatedClass.as_view(), name='productinfo'),
 	url(r'^productoptions', ProductViewClass.as_view(), name='productinfo'),
-	url(r'^productarticles', ProductViewClass.as_view(), name='productinfo'),
+	url(r'^productarticles', ProductArticleViewClass.as_view(), name='productinfo'),
 	url(r'^productreviews', ProductViewClass.as_view(), name='productinfo'),
     url(r'^admins$', StaffViewClass.as_view(), name='admins'),
 	url(r'^addadminsform', AddAdminsFormClass.as_view(), name='AddAdminsFormClass'),
@@ -95,8 +101,10 @@ urlpatterns = patterns('',
 	url(r'^addrewards', CustomerActionClass.as_view(), name='CustomerActionClass'),
 	url(r'^deletereward', CustomerActionClass.as_view(), name='CustomerActionClass'),
 	url(r'^acrm', CRMViewClass.as_view(), name='crm'),
-
-
+	url(r'^crmedit', CRMEditViewClass.as_view(), name='crmedit'),
+	url(r'^crmactions', CRMActionClass.as_view(), name='CRMActionClass'),
+	url(r'^productactions', ProductsctionClass.as_view(), name='ProductsctionClass'),
+	url(r'^particleedit', ProductArticleEditViewClass.as_view(), name='ProductArticleEditViewClass'),
 
     
 )+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

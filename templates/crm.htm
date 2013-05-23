@@ -1,4 +1,5 @@
 {% include 'admin_header.htm' %}
+{% load tagsfilter %}
 <div class="clr white-bg">
 <div class="clr content-bg padbottom10">
 <table width="100%" border="0">
@@ -10,7 +11,7 @@
     <td>
 	<table width="100%" border="0">
   <tr>
-    <td class="left-text padtop10">CRM	 > View/Edit</td>
+    <td class="left-text padtop10">CRM > View/Edit</td>
   </tr>
   <tr>
     <td class="padtop10 padbottom10">
@@ -29,7 +30,9 @@
   </tr>
    <tr>
    
-    <td class="clr padtop5"><div style="clear:both; width:800px; height:21px; line-height:21px; " class="records">Records:<b>{{count}} </b> Page {{page_num}} of {% widthratio count 100 1 %} |&nbsp;Goto Page: <a href="/acrm?page=1">First</a> 
+    <td class="clr padtop5">
+ {% if count > 101 %}	
+	<div style="clear:both; width:800px; height:21px; line-height:21px; " class="records">Records:<b>{{count}} </b> Page {{page_num}} of {% widthratio count 100 1 %} |&nbsp;Goto Page: <a href="/acrm?page=1">First</a> 
 {% if page_num < 2 %}
 <a href="/acrm?page=1">Previous</a>
 {% elif page_num >= 2 %}
@@ -38,14 +41,16 @@
 
 
 | <a href="/acrm?page={{page_num|add:+1}}">Next </a> &nbsp<a href="/acrm?page={% widthratio count 100 1 %}">Last</a></span>
-</div></td>
+</div>
+{% endif %}
+</td>
   </tr>
   
   
    <tr>
-    <td  class="customers_edit_table black-brdr"><form method="post" action="/deletecustomer" method=post>
+    <td  class="customers_edit_table black-brdr"><form method="post" action="/crmactions" method=post>
 		{% csrf_token %} 
-		<input type="hidden" name="action" value="massdelete"><table width="98%" border="1" cellspacing="0" cellpadding="2">
+		<input type="hidden" name="action" value="massaction"><table width="98%" border="1" cellspacing="0" cellpadding="2">
   <tr>
     <td width="3%"  align="center" valign="middle" class="yell-bg" ><img src="misc/images/check-box.png" width="14" height="13" border="0" /></td>
 	 <td width="9%"  align="center" valign="middle" class="yell-bg"  >ID</td>
@@ -56,17 +61,17 @@
     
      <td width="12%"  align="center" valign="middle" class="yell-bg" >Actions</td>
   </tr>
-  {% for item in customers %}
+  {% for item in allitems %}
   <tr class="{% cycle 'rose-bg' 'blue-bg' %}">
-       <td align="center" valign="middle"  ><input type=checkbox name="delid" value="{{item.contactid}}"></td>
-       <td align="left" valign="middle"  ><span class="padleft10"><a href="/bcustomersinfo?id={{item.contactid}}">{{item.id}} {{item.billing_lastname}}</a></span></td>
-  <td align="left" valign="middle"  ><span class="padleft10">{{item.billing_company}}</span></td>
+       <td align="center" valign="middle"  ><input type=checkbox name="delid" value="{{item.id}}"></td>
+       <td align="left" valign="middle"  ><span class="padleft10"><a href="/crmedit?id={{item.id}}">{{item.id}} {{item.billing_lastname}}</a></span></td>
+  <td align="left" valign="middle"  ><span class="padleft10">{% for dep in item.departmentid|crmdepartment %} {{dep.department}} {% endfor %}</span></td>
       <td align="left" valign="middle"   ><span class="padleft10">{{item.datentime}}</span></td>
      <td align="left" valign="middle" class=""  ><span class="">{{item.customer}}<br>{{item.subject}}</span></td>
-      <td align="left" valign="middle"  ><span class="padleft10">{{item.custenabled}}</span></td>
+      <td align="left" valign="middle"  ><span class="padleft10">{% for dep in item.id|crmlastmessage %} {%if dep.sender == 1 %}Customer {%else%} Staff{% endif %} {% endfor %}</span></td>
   <td align="left" valign="middle" class=" "><table width="80%" border="0" align="center" cellpadding="0" cellspacing="0">
   <tr>
-    <td><a href="/bcustomersinfo?id={{item.contactid}}"><img src="misc/images/edit.jpg" width="63" height="19" border="0" /></a></td>
+    <td><a href="/crmedit?id={{item.id}}"><img src="misc/images/edit.jpg" width="63" height="19" border="0" /></a></td>
     
      
   </tr>
@@ -74,20 +79,7 @@
 </td>
 
   </tr>
- 
-   
-  
-   
-  
-   
-   
-   
-   
-   
-   
-   
-  
-   {% empty %}
+    {% empty %}
 	<em class="formee-req">No Records</em>
 {% endfor %}
    
@@ -95,15 +87,15 @@
   </tr><tr>
    
     <td class="clr padtop5">
-	<div style="clear:both; width:800px; height:21px; line-height:21px; " class="records">Records:<b>{{count}} </b> Page {{page_num}} of {% widthratio count 100 1 %} |&nbsp;Goto Page: <a href="/{{request.get_full_path}}?page=1">First</a> 
+	<div style="clear:both; width:800px; height:21px; line-height:21px; " class="records">Records:<b>{{count}} </b> Page {{page_num}} of {% widthratio count 100 1 %} |&nbsp;Goto Page: <a href="/acrm?page=1">First</a> 
 {% if page_num < 2 %}
-<a href="/{{request.get_full_path}}?page=1">Previous</a>
+<a href="/acrm?page=1">Previous</a>
 {% elif page_num >= 2 %}
-    <a href="/{{request.get_full_path}}?page={{page_num|add:-1}}">Previous</a>
+    <a href="/acrm?page={{page_num|add:-1}}">Previous</a>
 {% endif %}
 
 
-| <a href="/{{request.get_full_path}}?page={{page_num|add:+1}}">Next </a> &nbsp<a href="/{{request.get_full_path}}?page={% widthratio count 100 1 %}">Last</a></span>
+| <a href="/acrm?page={{page_num|add:+1}}">Next </a> &nbsp<a href="/acrm?page={% widthratio count 100 1 %}">Last</a></span>
 </div></td>
   </tr>
   <tr>
@@ -113,10 +105,15 @@
   <tr>
     <td>&nbsp;</td>
     <td align="right">Batch Action:</td>
-    <td align="left" style="padding-top:5px; padding-left:5px;"><select name="bacthaction" class="dropdownlist">
-    <option>With Selected Customer(s)</option>
-     <option value=delete>Delete Selected</option>
-    </select></td>
+    <td align="left" style="padding-top:5px; padding-left:5px;"><select name="status" class="entrybox" id="statusc">
+						<option value="">With selected ticket(s):</option>
+						<option value="">-----------------------------------</option>
+						<option value="">Move to:</option>
+						<option value="1">New</option><option value="2">In Process</option><option value="3">On Hold</option><option value="4">Completed</option>
+						<option value="">-----------------------------------</option>
+						<option value="delete">Delete Selected</option>
+						<option value="">-----------------------------------</option>
+					</select></td>
     <td style="padding-top:5px;"><input type=image src="misc/images/apply.jpg" width="72" height="20" border="0" /></td>
   </tr>
 </table></form>

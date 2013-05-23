@@ -31,7 +31,7 @@ $(document).ready(function(){
 
 </script>
  
-{{request.session.customer.billing_firstname}}
+
  
 <div class="width10 float-left">&nbsp;&nbsp;</div>
 <div class="wid748 float-left">
@@ -178,14 +178,11 @@ $(document).ready(function(){
     <td colspan="3"><span class="style11">Total Reef Rewards: {{rewards_count}} </span></td>
   </tr>
   <tr>
-    <td colspan="3"><span class="style11">My Watch List <a href="#">View Details</a> </span></td>
+    <td colspan="3"><span class="style11">My Watch List <a href="/mywishlist">View Details</a> </span></td>
   </tr>
   <tr>
     <td colspan="3"><table width="600" border="0" cellpadding="3" cellspacing="1" bgcolor="#E8E8E8">
-      <tr bgcolor="#FFFFFF">
-        <td class="style11">Products: {{items_count}}<br />
-          Last Update: {{watch_list_last_update}}</td>
-      </tr>
+      <td class="style11">Products: {{wish_list_length}}</tr>
     </table></td>
   </tr>
 </table>

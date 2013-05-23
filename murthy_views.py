@@ -14,7 +14,7 @@ from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import unittest
 from forms import *
-from models import *
+from models import customers, Products, Extrapages, Category, WshWishlist, Products, WsiWishlistitems
 import random, logging
 import functools
 from functools import wraps
@@ -137,6 +137,7 @@ class ViewCategoryClass(TemplateView):
         return render_template(request, "category.htm", content)
 
 class ViewPagesClass(TemplateView):
+
     def GetRecaptcha(self, request):
         value = random.randrange(10000, 99999, 1)
         request.session['ReCaptcha'] = value
@@ -154,22 +155,86 @@ class ViewPagesClass(TemplateView):
 
 
 class MyaccountViewClass(LoginRequiredMixin,TemplateView):
-    def get(self, request, *args, **kwargs):
-        content = {'page_title': "Profile"}
-        #content['customerorders'] = Orders.objects.filter(ocustomerid=customer.contactid).all(),
-        content = {'page_title': "Summary",
-                   'customer':request.session['Customer'],
-                   'form':LoginForm,
-                   }
-        
-        
-        object_list = ProductWaitinglist.objects.filter(userid = request.session['Customer'].contactid).count()
-        content['wish_list_length'] = object_list
-        return render_template(request, "myaccount.html", content)
-        
 
-    def post(self, request, *args, **kwargs):
-        pass
+  def get(self, request, *args, **kwargs):
+    content = {'page_title': "Profile"}
+    #content['customerorders'] = Orders.objects.filter(ocustomerid=customer.contactid).all(),
+    content = {'page_title': "Summary",
+               'customer':request.session['Customer'],
+               'form':LoginForm,
+              }
+
+    # Getting number items in the watch list
+    wsh_id = -1
+    if 'WSH_ID' in request.session:
+      wsh_id = request.session['WSH_ID']
+        
+    object_list = WsiWishlistitems.objects.filter(wsh_id = wsh_id)
+    content['wish_list_length'] = len(object_list)
+    
+    return render_template(request, "myaccount.html", content)
+
+  def post(self, request, *args, **kwargs):
+    pass
+
+class MyWishListViewClass(LoginRequiredMixin,TemplateView):
+
+  def get(self, request, *args, **kwargs):
+    message = ""
+    wish_list_items = []
+    content = {'page_title': "My Wish List"}
+    customer = request.session['Customer']
+
+    if 'Message' in request.session:
+      message = request.session['Message']
+      content['message'] = message
+      del request.session['Message']
+
+    if 'ErrorMessage' in request.session:
+      error_message = request.session['ErrorMessage']
+      content['error_message'] = error_message
+      del request.session['ErrorMessage']
+
+    wish_list_master = WshWishlist.objects.filter(customerid = customer.contactid)
+
+    if wish_list_master:
+      wish_list_items = WsiWishlistitems.objects.filter(wsh_id = wish_list_master[0].wsh_id)
+      content['wsh_id'] = wish_list_master[0].wsh_id
+      catalog_list = []
+      for item in wish_list_items:
+        catalog_list.append(item.catalogid)
+
+      product_list = Products.objects.filter(catalogid__in=catalog_list)
+      content['product_list'] = product_list
+      content['message'] = message
+    else:
+      content['error_message'] = "No Items in the Wishlist"
+
+    return render_template(request, 'wishlistitems.html', content)
+
+class WishListItemsViewClass(LoginRequiredMixin,TemplateView):
+
+  def get(self, request, *args, **kwargs):
+    message = ""
+    content = {'page_title': "My Watch List"}
+    id = int(request.GET['wsh_id'])
+    customer = request.session['Customer']
+    if 'Message' in request.session:
+        message = request.session['Message']
+        del request.session['Message']
+        
+    wish_list_items = WsiWishlistitems.objects.filter(wsh_id = id)
+    catalog_list = []
+    for item in wish_list_items:
+      catalog_list.append(item.catalogid) 
+
+    product_list = Products.objects.filter(catalogid__in=catalog_list)
+
+    content['wsh_id'] = id
+    content['product_list'] = product_list
+    content['message'] = message
+    return render_template(request, 'wishlistitems.html', content)
+
 
 class ProductListViewClass(TemplateView):
 
@@ -264,17 +329,17 @@ class AddressFormViewClass(LoginRequiredMixin,TemplateView):
     
 class CartItems(object):
 
-  def __init__(self, id, name, price, saleprice, quantity, shipping, tax, image1, image2, image3, extra_field_3=""):
+  def __init__(self, id, name, price, saleprice, quantity, shipping, tax, image1, image2, image3):
       self.id = id
       self.name = name
       self.quantity = quantity
       self.price = price
-      self.saleprice = saleprice,
+      self.saleprice = saleprice
       if saleprice <= 0 :
           self.subtotal = price * quantity
       else:
           self.subtotal = saleprice * quantity
-      
+
       self.shipping = shipping
       self.tax = tax
       self.total = float(self.subtotal) + float(shipping) + (float(self.subtotal) * float(tax)/100.0)
@@ -282,7 +347,6 @@ class CartItems(object):
       self.image1 = image1
       self.image2 = image2
       self.image3 = image3
-      self.extra_field_3 = extra_field_3
 
 class CartConfirmClass(TemplateView):
 
@@ -300,7 +364,7 @@ class CartConfirmClass(TemplateView):
        return HttpResponse("<h3>Quantity out of stock. Click <a href='productlist'>here</a> to continue shopping.</h3>")
     
     cart_item = CartItems(item.catalogid, item.name, item.price,
-                          float(item.saleprice), 1, 0.0, 0.0,
+                          item.saleprice, 1, 0.0, 0.0,
                             item.image1, item.image2, item.image3)
 
     if 'CartItems' in request.session:
@@ -325,9 +389,11 @@ class CartConfirmClass(TemplateView):
 
 class ViewCartViewClass(TemplateView):
   #Page Url: /viewcart
+  #Last Modified: 2013-15-19 23:30
 
   def get(self, request, *args, **kwargs):
     content = {}
+    content = {'page_title': "My Cart"}
     if 'CartItems' in request.session:
       cart_items = request.session["CartItems"]
       content['ItemsHash'] = request.session["CartItems"]
@@ -341,12 +407,15 @@ class ViewCartViewClass(TemplateView):
     #Preparing result to render in html page.
     selected_items = []
     for item in mycart:
-      cart_item = CartItems(item.catalogid, item.name, item.price, float(item.saleprice),
+      logging.info(item.saleprice)
+      cart_item = CartItems(item.catalogid, item.name, item.price, item.saleprice,
                             cart_items[item.catalogid], 0.0, 0.0,
-                            item.thumbnail, item.image2, item.image3,item.extra_field_3)
+                            item.image1, item.image2, item.image3)
+
       selected_items.append(cart_item)
       
-    content['MyCart'] = selected_items
+    
+    content['MyCartItems'] = selected_items
     return render_template(request,'ViewCart.html', content)
 
 
@@ -395,57 +464,6 @@ class ForgetPasswordClass(LoginRequiredMixin,TemplateView):
       c.update(csrf(request))
       return render_to_response('login.htm', c)
 
-class MyWishListViewClass(LoginRequiredMixin,TemplateView):
-
-  def get(self, request, *args, **kwargs):
-    message = ""
-    wish_list_items = []
-    content = {'page_title': "My Wish List"}
-    customer = request.session['Customer']
-
-    if 'Message' in request.session:
-      message = request.session['Message']
-      content['message'] = message
-      del request.session['Message']
-
-    if 'ErrorMessage' in request.session:
-      error_message = request.session['ErrorMessage']
-      content['error_message'] = error_message
-      del request.session['ErrorMessage']
-
-    #wish_list_master = WshWishlist.objects.filter(customerid = customer.contactid)
-    wish_list_master = ProductWaitinglist.objects.filter(userid = request.session['Customer'].contactid)
-
-    catalog_list = []
-    for item in wish_list_master:
-        catalog_list.append(item.catalogid)
-
-    product_list = Products.objects.filter(catalogid__in=catalog_list)
-    content['product_list'] = product_list
-    return render_template(request, 'wishlistitems.html', content)
-
-class WishListItemsViewClass(LoginRequiredMixin,TemplateView):
-
-  def get(self, request, *args, **kwargs):
-    message = ""
-    content = {'page_title': "My Watch List"}
-    id = int(request.GET['wsh_id'])
-    customer = request.session['Customer']
-    if 'Message' in request.session:
-        message = request.session['Message']
-        del request.session['Message']
-        
-    wish_list_items = WsiWishlistitems.objects.filter(wsh_id = id).order_by('id')
-    catalog_list = []
-    for item in wish_list_items:
-      catalog_list.append(item.catalogid) 
-
-    product_list = Products.objects.filter(catalogid__in=catalog_list)
-
-    content['wsh_id'] = id
-    content['product_list'] = product_list
-    content['message'] = message
-    return render_template(request, 'wishlistitems.html', content)
 
 
 

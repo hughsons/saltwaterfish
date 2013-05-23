@@ -4,16 +4,7 @@
     <link href="/misc/tabcontent1.css" rel="stylesheet" type="text/css" />
 <div style="clear:both" class="white-bg"><div style="clear:both; padding-bottom:10px" class="content-bg"><table width="100%" border="0">
   <tr>
-    <td align="left" valign="top" width="130" style="padding-left:20px" class="left-text"><span class="left-text1">Products</span><br />
-<br />
- <a href="/products?page=1">View/Edit</a><br />
-        Add New<br />
-        Bundles<br />
-        <a href="/categories?page=1">Categories</a><br />
-        Inventtory<br />
-        <a href="/product_wish_list?page=1">Wish List</a><br />
-         <a href="/products-7-reviews?page=1">Reviews</a><br />
-        Import/Export</td>
+    <td align="left" valign="top" width="130" style="padding-left:20px" class="left-text">{% include 'lef_menu_products.htm' %}</td>
     <td style="width:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
     <td>
 	<table width="100%" border="0">
@@ -53,7 +44,7 @@
 	<li><a href="/productimages?pid={{allitems.catalogid}}" rel="view2">Images</a></li>
 	<li><a href="/productrelated?pid={{allitems.catalogid}}"  rel="view3">Related</a></li>
 	<li><a href="/productoptions?pid={{allitems.catalogid}}"  rel="view4">Options</a></li>
-	<li><a href="/productarticles?pid={{allitems.catalogid}}"  rel="view5">Articles</a></li>
+	<li><a href="/productarticles?pid={{allitems.catalogid}}&page=1"  rel="view5">Articles</a></li>
 	<li><a href="/productreviews?pid={{allitems.catalogid}}"  rel="view6">Reviews</a></li>
 </ul>
 <div class="clr product_info">Product Information</div>

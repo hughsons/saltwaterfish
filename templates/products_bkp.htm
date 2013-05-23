@@ -1,8 +1,18 @@
 {% include 'admin_header.htm' %}
-<div class="clr white-bg">
-<div class="clr content-bg padbottom10">  <table width="100%" border="0">
+<div style="clear:both" class="white-bg">
+<div style="clear:both; padding-bottom:10px" class="content-bg">
+  <table width="100%" border="0">
     <tr>
-      <td align="left" valign="top" width="100" style="padding-left:1px" >{% include 'lef_menu_products.htm' %}</td>
+      <td align="left" valign="top" width="130" style="padding-left:20px" class="left-text"><span class="left-text1">Products</span><br />
+          <br />
+       <a href="/products?page=1">View/Edit</a><br />
+        Add New<br />
+        Bundles<br />
+        <a href="/categories?page=1">Categories</a><br />
+        Inventtory<br />
+        <a href="/product_wish_list?page=1">Wish List</a><br />
+         <a href="/all_product_reviews?page=1">Reviews</a><br />
+        Import/Export</td>
       <td style="width:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
       <td bordercolor="0"><table width="100%" border="0">
           <tr>
@@ -46,26 +56,21 @@ Records:<b>{{count}} </b>&nbsp;&nbsp;&nbsp; Page {{page_num}} of {% widthratio c
   {% endif %}</div>
  
 </div>
-<form method="post" action="/productactions" method=post>
-		{% csrf_token %} 
-		<input type="hidden" name="action" value="massdelete">
-<div class="head_bg clr padtop5">
-<div class="clr">
-<div  class="order-txt1 product_checkbox"><input type="checkbox" name="checkbox" value="checkbox" /></div>
-<div  class="order-txt1 product_thumb">Thumb</div>
-<div  class="order-txt1 product_id">ID</div>
-<div  class="order-txt1 product_name">Name</div>
-<div  class="order-txt1 product_price">Price</div>
-<div  class="order-txt1 product_action">Actions</div>
-</div>
+<div class="head_bg" style="clear:both; padding-top:5px;">
+<div  class="order-txt1" style="float:left; padding-left:20px; padding-right:20px; width:10px;"><input type="checkbox" name="checkbox" value="checkbox" /></div>
+<div  class="order-txt1" style="float:left; padding-left:20px; width:50px;">Thumb</div>
+<div  class="order-txt1" style="float:left; padding-left:20px;width:100px;">ID</div>
+<div  class="order-txt1" style="float:left; padding-left:20px; width:328px;">Name</div>
+<div  class="order-txt1" style="float:left; padding-left:20px; width:100px;">Price</div>
+<div  class="order-txt1" style="float:left; padding-left:20px; width:122px;">Actions</div>
 </div>
 {% for item in allitems %}
-<div class="product_hor_line"></div>
-<div class="product_white_bg">
-<div  class="order-txt1 product_checkbox padtop15"><input type="checkbox" name="delid" value="{{item.catalogid}}" /></div>
-<div class="order-txt3 product_thumb_img" ><img src="{{item.thumbnail}}" width="43" height="36" border="0" /></div>
-<div class="order-txt2 product_id_txt">{{item.id}}</div>
-<div class="order-txt2 product_name_txt">{{item.name}}<br />
+<div style="clear:both; height:1px; background-color:#dedede"></div>
+<div style="clear:both; background-color:#FFFFFF">
+<div  class="order-txt1" style="float:left; padding-left:20px; padding-right:20px; width:10px; padding-top:15px;"><input type="checkbox" name="checkbox" value="checkbox" /></div><div class="order-txt3" style="float:left; width:50px;  height:30px; border-left:solid 1px #dedede; padding:10px;">
+<a href="/productinfo?pid={{item.catalogid}}"><img src="{{item.thumbnail}}" width="43" height="36" border="0" /></a></div>
+<div class="order-txt2" style="float:left; width:100px;  height:30px; border-left:solid 1px #dedede; padding:10px;">{{item.id}}</div>
+<div class="order-txt2" style="float:left; width:328px;  height:30px; border-left:solid 1px #dedede; padding:5px 10px;">{{item.name}}&nbsp;
   {% if item.hide == 1 %}
   <img src="/misc/images/h.jpg" width="25" height="16" border="0" />
   {% else %}
@@ -81,15 +86,16 @@ Records:<b>{{count}} </b>&nbsp;&nbsp;&nbsp; Page {{page_num}} of {% widthratio c
 	  {% if item.featured == 1 %}
 	  <img src="/misc/images/fs.jpg" width="25" height="16" border="0" />
 	  {% endif %}
-  {% endif %}</div>
-<div class="order-txt2 product_price_txt">${{item.price|floatformat:"2"}}</div>
-<div class="order-txt3 product_action_txt"><a href="/productinfo?pid={{item.catalogid}}"><img src="/misc/images/edit.jpg" width="55" height="24" border="0" /></a></div>
+  {% endif %}
+  </div>
+<div class="order-txt2" style="float:left; width:100px;   height:30px;border-left:solid 1px #dedede; padding:10px;">${{item.price|floatformat:"2"}}</div>
+<div class="order-txt3" style="float:left; width:122px;   height:30px; border-left:solid 1px #dedede;  border-right:solid 1px #dedede;padding:10px;"><a href="/productinfo?pid={{item.catalogid}}"><img src="/misc/images/edit.jpg" width="55" height="24" border="0" /></a></div>
 </div>
  {% empty %}
 	<em class="formee-req">No Records</em>
 {% endfor %}
 
-
+  
  
 <div style="clear:both; height:1px; background-color:#dedede"></div>
 
@@ -98,11 +104,11 @@ Records:<b>{{count}} </b>&nbsp;&nbsp;&nbsp; Page {{page_num}} of {% widthratio c
 <div style="clear:both; height:1px; background-color:#dedede"></div>
  
 <div class="text1" style="clear:both; background-color:#eeeeee"><div style="float:left; padding-left:5px">Batch Action:</div>
-    <div style="float:left; width:180px; margin-top:10px; margin-left:5px">  <select name="bacthaction" style="width:180px;">
+    <div style="float:left; width:180px; margin-top:10px; margin-left:5px">  <select name="select" style="width:180px;">
 	  <option>With Selected Product(s):</option>
-	  <option value="delete">Delete Selected </option>
+	  <option>Delete Selected </option>
       </select></div>
-	  <div style="float:left; margin-top:6px; margin-left:10px;"><input type=image src="/misc/images/apply.jpg" width="95" height="25" border="0" /></div>
+	  <div style="float:left; margin-top:6px; margin-left:10px;"><img src="/misc/images/apply.jpg" width="95" height="25" border="0" /></div>
   </div>
 <div class="clr">&nbsp;&nbsp;</div>
              </div>
@@ -112,7 +118,6 @@ Records:<b>{{count}} </b>&nbsp;&nbsp;&nbsp; Page {{page_num}} of {% widthratio c
 </div>
 </div>
 
-</div>
 
 
 

@@ -1,0 +1,36 @@
+{% include 'header.htm' %}
+{% include 'myaccount_widget.htm' %}
+ 
+{{request.session.customer.billing_firstname}}
+ 
+<div class="width10 float-left">&nbsp;&nbsp;</div>
+<div class="wid748 float-left">
+<div class="height12 clr"></div>
+<div  class=" clr">
+  <div >
+ <H4>My Wish List Items</h4>
+{% if message %}
+  <b>{{ message }} </b>
+{% endif %}
+<table width="778" border="0" cellpadding="3" cellspacing="1" bgcolor="#EFEFEF">
+  <tr>
+    <td width="173">Name</td>
+    <td width="332">Item Created</td>
+    <td width="332">Action</td>
+    <td width="332">View</td>
+  </tr>
+  {% for item in wish_list %}
+  <tr bgcolor="#FFFFFF"><td>{{item.wsh_name}}</td><td>{{item.wsh_created}}</td><td><a href='deletewishlist?wsh_id={{item.wsh_id }}' onclick="javascript: return confirm('Are you sure you want to delete this item ?');">Delete</a></td><td><a href="wishlistitems?wsh_id={{item.wsh_id }}">View</a></td></tr>
+  {% endfor %}
+</table>
+</div></div></div>
+ <div class="clr"></div>
+</div>
+
+ 
+
+
+</div>
+<div class="float-left"></div></div>
+
+{% include 'footer.htm' %}

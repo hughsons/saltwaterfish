@@ -1,0 +1,163 @@
+body {
+    color: #434343;
+    font-family: 'PT Sans',sans-serif;
+    font-size: 13px;
+    line-height: 20px;
+}
+ul{ list-style-type:none;}
+body  a { color:#434343; text-decoration:none; }
+body a:link{ color:#434343; text-decoration:none;}
+body a:visited{ color:#434343; text-decoration:none;}
+body  a:hover { color:#f67720; text-decoration:none; }
+body a:active{ color:#434343; text-decoration:none;}
+
+label{ float:left; width:26%; text-align:right; padding-right:5px;}
+ .float_left{ float:left;}
+.float_right{ float:right;}
+
+.button a{
+	float:left;
+	width:auto;
+	padding:5px 15px;
+	font-family: 'Open Sans', sans-serif;	
+	font-size:15px;
+	color:#434343;
+	text-transform:capitalize;
+	border:1px solid #dddddd;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	background-color:#efefef;
+	background: -webkit-gradient(linear, left top, left bottom, from(#efefef), to(#ffffff));
+	background: -moz-linear-gradient(top,  #efefef,  #ffffff);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#efefef', endColorstr='#ffffff');
+	background-repeat:repeat;
+	text-align:center;	
+	margin:0px 10px;
+}
+.button1 a{
+	float:left;
+	width:auto;
+	padding:5px 15px;
+	font-family: 'Open Sans', sans-serif;	
+	font-size:15px;
+	color:#3c9bd1;
+	text-transform:capitalize;
+	border:1px solid #3c9bd1;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	background-color:#efefef;
+	background: -webkit-gradient(linear, left top, left bottom, from(#efefef), to(#ffffff));
+	background: -moz-linear-gradient(top,  #efefef,  #ffffff);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#efefef', endColorstr='#ffffff');
+	background-repeat:repeat;
+	text-align:center;	
+	margin:0px 10px;
+}
+p{
+font-family: 'PT Sans', sans-serif;
+font-size:13px;
+color:#434343;
+line-height:20px;
+padding:10px 0px;
+}
+.blue-button{
+	background-image: url(/misc/images/add-to-tank.png);
+	background-repeat: no-repeat;
+	background-position: left top;
+	height: 25px;
+	width: 97px;
+	float:left;
+	font-family: "Open Sans";
+	font-size:13px;
+	font-weight: bold;
+	color: #ffffff;
+	line-height:25px;
+	text-align:center;
+	text-transform:uppercase;
+}
+.blue-button a:link{ color:#ffffff; text-decoration:none; }
+.blue-button a:visited{ color:#ffffff; text-decoration:none; }
+.blue-button a:hover{ color:#000; text-decoration:none; }
+.blue-button a:active{ color:#ffffff; text-decoration:none; }
+
+.hash-button{
+	background-image: url(/misc/images/quick-more-bg.png);
+	background-repeat: no-repeat;
+	background-position: left top;
+	float: right;
+	height: 25px;
+	width: 87px;
+	font-family: "Open Sans";
+	font-size: 12px;
+	color: #434343;
+	line-height:25px;
+	text-align:center;
+	margin-right:12px;
+}
+.hash-button a:link{ color: #434343; text-decoration:none; }
+.hash-button a:visited{ color: #434343; text-decoration:none; }
+.hash-button a:hover{ color:#000; text-decoration:none; }
+.hash-button a:active{ color: #434343; text-decoration:none; }
+
+.wish-button{
+	background-image:url(/misc/images/wish-list.png);
+	background-repeat: no-repeat;
+	background-position: left top;
+	height: 25px;
+	width: 99px;
+	float:left;
+	font-family: "Open Sans";
+	font-size:14px;
+	font-weight: bold;
+	color: #434343;
+	line-height:25px;
+	text-align:center;
+	text-transform:uppercase;
+}
+.wish-button a:link{ color: #434343; text-decoration:none; }
+.wish-button a:visited{ color: #434343; text-decoration:none; }
+.wish-button a:hover{ color: #000; text-decoration:none; }
+.wish-button a:active{ color: #434343; text-decoration:none; }
+/* //Master Category */
+
+/* Searchpage result */
+.heading_bg2{ 
+	width:82%; 
+	height:auto; 	
+	padding:5px 10px 10px 10px; 	
+	background-color:#efefef;
+	background: -webkit-gradient(linear, left top, left bottom, from(#efefef), to(#ffffff));
+	background: -moz-linear-gradient(top,  #efefef,  #ffffff);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#efefef', endColorstr='#ffffff');
+	background-repeat:repeat;
+	border:1px solid #dddddd;
+	font-family: 'Open Sans', sans-serif;	
+	font-size:16px;
+	color:#434343;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+}
+.product_heading {
+    color: #235478;
+    font-family: 'PT Sans',sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 20px;
+}
+.orange_text {
+    color: #EC5E00;
+}
+ {
+    text-decoration: line-through;
+}
+.orange_boxs {
+    margin-bottom: 5px !important;
+    
+}
+.blue_boxs {
+    margin-bottom: 5px !important;
+    
+}

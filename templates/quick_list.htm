@@ -41,7 +41,7 @@ Home <span class="home-txt-arrow">&gt; </span>Marine Life     </div>
 					{% if products.stock >= 1 %}
 					<div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
 				{% else %}
-					<div class="wish-button"><a href="/addtocart?item_id={{ products.catalogid }}">WISH LIST</a></div>
+					<div class="wish-button"><a href="/addtowatchlist?itemid={{ products.catalogid }}">WISH LIST</a></div>
 				{% endif %}
 					 
 					
@@ -80,7 +80,7 @@ Home <span class="home-txt-arrow">&gt; </span>Marine Life     </div>
 				<td width="203">{% if products.stock >= 1 %}
 					<div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
 				{% else %}
-					<div class="wish-button"><a href="/addtocart?item_id={{ products.catalogid }}">WISH LIST</a></div>
+					<div class="wish-button"><a href="/addtowatchlist?itemid={{ products.catalogid }}">WISH LIST</a></div>
 				{% endif %}
 					 </td>
 			  </tr>
@@ -93,7 +93,7 @@ Home <span class="home-txt-arrow">&gt; </span>Marine Life     </div>
 
 
 
-</div></div></div></div></div></div>
+</div></div></div></div></div> 
 <div class="float-left width10"></div>
 
 </div>
