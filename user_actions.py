@@ -186,6 +186,7 @@ class RegistrationActionClass(TemplateView):
           c.shipping_country = c.billing_country = c.country = p_form.cleaned_data['country']
           c.shipping_zip = c.billing_zip = c.zip = p_form.cleaned_data['zip']
           c.shipping_phone = c.billing_phone =  c.phone = p_form.cleaned_data['phone']
+          c.custenabled = 1
           c.comments = p_form.cleaned_data['comments']
 
           if not self.IsDuplicate(c.email):
