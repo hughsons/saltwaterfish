@@ -137,6 +137,7 @@ class CrmDepartment(models.Model):
     class Meta:
         db_table = u'crm_department'
         app_label = ''
+        ordering = ["id"]
 
 class CrmMessages(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -737,6 +738,19 @@ class ShippingStates(models.Model):
     enabled = models.IntegerField(null=True, blank=True)
     class Meta:
         db_table = u'shipping_states'
+        app_label = ''
+
+class SiteBanners(models.Model):
+    id = models.IntegerField(primary_key=True)
+    banner_name = models.CharField(max_length=250, blank=True)
+    banner_type = models.CharField(max_length=100, blank=True)
+    banner_image = models.CharField(max_length=250, blank=True)
+    banner_link = models.TextField(blank=True)
+    banner_target = models.CharField(max_length=33, blank=True)
+    banner_status = models.IntegerField(null=True, blank=True)
+    datentime = models.CharField(max_length=150, blank=True)
+    class Meta:
+        db_table = u'site_banners'
         app_label = ''
 
 class StoreSettings2(models.Model):

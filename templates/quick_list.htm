@@ -1,37 +1,55 @@
-{% include 'header.htm' %}
-
+{% extends 'base.html' %}
+{% block content %}
+<link type="text/css" rel="stylesheet" href="css3/style.css" />
 <link href="/misc/css4/style.css" rel="stylesheet" type="text/css" />
-
-{% include 'myaccount_widget.htm' %}
+<link type="text/css" rel="stylesheet" href="/misc/category.css" />
 {% load tagsfilter %}
- 
-<div class="wid748 float-left">
-<div class="height12 clr"></div>
-<div  class="  clr">
-  <div class=" ">
-<div id="tab-wrapper" style="width:760px !important;">
-<div class="wrapper-left">
-<div class="home-txt padleft20 padbottom5 clr">
-Home <span class="home-txt-arrow">&gt; </span>Marine Life     </div>
-<!--image starts-->
+<div class="float-left wid20">&nbsp;&nbsp;</div>
+<div class="float-left wid748 padtop10">
 {% if cat|categoriesdisplay|length < 1 %}
-	<div align=left class=padleft7>
-	   <div class="clr height15">&nbsp;&nbsp;</div>
-	 </div>
-
-	<div class=padleft7><table width="100%" border="0" cellspacing="0" cellpadding="10">
-	  <tr  class="table-topbg ">
-		<td width="40%" align="left">Description</td>
-		   <td width="28%" align="left">Price</td>
+<div class="feature-bg1">Featured Products</div>
+<div class="clr height15">&nbsp;&nbsp;</div>
+{% for products in cat|productsdisplay %}
+	 {% if products.categoryspecial >= 1 %}
+		<div class="float_left orange_boxs " align="center" style="width:26% !important;min-height:266px !important;">
+		<div class="clr product_heading product-align">{{ products.name }}</div>
+		<div class="clr product-align">{{ products.description }}</div>
+		<div class="clr pad-tb"><span class="clr pad-tb"><img src="{{ products.thumbnail }}" width="125" height="125" /></span></div>
+				{% if products.onsale > 0 %}
+					<div class="clr "><strong>Sale:&nbsp;</strong><span class="line-through">${{products.price|floatformat:2}}&nbsp;</span><strong class="orange_text">&nbsp;${{products.saleprice|floatformat:2}}</strong></div>
+				{% else %}
+					<div class="clr "><strong>&nbsp;${{products.price|floatformat:2}}</strong></div>
+				{% endif %}
+		<div class="clr pad-tb" style="width:200px !important">
+				{% if products.stock >= 1 %}
+					<div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
+				{% else %}
+					<div class="wish-button"><a href="/addtowatchlist?itemid={{ products.catalogid }}">WISH LIST</a></div>
+				{% endif %}
+		<div class="hash-button"><a href="#">more details...</a></div>
+		</div>
+		</div>
+	{% endif %}
+{% endfor %}
+<div class="clr">&nbsp;</div>
+	<div class="clr float-left wid570"><table width="100%" border="0" align="left" cellpadding="10" cellspacing="0">
+	  <tr><td class="table-topbg1"><table width="100%" border="0">
+	  <tr>
+		 <td width="52%" align="left">Description {{ cats.category_name }}</td>
+		 <td width="20%" align="left">Price</td>
 		<td width="20%" align="left">Status</td>
 	  </tr>
 	</table>
+	</td>
+	  </tr>
+	</table>
 	</div>
-	<div> <table width="100%" border="0" cellspacing="0" cellpadding="10" class="table-bg" >
+	<div class=" clr float_left">
+	<table width="100%" border="0" align="left" cellpadding="10" cellspacing="0" class="table-bg1" >
 		{% for products in cat|productsdisplay %}
 			  <tr>
-				<td width="276" class="table-text1"><a href="/product?pid={{ products.catalogid }}">{{ products.name }}</a></td>
-				<td width="207">
+				<td width="55%" class="table-text1"><a href="/product?pid={{ products.catalogid }}">{{ products.name }}</a></td>
+				<td width="22%" class="table-text1">
 				{% if products.onsale == 1 %}
 					<img src="/misc/images/quick-sale-img.png" width="33" height="21" border="0"  />
 				{% else %}
@@ -43,58 +61,171 @@ Home <span class="home-txt-arrow">&gt; </span>Marine Life     </div>
 				{% else %}
 					<div class="wish-button"><a href="/addtowatchlist?itemid={{ products.catalogid }}">WISH LIST</a></div>
 				{% endif %}
-					 
-					
-					</td>
+ 					</td>
 				</tr>
-			  
-			   <tr><td colspan="4"><div class="bg7"> </div></td></tr>
+ 			   <tr><td colspan="4"><div class="bg7"> </div></td></tr>
 		   {% endfor %}
 	</table></div>
 {% else %}
+<div class="clr height15">&nbsp;&nbsp;</div>
 	{% for cats in cat|categoriesdisplay %}
-		<div align=left class=padleft7>
-		   <div class="clr height15">&nbsp;&nbsp;</div>
-		<div class="table-topicbg padbottom15 ">{{ cats.category_name }}</div>
-		</div>
-		<div class=padleft7><table width="100%" border="0" cellspacing="0" cellpadding="10">
-		  <tr  class="table-topbg ">
-			<td width="40%" align="left">Description</td>
-			   <td width="28%" align="left">Price</td>
-			<td width="20%" align="left">Status</td>
-		  </tr>
-		</table>
-		</div>
-		<div><table width="100%" border="0" cellspacing="0" cellpadding="10" class="table-bg" >
-
-		{% for products in cats.id|productsdisplay %}
-			  <tr>
-				<td width="276" class="table-text1"><a href="/product?pid={{ products.catalogid }}">{{ products.name }}</a></td>
-				<td width="187">
-				{% if products.onsale == 1 %}
-					<img src="/misc/images/quick-sale-img.png" width="33" height="21" border="0"  />
-				{% else %}
-					${{products.price|floatformat:2}}
-				{% endif %}
-					</td>
-				<td width="203">{% if products.stock >= 1 %}
-					<div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
-				{% else %}
-					<div class="wish-button"><a href="/addtowatchlist?itemid={{ products.catalogid }}">WISH LIST</a></div>
-				{% endif %}
-					 </td>
-			  </tr>
-			  
-			   <tr><td colspan="4"><div class="bg7"> </div></td></tr>
-		 {% endfor %}
-		</table></div>
-	{% endfor %}
+	{% if cats.id|productsdisplay:"yes" > 0 %}
+	<div class="table-topicbg1 padbottom15 float_left" >{{ cats.category_name }}</div>
+	<div class="clr float-left wid570"><table width="100%" border="0" align="left" cellpadding="10" cellspacing="0">
+	  <tr><td class="table-topbg1"><table width="100%" border="0">
+	  <tr>
+		 <td width="52%" align="left">Description {{ cats.category_name }}</td>
+		 <td width="20%" align="left">Price</td>
+		<td width="20%" align="left">Status</td>
+	  </tr>
+	</table>
+	</td>
+	  </tr>
+	</table>
+	</div>
+	<div class=" clr float_left">
+	<table width="100%" border="0" align="left" cellpadding="10" cellspacing="0" class="table-bg1" >
+	{% for products in cats.id|productsdisplay %}
+	  <tr>
+		<td width="52%" class="table-text1"><a href="/product?pid={{ products.catalogid }}">{{ products.name }}</a></td>
+		<td width="20%">
+					{% if products.onsale == 1 %}
+						<img src="/misc/images/quick-sale-img.png" width="33" height="21" border="0"  />
+					{% else %}
+						${{products.price|floatformat:2}}
+					{% endif %}</td>
+		<td width="103">
+					{% if products.stock > 0 %}
+						<div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
+					{% else %}
+						<div class="wish-button"><a href="/addtowatchlist?itemid={{ products.catalogid }}">WISH LIST</a></div>
+					{% endif %}
+		</td>
+	  </tr>
+	   <tr><td colspan="4"><div class="bg7"> </div></td></tr>
+	  {%endfor%}
+	</table>
+	</div>
+	<div class=" clr">&nbsp;</div>
+	{%endif%}
+	{%endfor%}
 {% endif %}
 
 
 
-</div></div></div></div></div> 
-<div class="float-left width10"></div>
+
+<div class="clr">
+<div class="float_left wid570"><table width="100%" border="0" align="left" cellpadding="10" cellspacing="0" class="table-bg1" >
+
+  <tr>
+    <td width="276" class="table-text1"><a href="#">Red Leg Hermit Crab- Group of 10 - Mexico</a></td>
+    <td width="192">$19.99</td>
+    <td width="198"><div class="blue-button">Add to Tank</div></td>
+  </tr>
+  
+  <tr><td colspan="4"><div class="bg7"></div></td></tr>
+  
+  <tr>
+    <td class="table-text1"><a href="#">Adopted Emerald Crabs</a></td>
+     <td>$156.99</td>
+    <td><div class="blue-button">Add to Tank</div></td>
+  </tr>
+  
+  <tr><td colspan="4"><div class="bg7"></div></td></tr>
+  
+  <tr>
+    <td class="table-text1"><a href="#">Porcelain Crab - Limit 3</a></td>
+      <td>$39.99</td>
+    <td><div class="blue-button">Add to Tank</div></td>
+  </tr>
+  
+  <tr><td colspan="4"><div class="bg7"></div></td></tr>
+  
+  <tr>
+    <td class="table-text1"><a href="#">Dwarf White Leg Hermit Crabs - Group of 10</a></td>
+    <td>$62.99</td>
+    <td><div class="blue-button">Add to Tank</div></td>
+  </tr>
+  
+  <tr><td colspan="4"><div class="bg7"></div></td></tr>
+  
+  <tr>
+    <td class="table-text1"><a href="#">Blue leg Hermit Crab</a></td>
+    <td>$54.99</td>
+    <td><div class="blue-button">Add to Tank</div></td>
+  </tr>
+  
+  <tr><td colspan="4"><div class="bg7"></div></td></tr>
+  
+  <tr>
+    <td class="table-text1"><a href="#">Blue Leg Hermit Crab - Group of 10</a></td>
+    <td>$27.99</td>
+    <td><div class="blue-button">Add to Tank</div></td>
+  </tr>
+  
+  <tr><td colspan="4"><div class="bg7"></div></td></tr>
+  
+  <tr>
+    <td class="table-text1"><a href="#">100 Empty Hermit Crab Shells</a></td>
+    <td>$84.99</td>
+    <td><div class="blue-button">Add to Tank</div></td>
+  </tr>
+  
+  <tr><td colspan="4"><div class="bg7"></div></td></tr>
+  
+    <tr>
+    <td class="table-text1"><a href="#">Blue Leg Hermit Crab - Group of 20</a></td>
+     <td>$13.99</td>
+    <td><div class="blue-button">Add to Tank</div></td>
+  </tr>
+  
+  <tr><td colspan="4"><div class="bg7"></div></td></tr>
+  
+  <tr>
+    <td class="table-text1"><a href="#">Emerald Crab - Super Special - $2.50 - Limit 5</a></td>
+     <td>$10.99</td>
+    <td><div class="wish-button"><a href="#">Wish List</a></div></td>
+  </tr>
+  
+  <tr><td colspan="4"><div class="bg7"></div></td></tr>
+  
+  <tr>
+    <td class="table-text1"><a href="#">Horseshoe Crab</a></td>
+    <td>$104.99</td>
+    <td><div class="wish-button"><a href="#">Wish List</a></div></td>
+  </tr>
+</table>
+</div>
+<div class="float_right quick_right_img"><img src="misc/images/quick-right-image.png" width="180" height="121" /></div>
 
 </div>
-{% include 'footer.htm' %}
+
+<!--wrapper left close--><div class="height1"></div></div>
+
+<!--tab-wrapper close--><div class="height1"></div>
+
+
+<div class="float-left wid10"></div>
+
+</div>
+{% endblock content %}
+<script type="text/javascript" src="/misc/js2/jquery-1.7.2.min.js"></script>
+<script type="text/javascript">
+/* Toggle Panel start */
+
+  $('.toggle_content1').hide();  //hides the toggled content
+
+	$('.toggle_link').click(function () {
+		if ($(this).is('.toggle_close')) {
+			$(this).removeClass('toggle_close').addClass('toggle_open').parent().next('.toggle_content1').slideToggle(300);
+			
+			return false;
+		} 
+		
+		else {
+			$(this).removeClass('toggle_open').addClass('toggle_close').parent().next('.toggle_content1').slideToggle(300);
+			return false;
+		}
+	});	
+/* Toggle Panel end */
+</script>

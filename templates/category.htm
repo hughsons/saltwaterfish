@@ -1,11 +1,11 @@
- {% include 'header.htm' %}
-{% load tagsfilter %}
-
+{% extends 'base.html' %}
+{% block content %}
+ 
 <link type="text/css" rel="stylesheet" href="/misc/sty.css" />
  <link type="text/css" rel="stylesheet" href="/misc/category.css" />
 
- {% include 'myaccount_widget.htm' %}
- 
+
+{% load tagsfilter %} 
 <div class="float-left wid20">&nbsp;&nbsp;</div>
 <div class="float-left wid725">
 <div class="clr">
@@ -28,7 +28,15 @@
 		<div class="clr product_heading product-align">{{ products.name }}</div>
 		<div class="clr product-align">{{ products.description }}</div>
 		<div class="clr pad-tb"><span class="clr pad-tb"><img src="{{ products.thumbnail }}" width="125" height="125" /></span></div>
-		<div class="clr "><strong>Sale:&nbsp;</strong><span class="line-through">$199.99&nbsp;</span><strong class="orange_text">&nbsp;${{products.price|floatformat:2}}</strong></div>
+		
+				{% if products.onsale > 0 %}
+					<div class="clr "><strong>Sale:&nbsp;</strong><span class="line-through">${{products.price|floatformat:2}}&nbsp;</span><strong class="orange_text">&nbsp;${{products.saleprice|floatformat:2}}</strong></div>
+				{% else %}
+					<div class="clr "><strong>&nbsp;${{products.price|floatformat:2}}</strong></div>
+				{% endif %}
+		
+
+
 		<div class="clr pad-tb" style="width:200px !important">
 				{% if products.stock >= 1 %}
 					<div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
@@ -60,7 +68,12 @@
 <div class="clr product_heading product-align">{{ products.name }}</div>
 <div class="clr pad-tb product-align">{{ products.description }}&nbsp;</div>
 <div class="clr pad-tb"><span class="clr pad-tb"><img src="{{ products.thumbnail }}" width="125" height="125" /></span></div>
-<div class="clr "><strong>Sale:&nbsp;</strong><strong class="orange_text">&nbsp;${{products.price|floatformat:2}}</strong></div>
+				{% if products.onsale > 0 %}
+					<div class="clr "><strong>Sale:&nbsp;</strong><span class="line-through">${{products.price|floatformat:2}}&nbsp;</span><strong class="orange_text">&nbsp;${{products.saleprice|floatformat:2}}</strong></div>
+				{% else %}
+					<div class="clr "><strong>&nbsp;${{products.price|floatformat:2}}</strong></div>
+				{% endif %}
+
 <div class="clr pad-tb" style="width:200px !important">
 				{% if products.stock >= 1 %}
 					<div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
@@ -89,5 +102,5 @@
 </div>
 <div class="float-left"></div>
 
-</div>
-{% include 'footer.htm' %}
+</div></div>
+{% endblock content %}

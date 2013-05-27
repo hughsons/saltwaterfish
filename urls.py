@@ -41,6 +41,7 @@ urlpatterns = patterns('',
     url(r'^deletewishlist', DeleteWishListActionClass.as_view(), name='AddToWathList'),
     url(r'^wishlistitems', WishListItemsViewClass.as_view(), name='WishListItems'),
     url(r'^deletecartitem', DeleteCartItemActionClass.as_view(), name='DeleteCartItem'),
+	url(r'^checkoutlogin', CheckOutLoginViewClass.as_view(), name = 'CheckoutLogin'),
 	url(r'^orderconfirmation', OrderConfirmationView.as_view(), name = 'OrderConfirmation'),
 
 # Murthy URLS ENDS HERE	
@@ -49,6 +50,11 @@ urlpatterns = patterns('',
 	url(r'^quicklist', QuickListClass.as_view(), name='quicklist'),
 	url(r'^category', ViewCategoryClass.as_view(), name='maincategory'),
 	url(r'^pages', ViewPagesClass.as_view(), name='pages'),
+	url(r'^productindex', ProductIndexClass.as_view(), name='ProductIndexClass'),
+	url(r'^categoriesindex', CategoryIndexClass.as_view(), name='CategoryIndexClass'),
+	url(r'^addrequest', AddRequestFormClass.as_view(), name='AddRequestFormClass'),
+	url(r'^editrequestform', EditRequestFormClass.as_view(), name='EditRequestFormClass'),
+	url(r'^generalactions', GeneralActionClass.as_view(), name='GeneralActionClass'),
 # Simon URLS HERE
 
     url(r'^apanel', ApanelViewClass.as_view(), name='apanel'),
@@ -106,6 +112,10 @@ urlpatterns = patterns('',
 	url(r'^productactions', ProductsctionClass.as_view(), name='ProductsctionClass'),
 	url(r'^particleedit', ProductArticleEditViewClass.as_view(), name='ProductArticleEditViewClass'),
 	url(r'^addprodarticle', ProductArticleAddFormClass.as_view(), name='ProductArticleAddFormClass'),
+	url(r'^viewbanners', BannersViewClass.as_view(), name='BannersViewClass'),
+	url(r'^editbanner', BannerEditViewClass.as_view(), name='BannerEditViewClass'),
+	url(r'^addbannerform', BannersAddFormClass.as_view(), name='BannersAddFormClass'),
+	url(r'^gcsfiles', GCSfilesClass.as_view(), name='BannersAddFormClass'),
 
     
 )+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

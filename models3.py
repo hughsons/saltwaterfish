@@ -1914,6 +1914,17 @@ class Shorcuts(models.Model):
     class Meta:
         db_table = u'shorcuts'
 
+class SiteBanners(models.Model):
+    id = models.IntegerField(primary_key=True)
+    banner_name = models.CharField(max_length=765, blank=True)
+    banner_image = models.CharField(max_length=765, blank=True)
+    banner_link = models.TextField(blank=True)
+    banner_target = models.CharField(max_length=33, blank=True)
+    banner_status = models.IntegerField(null=True, blank=True)
+    datentime = models.CharField(max_length=150, blank=True)
+    class Meta:
+        db_table = u'site_banners'
+
 class Sitetext(models.Model):
     id = models.IntegerField(primary_key=True)
     varname = models.CharField(max_length=150, blank=True)

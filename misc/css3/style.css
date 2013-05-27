@@ -29,11 +29,10 @@ input[type="text"], input[type="password"]{
  margin-bottom:8px;
 }
 label{ float:left; width:26%; text-align:right; padding-right:5px;}
-.clr{ clear:both; width:100%;}
 .float_left{ float:left;}
 .float_right{ float:right;}
 #wrapper{ width:100%; height:auto; margin:0 auto; }
-.container{ width:1000px; margin:0 auto; height:auto;}
+
 
 .pad_top20{ padding-top:20px;}
 /* Fedex section start */

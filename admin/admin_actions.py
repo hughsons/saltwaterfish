@@ -114,6 +114,33 @@ class CMSManagerActionClass(LoginRequiredMixin,TemplateView):
             except Exception, e:
                 logging.info('LoginfoMessage:: %s',e)
                 return HttpResponseRedirect('/cmspages?page=1&err=Form Field Errors')
+        elif "action" in request.POST and request.POST['action'] == "editbanner":
+            try:
+                t = SiteBanners.objects.get(id=request.POST['id'])
+                t.banner_name = request.POST['banner_name']
+                t.banner_type = request.POST['banner_type']
+                t.banner_image = request.POST['banner_image']
+                t.banner_link = request.POST['banner_link']
+                t.banner_status = request.POST['banner_status']
+                t.datentime = datetime.datetime.now()
+                t.save()
+                return HttpResponse('/cmspages?page=1&err=Successfully Updated the Record')
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+                return HttpResponse('/cmspages?page=1&err=Form Field Errors')
+        elif "action" in request.POST and request.POST['action'] == "addbanner":
+            try:
+                t = SiteBanners(banner_name = request.POST['banner_name'],
+                               banner_type = request.POST['banner_type'],
+                               banner_image = request.POST['banner_image'],
+                               banner_link = request.POST['banner_link'],
+                               banner_status = request.POST['banner_status'],
+                               datentime = datetime.datetime.now())
+                t.save()
+                return HttpResponseRedirect('/viewbanners?page=1&err=Successfully Updated the Record')
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+                return HttpResponseRedirect('/viewbanners?page=1&err=Form Field Errors')
         else:
             return HttpResponseRedirect('/cmspages?page=1&err=Form Field Errors')
 

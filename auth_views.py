@@ -22,6 +22,10 @@ def GetRecaptcha(request):
 @csrf_exempt
 def CustomerLoginClass(request):
     if request.method == 'POST':
+        if 'target' in request.POST:
+            target_page = request.POST['target']
+        else:
+            target_page = "/myaccount"
         #logout(request)
         customer_list=""
         form = LoginForm(request.POST)
@@ -41,7 +45,7 @@ def CustomerLoginClass(request):
                     request.session['Customer'] = customer_list[0]
                     success = True
                     logging.info('LoginfoMessage:: %s',customer_list[0])
-                    return HttpResponseRedirect('/myaccount')
+                    return HttpResponseRedirect(target_page)
                 else:
                     request.session['ErrorMessage'] = "Invalid User name or Password."
                     return HttpResponseRedirect('/login')

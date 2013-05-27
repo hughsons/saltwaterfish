@@ -1,0 +1,77 @@
+{% include 'admin_header.htm' %}
+<div class="clr white-bg">
+<div class="clr content-bg padbottom10">  <table width="100%" border="0">
+    <tr>
+      <td align="left" valign="top" width="100" style="padding-left:1px" >{% include 'left_menu_cms.htm' %}</td>
+      <td style="width:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+      <td bordercolor="0" valign=top><table width="100%" border="0">
+          <tr>
+            <td class="left-text" style="padding-top:10px;" >Banners > View/Edit</td>
+          </tr>
+          <tr>
+            <td style="padding-bottom:10px; padding-top:10px;"><div style="float:left" class="left-text1">View/Edit</div>
+                <div style="float:right; margin-right:15px">
+                  <div class="search1">
+                    <div style="float:left; width:230px;">
+                      <input name="Input" type="text"  placeholder="Search saltwaterfish.com"/>
+                    </div>
+                    <div style="float:left; width:69px;">
+                      <input type="submit" name="Submit"  value="Search" />
+                    </div>
+                  </div>
+                </div></td>
+          </tr>
+          <tr>
+            <td style="height:1px; background-color:#d9d9d9; background-repeat:repeat-y"></td>
+          </tr>
+         
+         
+        </table>
+          
+        
+        <div style="clear:both;">
+	<div id="view2" class="tabcontent1">
+					
+<form method="post" action="/productactions" method=post>
+		{% csrf_token %} 
+		<input type="hidden" name="action" value="massdelete">
+<div class="head_bg clr padtop5">
+<div class="clr">
+<div  class="order-txt1 product_id" style="width:50px !important;">Type</div>
+<div  class="order-txt1 product_name">Title</div>
+<div  class="order-txt1 product_name" style="width:340px !important;">Link</div>
+
+<div  class="order-txt1 product_id"style="width:100px !important;">Actions</div>
+</div>
+</div>
+{% for item in allitems %}
+<div class="product_hor_line"></div>
+<div class="product_white_bg">
+<div class="order-txt3 product_id_txt" style="width:50px !important;">{{item.banner_type}}</div>
+<div class="order-txt2 product_name_txt">{{item.banner_name}}</div>
+<div class="order-txt2 product_name_txt" style="width:340px !important;">{{item.banner_link}} </div>
+<div class="order-txt3 product_id_txt"><a href="/editbanner?bid={{item.id}}"><img src="/misc/images/edit.jpg" width="55" height="24" border="0" /></a></div>
+</div>
+ {% empty %}
+	<em class="formee-req">No Records</em>
+{% endfor %}
+
+
+ 
+<div style="clear:both; height:1px; background-color:#dedede"></div>
+
+
+ 
+<div class="clr">&nbsp;&nbsp;</div>
+             </div>
+		</div>        </td>
+    </tr>
+  </table>
+</div>
+</div>
+
+</div>
+
+
+
+{% include 'admin_footer.html' %}

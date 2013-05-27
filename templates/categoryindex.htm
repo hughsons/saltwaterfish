@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load tagsfilter %}
+<div class="float-left width10">&nbsp;&nbsp;</div>
+<div class="float-left wid748 padtop1">
+<div class="clr my_account_title padleft10 padtop10 padbottom13">Home > Category Index</div>
+<div class="clr myaccount_bg " style="height:100% !important;">
+<div style="clear:both; width:700px; height:21px; line-height:21px; " >
+ </div>
+  <div class="clr padtop20 padleft20" align=left>
+<table width="70%" border="0" cellspacing="0" cellpadding="2"  >
+
+		{% for item in allitems %}
+			<tr>
+			<td width="476" class="table-text1" align=left><a href="/quicklist?cat={{ item.id }}">{{ item.category_name }}</a>
+			<ul>
+			{% for cats in item.id|categoriesdisplay %}
+			   <li><a href="/category?id={{ cats.id }}">{{ cats.category_name }}</a></li>
+			{% endfor %}
+			</ul></td>
+			</tr>
+		{% endfor %}
+</table>
+
+</div>
+</div>
+
+
+
+
+
+</div>
+<div class="float-left wid10"></div>
+
+</div>
+
+{% endblock content %}

@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<link href="/misc/css4/style.css" rel="stylesheet" type="text/css" />
+
+ 
+{% load tagsfilter %}
+ 
+<div class="wid748 float-left">
+<div class="height12 clr"></div>
+<div  class="  clr">
+  <div class=" ">
+<div id="tab-wrapper" style="width:760px !important;">
+<div class="wrapper-left">
+<div class="home-txt padleft20 padbottom5 clr">
+Home <span class="home-txt-arrow">&gt; </span>Marine Life     </div>
+<!--image starts-->
+{% if cat|categoriesdisplay|length < 1 %}
+	<div align=left class=padleft7>
+	   <div class="clr height15">&nbsp;&nbsp;</div>
+	 </div>
+
+	<div class=padleft7><table width="100%" border="0" cellspacing="0" cellpadding="10">
+	  <tr  class="table-topbg ">
+		<td width="40%" align="left">Description</td>
+		   <td width="28%" align="left">Price</td>
+		<td width="20%" align="left">Status</td>
+	  </tr>
+	</table>
+	</div>
+	<div> <table width="100%" border="0" cellspacing="0" cellpadding="10" class="table-bg" >
+		{% for products in cat|productsdisplay %}
+			  <tr>
+				<td width="276" class="table-text1"><a href="/product?pid={{ products.catalogid }}">{{ products.name }}</a></td>
+				<td width="207">
+				{% if products.onsale == 1 %}
+					<img src="/misc/images/quick-sale-img.png" width="33" height="21" border="0"  />
+				{% else %}
+					${{products.price|floatformat:2}}
+				{% endif %}</td>
+					<td width="153">
+					{% if products.stock >= 1 %}
+					<div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
+				{% else %}
+					<div class="wish-button"><a href="/addtowatchlist?itemid={{ products.catalogid }}">WISH LIST</a></div>
+				{% endif %}
+					 
+					
+					</td>
+				</tr>
+			  
+			   <tr><td colspan="4"><div class="bg7"> </div></td></tr>
+		   {% endfor %}
+	</table></div>
+{% else %}
+	{% for cats in cat|categoriesdisplay %}
+		<div align=left class=padleft7>
+		   <div class="clr height15">&nbsp;&nbsp;</div>
+		<div class="table-topicbg padbottom15 ">{{ cats.category_name }}</div>
+		</div>
+		<div class=padleft7><table width="100%" border="0" cellspacing="0" cellpadding="10">
+		  <tr  class="table-topbg ">
+			<td width="40%" align="left">Description</td>
+			   <td width="28%" align="left">Price</td>
+			<td width="20%" align="left">Status</td>
+		  </tr>
+		</table>
+		</div>
+		<div><table width="100%" border="0" cellspacing="0" cellpadding="10" class="table-bg" >
+
+		{% for products in cats.id|productsdisplay %}
+			  <tr>
+				<td width="276" class="table-text1"><a href="/product?pid={{ products.catalogid }}">{{ products.name }}</a></td>
+				<td width="187">
+				{% if products.onsale == 1 %}
+					<img src="/misc/images/quick-sale-img.png" width="33" height="21" border="0"  />
+				{% else %}
+					${{products.price|floatformat:2}}
+				{% endif %}
+					</td>
+				<td width="203">{% if products.stock >= 1 %}
+					<div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
+				{% else %}
+					<div class="wish-button"><a href="/addtowatchlist?itemid={{ products.catalogid }}">WISH LIST</a></div>
+				{% endif %}
+					 </td>
+			  </tr>
+			  
+			   <tr><td colspan="4"><div class="bg7"> </div></td></tr>
+		 {% endfor %}
+		</table></div>
+	{% endfor %}
+{% endif %}
+
+
+
+</div></div></div></div></div> 
+<div class="float-left width10"></div>
+
+</div>
+{% endblock content %}

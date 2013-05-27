@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+.content-label {
+    color: #000000;
+    font-family: "PT Sans";
+    font-size: 12px;
+    font-weight: bold;
+    line-height: normal;
+    text-align: right;
+    text-decoration: none;
+    text-transform: capitalize;
+    width: 100px;
+}
+</style>
+ 
+<div class="float-left width10">&nbsp;&nbsp;</div>
+<div class="float-left wid748 padtop5">
+<div class="clr my_account_link"></div>
+<div class="clr orange-txt padtop7 padbottom13">REQUEST DETAILS</div>
+<div class="clr myaccount_bg">
+  <div class="clr padtop5">
+  <table width="100%" border="0" cellpadding="2">
+  <tbody><tr>
+    <td class="item"><b>Status:</b> &nbsp;New</td>
+    
+  </tr>
+  <tr>
+    <td class="item"><b>Date Opened:</b> &nbsp;{{department.datentime}}</td>
+    
+  </tr>
+  <tr>
+    <td class="item"><b>Department:</b>&nbsp; General Info</td>
+  
+  </tr>
+  <tr>
+    <td class="item"><b>Opened by:</b>&nbsp; Customer</td>
+    
+  </tr>
+  <tr>
+    <td class="item"><b>Last Action Date:</b>&nbsp; 5/26/2013</td>
+   
+  </tr>
+
+  </tbody></table>
+<form method="post" action="/generalactions" method=post>
+		{% csrf_token %} 
+		<input type="hidden" name="action" value="addresponse">
+<div class="float-left">
+ <div class="clr">
+<div class=" ">
+<div class="clear padtop20">
+<div class="float-left content-label martop5">Department:</div>
+<div class="float-left padleft7"><select name="departmentid" class="textbox">
+{% for item in department %}
+	<option value="{{item.id}}">{{item.department}}
+	{%endfor%}
+</select></div>
+</div>
+<div class="clear padtop20">
+<div class="float-left content-label martop5">Name:</div>
+<div class="float-left padleft7"><input type="text" class="textbox" name="customer" value="{{ request.session.Customer.billing_firstname }} {{ request.session.Customer.billing_lastname }}"  /></div>
+</div>
+<div class="clear padtop20">
+<div class="float-left content-label martop5">E-Mail:</div>
+<div class="float-left padleft7"><input type="text" class="textbox" name="custemail" value="{{ request.session.Customer.email }}"  /></div>
+</div>
+<div class="clear padtop20">
+<div class="float-left content-label martop5">Phone:</div>
+<div class="float-left padleft7"><input type="text" class="textbox" name="phone" value="{{ request.session.Customer.billing_phone }}" /></div>
+</div>
+<div class="clear padtop20">
+<div class="float-left content-label martop5">Subject:</div>
+<div class="float-left padleft7"><input type="text" class="textbox" name="subject"  /></div>
+</div>
+<div class="clear padtop20">
+<div class="float-left content-label martop5">Message:</div>
+<div class="float-left padleft7"><textarea  name="message" rows="5" cols="36"></textarea></div>
+</div>
+</div>
+</div>
+ <div class="clr padtop20"><input type=image src="misc/images/submit.jpg" width="76" height="25" border="0" /></div>
+ 
+</div>
+</div>
+<div class="clr">&nbsp;</div>
+</div>
+
+
+
+
+
+</div>
+<div class="float-left wid10"></div>
+
+</div>
+{% endblock content %}

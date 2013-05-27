@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block content %}
+<link href="/misc/css3/style.css" rel="stylesheet" type="text/css" />
+<style>
+.height12 {
+    height: 7px !important;
+}
+</style>
+<script language="javascript" type="text/javascript" src="/misc/js/jquery-1.7.2.min.js"></script>
+<script language="javascript" type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/jquery.validate.min.js"></script>
+<script>
+$(function() {
+
+   $( "#form"  ).submit(function() {
+      var thisform = $('#form');
+	  if (thisform.valid()) 
+        return true;
+      else
+	  {
+         alert("Please fill the mandatory fields in the required format");
+	  }
+      return false;
+     });
+
+   $( "#form" ).validate({
+           rules: {
+                   {{ form.username.html_name }}: {
+                           required: true,
+                           maxlength: 30,
+                           customvalidation: true
+                   }
+           },
+           messages: {
+                   {{ form.username.html_name }}: {
+                           required: "*",
+                   }
+           },
+
+           errorPlacement: function(error, element){
+                            error.insertAfter(element);
+                       },
+                   
+           showErrors: function(errorMap, errorList){
+                              this.defaultShowErrors();
+                       }
+   });
+
+   $.validator.addMethod("customvalidation",
+           function(value, element) {
+		     if (element.name == '{{ form.username.html_name }}')
+                   return /^[A-Za-z\d_\.-]+@[A-Za-z\d_\.-]+\.[A-Za-z\d_\.-]+$/.test(value);
+           },
+   ""
+   );
+
+});
+</script>
+
+<div class="float-left width10">&nbsp;&nbsp;</div>
+<div class="float-left wid748">
+<div class="clr">
+<div class="clr">&nbsp;&nbsp;</div>
+<div class="clr">&nbsp;&nbsp;</div>
+  <div class="login_container">
+<div class="login_left">
+  <div class="login_heading">
+    <div align="justify">Returning Customers:</div>
+  </div>
+  <p align="justify">
+  Lorem ipsum dolor sit amet, habitasse pretium dolor sociis. Nulla et facilisis interdum elit amet erat, consectetuer condimentum eaque, ante maecenas. Suspendisse libero diam, doloribus aliquam consectetuer nec.
+  </p>
+<div class="clr">
+<form name="form" id="form" action="/custlogin" method="post">
+{% csrf_token %}
+{% if message or error_message1 %}
+      <p class="greentext">{{ message }} <span class="redtext">{{ error_message1 }}</span></p>{% endif %}
+<table border="0">
+  <tr><td>EMail</td><td>{{ form.username }}</td></tr>
+  <tr><td>Password</td><td>{{ form.password }}</td></tr>
+  <tr><td colspan="2"><img src="{{ recaptcha }}" /></td></tr>
+  <tr><td>Verify</td><td>{{ form.recaptcha }}<input type="hidden" name="target" value='/orderconfirmation'></td></tr>
+  <tr><td colspan="2"><input type=image src="/misc/images/sign-in.jpg" width="77" height="21" border="0" /></td></tr>
+</table>
+</form>
+</div>
+<div class="password_link"><a href="#">Forgot your password?</a></div>
+<div class="clr">&nbsp;&nbsp;</div>
+</div>
+
+
+
+
+<div class="login_right">
+<div class="login_heading">Returning Customers:</div>
+<p align="justify">
+Lorem ipsum dolor sit amet, habitasse pretium dolor sociis. Nulla et facilisis interdum elit amet erat, consectetuer condimentum eaque, ante maecenas. Suspendisse libero diam, doloribus aliquam consectetuer nec.</p>
+<form method="POST" action="/guestlogin">
+{% csrf_token %}
+<div class="clr">
+<div class="clr"><label>Email</label><input type="text" name="EMail" value="" class="wid210" /></div>
+</div>
+<div><input type="submit" name="cmdSubmit" value="Continue as Guest" class="button"></div>
+</div></div></div>
+</div>
+</form>
+<div class="float-left wid10"></div>
+
+</div>
+{% endblock content %}

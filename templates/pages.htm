@@ -1,8 +1,7 @@
-{% include 'header.htm' %}
+{% extends 'base.html' %}
+{% block content %}
+ 
 
-<link href="/misc/css4/style.css" rel="stylesheet" type="text/css" />
-
-{% include 'myaccount_widget.htm' %}
 {% load tagsfilter %}
  
 <div class="wid748 float-left">
@@ -14,13 +13,17 @@
 Home <span class="home-txt-arrow">&gt; </span> {{allpages.htmlpage}} </div>
 <div class="orange-txt padleft10 clr">{{allpages.htmlpage}}<br></div>
 <!--image starts-->
-<div class="padtop15 padleft10 clr" align=left><table width="100%" border="0" cellspacing="0" cellpadding="5" class="table-bg" ><tr>
-				<td class="table-text">{{allpages.content|safe}}</td>
-		  </tr>
-		</table>
+<div class="padtop5 padleft10 clr" align=left>
+<div class="clr myaccount_bg " style="height:100% !important;">
+<div style="clear:both; width:700px; height:1px; line-height:1px; " >
+ </div>
+  <div class="clr padtop5 padleft10 padbottom20 padright5" align="justify"  >
+ {{allpages.content|safe}} 
 </div>
- </div></div></div></div>
+ </div>
+</div>
+ </div></div></div>
 <div class="float-left width10"></div>
 
 </div>
-{% include 'footer.htm' %}
+{% endblock content %}

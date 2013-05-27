@@ -19,6 +19,14 @@ from django.utils import unittest
 from django.db import connection, transaction
 import logging
 import hashlib
+from google.appengine.api import files
+
+try:
+    files.gs
+except AttributeError:
+    import gs
+    files.gs = gs
+
 PERPAGE=50
 
 def checkadminlogin_dispatch(f):
@@ -611,20 +619,33 @@ class ProductOptionEditViewClass(LoginRequiredMixin, TemplateView):
                    'prod':pid,}
         return render_template(request, "product_options_edit.htm", content)
 
-class SiteBannerClass(LoginRequiredMixin, TemplateView):
-    
+class BannersViewClass(LoginRequiredMixin, TemplateView):
     def get(self, request, *args, **kwargs):
-        count = Extrapages.objects.count()
-        if request.GET['page'] == "":
-            page_num = 1
-        else:
-            page_num = request.GET['page']
-        page_num = int(page_num)
-        offset = page_num * 100
-        allpages = Extrapages.objects.all()[offset-100:offset]
-        content = {'page_title': "Summary",
+        allpages = SiteBanners.objects.all()
+        content = {'page_title': "Admin :: Banner Managements",
+                   'allitems':allpages,}
+        return render_template(request, "viewbanners.htm", content)
+
+class BannerEditViewClass(LoginRequiredMixin, TemplateView):
+    def get(self, request, *args, **kwargs):
+        bid = request.GET['bid']
+        filename = "/gs/swf_product_images/banner/banner5.png"
+        allpages = SiteBanners.objects.get(id=bid)
+        content = {'page_title': "Admin :: Edit banner",
                    'allpages':allpages,
-                   'count':count,
-                   'page_num':page_num,
-                   }
-        return render_template(request, "cms_pages.htm", content)
+                   'bannerpath':filename,}
+        return render_template(request, "editbanner.htm", content)
+
+class BannersAddFormClass(LoginRequiredMixin, TemplateView):
+    def get(self, request, *args, **kwargs):
+        content = {'page_title': "Admin :: Add Banner Managements",}
+        return render_template(request, "addbanner.htm", content)
+
+class GCSfilesClass(LoginRequiredMixin, TemplateView):
+    def get(self, request, *args, **kwargs):
+        content = {'page_title': "Admin :: Add Banner Managements",}
+        file_list = files.listdir('/gs/swf_product_images')
+        for file_name in file_list:
+          if not file_name.__contains__('$folder$'):
+            self.response.write('<a href="https://storage.cloud.google.com/%s">%s<a><br>' %(file_name[4:], file_name[4:]))
+        #return render_template(request, "gcsfiles.htm", content)

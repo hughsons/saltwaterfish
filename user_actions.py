@@ -120,58 +120,6 @@ class CustomerLoginActionClass(TemplateView):
             return HttpResponseRedirect('/login')
     return HttpResponseRedirect('/login')
 
-
-class AddToCartActionClass(TemplateView):
-  
-    def get(self, request, *args, **kwargs):
-      html_text = ""
-      item_id = 0
-      cart_items = {}
-      # Checking whether the item_id is available on the query string or not.
-      if 'item_id' in request.GET:
-        item_id = int(request.GET['item_id'])
-        # Checking whether cart itmes are in the session or not
-        if "CartItems" in request.session:
-          cart_items = request.session["CartItems"]
-          # If item is already added to the cart, incrementing the quantity
-          # to the partiuclar item. Else assigning initial quantity as 1.
-          if item_id in cart_items:
-            cart_items[item_id] += 1
-          else:
-            cart_items[item_id] = 1
-          request.session["CartItems"] = cart_items
-        else:
-          cart_items = {item_id:1}
-          request.session["CartItems"] = cart_items
-        
-      cart_items = request.session["CartItems"]
-      #for key, value in cart_items.items():
-      #  html_text += "%d - %d<br>\n" %(key, value)
-        
-      return HttpResponseRedirect("cartconfirmation?itemid=%d" %item_id)
-
-
-class CartActionsClass(TemplateView):
-
-    def get(self, request, *args, **kwargs):
-      if "cmdUpdate" in request.GET:
-        item_id = int(request.GET['itemid'])
-        quantity = int(request.GET['quantity'])
-        cart_items = request.session["CartItems"]
-        cart_items[item_id] = quantity
-        request.session["CartItems"] = cart_items
-        
-        #return HttpResponse(request.session["CartItems"][item_id])
-
-      if "cmdRemove" in request.GET:
-        item_id = int(request.GET['itemid'])
-        quantity = int(request.GET['quantity'])
-        cart_items = request.session["CartItems"]
-        del cart_items[item_id]
-        request.session["CartItems"] = cart_items
-
-      return HttpResponseRedirect('viewcart')
-
 class RegistrationActionClass(TemplateView):
     '''Page: /registeruser '''
 
@@ -467,4 +415,122 @@ class DeleteWishListActionClass(LoginRequiredMixin,TemplateView):
             return HttpResponseRedirect('/mywishlist?&err=Problem occured while deleting')
 
 
+class GeneralActionClass(LoginRequiredMixin,TemplateView):
+    def post(self, request, *args, **kwargs):
+        if "action" in request.POST and request.POST['action'] == "massaction":
+            logging.info('status type:: %s',request.POST['status'])
+            try:
+                if "status" in request.POST and request.POST['status'] == "delete":
+                    for a in request.POST.getlist('delid'):
+                        Crm.objects.filter(id=a).delete()
+                        logging.info('Deleting this Record:: %s',a)
+                    return HttpResponseRedirect('/acrm?page=1&err=Successfully Updated the Record')
+                elif "status" in request.POST and request.POST['status'] >= 1:
+                    for a in request.POST.getlist('delid'):
+                        t = Crm.objects.get(id=a)
+                        t.status = request.POST['status']
+                        t.save()
+                        logging.info('updating this Record:: %s',a)
+                    return HttpResponseRedirect('/acrm?page=1&err=Successfully Updated the Record')
+                else:
+                    return HttpResponseRedirect('/acrm?page=1&err=Form Field Errors')
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+                return HttpResponseRedirect('/acrm?page=1&err=Form Field Errors')
+        elif "action" in request.POST and request.POST['action'] == "editcrm":
+            crmid = request.POST['id']
+            try:
+                t = Crm.objects.get(id=crmid)
+                t.custemail = request.POST['custemail']
+                t.customer = request.POST['customer']
+                t.phone = request.POST['phone']
+                t.status = request.POST['status']
+                t.save()
+                return HttpResponseRedirect('/crmedit?id='+crmid+'&err=Successfully Updated the Record')
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+                return HttpResponseRedirect('/crmedit?id='+crmid+'&err=Form Field Errors')
+        elif "action" in request.POST and request.POST['action'] == "addresponse":
+            
+            try:
+                t = Crm(custid=request.session['Customer'].contactid,custemail = request.POST['custemail'] , departmentid = request.POST['departmentid'] ,
+                        subject = request.POST['subject'] , customer = request.POST['customer'] ,status=1, datentime = datetime.datetime.now())
+                t.save()
+                obj = Crm.objects.filter(custid=request.session['Customer'].contactid).latest('id').id
+                logging.info('Last Insert Id:: %s',obj)
+                s = CrmMessages(crmid = obj, sendername = request.POST['customer'] ,
+                                sender = 1 , message = request.POST['message'] ,
+                                datentime = datetime.datetime.now())
+                s.save()
+                return HttpResponseRedirect('/myaccount?err=Successfully Updated the Record')
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+                return HttpResponseRedirect('/myaccount?err=Form Field Errors')
+        else:
+            return HttpResponseRedirect('/myaccount?err=Form Field Errors')
 
+#=============================================================================
+# Murthy Code lines below
+#=============================================================================
+
+class GuestLoginActionClass(TemplateView):
+
+    def post(self, request, *args, **kwargs):
+
+       if 'EMail' in request.POST:
+           request.session['IsGuest'] = True
+           request.session['GuestEMail'] = request.POST['EMail']
+
+       return HttpResponseRedirect('/orderconfirmation');
+
+class AddToCartActionClass(TemplateView):
+  
+    def get(self, request, *args, **kwargs):
+      html_text = ""
+      item_id = 0
+      cart_items = {}
+      # Checking whether the item_id is available on the query string or not.
+      if 'item_id' in request.GET:
+        item_id = int(request.GET['item_id'])
+        # Checking whether cart itmes are in the session or not
+        if "CartItems" in request.session:
+          cart_items = request.session["CartItems"]
+          # If item is already added to the cart, incrementing the quantity
+          # to the partiuclar item. Else assigning initial quantity as 1.
+          if item_id in cart_items:
+            cart_items[item_id] += 1
+          else:
+            cart_items[item_id] = 1
+          request.session["CartItems"] = cart_items
+        else:
+          cart_items = {item_id:1}
+          request.session["CartItems"] = cart_items
+        
+      cart_items = request.session["CartItems"]
+      #for key, value in cart_items.items():
+      #  html_text += "%d - %d<br>\n" %(key, value)
+        
+      return HttpResponseRedirect("cartconfirmation?itemid=%d" %item_id)
+
+class CartActionsClass(TemplateView):
+
+    def get(self, request, *args, **kwargs):
+
+      if "cmdUpdate" in request.GET:
+        item_id = int(request.GET['itemid'])
+        quantity = int(request.GET['quantity'])
+        cart_items = request.session["CartItems"]
+        cart_items[item_id] = quantity
+        request.session["CartItems"] = cart_items
+        logging.info("\n\n\n\n\nUpdated. %s\n\n\n\n" %str(cart_items))
+        
+        #return HttpResponse(request.session["CartItems"][item_id])
+
+      if "cmdDelete" in request.GET:
+        item_id = int(request.GET['itemid'])
+        quantity = int(request.GET['quantity'])
+        cart_items = request.session["CartItems"]
+        del cart_items[item_id]
+        request.session["CartItems"] = cart_items
+
+      return HttpResponseRedirect('viewcart')

@@ -3,6 +3,7 @@
 .redtext {color: #FF0000; font-size: 12px;}
 label.error { float: none; color: red; padding-left: .5em; vertical-align: top; }
 -->
+{% load tagsfilter %}
 <script language="javascript" type="text/javascript" src="/misc/js/jquery-1.7.2.min.js"></script>
 <script language="javascript" type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/jquery.validate.min.js"></script>
 <script type="text/javascript">
@@ -52,10 +53,17 @@ CMS Admin Control</div>
 My Account 
 </div>
 {% if request.session.IsLogin %}
-<div class="my-account clr">
-<div class=" clr">&nbsp;&nbsp;</div>
-Welcome <span class="start">{{ request.session.Customer.billing_firstname }} {{ request.session.Customer.billing_lastname }}</span>
+<div class="clr my-account">
+<div class="new-customer padtop38">Welcome Back, {{ request.session.Customer.billing_firstname }} {{ request.session.Customer.billing_lastname }}</div>
+<div class="clr height23">&nbsp;&nbsp;</div>
+<div class="new-customer"><a href="/myaccount">My Account</a> | <a href="/orderstatus">Order Status</a></div>
+<div class="clr height23">&nbsp;&nbsp;</div>
+<div class="clr wid187">
+<a href="/logout"><img src="/misc/images/left_logout.jpg" width="77" height="21" border="0" /></a>
 </div>
+ 
+</div>
+
 {% else %}
 <form name="form" id="form" action="custlogin" method="post">
 {% csrf_token %}
@@ -87,6 +95,37 @@ Welcome <span class="start">{{ request.session.Customer.billing_firstname }} {{ 
 </div>
 {% endif %}
 </div>
+
+{% if request.session.IsLogin %}
+	{% if request.session.MyCartItems %}
+		<div class="clr height9">&nbsp;&nbsp;</div>
+		<div class="blue-border" style="height:100% !important;">
+		<div class="blue-bg-header">My Cart</div>
+		<div class=" clr">
+		<div class="height12">&nbsp;&nbsp;</div>
+		<table>
+		<tr><td>
+		{% for item in cartsitems %}
+		
+		<table>
+		<tr>
+			<td class=" padleft2" width="10"><img src="misc/images/1.jpg" border="0" /></td>
+			<td class=" my_cart_txt1 padleft5 padtop3" width="210">{{item.name}}</td>
+			<td class=" my_cart_txt2 padleft5 padtop3">${{item.price|floatformat:2}}</td>
+		</tr>
+		<tr><td colspan=3><img src="misc/images/mycart_line.jpg" border="0" /></td></tr>
+		</table>
+		{%endfor%}
+		</td>
+		</tr>
+		<tr><td  class="float_right padright10">Total:&nbsp;&nbsp;<strong>${{total_fines|floatformat:2}}</strong></td></tr>
+		<tr><td align=center> <a href="/viewcart"><img src="misc/images/view_cart.jpg" border="0" /></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/checkoutlogin"><img src="misc/images/chk_out.jpg" border="0" /></a> </td></tr>
+		</table>
+ 		
+		</div>
+		</div>
+	{% endif %}
+{% endif %}
 <div class="height9 clr">&nbsp;&nbsp;</div>
 <div class="blue-border clr">
 <div class="blue-bg-header clr">

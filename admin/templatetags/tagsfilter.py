@@ -137,18 +137,23 @@ def categoriesdisplay(parent):
     return result
 
 @register.filter("productsdisplay")
-def productsdisplay(category):
+def productsdisplay(category,count=""):
     logging.info('field name:: %s',category)
     try:
-        if category != '':
-            result = Products.objects.raw('select * from product_category,products where product_category.catalogid=products.catalogid and categoryid = %s',category)
+        if count =="":
+            if category != '':
+                result = Products.objects.raw('select * from product_category,products where product_category.catalogid=products.catalogid  and categoryid = %s',category)
+            else:
+                result = Products.objects.all()
         else:
-            result = Products.objects.all()
-            
+            result = Products.objects.raw('select * from product_category,products where product_category.catalogid=products.catalogid  and categoryid = %s',category)
+            result = sum(1 for result in result)
+            logging.info('count:: %s',result)
     except Exception as e:
         result = e
         logging.info('LoginfoMessage:: %s',e)
     return result
+
 
 @register.filter("crmdepartment")
 def crmdepartment(department):
