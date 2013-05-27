@@ -80,8 +80,8 @@ def cartwidget(request):
         for item in mycart:
           logging.info(item.saleprice)
           cart_item = CartItems(item.catalogid, item.name, item.price, item.saleprice,
-                                cart_items[item.catalogid], 0.0, tax.tax_value1, 0.0, 0.0,
-                                item.image1, item.image2, item.image3)
+                            cart_items[item.catalogid], 0.0, tax.tax_value1, 0.0, 0.0,
+                            item.thumbnail, item.image1, item.image2, item.image3)
 
           sub_total += cart_item.subtotal
           selected_items.append(cart_item)
@@ -332,82 +332,6 @@ class ForgetPasswordClass(LoginRequiredMixin,TemplateView):
       c.update(csrf(request))
       return render_to_response('login.htm', c)
 
-class CartItems(object):
-
-  def __init__(self, id, name, price, saleprice, quantity, shipping, tax, fuelcharge, promotions, image1, image2, image3, extra_field_3=""):
-      self.id = id
-      self.name = name
-      self.quantity = quantity
-      self.price = price
-      self.saleprice = saleprice
-      self.fuelcharge = fuelcharge
-      self.promotions = promotions
-      if saleprice <= 0 :
-          self.subtotal = price * quantity
-      else:
-          self.subtotal = saleprice * quantity
-      
-      self.shipping = shipping
-      self.tax = tax
-      self.taxvalue = float(self.subtotal) * float(tax)/float(100)
-      self.total = float(self.subtotal) + float(shipping) + self.taxvalue
-      self.image1 = image1
-      self.image2 = image2
-      self.image3 = image3
-      self.extra_field_3 = extra_field_3
-
-    
-class CartConfirmClass(TemplateView):
-
-  def get(self, request, *args, **kwargs):
-    item_id = 0
-    content = {}
-    if "itemid" in request.GET:
-      item_id = int(request.GET['itemid'])
-    
-    item = Products.objects.filter(catalogid=item_id)[0]
-    if item.stock == 0:
-       # If quantity is out of stock, removing the item from the cart.
-       cart_items = request.session["CartItems"]
-       if cart_items: del cart_items[item_id]
-       request.session["CartItems"] = cart_items
-       return HttpResponse("<h3>Quantity is out of stock. Click <a href='productlist'>here</a> to continue shopping.</h3>")
-    
-    cart_item = CartItems(item.catalogid, item.name, item.price,
-                          item.saleprice, 1, 0.0, 0.0, 0.0, 0.0,
-                            item.image1, item.image2, item.image3)
-
-    # Calculating Sum for all the items.
-    if 'CartItems' in request.session:
-      cart_items = request.session["CartItems"]
-      item_count = 0
-      sub_total = 0
-      shipping_total = 0
-      fuelcharge_total = 0
-      tax_total = 0
-      promotions_total = 0
-      order_total = 0
-      
-      for key, qty in cart_items.items():
-        if key == item_id:
-          item_count += qty
-          sub_total += (cart_item.subtotal * qty)
-          shipping_total += (cart_item.shipping * qty)
-          tax_total += (cart_item.taxvalue * qty)
-          fuelcharge_total += (cart_item.fuelcharge * qty)
-          promotions_total += (cart_item.promotions * qty)
-    
-      order_total = float(sub_total) + float(shipping_total) + float(fuelcharge_total) + float(tax_total) - float(promotions_total)
-    else:
-      content['ItemsHash'] = {}
-
-    content['ItemCount'] = item_count
-    content['OrderSubTotal'] = order_total
-
-    content['item'] = cart_item
-    
-    return render_template(request,'CartConfirmation.html', content)
-
 class MyWishListViewClass(LoginRequiredMixin,TemplateView):
 
   def get(self, request, *args, **kwargs):
@@ -531,6 +455,83 @@ class EditRequestFormClass(LoginRequiredMixin,TemplateView):
         return render_template(request, "editrequestform.htm", content)
 
 #======================================================================
+class CartItems(object):
+
+  def __init__(self, id, name, price, saleprice, quantity, shipping, tax, fuelcharge, promotions, thumbnail, image1, image2, image3, extra_field_3=""):
+      self.id = id
+      self.name = name
+      self.quantity = quantity
+      self.price = price
+      self.saleprice = saleprice
+      #self.fuelcharge = fuelcharge
+      self.fuelcharge = 2.99
+      self.promotions = promotions
+      if saleprice <= 0 :
+          self.subtotal = price * quantity
+      else:
+          self.subtotal = saleprice * quantity
+      
+      self.shipping = shipping
+      self.tax = tax
+      self.taxvalue = float(self.subtotal) * float(tax)/float(100)
+      self.total = float(self.subtotal) + float(shipping) + self.taxvalue + self.fuelcharge
+      self.thumbnail = thumbnail
+      self.image1 = image1
+      self.image2 = image2
+      self.image3 = image3
+      self.extra_field_3 = extra_field_3
+
+class CartConfirmClass(TemplateView):
+
+  def get(self, request, *args, **kwargs):
+    item_id = 0
+    content = {}
+    if "itemid" in request.GET:
+      item_id = int(request.GET['itemid'])
+    
+    item = Products.objects.filter(catalogid=item_id)[0]
+    if item.stock == 0:
+       # If quantity is out of stock, removing the item from the cart.
+       cart_items = request.session["CartItems"]
+       if cart_items: del cart_items[item_id]
+       request.session["CartItems"] = cart_items
+       return HttpResponse("<h3>Quantity is out of stock. Click <a href='productlist'>here</a> to continue shopping.</h3>")
+    
+    cart_item = CartItems(item.catalogid, item.name, item.price,
+                          item.saleprice, 1, 0.0, 0.0, 0.0, 0.0, item.thumbnail,
+                          item.image1, item.image2, item.image3)
+
+    # Calculating Sum for all the items.
+    if 'CartItems' in request.session:
+      cart_items = request.session["CartItems"]
+      item_count = 0
+      sub_total = 0
+      shipping_total = 0
+      fuelcharge_total = 0
+      tax_total = 0
+      promotions_total = 0
+      order_total = 0
+      
+      for key, qty in cart_items.items():
+        if key == item_id:
+          item_count += qty
+          sub_total += (cart_item.subtotal * qty)
+          shipping_total += (cart_item.shipping * qty)
+          tax_total += (cart_item.taxvalue * qty)
+          fuelcharge_total += (cart_item.fuelcharge * qty)
+          promotions_total += (cart_item.promotions * qty)
+    
+      order_total = float(sub_total) + float(shipping_total) + float(fuelcharge_total) + float(tax_total) - float(promotions_total)
+    else:
+      content['ItemsHash'] = {}
+
+    content['ItemCount'] = item_count
+    content['OrderSubTotal'] = order_total
+
+    content['item'] = cart_item
+    
+    return render_template(request,'CartConfirmation.html', content)
+
 
 class CheckOutLoginViewClass(TemplateView):
    def get(self, request, *args, **kwargs):

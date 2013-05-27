@@ -13,13 +13,16 @@ from django.contrib.auth.models import User, Group, Permission
 from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import unittest
+from django.db import connection
 from forms import *
-from models import customers, Products, Extrapages, Category, WshWishlist, Products, WsiWishlistitems
+from models import customers, Products, Extrapages, Category, WshWishlist, Products, WsiWishlistitems, ProductWaitinglist, Tax
 import random, logging
 import functools
 from functools import wraps
+
 from django.core.context_processors import csrf
 PERPAGE=50
+
 class CsrfExemptMixin(object):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -92,10 +95,22 @@ class RegistrationViewClass(TemplateView):
         request.session['ReCaptcha'] = value
         return value
     def get(self, request, *args, **kwargs):
+        message = ""
+        error_message = ""
+        if 'Message' in request.session:
+          message = request.session['Message']
+          del request.session['Message']
+
+        if 'ErrorMessage' in request.session:
+          error_message = request.session['ErrorMessage']
+          del request.session['ErrorMessage']
+            
         content = {'title': "User Registration",
                    'form':RegistrationForm,
                    'loginform':LoginForm,
-                   'recaptcha':"https://chart.googleapis.com/chart?chst=d_text_outline&chld=FFCC33|16|h|FF0000|b|%s" %self.GetRecaptcha(request)
+                   'recaptcha':"https://chart.googleapis.com/chart?chst=d_text_outline&chld=FFCC33|16|h|FF0000|b|%s" %self.GetRecaptcha(request),
+                   'message': message,
+                   'error_message': error_message
                    }
         return render_template(request, "registration.htm", content)
 
@@ -195,21 +210,15 @@ class MyWishListViewClass(LoginRequiredMixin,TemplateView):
       content['error_message'] = error_message
       del request.session['ErrorMessage']
 
-    wish_list_master = WshWishlist.objects.filter(customerid = customer.contactid)
+    #wish_list_master = WshWishlist.objects.filter(customerid = customer.contactid)
+    wish_list_master = ProductWaitinglist.objects.filter(userid = request.session['Customer'].contactid)
 
-    if wish_list_master:
-      wish_list_items = WsiWishlistitems.objects.filter(wsh_id = wish_list_master[0].wsh_id)
-      content['wsh_id'] = wish_list_master[0].wsh_id
-      catalog_list = []
-      for item in wish_list_items:
+    catalog_list = []
+    for item in wish_list_master:
         catalog_list.append(item.catalogid)
 
-      product_list = Products.objects.filter(catalogid__in=catalog_list)
-      content['product_list'] = product_list
-      content['message'] = message
-    else:
-      content['error_message'] = "No Items in the Wishlist"
-
+    product_list = Products.objects.filter(catalogid__in=catalog_list)
+    content['product_list'] = product_list
     return render_template(request, 'wishlistitems.html', content)
 
 class WishListItemsViewClass(LoginRequiredMixin,TemplateView):
@@ -223,7 +232,7 @@ class WishListItemsViewClass(LoginRequiredMixin,TemplateView):
         message = request.session['Message']
         del request.session['Message']
         
-    wish_list_items = WsiWishlistitems.objects.filter(wsh_id = id)
+    wish_list_items = WsiWishlistitems.objects.filter(wsh_id = id).order_by('id')
     catalog_list = []
     for item in wish_list_items:
       catalog_list.append(item.catalogid) 
@@ -253,7 +262,7 @@ class ProductListViewClass(TemplateView):
     content['error_message'] = error_message
     content['message'] = message
     
-    product_list = Products.objects.all()[:50]
+    product_list = Products.objects.all().order_by('stock')[:50]
     content['product_list'] = product_list 
     return render_to_response('productlist.html', content)
 
@@ -329,58 +338,76 @@ class AddressFormViewClass(LoginRequiredMixin,TemplateView):
     
 class CartItems(object):
 
-  def __init__(self, id, name, price, saleprice, quantity, shipping, tax, image1, image2, image3):
+  def __init__(self, id, name, price, saleprice, quantity, shipping, tax, fuelcharge, promotions, thumbnail, image1, image2, image3, extra_field_3=""):
       self.id = id
       self.name = name
       self.quantity = quantity
       self.price = price
       self.saleprice = saleprice
+      #self.fuelcharge = fuelcharge
+      self.fuelcharge = 2.99
+      self.promotions = promotions
       if saleprice <= 0 :
           self.subtotal = price * quantity
       else:
           self.subtotal = saleprice * quantity
-
+      
       self.shipping = shipping
       self.tax = tax
-      self.total = float(self.subtotal) + float(shipping) + (float(self.subtotal) * float(tax)/100.0)
-
+      self.taxvalue = float(self.subtotal) * float(tax)/float(100)
+      self.total = float(self.subtotal) + float(shipping) + self.taxvalue + self.fuelcharge
+      self.thumbnail = thumbnail
       self.image1 = image1
       self.image2 = image2
       self.image3 = image3
+      self.extra_field_3 = extra_field_3
 
 class CartConfirmClass(TemplateView):
 
   def get(self, request, *args, **kwargs):
-    id = 0
+    item_id = 0
     content = {}
     if "itemid" in request.GET:
-      id = int(request.GET['itemid'])
+      item_id = int(request.GET['itemid'])
     
-    item = Products.objects.filter(catalogid=id)[0]
+    item = Products.objects.filter(catalogid=item_id)[0]
     if item.stock == 0:
+       # If quantity is out of stock, removing the item from the cart.
        cart_items = request.session["CartItems"]
-       del cart_items[id]
+       if cart_items: del cart_items[item_id]
        request.session["CartItems"] = cart_items
-       return HttpResponse("<h3>Quantity out of stock. Click <a href='productlist'>here</a> to continue shopping.</h3>")
+       return HttpResponse("<h3>Quantity is out of stock. Click <a href='productlist'>here</a> to continue shopping.</h3>")
     
     cart_item = CartItems(item.catalogid, item.name, item.price,
-                          item.saleprice, 1, 0.0, 0.0,
-                            item.image1, item.image2, item.image3)
+                          item.saleprice, 1, 0.0, 0.0, 0.0, 0.0, item.thumbnail,
+                          item.image1, item.image2, item.image3)
 
+    # Calculating Sum for all the items.
     if 'CartItems' in request.session:
       cart_items = request.session["CartItems"]
       item_count = 0
       sub_total = 0
-      for key, value in cart_items.items():
-        if key == id:
-          item_count += value
-          sub_total = sub_total + (cart_item.subtotal * value)
-                          
-      content['ItemCount'] = item_count
-      content['subtotal'] = sub_total
+      shipping_total = 0
+      fuelcharge_total = 0
+      tax_total = 0
+      promotions_total = 0
+      order_total = 0
       
+      for key, qty in cart_items.items():
+        if key == item_id:
+          item_count += qty
+          sub_total += (cart_item.subtotal * qty)
+          shipping_total += (cart_item.shipping * qty)
+          tax_total += (cart_item.taxvalue * qty)
+          fuelcharge_total += (cart_item.fuelcharge * qty)
+          promotions_total += (cart_item.promotions * qty)
+    
+      order_total = float(sub_total) + float(shipping_total) + float(fuelcharge_total) + float(tax_total) - float(promotions_total)
     else:
       content['ItemsHash'] = {}
+
+    content['ItemCount'] = item_count
+    content['OrderSubTotal'] = order_total
 
     content['item'] = cart_item
     
@@ -392,6 +419,13 @@ class ViewCartViewClass(TemplateView):
   #Last Modified: 2013-15-19 23:30
 
   def get(self, request, *args, **kwargs):
+    sub_total = 0
+    shipping_total = 0
+    fuelcharge_total = 0
+    tax_total = 0
+    promotions_total = 0
+    order_total = 0
+
     content = {}
     content = {'page_title': "My Cart"}
     if 'CartItems' in request.session:
@@ -400,26 +434,65 @@ class ViewCartViewClass(TemplateView):
     else:
       cart_items = {}
       content['ItemsHash'] = {}
+      request.session["CartItems"] = cart_items
 
+    logging.info("\n\n\n\nIn View: %s\n\n\n\n" %str(cart_items))
     item_list = cart_items.keys()
     mycart = Products.objects.filter(catalogid__in=item_list)
 
+    # Executing custom query to get the product categories
+    #cursor = connection.cursor()
+    #cursor.execute("SELECT catalogid, category_name from product_category PC inner join category C on (PC.categoryid = c.id) where PC.catalogid in (%s) order by catalogid", ", ".join([str(x) for x in item_list]))
+    #cursor.close()
+
+   
+
     #Preparing result to render in html page.
     selected_items = []
+
+    tax_list = Tax.objects.filter(tax_country = 'US', tax_state = 'FL')
+    if tax_list:
+      tax = tax_list[0]
+    else:
+      tax = 0.0
+    
     for item in mycart:
       logging.info(item.saleprice)
       cart_item = CartItems(item.catalogid, item.name, item.price, item.saleprice,
-                            cart_items[item.catalogid], 0.0, 0.0,
-                            item.image1, item.image2, item.image3)
+                            cart_items[item.catalogid], 0.0, tax.tax_value1, 0.0, 0.0,
+                            item.thumbnail, item.image1, item.image2, item.image3)
 
+      sub_total += cart_item.subtotal
+      shipping_total += cart_item.shipping
+      fuelcharge_total += cart_item.fuelcharge
+      tax_total += cart_item.taxvalue
+      promotions_total += cart_item.promotions
       selected_items.append(cart_item)
       
-    
+    request.session['MyCartItems'] = selected_items
     content['MyCartItems'] = selected_items
+
+    #content['ItemCount'] = item_count
+    content['SubTotal'] = sub_total
+    content['ShippingTotal'] = shipping_total
+    content['FuelTotal'] = fuelcharge_total
+    content['TaxTotal'] = tax_total
+    content['PromotionsTotal'] = promotions_total
+    content['OrderTotal'] = float(sub_total) + float(shipping_total) + float(fuelcharge_total) + float(tax_total) + float(promotions_total)
+    
+    request.session['SubTotal'] = sub_total
+    request.session['ShippingTotal'] = shipping_total
+    request.session['FuelTotal'] = fuelcharge_total
+    request.session['TaxTotal'] = tax_total
+    request.session['PromotionsTotal'] = promotions_total
+    request.session['OrderTotal'] = float(sub_total) + float(shipping_total) + float(fuelcharge_total) + float(tax_total) + float(promotions_total)
+
+
+    content.update(csrf(request))
     return render_template(request,'ViewCart.html', content)
 
 
-class ForgetPasswordClass(LoginRequiredMixin,TemplateView):
+class ForgetPasswordClass(LoginRequiredMixin, TemplateView):
 
     @csrf_exempt
     def GetRecaptcha(self, request):
@@ -464,6 +537,93 @@ class ForgetPasswordClass(LoginRequiredMixin,TemplateView):
       c.update(csrf(request))
       return render_to_response('login.htm', c)
 
+class OrderConfirmationView(TemplateView):
 
+  def get(self, request, *args, **kwargs):
+    data = {}
+    content = {'page_title': "Order Confirmation"}
+    is_login = False;
+    is_guest = False;
+
+    if 'IsLogin' in request.session:
+      if request.session['IsLogin']:
+        is_login = True;
+
+    if 'IsGuest' in request.session:
+      if request.session['IsGuest']:
+        is_guest = True;
+        
+    # If there is no login and no guest, then redirect to checkoutlogin page.
+    if not is_login and not is_guest:
+      return HttpResponseRedirect('/checkoutlogin')
+
+    if 'gateway' in request.GET:
+        request.session['PaymentGateway'] = request.GET['gateway']
+
+    cart_items = request.session['MyCartItems']
+    is_login = False
+    if 'IsLogin' in request.session:
+        if request.session['IsLogin'] == True:
+            is_login = True
+        else:
+            is_login = False
+        
+    data = {}
+    # Populating Customer Information if user is logged in.
+    if is_login:
+      customer = request.session['Customer']
+      data = {'contact_id':customer.contactid,
+          'first_name':customer.billing_firstname,
+          'last_name':customer.billing_lastname,
+          'address1':customer.billing_address,
+          'address2':customer.billing_address2,
+          'city': customer.billing_city,
+          'state': customer.billing_state,
+          'zip': customer.billing_zip,
+          'country': customer.billing_country,
+          'company': customer.billing_company,
+          'phone': customer.billing_phone,
+          'address_type': 'shipping'}
+
+    subtotal = 0
+    estimated_shipping = 0
+    fuel_charge = 0
+    order_total = 0
+    promotions = 0
+
+    for item in cart_items:
+      subtotal += item.subtotal
+      estimated_shipping += item.shipping
+
+    order_total = float(subtotal) + float(estimated_shipping)
+
+    content['form'] = AddressForm(data)
+    content['SubTotal'] = subtotal
+    content['EstimatedShipping'] = estimated_shipping
+    content['FuelSurCharge'] = fuel_charge
+    content['OrderTotal'] = order_total
+
+    return render_template(request,'OrderConfirmation.html', content)
+
+#======================================================================
+
+class CheckOutLoginViewClass(TemplateView):
+
+  def GetRecaptcha(self, request):
+      value = random.randrange(10000, 99999, 1)
+      request.session['ReCaptcha'] = value
+      return value
+
+  def get(self, request, *args, **kwargs):
+    error_message = ""
+    if 'ErrorMessage' in request.session:
+      error_message = request.session['ErrorMessage']
+        
+    content = {'page_title': "Checkout Login",
+               'form':LoginForm,
+               'recaptcha':"https://chart.googleapis.com/chart?chst=d_text_outline&chld=FFCC33|16|h|FF0000|b|%s" %self.GetRecaptcha(request),
+               'error_message': error_message,
+              }
+    return render_template(request,'CheckOutLogin.html', content)
 
 

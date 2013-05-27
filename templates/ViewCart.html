@@ -26,7 +26,7 @@
 </div>
 </div>
 <div class="clr card2_100 padtop10">
-<div class="float_left card2_alignC wid105"><img src="{{item.thumbnail}}" width=60 height=60/></div>
+<div class="float_left card2_alignC wid105"><img src="{{item.thumbnail}}" width=60 height=60/>&nbsp;</div>
 <div class="float_left card2_alignL padleft5 wid150">{{item.name|floatformat:2}}<br>{{item.extra_field_3}}</div>
 <div class="float_left orange_text card2_alignC pwid4"><span class="card2_strike">${{item.price|floatformat:2}}<br></span>{% if item.saleprice > 0 %} ${{ item.saleprice }} {% endif %}</div>
 <div class="float_left card2_alignC wid70"><input type="text" name="quantity" value="{{ item.quantity }}" size="1" /><br><input type="submit" name="cmdUpdate" value="Update"><br /><input type="submit" name="cmdDelete" value="Delete" onclick="javascript:return confirm('Are you sure you want to delete this item from your cart ?')"></div>
