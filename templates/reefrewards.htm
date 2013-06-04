@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block content %}
+<link type="text/css" rel="stylesheet" href="/misc/category.css" />
+<style>
+body {
+    color: #434343;
+    font-family: 'Open Sans',sans-serif; 
+    font-size: 12px !important;
+    line-height: 20px;
+}
+.content-label {
+    color: #000000;
+    font-family: "PT Sans";
+    font-size: 12px;
+    font-weight: bold;
+    line-height: normal;
+    text-align: right;
+    text-decoration: none;
+    text-transform: capitalize;
+    width: 100px;
+}
+</style>
+{% load tagsfilter %}
+<div class="float-left width10">&nbsp;&nbsp;</div>
+<div class="float-left wid748 padtop5">
+<div class="clr my_account_link padbottom13">Home  <span> &gt; My Account </span><span> &gt; My Rewards - Details </span></div>
+ <div class="clr my_account_title padtop5 padbottom13">MY REWARDS - DETAIL </div>
+<div class="clr myaccount_bg1">
+ 
+{% include 'myaccount_links.htm' %}
+<div class="clr">&nbsp;&nbsp;</div>
+ <div class="clr padleft15" align=left>{{htmltext.header|safe}}</div> 
+ {% if product_list %}
+<table width="700" border="0" cellpadding="3" cellspacing="1" bgcolor="#EFEFEF">
+  <tr style='background-image: url("/misc/images/content_menu.jpg");height: 31px;'>
+    <td width="200"><b>Date</b></td>
+    <td width="100"><b>Points</b></td>
+    <td width="400"><b>Reference</b></td>
+     
+  </tr>
+{% for item in product_list %}
+	<tr bgcolor="#FFFFFF"><td align=left>{{item.datentime}}</td> 
+	<td>{{item.points}}</td>
+	<td>
+	{% if item.reference == "" %}
+		<a href="/vieworder?oid={{item.orderid}}"> {{item.orderid|rmaordervalues:"invoicenum_prefix"}}{{item.orderid|rmaordervalues:"invoicenum"}}
+		</a>
+	{%else%}
+		{{item.reference}}
+	{%endif%}
+	</td>
+	 
+	</tr>
+{% endfor %}
+<tr bgcolor="#ff9900;"><td align=left>Total Rewards</td><td colspan=2>{{totalrewards.points__sum}}</td></tr>
+</table>
+{% endif %}
+
+ 
+ </div>
+</div>
+
+
+
+
+
+
+<div class="float-left wid10"></div>
+
+</div>
+ 
+
+{% endblock content %}

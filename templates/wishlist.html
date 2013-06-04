@@ -21,7 +21,9 @@
   </tr>
   {% for item in wish_list %}
   <tr bgcolor="#FFFFFF"><td>{{item.wsh_name}}</td><td>{{item.wsh_created}}</td><td><a href='deletewishlist?wsh_id={{item.wsh_id }}' onclick="javascript: return confirm('Are you sure you want to delete this item ?');">Delete</a></td><td><a href="wishlistitems?wsh_id={{item.wsh_id }}">View</a></td></tr>
-  {% endfor %}
+ {% empty %}
+	<em class="formee-req">No Records</em>sd
+{% endfor %}asdasd
 </table>
 </div></div></div>
  <div class="clr"></div>

@@ -48,8 +48,71 @@ $(document).ready(function(){
 
 });
 </script>
+<div class="clr"><img src="/misc/images/account-line.jpg" width="414" height="1" border="0" class="padtop20 padbottom20" /></div>
+<div class="clr txt5" align="left">
+<div class="float-left guaran" >Provide Information </div>
 <form  id="AddressForm" name="AddressForm" method="post" action="#">
 {% csrf_token %}
+<div class="form_top">
+<div class="clr">
+<div class="form_left">
+<div class="clear">{{ form.contact_id }}{{ form.address_type }}
+<div class="left_label txt4">First:</div>
+<div >{{ form.first_name }}</div>
+</div>
+<div class="clear padtop10">
+<div class="left_label txt4">Company:</div>
+<div>{{ form.company }}</div>
+</div>
+ 
+<div class="clear padtop10">
+<div class="left_label txt4">Address1:</div>
+<div>{{ form.address1 }}</div>
+</div>
+<div class="clear padtop10">
+<div class="left_label txt4">City:</div>
+<div>{{ form.city }}</div>
+</div>
+<div class="clear padtop10">
+<div class="left_label txt4">State:</div>
+<div class="content_form">{{ form.state }}</div>
+</div>
+</div>
+
+
+<div class="form_left">
+<div class="clear">
+<div class="left_label txt4">Last:</div>
+<div>{{ form.last_name }}</div>
+</div>
+ 
+<div class="clear padtop10">
+<div class="left_label txt4">Phone:</div>
+<div>{{ form.phone }}</div>
+</div>
+<div class="clear padtop10">
+<div class="left_label txt4">Address2:</div>
+<div>{{ form.address2 }}</div>
+</div>
+<div class="clear padtop10">
+<div class="left_label txt4">Country:</div>
+<div class="content_form">{{ form.country }}</div>
+</div>
+<div class="clear padtop10">
+<div class="left_label txt4">Zip:</div>
+<div>{{ form.zip }}</div>
+</div>
+</div>
+</div>
+<div class="clr padtop10"><button id="cmdUpdateAddress">Update Address</button>&nbsp;<button id="cmdCancel">Cancel</button></div>
+</div>
+</div>
+</div>
+</form>
+{%comment%}
+<form  id="AddressForm" name="AddressForm" method="post" action="#">
+{% csrf_token %}
+
   <table width="498" border="0" cellpadding="3" cellspacing="1" bgcolor="#F0F0F0">
     <tr>
       <td colspan="3" bgcolor="#FFFFFF">&nbsp;</td>
@@ -102,4 +165,5 @@ $(document).ready(function(){
       <td bgcolor="#FFFFFF"><button id="cmdUpdateAddress">Update Address</button>&nbsp;<button id="cmdCancel">Cancel</button></td>
     </tr>
   </table>
+  {%endcomment%}
 </form>

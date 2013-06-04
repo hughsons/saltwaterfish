@@ -124,7 +124,7 @@ def shippingcountries(field):
 
 @register.filter("categoriesdisplay")
 def categoriesdisplay(parent):
-    logging.info('category name:: %s',parent)
+    #logging.info('category name:: %s',parent)
     try:
         if parent != '':
             result = Category.objects.all().filter(category_parent = parent).order_by('category_name')
@@ -188,6 +188,22 @@ def crmlastmessage(crmid,limits=""):
         logging.info('LoginfoMessage:: %s',e)
     return result
 
+@register.filter("crmstatus")
+def crmstatus(crmid,limits=""):
+    #logging.info('crmid name:: %s',limits)
+    try:
+        if crmid != '':
+            if limits != "all":
+                result = CrmStatus.objects.all().filter(id = crmid).order_by('-id')[0:1]
+            else:
+                result = CrmStatus.objects.all().filter(id = crmid).order_by('-id')
+        else:
+            result = CrmStatus.objects.all()
+    except Exception as e:
+        result = e
+        logging.info('LoginfoMessage:: %s',e)
+    return result
+
 @register.filter("fetchproduct")
 def fetchproduct(pid):
     logging.info('product name:: %s',id)
@@ -202,4 +218,13 @@ def fetchproduct(pid):
         result = e
         logging.info('LoginfoMessage:: %s',e)
     logging.info('filter tag result:: %s',result)
+    return result
+
+@register.filter("strreplace")
+def strreplace(strtag,replacetag="",replacewith=""):
+    try:
+        result = strtag.replace(replacetag, "")
+    except Exception as e:
+        result = e
+        logging.info('LoginfoMessage:: %s',e)
     return result

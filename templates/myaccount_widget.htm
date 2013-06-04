@@ -43,9 +43,12 @@ FORM_MESSAGES = {
  <div  class="gray-back-new">
 <div class="width8 float-left">&nbsp;</div>
 <div class="width226 float-left">
-<div class="grey-left-one clr">
-    <div class="padtop81">GREY AREA 
-CMS Admin Control</div>
+<div class="grey-left-one clr" style="min-height:250px !important;">
+     {% for banners in banner_main %}
+	{% if banners.banner_type == "Left" %}
+		{%comment%}<a href="{{banners.banner_link}}" target=blank><img src="http://commondatastorage.googleapis.com/{{banners.banner_image}}" style="max-width:221px !important;"></a>{%endcomment%}<table width="220px"><tr><td >{{banners.banner_content|safe}}</td></tr></table>
+	{%endif%}
+{%endfor%} 
 </div>
 <div class="height9 clr"></div>
 <div class="blue-border clr">
@@ -70,13 +73,13 @@ My Account
 <div class="my-account " style="height:100%;min-height:230px;">
 <div class="height23 clr">&nbsp;&nbsp;</div>
 <div class="redtext">{{ error_message }}</div>
-<div class=" " >{{ form.username }}</div>
+<div class=" " >{{ LoginForm.username }}</div>
 <div class="height12 clr">&nbsp;&nbsp;</div>
-<div class=" " >{{ form.password }}</div>
+<div class=" " >{{ LoginForm.password }}</div>
 <div class="height12 clr">&nbsp;&nbsp;</div>
 <div class=" " ><img src="{{ recaptcha }}" /></div>
 <div class="height12 clr">&nbsp;&nbsp;</div>
-<div class=" " >{{ form.recaptcha }}</div>
+<div class=" " >{{ LoginForm.recaptcha }}</div>
 <div class="height12 clr">&nbsp;&nbsp;</div>
 <div class="wid187 clr">
 <div class="float-left"><input type=image src="misc/images/sign-in.jpg" width="77" height="21" border="0" /></div>
@@ -96,7 +99,7 @@ My Account
 {% endif %}
 </div>
 
-{% if request.session.IsLogin %}
+ 
 	{% if request.session.MyCartItems %}
 		<div class="clr height9">&nbsp;&nbsp;</div>
 		<div class="blue-border" style="height:100% !important;">
@@ -125,7 +128,7 @@ My Account
 		</div>
 		</div>
 	{% endif %}
-{% endif %}
+ 
 <div class="height9 clr">&nbsp;&nbsp;</div>
 <div class="blue-border clr">
 <div class="blue-bg-header clr">

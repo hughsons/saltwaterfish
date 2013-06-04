@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block content %}
+<link type="text/css" rel="stylesheet" href="/misc/category.css" />
+<style>
+body {
+    color: #434343;
+    font-family: 'Open Sans',sans-serif; 
+    font-size: 12px !important;
+    line-height: 20px;
+}
+.content-label {
+    color: #000000;
+    font-family: "PT Sans";
+    font-size: 12px;
+    font-weight: bold;
+    line-height: normal;
+    text-align: right;
+    text-decoration: none;
+    text-transform: capitalize;
+    width: 100px;
+}
+</style>
+{% load tagsfilter %}
+<div class="float-left width10">&nbsp;&nbsp;</div>
+<div class="float-left wid748 padtop5">
+<div class="clr my_account_link padbottom13">Home  <span> &gt; My Account </span><span> &gt; Recent Orders </span></div>
+ <div class="clr my_account_title padtop5 padbottom13">RECENT ORDERS </div>
+<div class="clr myaccount_bg1">
+ 
+{% include 'myaccount_links.htm' %}
+<div class="clr">&nbsp;&nbsp;</div>
+  
+ {% if product_list %}
+<table width="700" border="0" cellpadding="3" cellspacing="1" bgcolor="#EFEFEF">
+  <tr style='background-image: url("/misc/images/content_menu.jpg");height: 31px;'>
+     <td width="150"><b>Date</b></td>
+    <td width="240"><b>Order # -- Full Name</b></td>
+    <td width="80"><b>Amount</b></td>
+    <td width="250"><b>Status</b></td>
+	<td width="150"><b>Details / RMA</b></td>
+  </tr>
+{% for item in product_list %}
+	<tr bgcolor="#FFFFFF"><td align=left>{{item.date_started|date:"F j, Y"}}</td> <td>{{item.invoicenum_prefix}}{{item.invoicenum}} -- {{item.ofirstname}}  {{item.olastname}}</td><td>${{item.orderamount|floatformat:"2"}}</td><td>
+	{% for linkitem in order_links %}
+		{% if item.order_status == linkitem.id %}
+			{{linkitem.statustext}}
+		{%endif%}
+	{% endfor %}
+	</td><td><a href="/vieworder?oid={{item.orderid}}">View order</a></td></tr>
+{% endfor %}
+</table>
+{% endif %}
+
+ 
+ </div>
+</div>
+
+<div class="float-left wid10"></div>
+
+</div>
+ 
+
+{% endblock content %}

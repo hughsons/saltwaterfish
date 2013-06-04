@@ -16,7 +16,9 @@ from forms import *
 from views import LoginRequiredMixin
 from models import *
 from google.appengine.api import mail
-import logging, random, hashlib, datetime
+import logging, random, hashlib, datetime, settings
+from quix.pay.transaction import CreditCard
+from quix.pay.gateway.authorizenet import AimGateway
 #from django.db import connection, transaction
 PERPAGE=50
 class CsrfExemptMixin(object):
@@ -369,9 +371,32 @@ class AddToWatchActionClass(TemplateView):
 
       return HttpResponseRedirect('/mywishlist')
 """
-class AddToWatchActionClass(LoginRequiredMixin,TemplateView):
+class AddToWatchActionClass(TemplateView):
 
     def get(self, request, *args, **kwargs):
+        try:
+            item_id = int(request.GET['itemid'])
+            if 'Customer' in request.session:
+                t = ProductWaitinglist.objects.filter(catalogid=item_id, userid=request.session['Customer'].contactid)
+                count = t.count()
+                if count <= 0:
+                    logging.info('count:: %s',count)
+                    s = ProductWaitinglist(userid=request.session['Customer'].contactid, catalogid=item_id ,
+                                    user_email = request.session['Customer'].email, record_date = datetime.datetime.now())
+                    s.save()
+                    return HttpResponse('<h2>Item is added to your wish list</h2><input name="cancel" type="button" value="Close Window" class=" b-close">')
+                else:
+                    logging.info('count:: %s',count)
+                    return HttpResponse('<h2>Item Already Exists</h2><input name="cancel" type="button" value="Close Window" class=" b-close">')
+            else:
+                s = ProductWaitinglist(userid=0, catalogid=item_id ,user_name = request.GET['name'],
+                                       user_email = request.GET['email'], record_date = datetime.datetime.now())
+                s.save()
+                return HttpResponse('<h2>Item is added to Wish list</h2><input name="cancel" type="button" value="Close Window" class=" b-close">')
+        except Exception, e:
+            logging.info('LoginfoMessage:: %s',e)
+            return HttpResponse('<h2>Item Already Exists</h2><input name="cancel" type="button" value="Close Window" class=" b-close">')
+    def post(self, request, *args, **kwargs):
         try:
             item_id = int(request.GET['itemid'])
             t = ProductWaitinglist.objects.filter(catalogid=item_id, userid=request.session['Customer'].contactid)
@@ -381,13 +406,13 @@ class AddToWatchActionClass(LoginRequiredMixin,TemplateView):
                 s = ProductWaitinglist(userid=request.session['Customer'].contactid, catalogid=item_id ,
                                 user_email = request.session['Customer'].email, record_date = datetime.datetime.now())
                 s.save()
-                return HttpResponseRedirect('/mywishlist?err=Item is added to your wish list')
+                return HttpResponse('/mywishlist?err=Item is added to your wish list')
             else:
                 logging.info('count:: %s',count)
-                return HttpResponseRedirect('/mywishlist?err=Item Already Exists')
+                return HttpResponse('/mywishlist?err=Item Already Exists')
         except Exception, e:
             logging.info('LoginfoMessage:: %s',e)
-            return HttpResponseRedirect('/mywishlist?err=Item Already Exists')
+            return HttpResponse('/mywishlist?err=Item Already Exists')
 
 
 class DeleteCartItemActionClass(TemplateView):
@@ -513,16 +538,23 @@ class AddToCartActionClass(TemplateView):
       return HttpResponseRedirect("cartconfirmation?itemid=%d" %item_id)
 
 class CartActionsClass(TemplateView):
+    '''Page Name: /cartaction '''
 
     def get(self, request, *args, **kwargs):
 
       if "cmdUpdate" in request.GET:
         item_id = int(request.GET['itemid'])
         quantity = int(request.GET['quantity'])
-        cart_items = request.session["CartItems"]
-        cart_items[item_id] = quantity
-        request.session["CartItems"] = cart_items
-        logging.info("\n\n\n\n\nUpdated. %s\n\n\n\n" %str(cart_items))
+        # Checking the stock availability
+        product_list = Products.objects.filter(catalogid = item_id, stock__gt = quantity)
+
+        if product_list:
+          cart_items = request.session["CartItems"]
+          cart_items[item_id] = quantity
+          request.session["CartItems"] = cart_items
+          logging.info("\n\n\n\n\nUpdated. %s\n\n\n\n" %str(cart_items))
+        else:
+          request.session['ErrorMessage'] = 'Requested quantity is not avaialable in the store.'
         
         #return HttpResponse(request.session["CartItems"][item_id])
 
@@ -533,4 +565,219 @@ class CartActionsClass(TemplateView):
         del cart_items[item_id]
         request.session["CartItems"] = cart_items
 
+      if "cmdApplyCoupon" in request.GET:
+        tm = time.localtime()
+        current_date = datetime.date(tm.tm_year, tm.tm_mon, tm.tm_mday)
+        
+        coupon_code = request.GET['txtCoupon'].strip()
+        promotion_list = Promotions.objects.filter(promotion_enabled = 1, coupon = coupon_code, promotion_start__lte = current_date, promotion_end__gte = current_date)
+                                                   
+        if promotion_list:
+          if 'PromotionalDiscount' in request.session:
+              discounts_hash = request.session['PromotionalDiscount']
+          else:
+              discounts_hash = {}
+
+          for promotion in promotion_list:
+            product_id = promotion.promotion_product
+            if product_id:
+              discounts_hash[product_id] = promotion.promotion_amount
+            else:
+              discounts_hash[-1] = promotion.promotion_amount
+
+          request.session['CouponCode'] = coupon_code
+          request.session['PromotionalDiscount'] = discounts_hash
+        else:
+          request.session['ErrorMessage'] = 'Coupon Not found'
+
+
       return HttpResponseRedirect('viewcart')
+      #return HttpResponse(request.GET)
+
+class PaypalStatusActionClass(TemplateView):
+
+   def get(self, request, *args, **kwargs):
+     post_str = ""
+     for key, value in request.POST.items():
+       post_str += "%s=%s<br>" %(key, value)
+
+     return HttpResponse(post_str)
+
+
+class UpdateAddressInSession(TemplateView):
+
+  def get(self, request, *args, **kwargs):
+    logging.info('\n\nEntered into Updating Address\n\n')
+    content = {}
+    form = AddressForm(request.GET)
+
+    if form.is_valid():
+      address_type = form.cleaned_data['address_type'].strip()
+    else:
+      logging.info(form.errors)
+      logging.info('\n\nForm is not valid\n\n')
+
+
+    if 'IsLogin' not in request.session or not request.session['IsLogin']:
+        logging.info('\n\nUser is Not logged in\n\n')
+        # This block will be executed when Gust user is submitted shipping address in
+        # order confirmation page.
+        customer = customers()
+        customer.contactid = -1    
+        if address_type == "billing":
+          logging.info('\n\n   Updating Billing Address in session\n\n')
+          customer.billing_firstname = form.cleaned_data['first_name'].strip()
+          customer.billing_lastname = form.cleaned_data['last_name'].strip()
+          customer.billing_address = form.cleaned_data['address1'].strip()
+          customer.billing_address2 = form.cleaned_data['address2'].strip()
+          customer.billing_city = form.cleaned_data['city'].strip()
+          customer.billing_state = form.cleaned_data['state'].strip()
+          customer.billing_country = form.cleaned_data['country'].strip()
+          customer.billing_zip = form.cleaned_data['zip'].strip()
+          customer.billing_company = form.cleaned_data['company'].strip()
+          customer.billing_phone = form.cleaned_data['phone'].strip()
+          request.session['Customer'] = customer
+          html = "<h4>Billing Address is updated in session</h4>"
+        elif address_type == "shipping":
+          logging.info('\n\n   Updating Shipping Address in session\n\n')
+          customer.shipping_firstname = form.cleaned_data['first_name'].strip()
+          customer.shipping_lastname = form.cleaned_data['last_name'].strip()
+          customer.shipping_address = form.cleaned_data['address1'].strip()
+          customer.shipping_address2 = form.cleaned_data['address2'].strip()
+          customer.shipping_city = form.cleaned_data['city'].strip()
+          customer.shipping_state = form.cleaned_data['state'].strip()
+          customer.shipping_country = form.cleaned_data['country'].strip()
+          customer.shipping_zip = form.cleaned_data['zip'].strip()
+          customer.shipping_company = form.cleaned_data['company'].strip()
+          customer.shipping_phone = form.cleaned_data['phone'].strip()
+          logging.info("\n\n\nFirst Name: %s" %customer.shipping_firstname)
+          request.session['Customer'] = customer
+         
+          html = "<h4>Shipping Address is updated in session</h4>"
+        
+    return HttpResponseRedirect("/orderconfirmation")
+        
+      
+class CommitOrderActionClass(TemplateView):
+
+  def post(self, request, *args, **kwargs):
+    logging.info('\n\nEntered into Commit Order Page\n\n')
+    content = {}
+
+    is_login = False;
+    is_guest = False;
+    is_save_card = False;
+    gateway = ''
+
+    if 'IsLogin' in request.session:
+      if request.session['IsLogin']:
+        is_login = True;
+        is_guest = False;
+
+    if 'IsGuest' in request.session:
+      if request.session['IsGuest'] and not is_login:
+        is_guest = True;
+        
+    # If there is no login and no guest, then redirect to checkoutlogin page.
+    if not is_login and not is_guest:
+      return HttpResponseRedirect('/checkoutlogin')
+        
+    if 'gateway' in request.GET:
+      request.session['PaymentGateway'] = request.GET['gateway']
+      gateway = request.GET['gateway']
+      
+    if 'PaymentGateway' in request.session:
+      gateway = request.session['PaymentGateway']
+
+    data = request.POST 
+
+    if is_login:
+      if gateway == 'paypal':
+        form = PaypalOrderFormLoggedIn(data)
+      elif gateway == 'AUTHORIZENET':
+        form = AuthorizeNetFormLoggedIn(data)
+    elif is_guest:
+      if gateway == 'paypal':
+        form = PaypalOrderFormNoLogin(data)
+      elif gateway == 'AUTHORIZENET':
+        form = AuthorizeNetFormNoLogin(data)
+      
+      customer = None   
+    logging.info("\n\n\n\nI am in user actions..\n\n")
+    logging.info(request.POST)
+    logging.info("I am in user actions..\n\n\n\n\n\n\n")
+    if form.is_valid():
+      # If gust, we should save the customer information with login credentials and then continue.
+      if is_login: 
+        customer = request.session['Customer']        
+      elif is_guest:
+        customer = customers()
+        customer.email = form.cleaned_data['username'].strip()
+        customer.pass_field = form.cleaned_data['password'].strip()
+
+      customer.shipping_firstname = form.cleaned_data['first_name'].strip()
+      customer.shipping_lastname = form.cleaned_data['last_name'].strip()
+      customer.shipping_address = form.cleaned_data['address1'].strip()
+      customer.shipping_address2 = form.cleaned_data['address2'].strip()
+      customer.shipping_city = form.cleaned_data['city'].strip()
+      customer.shipping_state = form.cleaned_data['state'].strip()
+      customer.shipping_country = form.cleaned_data['country'].strip()
+      customer.shipping_zip = form.cleaned_data['zip'].strip()
+      customer.shipping_company = form.cleaned_data['company'].strip()
+      customer.shipping_phone = form.cleaned_data['phone'].strip()
+      customer.save() 
+
+      request.session['OrderComment'] = form.cleaned_data['comment'].strip()
+     
+      if is_guest:
+        customer = customers.objects.all().latest('contactid')
+        request.session['Customer'] = customer
+        request.session['IsLogin'] = True
+        del request.session['GuestEMail']
+        is_login = True
+        is_guest = False
+
+      if is_login and gateway == 'AUTHORIZENET':      
+        card_holder_name = form.cleaned_data['card_holder_name'].strip()
+        card_number = form.cleaned_data['card_number'].strip()
+        card_type = form.cleaned_data['card_type'].strip()
+        card_expdate = form.cleaned_data['card_expdate'].strip()
+        card_cvn = form.cleaned_data['card_cvn'].strip()
+        is_save_card = form.cleaned_data['is_save_card']
+                
+        # Authenticating Card Number
+        card = CreditCard(
+            number = card_number,
+            month = card_expdate.split('/')[0],
+            year = '20%s' %card_expdate.split('/')[1],
+            first_name = card_holder_name.split(' ')[0],
+            last_name = card_holder_name.split(' ')[1],
+            code = '123'
+        )
+
+        
+        gateway = AimGateway(settings.AUTHORIZENET_API_LOGIN_ID, settings.AUTHORIZENET_API_PASSWORD)
+        gateway.use_test_mode = settings.TEST_MODE
+        gateway.use_test_url = settings.TEST_MODE_URL
+        response = gateway.authorize(1, card)
+        #return HttpResponse("<h1>Done</h1>")
+        
+        if response.status_strings[response.status] == "Approved":
+          response = gateway.sale("%8.2f" %request.session['OrderTotal'], card)
+          if response.status_strings[response.status] == "Approved":
+            if is_save_card:
+              # This will trigger the save credit card option in Call Back Code.
+              request.session['CreditCard'] = card.__dict__
+            return HttpResponseRedirect(settings.CALLBACK_URL + '?tx=%s&st=Approved&amt=%s&cc=USD&item_number=' %(response.trans_id,
+                                                                                                                  "%8.2f" %request.session['OrderTotal']))
+          else:
+            request.session['ErrorMessage'] =  "<h5>%s - %s: %s</h5>" %(response.trans_id, response.status_strings[response.status], response.message)
+        else:
+          request.session['ErrorMessage'] =  "%s - %s: %s" %(response.trans_id, response.status_strings[response.status], response.message)
+        return HttpResponseRedirect('/orderconfirmation')    
+
+      elif is_login and gateway == 'paypal':
+          return  HttpResponseRedirect('/paypalredirection')    
+    else:
+      request.session['ErrorMessage'] = 'Please fill mandatory fields.', form.errors
+    return HttpResponseRedirect('/orderconfirmation')

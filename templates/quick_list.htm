@@ -1,8 +1,95 @@
 {% extends 'base.html' %}
 {% block content %}
-<link type="text/css" rel="stylesheet" href="css3/style.css" />
-<link href="/misc/css4/style.css" rel="stylesheet" type="text/css" />
+ <script language="javascript" type="text/javascript" src="/misc/js/imagetooltip.js"></script>
+ <script language="javascript" type="text/javascript" src="/misc/js/jquery.bpopup.min.js"></script>
 <link type="text/css" rel="stylesheet" href="/misc/category.css" />
+<script type="text/javascript">
+	;(function($) {
+         $(function() {
+            $('.pop1').bind('click', function(e) {
+                e.preventDefault();
+				var a_href = $(this).attr('id');
+				$("#contentss").load(a_href);
+                $('#popup').bPopup({
+				});
+			});
+			 
+        });
+
+    })(jQuery);
+
+</script>
+
+<style>
+
+.buttons {
+    background-color: #2B91AF;
+    border-radius: 10px 10px 10px 10px;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    padding: 6px 11px;
+    text-align: left;
+    text-decoration: none;
+}
+
+#popup, #popup2, .bMulti {
+background-color: #fff;
+border-radius: 10px 10px 10px 10px;
+box-shadow: 0 0 25px 5px #999;
+color: #111;
+display: none;
+min-width: 450px;
+padding: 1px;
+}
+#element.style {
+left: 338px;
+position: absolute;
+top: 2163px;
+z-index: 9999;
+opacity: 0;
+display: none;
+height: auto;
+width: auto;
+}
+pre{
+	display:block;
+	font:100% "Courier New", Courier, monospace;
+	padding:10px;
+	border:1px solid #bae2f0;
+	background:#e3f4f9;	
+	margin:.5em 0;
+	overflow:auto;
+	width:800px;
+}
+
+img{border:none;}
+ 
+
+/*  */
+
+#preview{
+	position:absolute;
+	border:1px solid #ccc;
+	background:#333;
+	padding:5px;
+	display:none;
+	color:#fff;
+	margin-left:350px;
+	}
+#screenshot{
+	position:absolute;
+	border:1px solid #ccc;
+	background:#333;
+	padding:5px;
+	display:none;
+	color:#fff;
+	margin-left:320px;
+	}
+
+/*  */
+</style>
 {% load tagsfilter %}
 <div class="float-left wid20">&nbsp;&nbsp;</div>
 <div class="float-left wid748 padtop10">
@@ -24,7 +111,7 @@
 				{% if products.stock >= 1 %}
 					<div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
 				{% else %}
-					<div class="wish-button"><a href="/addtowatchlist?itemid={{ products.catalogid }}">WISH LIST</a></div>
+					<div class="wish-button "><a href="/waitpopup?itemid={{ products.catalogid }}" class="pop1">WISH LIST</a></div>
 				{% endif %}
 		<div class="hash-button"><a href="#">more details...</a></div>
 		</div>
@@ -48,7 +135,7 @@
 	<table width="100%" border="0" align="left" cellpadding="10" cellspacing="0" class="table-bg1" >
 		{% for products in cat|productsdisplay %}
 			  <tr>
-				<td width="55%" class="table-text1"><a href="/product?pid={{ products.catalogid }}">{{ products.name }}</a></td>
+				<td width="55%" class="table-text1"><a href="/product?pid={{ products.catalogid }}"  class="screenshot" rel='http://commondatastorage.googleapis.com/swf_product_images/{{ products.image1|strreplace:"assets/images/" }}'>{{ products.name }}</a></td>
 				<td width="22%" class="table-text1">
 				{% if products.onsale == 1 %}
 					<img src="/misc/images/quick-sale-img.png" width="33" height="21" border="0"  />
@@ -59,7 +146,7 @@
 					{% if products.stock >= 1 %}
 					<div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
 				{% else %}
-					<div class="wish-button"><a href="/addtowatchlist?itemid={{ products.catalogid }}">WISH LIST</a></div>
+					<div class="wish-button"><a href="/waitpopup?itemid={{ products.catalogid }}" class="pop1">WISH LIST</a></div>
 				{% endif %}
  					</td>
 				</tr>
@@ -87,10 +174,10 @@
 	<table width="100%" border="0" align="left" cellpadding="10" cellspacing="0" class="table-bg1" >
 	{% for products in cats.id|productsdisplay %}
 	  <tr>
-		<td width="52%" class="table-text1"><a href="/product?pid={{ products.catalogid }}">{{ products.name }}</a></td>
+		<td width="52%" class="table-text1"><a href="/product?pid={{ products.catalogid }}"  class="screenshot" rel='http://commondatastorage.googleapis.com/swf_product_images/{{ products.image1|strreplace:"assets/images/" }}'>{{ products.name }}</a></td>
 		<td width="20%">
 					{% if products.onsale == 1 %}
-						<img src="/misc/images/quick-sale-img.png" width="33" height="21" border="0"  />
+						${{products.saleprice|floatformat:2}} <img src="/misc/images/quick-sale-img.png" width="33" height="21" border="0"  />
 					{% else %}
 						${{products.price|floatformat:2}}
 					{% endif %}</td>
@@ -98,8 +185,11 @@
 					{% if products.stock > 0 %}
 						<div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
 					{% else %}
-						<div class="wish-button"><a href="/addtowatchlist?itemid={{ products.catalogid }}">WISH LIST</a></div>
-					{% endif %}
+						<div class="wish-button "><a href="##" id="/waitpopup?itemid={{ products.catalogid }}" class="pop1">WISH LIST</a>
+						
+						</div>
+					{% endif %}<br>
+					
 		</td>
 	  </tr>
 	   <tr><td colspan="4"><div class="bg7"> </div></td></tr>
@@ -108,7 +198,10 @@
 	</div>
 	<div class=" clr">&nbsp;</div>
 	{%endif%}
+	{%empty%}
+	No Products currently
 	{%endfor%}
+
 {% endif %}
 
 
@@ -124,24 +217,8 @@
 <div class="float-left wid10"></div>
 
 </div>
+<div id="popup" style="left: -700px; position: absolute; top: 1177px; z-index: 9999; opacity: 1; display: none;min-height:200px;">
+        
+        <div id="contentss" style="height: auto; width: auto;"></div>
+</div>
 {% endblock content %}
-<script type="text/javascript" src="/misc/js2/jquery-1.7.2.min.js"></script>
-<script type="text/javascript">
-/* Toggle Panel start */
-
-  $('.toggle_content1').hide();  //hides the toggled content
-
-	$('.toggle_link').click(function () {
-		if ($(this).is('.toggle_close')) {
-			$(this).removeClass('toggle_close').addClass('toggle_open').parent().next('.toggle_content1').slideToggle(300);
-			
-			return false;
-		} 
-		
-		else {
-			$(this).removeClass('toggle_open').addClass('toggle_close').parent().next('.toggle_content1').slideToggle(300);
-			return false;
-		}
-	});	
-/* Toggle Panel end */
-</script>

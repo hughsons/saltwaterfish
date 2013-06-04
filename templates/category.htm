@@ -27,7 +27,7 @@
 		<div class="float_left orange_boxs " align="center" style="width:26% !important;min-height:266px !important;">
 		<div class="clr product_heading product-align">{{ products.name }}</div>
 		<div class="clr product-align">{{ products.description }}</div>
-		<div class="clr pad-tb"><span class="clr pad-tb"><img src="{{ products.thumbnail }}" width="125" height="125" /></span></div>
+		<div class="clr pad-tb"><span class="clr "><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.thumbnail|strreplace:"assets/images/" }}' width="125" height="125" /></span></div>
 		
 				{% if products.onsale > 0 %}
 					<div class="clr "><strong>Sale:&nbsp;</strong><span class="line-through">${{products.price|floatformat:2}}&nbsp;</span><strong class="orange_text">&nbsp;${{products.saleprice|floatformat:2}}</strong></div>
@@ -43,7 +43,7 @@
 				{% else %}
 					<div class="wish-button"><a href="/addtowatchlist?itemid={{ products.catalogid }}">WISH LIST</a></div>
 				{% endif %}
-		<div class="hash-button"><a href="#">more details...</a></div>
+		<div class="hash-button"><a href="/product?pid={{ products.catalogid }}">more details...</a></div>
 		</div>
 		</div>
 	{% endif %}
@@ -66,8 +66,8 @@
 {% for products in cat.id|productsdisplay %}
 <div class="float_left blue_boxs" align="center"  style="width:26% !important;min-height:266px !important;">
 <div class="clr product_heading product-align">{{ products.name }}</div>
-<div class="clr pad-tb product-align">{{ products.description }}&nbsp;</div>
-<div class="clr pad-tb"><span class="clr pad-tb"><img src="{{ products.thumbnail }}" width="125" height="125" /></span></div>
+<div class="clr  product-align">{{ products.description }}&nbsp;</div>
+<div class="clr pad-tb"><span class="clr "><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.thumbnail|strreplace:"assets/images/" }}' width="125" height="125" /></span></div>
 				{% if products.onsale > 0 %}
 					<div class="clr "><strong>Sale:&nbsp;</strong><span class="line-through">${{products.price|floatformat:2}}&nbsp;</span><strong class="orange_text">&nbsp;${{products.saleprice|floatformat:2}}</strong></div>
 				{% else %}
@@ -80,7 +80,7 @@
 				{% else %}
 					<div class="wish-button"><a href="/addtowatchlist?itemid={{ products.catalogid }}">WISH LIST</a></div>
 				{% endif %}
- <div class="hash-button"><a href="#">more details...</a></div>
+ <div class="hash-button"><a href="/product?pid={{ products.catalogid }}">more details...</a></div>
 </div>
 </div>
 {% endfor %}

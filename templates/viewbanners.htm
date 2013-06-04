@@ -37,8 +37,9 @@
 		<input type="hidden" name="action" value="massdelete">
 <div class="head_bg clr padtop5">
 <div class="clr">
-<div  class="order-txt1 product_id" style="width:50px !important;">Type</div>
-<div  class="order-txt1 product_name">Title</div>
+<div  class="order-txt1 product_id" style="width:70px !important;">Type</div>
+<div  class="order-txt1 product_id" style="width:50px !important;">Status</div>
+<div  class="order-txt1 product_name" style="width:142px !important;">Title</div>
 <div  class="order-txt1 product_name" style="width:340px !important;">Link</div>
 
 <div  class="order-txt1 product_id"style="width:100px !important;">Actions</div>
@@ -47,10 +48,11 @@
 {% for item in allitems %}
 <div class="product_hor_line"></div>
 <div class="product_white_bg">
-<div class="order-txt3 product_id_txt" style="width:50px !important;">{{item.banner_type}}</div>
-<div class="order-txt2 product_name_txt">{{item.banner_name}}</div>
+<div class="order-txt3 product_id_txt" style="width:70px !important;">{{item.banner_type}}</div>
+<div class="order-txt3 product_id_txt" style="width:50px !important;">{% if item.banner_status > 0 %}Active{%else%}In-Active{%endif%}</div>
+<div class="order-txt2 product_name_txt" style="width:138px !important;">{{item.banner_name}}</div>
 <div class="order-txt2 product_name_txt" style="width:340px !important;">{{item.banner_link}} </div>
-<div class="order-txt3 product_id_txt"><a href="/editbanner?bid={{item.id}}"><img src="/misc/images/edit.jpg" width="55" height="24" border="0" /></a></div>
+<div class="order-txt3 product_id_txt"><a href="/editbanner?bid={{item.id}}"><img src="/misc/images/edit.jpg" width="45" height="24" border="0" /></a>&nbsp;<a onclick="return confirm('Are you sure you want to delete?')" href="/actioncmsmanager?action=delbanner&bid={{item.id}}"><img width="43" height="22" border="0" src="/misc/images/del.jpg"></a></div>
 </div>
  {% empty %}
 	<em class="formee-req">No Records</em>

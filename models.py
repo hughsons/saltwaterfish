@@ -422,6 +422,14 @@ class OrderStatus(models.Model):
         app_label = ''
         ordering = ["statusid"]
 
+class PaymentMethods(models.Model):
+    id = models.IntegerField()
+    gateway_id = models.IntegerField(null=True, db_column='gateway_ID', blank=True) # Field name made lowercase.
+    payment_gateway = models.CharField(max_length=150, blank=True)
+    ccgateway = models.IntegerField(null=True, db_column='CCGateway', blank=True) # Field name made lowercase.
+    class Meta:
+        db_table = u'payment_methods'
+
 class ProductAccessories(models.Model):
     id = models.IntegerField(primary_key=True)
     catalogid = models.IntegerField(null=True, blank=True)
@@ -674,6 +682,7 @@ class Promotions(models.Model):
     class Meta:
         db_table = u'promotions'
         app_label = ''
+        ordering = ["-id"]
 
 class Rma(models.Model):
     idrma = models.IntegerField(primary_key=True, db_column='idRma') # Field name made lowercase.
@@ -746,6 +755,7 @@ class SiteBanners(models.Model):
     banner_type = models.CharField(max_length=100, blank=True)
     banner_image = models.CharField(max_length=250, blank=True)
     banner_link = models.TextField(blank=True)
+    banner_content = models.TextField(blank=True)
     banner_target = models.CharField(max_length=33, blank=True)
     banner_status = models.IntegerField(null=True, blank=True)
     datentime = models.CharField(max_length=150, blank=True)

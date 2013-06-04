@@ -42,18 +42,16 @@
     <td width="75%" height="40"><input name="banner_link" type="text" text-box-cms2  class="text-box-cms2" value="{{allpages.banner_link}}"/></td>
   </tr>
   
-    <tr>
-    <td width="25%" height="40" align="right" valign="middle" class="order-txt-status" style="padding-right:10px;"><span class="required">*</span>Banner Image</td>
-    <td width="75%" height="40"><input name="banner_image" type="test" text-box-cms2  class="text-box-cms2" value="{{allpages.banner_image}}"/><br><small>cloud storage full path<font size="" color="#0099ff">ex: "swf_product_images/banner/10-percent-off-marine-fish.jpg"</font></small></td>
-  </tr>
+    
    <tr>
     <td width="25%" height="40" align="right" valign="middle" class="order-txt-status" style="padding-right:10px;"><span class="required">*</span>Banner Type</td>
     <td width="75%" height="40"><select name="banner_type">
 		<option value="Top" selected>Top
 		<option value="Left">Left Box
-		<option value="TopMain">Top Main
-		<option value="TopBottom1">Top Bottom 1
-		<option value="TopBottom2">Top Bottom 2
+		<option value="Main">Main Box
+		<option value="MainChild1">Main Child 1
+		<option value="MainChild2">Main Child 2
+		<option value="MainBottom">Main Bottom 
     </select></td>
   </tr>
  <tr>
@@ -63,7 +61,14 @@
 		<option value="0">In-Active
     </select></td>
   </tr>
-	  
+	  <tr>
+    <td  height="40" align="right"  valign="middle" class="order-txt-status" style="padding-right:10px;"><span class="required">*</span>Banner Content</td> <td width="75%" height="40"></td></tr><tr>
+    <td height="40" colspan=2><div id="myNicPanel" style="width: 650px;"></div><textarea name="banner_content" cols="79" rows="6" id="myInstance1" >{{allpages.banner_content}}</textarea>
+	{%comment%}
+	<input name="banner_image" type="test" text-box-cms2  class="text-box-cms2" value="{{allpages.banner_image}}"/><br><small>google cloud storage full path<font size="" color="#0099ff">ex: "swf_product_images/banner/10-percent-off-marine-fish.jpg"</font></small>
+	{%endcomment%}
+	</td>
+  </tr>
   <tr>
     <td align="left" valign="middle">&nbsp;</td>
 <td align="left" > <input type="submit" value="Submit Query"></td>

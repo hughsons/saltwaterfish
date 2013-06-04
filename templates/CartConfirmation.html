@@ -1,11 +1,9 @@
-{% include 'header.htm' %}
+{% extends 'base.html' %}
+{% block content %}
+{% load tagsfilter %}
 <link type="text/css" rel="stylesheet" href="/misc/css/style.css" />
-<link href="/misc/style.css" rel="stylesheet" type="text/css" />
- <link href="/misc/sty.css" rel="stylesheet" type="text/css" />
 
- 
-{% include 'myaccount_widget.htm' %}
-<div class="float-left width10">&nbsp;&nbsp;</div>
+<div class="float-left width4">&nbsp;&nbsp;</div>
 <div class="float-left wid748">
 <div class="clr">
 <div class="clr">&nbsp;</div>
@@ -15,10 +13,11 @@
 <div class="cart_left">
 <div class="cart_heading">1 Item has been added to your cart</div>
 <div class="clr">
-<div class="float_left"><img src="{{item.image1}}" width="194" height="160" /></div>
+<div class="float_left"><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ item.image1|strreplace:"assets/images/" }}' width="194" height="160" /></div>
 <div class="cart_img_right">
 {{ item.name }}
 <br>{{ item.extra_field_3 }}
+<br>{{ item.extra_field_2 }}
 </div>
 </div>
 </div>
@@ -31,7 +30,7 @@ Your Cart Contanins {{ItemCount}} items<br />
 <span class="price-final">Order Subtotal: ${{OrderSubTotal}}</span>
 </div>
 <div class="button_top float-right">
-<div class="button-latest float-right"><a href="/productlist">Continue Shopping</a></div>
+<div class="button-latest float-right"><a href="/productindex">Continue Shopping</a></div>
 <div class="height9 clr float-right">&nbsp;</div>
 <div class="button-latest"><a href="/viewcart">View Cart & checkout</a></div>
 </div>
@@ -48,7 +47,7 @@ Your Cart Contanins {{ItemCount}} items<br />
 <div class="clr"><span class="product_heading">Seachem Reef Carbonate</span><br />250ml</div>
 <div class="clr padtop10">
 <div class="float_left"><img src="misc/images/product_img1.jpg" /></div>
-<div class="float_left padleft10">
+<div class="float_left padleft5">
 <div class="price-final">$3.99</div>
 <div class="clr"><a href="#"><img src="misc/images/add_tant.png" border="0" /></a></div>
 </div>
@@ -61,7 +60,7 @@ Your Cart Contanins {{ItemCount}} items<br />
 <div class="clr"><span class="product_heading">Seachem Reef Carbonate</span><br />300 gram</div>
 <div class="clr padtop10">
 <div class="float_left"><img src="misc/images/product_img2.jpg" /></div>
-<div class="float_left padleft10">
+<div class="float_left padleft5">
 <div class="price-final">$5.99</div>
 <div class="clr"><a href="#"><img src="misc/images/add_tant.png" border="0" /></a></div>
 </div>
@@ -98,90 +97,4 @@ Your Cart Contanins {{ItemCount}} items<br />
 <div class="float-left wid10"></div>
 
 </div>
-<div class="footer clr">
-<div class="clr">
-<div class="float-left">
-
-<div class="float-left wid150 padleft20">
-<ul class="footerlist" >
-  <span class="footertitle">SHOP</span>
-<li class="padtop24"><a href="http://www.saltwaterfish.com/Fish_c_15.html" target="_blank">Saltwaterfish</a></li>
-<li><a href="http://www.saltwaterfish.com/Coral_c_16.html" target="_blank">Saltwater Corals</a></li>
-<li><a href="http://www.saltwaterfish.com/Invertebrates_c_17.html" target="_blank">Inverts</a></li>
-<li><a href="http://www.saltwaterfish.com/Reef-Packages_c_2.html" target="_blank">Reef Packages</a></li>
-<li><a href="http://www.saltwaterfish.com/Aquarium-Supplies_c_3.html" target="_blank">Aquarium Supplies</a></li>
-<li><a href="http://www.saltwaterfish.com/Gift-Certificate_p_11.html" target="_blank">Gidt Certificates</a></li>
-</ul>
-
-</div>
-<div class="float-left wid177"><div class="float-left wid150">
-<ul class="footerlist" >
-  <span class="footertitle">SAVE</span>
-<li class="padtop24"><a href="http://www.saltwaterfish.com/Fish_c_224.html" target="_blank">Saltwaterfish on Sale</a></li>
-<li><a href="http://www.saltwaterfish.com/Coral_c_222.html" target="_blank">Sale Corals</a></li>
-<li><a href="http://www.saltwaterfish.com/Invertebrates_c_203.html" target="_blank">Invert on Sales</a></li>
-<li><a href="http://www.saltwaterfish.com/Reef-Packages_c_223.html" target="_blank">Reef Packages on Sale</a></li>
-<li><a href="http://www.saltwaterfish.com/Aquarium-Supplies_c_197.html" target="_blank">Aquarium Supplies on Sale </a></li>
-<li><a href="specials.htm">Specials</a></li>
-</ul>
-
-</div></div>
-<div class="float-left wid122"><div class="float-left wid150">
-<ul class="footerlist">
-  <span class="footertitle">SERCIVE</span>
-<li class="padtop24"><a href="http://www.saltwaterfish.com/Free-FedEx-Shipping-Discount-Shipping-at-Saltwaterfishcom_ep_45-1.html" target="_blank">Shipping</a></li>
-<li><a href="http://www.saltwaterfish.com/Contact-Us_ep_40.html" target="_blank">Contact Us</a></li>
-<li><a href="http://www.saltwaterfish.com/Money-Back-Guarantee_ep_39-1.html" target="_blank">Returns</a></li>
-<li><a href="http://www.saltwaterfish.com/Reef-Rewards_ep_43-1.html" target="_blank">Reef Rewards</a></li>
-<li><a href="http://www.saltwaterfish.com/Terms-and-Conditions_ep_2-1.html" target="_blank">Terms and Condition</a></li>
-<li><a href="guaranteeinfo.htm">Guarantee Info</a></li>
-</ul>
-
-</div></div>
-<div class="float-left wid176"><ul class="footerlist" >
-  <span class="footertitle">RESOURCES</span>
-<li class="padtop24"><a href="http://www.saltwaterfish.com/product_index.asp" target="_blank">Product Index</a></li>
-<li><a href="http://www.saltwaterfish.com/category_index.asp" target="_blank">Cateogry Index</a></li>
-<li><a href="http://www.saltwaterfish.com/Acclimation_ep_48-1.html" target="_blank">Acclimation Video</a></li>
-<li><a href="http://forums.saltwaterfish.com/f/" target="_blank">Forum</a></li>
-
-</ul>
-</div>
-<div class="float-left wid66"></div>
-<div class="clr">&nbsp;</div>
-<div class="we_accept clr"><div class="float-left padleft40 padtop10 padright20">We Accept:</div><div class="float-left"><a href="#"><img src="misc/images/visa.jpg" width="77" height="32" border="0" /></a>&nbsp;&nbsp;<a href="#"><img src="misc/images/master.jpg" border="0" /></a>&nbsp;&nbsp;<a href="#"><img src="misc/images/amex.jpg" width="77" height="32" border="0" /></a>&nbsp;&nbsp;<a href="#"><img src="misc/images/discover.jpg" border="0" /></a>&nbsp;&nbsp;<a href="#"><img src="misc/images/paypal.jpg" border="0" /></a>&nbsp;&nbsp;<a href="#"><img src="misc/images/google.jpg" border="0" /></a></div>
-</div>
-</div>
-<div class="float-left wid257">
-<div align="left" class="txt1 clr padtop30 padbottom10">Friend and Follow us on:</div>
-<div align="left" class="txt1 clr padtop7">
-<img src="misc/images/face-icon.jpg" />&nbsp;<img src="misc/images/twitter.jpg" />&nbsp;<img src="misc/images/utube.jpg" />&nbsp;<img src="misc/images/g+.jpg" />
-</div>
-<div align="left" class="sign clr">Sign up for <span>Email</span></div>
-<div class="sign-box clr padtop5">
-<div class="float-left wid151 height30"><input name="" type="text" placeholder="Enter email address" /></div>
-<div class="float-left wid103 height30"><input name="" type="submit" value="Sign In" /></div>
-</div>
-<div align="left" class="get clr" >And Get 15% <span>OFF </span><br />
-Your First Purchase</div>
-<div class="clr">&nbsp;</div>
-<div align="left" class="order clr">Order by Phone<br />
-<span>772-462-0203</span> </div>
-<div class="clr">&nbsp;</div>
-</div>
-
-</div>
-<div class="copy_right clr">All images, picture and descriptions are generalizations and cannot be exact representations.<br />
-Copyright 2013 Saltwaterfish.com  All Rights Reserved</div>
-<div class="clr">&nbsp;</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-
-
-</body>
-</html>
+{% endblock content %}

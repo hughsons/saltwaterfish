@@ -1,4 +1,26 @@
-{% include 'header.htm' %}
+{% extends 'base.html' %}
+{% block content %}
+<link type="text/css" rel="stylesheet" href="/misc/category.css" />
+<style>
+body {
+    color: #434343;
+    font-family: 'Open Sans',sans-serif; 
+    font-size: 12px !important;
+    line-height: 20px;
+}
+.content-label {
+    color: #000000;
+    font-family: "PT Sans";
+    font-size: 12px;
+    font-weight: bold;
+    line-height: normal;
+    text-align: right;
+    text-decoration: none;
+    text-transform: capitalize;
+    width: 100px;
+}
+</style>
+{% load tagsfilter %}
 <style type="text/css">
 <!--
 .greentext {color: #00CC00; font-size: 12px;}
@@ -76,17 +98,13 @@ $(function() {
 
 });
 </script>
-{% include 'myaccount_widget.htm' %}
-<div class="wid748 float-left">
-<div class="height12 clr"></div>
-<div  class="  clr">
-<div class="height9 clr"></div>
-<div class="blue-border clr" style="width:90% !important;">
-<div class="blue-bg-header clr" >
-Password Change
-</div>
- <div class="my-account clr">
+<div class="float-left width10">&nbsp;&nbsp;</div>
+<div class="float-left wid748 padtop5">
+<div class="clr my_account_link padbottom13">Home  <span> &gt; My Account</span>  <span> &gt; Password Change </span></div>
+ <div class="clr my_account_title padtop10 padbottom13">Password Change </div>
+<div class="clr myaccount_bg1">
  
+  
     
        
       <form name="changepwdform" id="changepwdform" action="/setnewpassword" method="post">
@@ -96,21 +114,32 @@ Password Change
           <p class="greentext">{{ message }} <span class="redtext">{{ error_message }}</span></p>
           {% endif %}</div>
         <div class="height23 clr">&nbsp;&nbsp;</div>
-        <div style="font-size:15px" >Email: {{ form.username }}</div>
-        <div class="height12 clr">&nbsp;&nbsp;</div>
-        <div style="font-size:15px" >Old Password: {{ form.old_password }}</div>
-        <div class="height12 clr">&nbsp;&nbsp;</div>
-        <div style="font-size:15px" >New Password: {{ form.new_password }}</div>
-        <div class="height12 clr">&nbsp;&nbsp;</div>
-        <div class="float-center"><input type=submit value="Change My Password" width="77" height="21" border="0" /></div>
-        <div class="wid187 clr">
+		<table cellpadding=5>
+		<tr>
+			<td>Email:</td>
+			<td>{{ form.username }}</td>
+		</tr>
+		<tr>
+			<td>Old Password:</td>
+			<td>{{ form.old_password }}</td>
+		</tr>
+		<tr>
+			<td>New Password:</td>
+			<td>{{ form.new_password }}</td>
+		</tr>
+		<tr>
+			<td></td><td><input type=image src="misc/images/submit.jpg" width="76" height="25" border="0" /> </td>
+			 
+		</tr>
+		</table>
+        
+ 
       </form>
     </div>
   </div>
 </div>
- </div>
-</div>
+  
 <div class="float-left width10"></div>
 
 </div>
-{% include 'footer.htm' %} 
+{% endblock content %} 

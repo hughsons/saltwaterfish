@@ -54,11 +54,11 @@ class TaxManagerActionClass(LoginRequiredMixin,TemplateView):
                 t = Tax.objects.get(id=request.POST['id'])
                 t.tax_code = int(request.POST['tax_code'])
                 #t.tax_value1 = int(request.POST['tax_value1'])
-                if request.POST['taxshipping'] == "" or request.POST['taxshipping'] != "":
+                if "tax_shipping" in request.POST:
                     t.tax_shipping = 1
                 else:
                     t.tax_shipping = 0
-                if "taxdiscount" in request.POST and request.POST['taxdiscount'] != "" :
+                if "taxdiscount" in request.POST:
                     t.tax_discount = 1
                 else:
                     t.tax_discount = 0
@@ -82,6 +82,34 @@ class TaxManagerActionClass(LoginRequiredMixin,TemplateView):
             except Exception, e:
                 logging.info('LoginfoMessage:: %s',e)
                 return HttpResponseRedirect('/taxmanager?page=1&err=Form Field Errors')
+        elif "action" in request.POST and request.POST['action'] == "massedit" and request.POST['bacthaction'] != '':
+            try:
+                if request.POST['bacthaction'] == "delete":
+                    for a in request.POST.getlist('delid'):
+                        Promotions.objects.filter(id=a).delete()
+                        logging.info('Deleting this Record:: %s',a)
+                    return HttpResponseRedirect('/couponmanager?page=1&msg=Successfully Deleted the Record')
+                elif request.POST['bacthaction'] == "disable":
+                    for a in request.POST.getlist('delid'):
+                        t = Promotions.objects.get(id=a)
+                        t.promotion_enabled =0
+                        t.save()
+                        logging.info('Disabling this Record:: %s',a)
+                    return HttpResponseRedirect('/couponmanager?page=1&msg=Successfully Disabled the Record')
+                elif request.POST['bacthaction'] == "enable":
+                    for a in request.POST.getlist('delid'):
+                        t = Promotions.objects.get(id=a)
+                        t.promotion_enabled =1
+                        t.save()
+                        logging.info('Enabling this Record:: %s',a)
+                    return HttpResponseRedirect('/couponmanager?page=1&msg=Successfully Enabled the Record')
+                else:
+                    return HttpResponseRedirect('/couponmanager?page=1&err=Form Field Errors')
+                    
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+                return HttpResponse('/couponmanager?page=1&err=Form Field Errors')
+
         else:
             return HttpResponseRedirect('/taxmanager?page=1&err=Form Field Errors')
 
@@ -119,20 +147,20 @@ class CMSManagerActionClass(LoginRequiredMixin,TemplateView):
                 t = SiteBanners.objects.get(id=request.POST['id'])
                 t.banner_name = request.POST['banner_name']
                 t.banner_type = request.POST['banner_type']
-                t.banner_image = request.POST['banner_image']
+                t.banner_content = request.POST['banner_content']
                 t.banner_link = request.POST['banner_link']
                 t.banner_status = request.POST['banner_status']
                 t.datentime = datetime.datetime.now()
                 t.save()
-                return HttpResponse('/cmspages?page=1&err=Successfully Updated the Record')
+                return HttpResponseRedirect('/viewbanners?page=1&err=Successfully Updated the Record')
             except Exception, e:
                 logging.info('LoginfoMessage:: %s',e)
-                return HttpResponse('/cmspages?page=1&err=Form Field Errors')
+                return HttpResponseRedirect('/viewbanners?page=1&err=Form Field Errors')
         elif "action" in request.POST and request.POST['action'] == "addbanner":
             try:
                 t = SiteBanners(banner_name = request.POST['banner_name'],
                                banner_type = request.POST['banner_type'],
-                               banner_image = request.POST['banner_image'],
+                               banner_content = request.POST['banner_content'],
                                banner_link = request.POST['banner_link'],
                                banner_status = request.POST['banner_status'],
                                datentime = datetime.datetime.now())
@@ -145,13 +173,20 @@ class CMSManagerActionClass(LoginRequiredMixin,TemplateView):
             return HttpResponseRedirect('/cmspages?page=1&err=Form Field Errors')
 
     def get(self, request, *args, **kwargs):
-        if "action" in request.GET and request.GET['id'] != "":
+        if "action" in request.GET and request.GET['action'] != "delbanner" and request.GET['id'] != "" :
             try:
                 Extrapages.objects.filter(id=request.GET['id']).delete()
                 return HttpResponseRedirect('/cmspages?page=1&err=Successfully Deleted')
             except Exception, e:
                 logging.info('LoginfoMessage:: %s',e)
                 return HttpResponseRedirect('/cmspages?page=1&err=Form Field Errors')
+        elif "action" in request.GET and request.GET['action'] == "delbanner" and request.GET['bid'] != "":
+            try:
+                SiteBanners.objects.filter(id=request.GET['bid']).delete()
+                return HttpResponseRedirect('/viewbanners?page=1&err=Successfully Deleted')
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+                return HttpResponseRedirect('/viewbanners?page=1&err=Form Field Errors')
 
 
 class EmailManagerActionClass(LoginRequiredMixin,TemplateView):

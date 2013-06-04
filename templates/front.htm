@@ -1,16 +1,47 @@
-{% include 'header.htm' %}
-
-
-{% include 'myaccount_widget.htm' %}
+{% extends 'base.html' %}
+{% block content %}
 
 <div class="width10 float-left">&nbsp;&nbsp;</div>
 <div class="wid748 float-left">
 <div class="height12 clr"></div>
-<div  class="content-bg1 clr">
-  <div class=" "><a href="{{banner_main.banner_link}}" target=blank><img src="http://commondatastorage.googleapis.com/{{banner_main.banner_image}}"></a></div>
+<div  class="padtop20 clr">
+  <table><tr><td style="max-height:220px;">{% for banners in banner_main %}
+	{% if banners.banner_type == "TopMain" %}
+		{%comment%}<a href="{{banners.banner_link}}" target=blank><img src="http://commondatastorage.googleapis.com/{{banners.banner_image}}"></a>{%endcomment%}
+		{{banners.banner_content|safe}}
+	{%endif%}
+{%endfor%}</td></tr></table>
 </div>
-<div class="height12 clr"></div>
-<div class="content-bg2 clr"><div class=""><a href="{{banner_main.banner_link}}" target=blank><img src="http://commondatastorage.googleapis.com/{{banner_main.banner_image}}"> </a></div></div>
+<div class="height1 clr"></div>
+<div class=" clr"><div class="">
+<table border="0" cellpadding="0" cellspacing="0" width="700">
+      <tbody><tr>
+        <td>{% for banners in banner_main %}
+			{% if banners.banner_type == "MainChild1" %}
+				{{banners.banner_content|safe}}
+			{%endif%}
+		{%endfor%}</td>
+		<td width=1>&nbsp;</td>
+        <td>
+		{% for banners in banner_main %}
+			{% if banners.banner_type == "MainChild2" %}
+				{{banners.banner_content|safe}}
+			{%endif%}
+		{%endfor%}
+		</td>
+         
+      </tr>
+    </tbody></table>
+
+ </div>
+	 <div class="padtop20">
+	 {% for banners in banner_main %}
+		{% if banners.banner_type == "MainBottom" %}
+			{{banners.banner_content|safe}}
+		{%endif%}
+	{%endfor%}
+	</div>
+</div>
 
 
 
@@ -18,4 +49,4 @@
 <div class="float-left width10"></div>
 
 </div>
-{% include 'footer.htm' %}
+{% endblock content %}

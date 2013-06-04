@@ -2,8 +2,8 @@ body{
 	margin:0;
 	padding:0;
 	font-family: 'PT Sans', sans-serif;
-	font-size:13px;
-	line-height:20px;	
+	 
+ 	
 	color:#434343;
 	text-decoration:none;
 	background-color:#FFFFFF;
@@ -29,6 +29,7 @@ input[type="text"]{
  margin-bottom:8px;
 }
 label{ float:left; width:26%; text-align:right; padding-right:5px;}
+ 
 .float_left{ float:left;}
 .float_right{ float:right;}
 #wrapper{ width:100%; height:auto; margin:0 auto; }
@@ -209,12 +210,12 @@ height:auto;
 .button_top{ clear:both; padding-top:23px;}
 .button_top .button { clear:both; float:right; margin:2px 0px; text-transform:uppercase;}
 .slide_left{
-	background-image: url(images/new-price-left.jpg);
+	background-image: url(/misc/images/new-price-left.jpg);
 	background-repeat: no-repeat;
 	background-position: left center;
 }
 .slide_right{
-	background-image: url(images/new-price-right.jpg);
+	background-image: url(/misc/images/new-price-right.jpg);
 	background-repeat: no-repeat;
 	background-position: right center;
 }
@@ -223,7 +224,7 @@ height:auto;
 	width:100%;
 	padding-top:2px;
 	padding-bottom:1px;
-	background-image: url(images//cart-bg.jpg);
+	background-image: url(/misc/images/cart-bg.jpg);
 	background-repeat: no-repeat;
 	background-position: left top;
 }
@@ -238,7 +239,7 @@ height:auto;
 	background-repeat:repeat;
 }
 .slide_middle ul { list-style-type:none;}
-.slide_middle li{ float:left; width:31%; padding:5px; border-right:1px dotted #a5a5a5;}
+.slide_middle li{ float:left; width:32%; padding:1px; border-right:1px dotted #a5a5a5;}
 .product_heading{
 font-family: 'PT Sans', sans-serif;
 font-size:13px;

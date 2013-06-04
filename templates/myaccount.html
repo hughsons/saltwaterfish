@@ -17,14 +17,15 @@ $(document).ready(function(){
   $("button[id='cmdEditBillingAddress']").click(function(){
     address_type = 1;
 	$("#BillingAddressView").hide();
-	$("#ShippingAddressView").show();
+	$("#ShippingAddressView").hide();
     $("#BillingAddressForm").load("/getaddress?address_type=billing");	
   });
 
   $("button[id='cmdEditShippingAddress']").click(function(){
     address_type = 2;
 	$("#ShippingAddressView").hide();
-	$("#BillingAddressView").show();
+	$("#BillingAddressView").hide();
+	//$("#BillingAddressView").show();
     $("#ShippingAddressForm").load("/getaddress?address_type=shipping");
   });
 
@@ -32,7 +33,120 @@ $(document).ready(function(){
 
 </script>
  
+<div class="float-left width10">&nbsp;&nbsp;</div>
+<div class="float-left wid748 padtop15">
+<div class="clr my_account_link">Home &gt; <span>My Account</span></div>
+<div class="clr my_account_title padtop10 padbottom13">My Account</div>
+<div class="clr myaccount_bg" style="height:100% !important;">
+<div class="clr">
+<div class="float_left padtop18 padleft20 myaccount_txt1">Welcome Back, {{customer.billing_firstname}} {{customer.billing_lastname}}<br />
+<span class="myaccount_greytxt">If your&rsquo;e not {{customer.billing_firstname}} {{customer.billing_lastname}}, <a href="/logout">click here</a></div>
+<div class="float-right padright20 padtop20"><a href="#"><img src="misc/images/right_logout.jpg" width="75" height="25" border="0" /></a></div>
+<div>&nbsp;</div>
+</div>
+<div class="clr padtop30">
+<div class="float-left leftcontent_bg">
+<div class="vertical_tab">
+<ul>
+<li>
+<a href="/ordertracking">
+<div class="vertical_inner">
+<div class="float-left"><img src="misc/images/car_img.png" width="17" height="14" border="0" /></div>
+<div class="float-left padleft10">TRACK YOUR RECENT ORDERS<br />
+ 
+</div>
+</div>
+</a>
+</li>
+<li>
+<a href="/myreefs">
+<div class="vertical_inner">
+<div class="float-left"><img src="misc/images/book_img.png" width="17" height="13" border="0" /></div>
+<div class="float-left padleft10 ">REEF REWARDS</div>
+</div>
+</a>
+</li>
+<li>
+<a href="/mytickets">
+<div class="vertical_inner">
+<div class="float-left"><img src="misc/images/user_img.png" width="16" height="16" border="0" /></div>
+<div class="float-left padleft10">MY LAST SUPPORT REQUESTS</div>
+</div>
+</a>
+</li>
+<li>
+<a href="/mywishlist">
+<div class="vertical_inner">
+<div class="float-left"><img src="misc/images/reward_img.png" width="17" height="17" border="0" /></div>
+<div class="float-left padleft10">MY WISH LIST</div>
+</div>
+</a>
+</li>
+<li>
+<a href="my_account_wishlist.htm">
+<div class="vertical_inner">
+<div class="float-left"><img src="misc/images/list_img.png" width="18" height="25" border="0" /></div>
+<div class="float-left padleft10">MY ADDRESS BOOK</div>
+</div>
+</a>
+</li>
+</ul>
+</div>
+</div>
+<div class="float-left rightcontent">
 
+<div class="clr txt5" align="left">
+<div class="float-left guaran">{{customer.email}}<br />
+
+{{customer.billing_company}}</div>
+<div class="float-right vie-details"><!--<a href="http://www.saltwaterfish.com/customercredits.asp?email={{customer.email}}" target="_blank">View Details</a>--><a href="/changepwd">Change Password</a></div>
+
+</div>
+<div id="BillingAddressView">
+<div class="clr"><img src="/misc/images/account-line.jpg" width="414" height="1" border="0" class="padtop20 padbottom20" /></div>
+<div class="clr txt5" align="left">
+	<div class="float-left guaran" >Billing Information </div>
+	<div class="float-right vie-details" ><button id="cmdEditBillingAddress">Edit</button></div>
+</div>
+
+	<div class="clr content-account" >
+		{{customer.billing_firstname}} {{customer.billing_lastname}}<br />
+		{{customer.billing_address}} <br /> 
+		{{customer.billing_phone}}<br>
+		{{customer.billing_city}} {{customer.billing_state}} {{customer.billing_zip}} {{customer.billing_country}}
+	</div>
+</div>
+<div id="BillingAddressForm"></div>
+<div id="ShippingAddressView">
+<div class="clr"><img src="/misc/images/account-line.jpg" width="414" height="1" border="0" class="padtop20 padbottom20" /></div>
+<div class="clr txt5" align="left">
+<div class="float-left guaran">Shipping Information</div>
+<div class="float-right vie-details"><button id="cmdEditShippingAddress">Edit</button></div>
+</div>
+
+	<div class="clr content-account" >
+		{{customer.shipping_firstname}} {{customer.shipping_lastname}}<br />
+		{{customer.shipping_address}} <br /> 
+		{{customer.shipping_phone}}<br>
+		{{customer.shipping_city}} {{customer.shipping_state}} {{customer.shipping_zip}} {{customer.shipping_country}}</div>
+	</div>
+<div id="ShippingAddressForm"></div>
+</div>
+
+</div>
+
+<div class="clr">&nbsp;</div>
+</div>
+
+
+
+
+
+</div>
+<div class="float-left wid10"></div>
+
+</div>
+{% comment %}
  
 <div class="float-left width10">&nbsp;&nbsp;</div>
 <div class="float-left wid748 padtop1">
@@ -187,4 +301,5 @@ $(document).ready(function(){
 <div class="float-left width10"></div>
 
 </div></div></div>
+{%endcomment%}
 {% endblock content %}

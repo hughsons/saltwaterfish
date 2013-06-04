@@ -1,4 +1,5 @@
 {% include 'admin_header.htm' %}
+{% load tagsfilter %} 
 <div class="clr white-bg">
 <div class="clr content-bg padbottom10">  <table width="100%" border="0">
     <tr>
@@ -63,7 +64,7 @@ Records:<b>{{count}} </b>&nbsp;&nbsp;&nbsp; Page {{page_num}} of {% widthratio c
 <div class="product_hor_line"></div>
 <div class="product_white_bg">
 <div  class="order-txt1 product_checkbox padtop15"><input type="checkbox" name="delid" value="{{item.catalogid}}" /></div>
-<div class="order-txt3 product_thumb_img" ><img src="{{item.thumbnail}}" width="43" height="36" border="0" /></div>
+<div class="order-txt3 product_thumb_img" ><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ item.thumbnail|strreplace:"assets/images/" }}' width="43" height="36" border="0" /></div>
 <div class="order-txt2 product_id_txt">{{item.id}}</div>
 <div class="order-txt2 product_name_txt">{{item.name}}<br />
   {% if item.hide == 1 %}

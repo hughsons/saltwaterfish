@@ -1,10 +1,12 @@
  {% include 'admin_header.htm' %}
- <script type="text/javascript" src="/misc/js/nicEdit.js"></script>
+ <script type="text/javascript" src="http://js.nicedit.com/nicEdit-latest.js"></script>
 <script type="text/javascript">
      bkLib.onDomLoaded(function() {
           var myNicEditor = new nicEditor();
-          myNicEditor.setPanel('myNicPanel');
-          myNicEditor.addInstance('myInstance1');
+         //myNicEditor.setPanel('myNicPanel');
+        
+		  new nicEditor({fullPanel : true}).panelInstance('myInstance1');
+		    myNicEditor.addInstance('myInstance1');
      });
 </script>
 <div style="clear:both" class="white-bg"><div style="clear:both; padding-bottom:10px" class="content-bg"><table width="100%" border="0">

@@ -44,6 +44,12 @@ urlpatterns = patterns('',
 	url(r'^checkoutlogin', CheckOutLoginViewClass.as_view(), name = 'CheckoutLogin'),
 	url(r'^orderconfirmation', OrderConfirmationView.as_view(), name = 'OrderConfirmation'),
 
+	url(r'^updateguestaddress', UpdateAddressInSession.as_view(), name='UpdateAddressInSession'),
+	url(r'^commitorder', CommitOrderActionClass.as_view(), name = 'OommitOrder'),
+	url(r'^guestlogin', GuestLoginActionClass.as_view(), name = 'GuestLogin'),
+    url(r'^checkoutcallback', CheckOutCallBackViewClass.as_view(), name = 'PurchaseConfirmation'),
+    url(r'^paypalredirection', PaypalRedirectionViewClass.as_view(), name = 'PaypalRedirection'),
+
 # Murthy URLS ENDS HERE	
 
 # Simon URLS FRONT END HERE
@@ -55,6 +61,16 @@ urlpatterns = patterns('',
 	url(r'^addrequest', AddRequestFormClass.as_view(), name='AddRequestFormClass'),
 	url(r'^editrequestform', EditRequestFormClass.as_view(), name='EditRequestFormClass'),
 	url(r'^generalactions', GeneralActionClass.as_view(), name='GeneralActionClass'),
+	url(r'^ordertracking', MyOrdersViewClass.as_view(), name='MyOrdersViewClass'),
+	url(r'^orderstatus', MyOrdersViewClass.as_view(), name='MyOrdersViewClass'),
+	url(r'^mytickets', MyTicketsViewClass.as_view(), name='MyTicketsViewClass'),
+	url(r'^myreefs', MyRewardsViewClass.as_view(), name='MyRewardsViewClass'),
+	url(r'^rmaservice', MyGuaranteedRequestsViewClass.as_view(), name='MyGuaranteedRequestsViewClass'),
+	url(r'^contactus', ContactUsViewClass.as_view(), name='ContactUsViewClass'),
+	url(r'^termsconditions', TermsConViewClass.as_view(), name='TermsConViewClass'),
+	url(r'^reefpackages', ReefPackageViewClass.as_view(), name='ReefPackageViewClass'),
+	url(r'^waitpopup', WaitingPopupViewClass.as_view(), name='WaitingPopupViewClass'),
+	url(r'^product', ProductInfoViewClass.as_view(), name='ProductInfoViewClass'),
 # Simon URLS HERE
 
     url(r'^apanel', ApanelViewClass.as_view(), name='apanel'),
@@ -116,6 +132,7 @@ urlpatterns = patterns('',
 	url(r'^editbanner', BannerEditViewClass.as_view(), name='BannerEditViewClass'),
 	url(r'^addbannerform', BannersAddFormClass.as_view(), name='BannersAddFormClass'),
 	url(r'^gcsfiles', GCSfilesClass.as_view(), name='BannersAddFormClass'),
+	url(r'^couponmanager', CouponsViewClass.as_view(), name='CouponsViewClass'),
 
     
 )+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

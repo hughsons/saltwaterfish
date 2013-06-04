@@ -2,8 +2,8 @@ body{
 	margin:0;
 	padding:0;
 	font-family: 'PT Sans', sans-serif;
-	font-size:13px;
-	line-height:20px;	
+	 
+	 	
 	color:#434343;
 	text-decoration:none;
 	background-color:#FFFFFF;
@@ -25,8 +25,8 @@ body a:active{ color:#434343; text-decoration:none;}
 input[type="text"], input[type="password"]{
  border:1px solid #c9c9c9;
  background-color:#FFFFFF;
- height:22px;
- margin-bottom:8px;
+ 
+ 
 }
 label{ float:left; width:26%; text-align:right; padding-right:5px;}
 .float_left{ float:left;}

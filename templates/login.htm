@@ -54,6 +54,7 @@ $(function() {
       else
 	  {
          alert("Please fill the mandatory fields in the required format");
+		 return true;
 	  }
       return false;
      });
@@ -127,7 +128,7 @@ Forgot Password
 <form action="sendpassword" method="post" id="forgetpwdform" name="forgetpwdform">
 {% csrf_token %}
 <div class="my-account clr">
-<div class="height23 clr">&nbsp;&nbsp;</div>
+<div class="height1 clr">&nbsp;&nbsp;</div>
 <div class=" " >{% if message2 or error_message2 %}
       <p class="greentext">{{ message2 }} <span class="redtext">{{ error_message2 }}</span></p>{% endif %}</div>
 <div style="font-size:15px" >Email: {{ forgotform.email }}</div>

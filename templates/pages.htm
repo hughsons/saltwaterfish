@@ -1,7 +1,25 @@
 {% extends 'base.html' %}
 {% block content %}
  
-
+<style>
+.pages {
+    color: #434343;
+    font-family: 'Open Sans',sans-serif; 
+    font-size: 12px !important;
+    line-height: 20px;
+}
+.content-label {
+    color: #000000;
+    font-family: "PT Sans";
+    font-size: 12px;
+    font-weight: bold;
+    line-height: normal;
+    text-align: right;
+    text-decoration: none;
+    text-transform: capitalize;
+    width: 100px;
+}
+</style>
 {% load tagsfilter %}
  
 <div class="wid748 float-left">
@@ -17,7 +35,7 @@ Home <span class="home-txt-arrow">&gt; </span> {{allpages.htmlpage}} </div>
 <div class="clr myaccount_bg " style="height:100% !important;">
 <div style="clear:both; width:700px; height:1px; line-height:1px; " >
  </div>
-  <div class="clr padtop5 padleft10 padbottom20 padright5" align="justify"  >
+  <div class="clr padtop5 padleft10 padbottom20 padright5 pages" align="justify"  >
  {{allpages.content|safe}} 
 </div>
  </div>

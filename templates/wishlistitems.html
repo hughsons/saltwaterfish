@@ -1,16 +1,70 @@
-{% include 'header.htm' %}
-{% include 'myaccount_widget.htm' %}
+{% extends 'base.html' %}
+{% block content %}
+<link type="text/css" rel="stylesheet" href="/misc/category.css" />
+<style>
+.content-label {
+    color: #000000;
+    font-family: "PT Sans";
+    font-size: 12px;
+    font-weight: bold;
+    line-height: normal;
+    text-align: right;
+    text-decoration: none;
+    text-transform: capitalize;
+    width: 100px;
+}
+</style>
 {% load tagsfilter %}
- <link type="text/css" rel="stylesheet" href="/misc/sty.css" />
- <link type="text/css" rel="stylesheet" href="/misc/category.css" />
+<div class="float-left width10">&nbsp;&nbsp;</div>
+<div class="float-left wid748 padtop5">
+<div class="clr my_account_link padbottom13">Home  <span> &gt; My Account </span><span> &gt; My Wish List </span></div>
+ <div class="clr my_account_title padtop5 padbottom13">MY WISH LIST </div>
+<div class="clr myaccount_bg1">
  
+{% include 'myaccount_links.htm' %}
+<div class="clr">&nbsp;&nbsp;</div>
+<div class="clr"> 
  
+ {% if product_list %}
+<table width="700" border="0" cellpadding="3" cellspacing="1" bgcolor="#EFEFEF">
+  <tr style='background-image: url("/misc/images/content_menu.jpg");height: 31px;'>
+    <td width="73">&nbsp;</td>
+    <td width="300">Item Name</td>
+    <td width="100">Price</td>
+    <td width="90">Action</td>
+	<td width="100">Add to Cart </td>
+  </tr>
+{% for item in product_list %}
+	<tr bgcolor="#FFFFFF"><td align=center><a href="/product?pid={{ item.catalogid }}"><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ item.thumbnail|strreplace:"assets/images/" }}' width="55" height="55" /></td><td><a href="/product?pid={{ item.catalogid }}">{{item.name}}</a></td><td>${{item.price|floatformat:"2"}}</td><td><a href='/deletewishlist?wsh_id={{item.id}}&catalogid={{item.catalogid}}' onclick="javascript: return confirm('Are you sure you want to delete this item ?');">Delete</a></td><td><div class="blue-button"><a href="/addtocart?item_id={{ item.catalogid }}">Add to Tank</a></div></td></tr>
+
+{% empty %}
+	<em class="formee-req">No Records</em>
+{% endfor %}
+</table>
+{%else%}
+<em class="formee-req">No Records</em>
+{% endif %}
+
+ 
+</div> 
+</div>
+
+
+
+
+
+</div>
+<div class="float-left wid10"></div>
+
+</div>
+ 
+{%comment%} 
 <div class="width10 float-left">&nbsp;&nbsp;</div>
 <div class="wid748 float-left">
 <div class="height12 clr"></div>
 <div  class=" clr">
 <div>
-<div class="clr pad-tb product-align1 marleft10 master-link">My Wish List Items</div>
+<div class="clr pad-tb product-align1 marleft10 master-link">My Wish List Itemsssss</div>
 {% if error_message %}
   <b>{{ error_message }} </b>
 {% endif %}
@@ -41,4 +95,5 @@
 </div>
 
 <div class="float-left"></div></div>
-{% include 'footer.htm' %}
+{%endcomment%}
+{% endblock content %}

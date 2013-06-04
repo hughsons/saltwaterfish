@@ -13,6 +13,58 @@
 .redtext {color: #FF0000; font-size: 12px;}
 label.error { float: none; color: red; padding-left: .5em; vertical-align: top; }
 .style1 {color: #FF0000}
+.promoMsg {
+    background: url("/misc/images/specialBG.png") repeat-x  scroll 0 0 transparent;
+    color: #FFFFFF !important;
+    font-size: 17px;
+    font-weight: bold;
+    text-decoration: none;
+	min-height: 40px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	border-right-color: #d2d2d2;
+	border-bottom-color: #d2d2d2;
+	border-left-color: #d2d2d2;
+}
+.promoMsg A, .promoMsg A:visited {
+font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+font-size: 25px;
+color: #FFF !important;
+font-weight: bold;
+text-decoration: underline;
+}
+.superSpecialBG {
+    background: url("/misc/images/super-specialBG.png") no-repeat scroll left top transparent;
+    padding: 57px 0 23px 25px;
+}
+.price2 {
+font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+font-size: 20px;
+color: #ff5200;
+font-weight: bold;
+}
+A.homeSpecials:visited:hover {
+color: #ff6100;
+text-decoration: none;
+}
+.allSpecials {
+padding: 10px 0px 0px 330px;
+}
+
+.signupBG {
+    background: url("/misc/images/signupBG.png") no-repeat scroll left top transparent;
+    height: 170px;
+    padding: 0;
+}
+.free-ship {
+    background: url("/misc/images/shippingBG.png") no-repeat scroll left center transparent;
+    height: 173px;
+    padding: 26px 30px 0 29px;
+}
 </style>
 
 
@@ -64,15 +116,15 @@ Shipping Rates</div>
 <li><a href="/myaccount" class="style1">My Account</a>
 <ul>
 <li><a href="/myaccount">My Account</a></li>
-<li><a href="/orderstatus">Order Status</a></li>
-<li><a href="shippingstatus.htm">Shipping Status</a></li>
-<li><a href="returnclaims.htm">Return Claims</a></li>
+<li><a href="/ordertracking">Order Status</a></li>
+<li><a href="/shipstatus">Shipping Status</a></li>
+<li><a href="/rmaservice">Return Claims</a></li>
 <li><a href="/mywishlist">Wish List</a></li>
 <li><a href="/logout">Logout</a></li>
 </ul>
 </li>
 <li><div class="topmenu_divider"><img src="misc/images/divider.jpg" width="3" height="12" border="0" /></div></li>
-<li><a href="/pages?pageid=40">Contact us</a></li>
+<li><a href="/contactus">Contact us</a></li>
 <li><div class="topmenu_divider"><img src="misc/images/divider.jpg" width="3" height="12" border="0" /></div></li>
 <li><a href="/viewcart">My Cart</a></li>
 </ul>
@@ -172,7 +224,7 @@ Shipping Rates</div>
 </li>
 </ul>
 </li>
-<li><a href="/quicklist?cat=2" >Reef Packages</a></li>
+<li><a href="/reefpackages" >Reef Packages</a></li>
 <li><a href="/quicklist?cat=4" >Live Rock/Sand</a></li>
 <li><a href="/quicklist?cat=3">Supplies</a>
 <ul>
@@ -207,4 +259,11 @@ Shipping Rates</div>
 
 
 </div>
-<div class="clr grey-area"><a href="{{banner_top.banner_link}}" target=blank><img src="{{banner_top.banner_image}}"></a></div>
+
+<div class="clr promoMsg" style="">
+{% for banners in banner_main %}
+	{% if banners.banner_type == "Top" %}
+		{%comment%}<a href="{{banners.banner_link}}" target=blank><img src="http://commondatastorage.googleapis.com/{{banners.banner_image}}"></a>{%endcomment%}{{banners.banner_content|safe}}
+	{%endif%}
+{%endfor%}
+</div>

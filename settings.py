@@ -19,8 +19,8 @@ if (os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine') or
     DATABASES = {
         'default': {
             'ENGINE': 'google.appengine.ext.django.backends.rdbms',
-            'INSTANCE': 'saltwaterfishdb:saltwaterfish',
-            'NAME': 'salwaterfish_db',
+            'INSTANCE': 'saltwaterfishdb:saltwaterfish2',
+            'NAME': 'saltwaterfishnew_db',
         }
     }
 else:
@@ -31,7 +31,8 @@ else:
             'USER': 'root',
             'PASSWORD': 'root',
             'HOST': 'localhost',
-            'NAME': 'saltwaterfish',
+			'NAME': 'newdatabase',
+            #'NAME': 'saltwaterfish',
         }
     }
 SETTINGS_MODE='prod' 
@@ -119,3 +120,20 @@ LOGGING = {
         },
     }
 }
+
+PAYPAL_URL  = 'https://www.sandbox.paypal.com/us/cgi-bin/webscr'
+PAYPAL_MERCHANT_EMAIL = 'swfmerchant@expertsden.com'
+if(os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine')):
+    
+    CALLBACK_URL = 'http://saltwaterfish-com.appspot.com/checkoutcallback'
+    PAYPAL_CANCEL_URL = 'http://saltwaterfish-com.appspot.com/viewcart'
+else:
+    CALLBACK_URL = 'http://localhost:8000/checkoutcallback'
+    PAYPAL_CANCEL_URL = 'http://localhost:8000/viewcart'
+ 
+
+AUTHORIZENET_API_LOGIN_ID = "2SzzM45p"
+AUTHORIZENET_API_PASSWORD = "425hScrL9qHX37g3"
+TEST_MODE = False  # Change it to False when transaction has to record in Sandbox Instance. You will get Transaction ID.
+TEST_MODE_URL = True # Boolean Value for Authorize.net to call Production URL or Sandbox URL.
+

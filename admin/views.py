@@ -649,3 +649,20 @@ class GCSfilesClass(LoginRequiredMixin, TemplateView):
           if not file_name.__contains__('$folder$'):
             self.response.write('<a href="https://storage.cloud.google.com/%s">%s<a><br>' %(file_name[4:], file_name[4:]))
         #return render_template(request, "gcsfiles.htm", content)
+
+class CouponsViewClass(LoginRequiredMixin,TemplateView):
+    def get(self, request, *args, **kwargs):
+        count = Promotions.objects.count()
+        if "page" in request.GET and request.GET['page'] != "":
+            page_num = request.GET['page']
+        else:
+            page_num = 1
+            #pages = count/100
+            
+        page_num = int(page_num)
+        offset = page_num * 100
+        allitems = Promotions.objects.all()[offset-100:offset]
+        content = {'page_title': "Orders Status",
+                   'allitems':allitems,
+                   'count':count,}
+        return render_template(request, "viewcoupons.htm", content)
