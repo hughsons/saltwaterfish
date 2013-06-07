@@ -71,6 +71,7 @@ urlpatterns = patterns('',
 	url(r'^reefpackages', ReefPackageViewClass.as_view(), name='ReefPackageViewClass'),
 	url(r'^waitpopup', WaitingPopupViewClass.as_view(), name='WaitingPopupViewClass'),
 	url(r'^product', ProductInfoViewClass.as_view(), name='ProductInfoViewClass'),
+	url(r'^orderinfo', OrderInfoViewClass.as_view(), name='OrderInfoViewClass'),
 # Simon URLS HERE
 
     url(r'^apanel', ApanelViewClass.as_view(), name='apanel'),

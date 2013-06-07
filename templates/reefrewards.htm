@@ -1,25 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
-<link type="text/css" rel="stylesheet" href="/misc/category.css" />
-<style>
-body {
-    color: #434343;
-    font-family: 'Open Sans',sans-serif; 
-    font-size: 12px !important;
-    line-height: 20px;
-}
-.content-label {
-    color: #000000;
-    font-family: "PT Sans";
-    font-size: 12px;
-    font-weight: bold;
-    line-height: normal;
-    text-align: right;
-    text-decoration: none;
-    text-transform: capitalize;
-    width: 100px;
-}
-</style>
+<link type="text/css" rel="stylesheet" href="/misc/myaccount.css" />
+
 {% load tagsfilter %}
 <div class="float-left width10">&nbsp;&nbsp;</div>
 <div class="float-left wid748 padtop5">
@@ -43,7 +25,7 @@ body {
 	<td>{{item.points}}</td>
 	<td>
 	{% if item.reference == "" %}
-		<a href="/vieworder?oid={{item.orderid}}"> {{item.orderid|rmaordervalues:"invoicenum_prefix"}}{{item.orderid|rmaordervalues:"invoicenum"}}
+		<a href="/orderinfo?oid={{item.orderid}}"> {{item.orderid|rmaordervalues:"invoicenum_prefix"}}{{item.orderid|rmaordervalues:"invoicenum"}}
 		</a>
 	{%else%}
 		{{item.reference}}

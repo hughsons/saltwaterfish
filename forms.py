@@ -93,5 +93,7 @@ class AuthorizeNetFormNoLogin(AddressForm, CreditCardForm, NewAccountForm):
   comment = forms.CharField(widget=forms.Textarea, max_length = 255L, required=False)
 
 class AuthorizeNetFormLoggedIn(AddressForm, CreditCardForm):
-
   comment = forms.CharField(widget=forms.Textarea, max_length = 255L, required=False)
+
+class NoGateWay(AddressForm):
+    comment = forms.CharField(widget=forms.Textarea, max_length = 255L, required=False)

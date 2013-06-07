@@ -208,15 +208,12 @@ class ChangePwdViewClass(LoginRequiredMixin, TemplateView):
           error_message = request.session["ErrorMessage"]
           del request.session["ErrorMessage"]
 
-        if request.session["IsLogin"] == False: return HttpResponseRedirect('/')
+        
         customer = request.session['Customer']
         prefill_data = {'username':customer.email}
         form = ChangePwdForm(prefill_data)
-        content = {'page_title': "Summary",
-                   'customer':request.session['Customer'],
-                   'form':form,
-                   'error_message':error_message,
-                   }
+        content = {'page_title': "Summary",'customer':request.session['Customer'],'form':form}
+        content.update(leftwidget(request))
         return render_template(request, "ChangePwd.html", content)
         #content['form'] = form
         #content['error_message'] = error_message     
@@ -425,10 +422,14 @@ class MyRewardsViewClass(LoginRequiredMixin,TemplateView):
 
 class MyGuaranteedRequestsViewClass(LoginRequiredMixin,TemplateView):
     def get(self, request, *args, **kwargs):
-        product_list = Rma.objects.all().filter(custid=request.session['Customer'].contactid)
+        orderitems = Orders.objects.filter(ocustomerid = request.session['Customer'].contactid)
+        catalog_list = []
+        for item in orderitems:
+            catalog_list.append(item.orderid)
+        product_list = Rma.objects.filter(orderid__in=catalog_list)
         content = {'page_title': "My Support Requests",'product_list':product_list,}
         content.update(leftwidget(request))
-        return render_template(request, 'tickets.htm', content)
+        return render_template(request, 'rma.htm', content)
 
 class ContactUsViewClass(TemplateView):
     def get(self, request, *args, **kwargs):
@@ -461,6 +462,16 @@ class ProductInfoViewClass(TemplateView):
         content = {'page_title': product_list.name,"products":product_list}
         content.update(leftwidget(request))
         return render_template(request, 'product.htm', content)
+
+class OrderInfoViewClass(LoginRequiredMixin,TemplateView):
+    def get(self, request, *args, **kwargs):
+        oid = request.GET['oid']
+        product_list = Orders.objects.get(orderid=oid,
+                                          ocustomerid = request.session['Customer'].contactid)
+        alloiitems = Oitems.objects.all().filter(orderid=oid)
+        content = {'page_title': 'Orders Page',"item":product_list,'alloiitems':alloiitems,}
+        content.update(leftwidget(request))
+        return render_template(request, 'orderinfo.htm', content)
 
 #======================================================================
 class CartItems(object):

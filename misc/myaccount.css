@@ -1,0 +1,8 @@
+body {color: #434343;font-family: 'PT Sans',sans-serif; font-size: 12px; }
+.table-bg {font-size: 12px !important;}
+body  a { color:#0179B0; text-decoration:none; }
+body a:link{ color:#0179B0; text-decoration:none;}
+body a:visited{ color:#0179B0; text-decoration:none;}
+body  a:hover { color:#f67720; text-decoration:none; }
+body a:active{ color:#0179B0; text-decoration:none;}
+.content-label {color: #000000; font-family: "PT Sans";font-size: 12px;font-weight: bold;line-height: normal;text-align: right;text-decoration: none;text-transform: capitalize;width: 100px;}

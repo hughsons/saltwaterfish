@@ -429,6 +429,7 @@ class PaymentMethods(models.Model):
     ccgateway = models.IntegerField(null=True, db_column='CCGateway', blank=True) # Field name made lowercase.
     class Meta:
         db_table = u'payment_methods'
+        app_label = ''
 
 class ProductAccessories(models.Model):
     id = models.IntegerField(primary_key=True)

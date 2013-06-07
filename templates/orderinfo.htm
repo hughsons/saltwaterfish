@@ -1,0 +1,234 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load tagsfilter %}
+<link type="text/css" rel="stylesheet" href="/misc/myaccount.css" />
+
+<style>
+.bod-bg1 {
+    background-color: #CCCCCC;
+    height: 1px;
+}
+.my_account_link_new {
+    color: #144789;
+}
+.my_account_link_new {
+    color: #144789;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 14px;
+    text-align: left;
+}
+.myaccount_txt1 {
+    color: #010000;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: left;
+    text-decoration: none;
+}
+.padbottom13 {
+    padding-bottom: 13px;
+}
+.myaccount_txt2 {
+    color: #010000;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    height: 31px;
+    line-height: 31px;
+    text-align: center;
+    text-decoration: none;
+}
+.bod-title3 {
+    color: #434343;
+    float: left;
+    font-family: 'Open Sans',sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+}
+.bod-title4 {
+    color: #434343;
+    float: right;
+    font-family: 'Open Sans',sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+}
+</style>
+<div class="float-left width10">&nbsp;&nbsp;</div>
+<div class="float-left wid748 padtop15">
+<div class="clr my_account_link_new">
+<div class="clr">
+<div class="float-left wid103">
+<div class="float-left"><img src="misc/images/print1.jpg" /></div>
+<div class="float-right"><span><a href="#">Print version</a></span></div>
+</div>
+<div class="float-right wid160"><div class="float-left"><img src="misc/images/arro.jpg" /></div>
+<div class="float-right"><span><a href="/orderstatus">Click here to go back</a></span></div>
+</div>
+
+</div>
+<div class="clr height10">&nbsp;</div>
+<div class="clr bod-bg1"></div>
+<div class="clr myaccount_txt2" align="center">Order {{item.invoicenum_prefix}}{{item.invoicenum}}</div>
+
+<div class="clr bod-bg1"></div>
+<div class="clr">
+<div class="float-left">
+<div class="clr"><img src="misc/images/log-n.jpg" width="331" height="57" border="0" /></div>
+<div class="clr"><div class="myaccount_txt1 padtop0 padbottom13">Saltwaterfish.com<br />
+<div class="bod-title3">920 Valley Lane<br />
+
+Fort Pierce, FL 34946</div></div></div>
+</div>
+<div class="float-right bod-title4">
+<div class="clr"><strong>Date Ordered</strong>:&nbsp;{{item.odate}}<br />
+
+<strong>Order Number</strong>::{{item.invoicenum_prefix}}{{item.invoicenum}}</div>
+</div>
+
+
+</div>
+
+<div class="clr">&nbsp;&nbsp;</div>
+<div class="clr">
+<div class="float-left">
+
+<div class="clr"><div class="myaccount_txt1 padtop0 padbottom13">
+<div class="bod-title3">
+<strong>Billing/Payment Information</strong><br />{{item.ofirstname}}{{item.olastname}}<br />
+
+{{item.oaddress}} {{item.oaddress2}}<br />
+
+{{item.ocity}},{{item.ostate}} {{item.ozip}} -<br />
+
+{{item.ophone}}<br />
+
+{{item.oemail}}
+</div></div></div>
+</div>
+<div class="float-right bod-title4">
+<div class="clr">
+
+<strong>Delivery/Shipping Information</strong><br />
+
+{{item.oshipfirstname}}{{item.oshiplastname}}<br />
+
+{{item.oshipaddress}}<br />
+
+{{item.oshipcity}},{{item.oshipstate}} {{item.oshipzip}} - {{item.oshipcountry}}</div>
+</div>
+
+
+</div>
+
+<div class="clr">&nbsp;</div>
+
+<div class="clr bod-title3"><strong>Shipping</strong>&nbsp;:&nbsp;{{item.oshipmethod}}<br />
+  <br />
+
+
+    <strong>Tracking Number</strong>&nbsp;:&nbsp;413421878179<br />
+<br />
+
+
+<strong>Shipped on</strong>&nbsp;:&nbsp;03/18/2013<br />
+<br />
+
+
+<strong>Payment Type&nbsp;</strong>: Testing - Nothing Will Ship<br />
+<br />
+
+
+<strong>Discount(s)</strong></div>
+<div class="clr">&nbsp;</div>
+<div class="float-left rightcontent-latest3">
+<table width="750" border="0" cellpadding="3" cellspacing="1" bgcolor="#EFEFEF" style="color: #434343 !important;font-size: 12px !important;">
+  <tr style='background-image: url("/misc/images/content_menu.jpg");height: 31px;'>
+     <td width="100"><b>Item ID</b></td>
+    <td width="300"><b>ITEMS</b></td>
+    <td width="100"><b>PRICE</b></td>
+	<td width="100"><b>QTY</b></td>
+    <td width="100"><b>Total</b></td>
+	
+  </tr>
+{% for item in alloiitems %}
+	<tr bgcolor="#FFFFFF" ><td align=left>{{item.itemid}}</td> 
+	<td>{{item.itemname|safe}}</td>
+	<td>${{item.unitprice|floatformat:"2"}}</td>
+	<td>{{item.numitems}}</td>
+	<td>{{item.unitprice|floatformat:"2"}}</td>
+	</tr>
+{% endfor %}
+</table>
+<div>
+ 
+ 
+<div class="clr bod-title7 float-right">	
+<div class="bod-title3 wid9 float-left" align="center"><strong>Subtotal:</strong></div>
+<div class="float-left wid9">$115.76</div>
+
+</div>
+<div class="clr bod-title7 float-right">	
+<div class="bod-title3 wid9 float-left" align="center"><strong>Discount(s):</strong></div>
+<div class="float-left wid9">$0.00</div>
+
+</div>
+<div class="clr bod-title7 float-right">	
+<div class="bod-title3 wid9 float-left" align="center"><strong>Taxes:</strong></div>
+<div class="float-left wid9">$0.00</div>
+
+</div>
+<div class="clr bod-title7 float-right">	
+<div class="bod-title3 wid9 float-left" align="center"><strong>Shipping:</strong></div>
+<div class="float-left wid9">$37.98</div>
+
+</div>
+<div class="clr bod-title7 float-right">	
+<div class="bod-title3 wid9 float-left" align="center"><strong>Total:	</strong></div>
+<div class="float-left wid9 bod-over">$153.74</div>
+
+</div>
+</div>
+</div>
+
+<div class="clr height25">&nbsp;</div>
+<div class="clr myaccount_txt1 padbottom10" >Guarantee Request Service</div>
+<div class="clr">
+<div class="float-left rightcontent-latest4">
+<div>
+<div class="clr bod-title">
+<div class="float-left wid220 padleft10">Guarantee Request </div>
+<div class="float-left wid220 padleft20">Date</div>
+<div class="float-left wid220">Guarantee Request System Status</div>
+
+
+</div>
+<div class="clr bod-title1">
+<div class="float-left wid220 padleft10">19337	</div>
+<div class="float-left wid220 padleft20">2/21/2013 11:14:22 AM</div>
+<div class="float-left wid220 padleft10">Closed	Send more Guarantee <br />
+Request pictures for this order</div>
+
+
+</div>
+<div class="clr">&nbsp;</div>
+<div class="clr bod-title1">
+<div class="float-left wid220 padleft10">19341		</div>
+<div class="float-left wid220 padleft20">2/21/2013 11:14:22 AM</div>
+<div class="float-left wid220 padleft10">Closed	Send more Guarantee<br />
+ Request pictures for this order</div>
+
+
+</div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="clr my_account_title padtop27 padbottom13">
+</div>
+</div>
+<div class="float-left wid10"></div>
+
+</div>
+{% endblock content %}
