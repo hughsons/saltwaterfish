@@ -104,9 +104,12 @@ Returning Customers
 <form name="form" id="form" action="/custlogin" method="post">
 {% csrf_token %}
 <div class="my-account " style="min-height:200px !important;">
-<div class=" " >{% if message or error_message %}
-      <p class="style5">{{ message }} <span class="style8">{{ error_message }}</span></p>{% endif %}</div>
+ {% if error_message1 %}
+       <small style="color:red;font-size:15px;">{{ message }}  {{ error_message1 }} </small>
+{%else%}
 <div class="height23 clr">&nbsp;&nbsp;</div>
+{% endif %} 
+
 <div style="font-size:15px" >Email: {{ form.username }}</div>
 <div class="height12 clr">&nbsp;&nbsp;</div>
 <div style="font-size:15px" >Pass: {{ form.password }}</div>
@@ -129,8 +132,12 @@ Forgot Password
 {% csrf_token %}
 <div class="my-account clr">
 <div class="height1 clr">&nbsp;&nbsp;</div>
-<div class=" " >{% if message2 or error_message2 %}
-      <p class="greentext">{{ message2 }} <span class="redtext">{{ error_message2 }}</span></p>{% endif %}</div>
+{% if error_message2 %}
+       <small style="color:red;font-size:15px;">{{ message }}  {{ error_message2 }} </small>
+{%else%}
+<div class="height23 clr">&nbsp;&nbsp;</div>
+{% endif %} 
+
 <div style="font-size:15px" >Email: {{ forgotform.email }}</div>
 <div class="height12 clr">&nbsp;&nbsp;</div>
 <div class=" " ><img src="{{ recaptcha2 }}" /></div>
@@ -144,5 +151,5 @@ Forgot Password
 
 </div></div></div>
 
-<div class="height12 clr"></div></div></div></div>
+<div class="height12 clr"></div></div></div> 
 {% include 'footer.htm' %}

@@ -1,0 +1,390 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if order_error_message %}<h4><span class="redtext">{{order_error_message}}</span></h4>{% endif %}
+<div class="float-left wid20"></div>
+<div class="float-left wid748">
+  <div class="toggle_left1">
+    <form name="OrderConfirmationForm" id="OrderConfirmationForm" method="POST" action="/commitorder">
+      {% csrf_token %}
+      <div class="toggle_main1">
+      <div class="clr">
+        <!-- Tab1 starts -->
+        <div class="clr">
+          <div class="toggle_container">
+            <div class="toggle_header1">
+              <div class="toggle_link toggle_open">&nbsp;&nbsp;1 - Shipping Address</div>
+            </div>
+            <div class="toggle_content1">
+              <div class="clr">
+                <div class="clr">
+                  <div class="float-left">
+                    <h4>Enter Your Shipping Address:</h4>
+                  </div>
+                  <div class="martop30"><span class="red_star">*</span> Required Field</div>
+                </div>
+                <div class="clr">
+                  <div class="float-left pwid12" align="left">First Name<span class="red_star">*</span></div>
+                  <div class="float-left" align="left">{{ form.first_name}}</div>
+                </div>
+                <div class="clr">&nbsp;&nbsp;</div>
+                <div class="clr">
+                  <div class="float-left pwid12" align="left">Last Name<span class="red_star">*</span></div>
+                  <div class="float-left" align="left">{{ form.last_name}}</div>
+                </div>
+                <div class="clr">&nbsp;&nbsp;</div>
+                <div class="clr">
+                  <div class="float-left pwid12" align="left">Address Line1<span class="red_star">*</span></div>
+                  <div class="float-left">{{ form.address1}}</div>
+                </div>
+                <div class="clr">&nbsp;&nbsp;</div>
+                <div class="clr">
+                  <div class="float-left pwid12" align="left">Address Line2<span class="red_star">*</span></div>
+                  <div class="float-left">{{ form.address1 }}</div>
+                </div>
+                <div class="clr">&nbsp;&nbsp;</div>
+                <div class="clr">
+                  <div class="float-left pwid14">
+                    <div class="float-left wid70" align="left">City<span class="red_star">*</span>&nbsp;&nbsp;</div>
+                    <div class="float-left">{{ form.city }}</div>
+                  </div>
+                  <div class="float-right wid220">
+                    <div class="float-left pwid7" align="left">State<span class="red_star">*</span>&nbsp;&nbsp;</div>
+                    <div class="float-left">{{ form.state }}</div>
+                    <div class="float-left pwid7" align="left">Country<span class="red_star">*</span>&nbsp;&nbsp;</div>
+                    <div class="float-left">{{ form.country }}</div>
+                  </div>
+                </div>
+                <div class="clr">&nbsp;&nbsp;</div>
+                <div class="clr">
+                  <div class="float-left wid250">
+                    <div class="float-left wid70" align="left">Zip code<span class="red_star">*</span>&nbsp;&nbsp;</div>
+                    <div class="float-left">{{ form.zip }}</div>
+                  </div>
+                  <div class="float-right wid250 martopless">
+                    <div class="float-left">Phone Number<span class="red_star">*</span>&nbsp;&nbsp;</div>
+                    <div class="float-left">
+                      <div class="float-left">{{ form.phone }}</div>
+                      <div class="float-left">{{ form.address_type }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="clr">&nbsp;&nbsp;</div>
+                <div class="clr">
+                  <div class="float-left wid70" align="left">Ext</div>
+                  <div class="float-left">
+                    <input type="text" value="" size="1" />
+                  </div>
+                </div>
+                <div class="card4_select_chk">
+                  <input type="checkbox" checked="checked"/>
+                  This is also my billing address</div>
+                <div class="clr">&nbsp;&nbsp;</div>
+                <div class="clr">&nbsp;&nbsp;</div>
+              </div>
+              <div class="clr"></div>
+              <div class="clr"></div>
+              <div class="clr"></div>
+            </div>
+          </div>
+        </div>
+        <!-- //Tab1 -->
+        <!-- Tab2 starts -->
+        <div class="clr">
+          <div class="toggle_container">
+            <div class="toggle_header1">
+              <div class="toggle_link toggle_open">&nbsp;&nbsp;2 - Shipping Method</div>
+            </div>
+            <div class="toggle_content1">
+              <div class="shipping_method">
+                <div class="clr pad-tb" align="justify"><strong>Please select a shipping method for each category of items you've ordered:</strong></div>
+                <div class="toggle_main">
+                  <div class="clr">
+                    <!-- Tab1 starts -->
+                    <div class="clr">
+                      <div class="toggle_container">
+                        <div class="toggle_header2">
+                          <div class="toggle_link toggle_open padleft10" align="left">Live Marine Life</div>
+                        </div>
+                        <div class="toggle_content1" align="left">
+                          <div class="padtop10 padbottom5"><strong>Live Marine Life Shipping method:</strong></div>
+                          <div><strong>Marine Life Arrival Date</strong></div>
+                          <div>
+                            <p>Unless you request a specific date, we will ship your Marine Life order to arrive at
+                              the earliest possible date. We will notify you by e-mail, if for some reason, your 
+                              request cannot be honored.</p>
+                          </div>
+                          <strong>Estimated Delivery Date:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;01/01/2012</strong><br />
+                          <div class="blue_link padbottom7 padtop7"><a href="#"><strong>Change Delivery Dates Or Upgrade Shipping Options</strong></a></div>
+                          <div class="padbottom8">
+                            <input type="radio"/>
+                            &nbsp;&nbsp;<strong>Overnight Shipping with Priority Upgrade ($99.99)</strong><br />
+                          </div>
+                          <div class="padbottom25"><strong>. This Category Requires a Fuel Surcharge of $9.99</strong></div>
+                          <div class="clr">
+                            <div class="float-left"></div>
+                            <div class="float-right"></div>
+                            <div class="float-left wid7">
+                              <div class="padbottom10"><strong>Hold Package FedEx Location</strong></div>
+                              If you would like your package held at a FedEx Location Please check here. This option
+                              will allow you to pick up your package at your convenience anytime after 9 a.m. on the day
+                              it is Scheduled to arrive. You must provide the FedEv station address as your delivery
+                              address at the time you place order. If  you need to change your delivery address
+                              please use the "new address" selection in the Address Book option above.
+                              Call 1 -800 -GOFEDEX for the station nearest you <span class="blue_text"><strong>or click here to use the online FedEx location tool.</strong></span> </div>
+                            <div class="float-right card7_select martop50">
+                              <select>
+                                <option>No</option>
+                              </select>
+                            </div>
+                            <div class="clr">&nbsp;</div>
+                          </div>
+                          <div class="clr">
+                            <div class="button11"><a href="#">Continue To Next Category</a></div>
+                            <div class="clr">&nbsp;</div>
+                          </div>
+                          <div class="clr"></div>
+                          <div class="clr"></div>
+                          <div class="clr"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- //Tab1 -->
+                    <!-- Tab2 starts -->
+                    <div class="clr">
+                      <div class="toggle_container">
+                        <div class="toggle_header2">
+                          <div class="toggle_link toggle_open padleft10" align="left">Aquarium Supplies</div>
+                        </div>
+                        <div class="toggle_content1" align="left">
+                          <div class="marbottom15 martop10"><strong>Delivery Notifications:</strong></div>
+                          <input type="checkbox" />
+                          &nbsp;&nbsp;Receive Delivery Notifications Via Email<br />
+                          <input type="checkbox" />
+                          &nbsp;&nbsp;Receive Delivery Notifications Via SMS<br />
+                          <div class="padleft23 padtop5">Enter your mobile number:&nbsp;&nbsp;
+                            <input type="text" value="" />
+                          </div>
+                          <div class="clr">&nbsp;</div>
+                          <div class="clr marright30">
+                            <div class="button22"><a href="#">Continue To Next Category</a></div>
+                          </div>
+                          <div class="clr">&nbsp;</div>
+                          <div class="clr"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- //Tab2 -->
+                    <!-- Tab3 starts -->
+                    <div class="clr"> </div>
+                    <!-- //Tab3 -->
+                    <div class="clr"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="clr"></div>
+            </div>
+          </div>
+        </div>
+        <!-- //Tab2 -->
+        <!-- Tab3 starts -->
+        <div class="clr">
+          <div class="toggle_container">
+            <div class="toggle_header1">
+              <div class="toggle_link toggle_open">&nbsp;&nbsp;3 - Payment Information</div>
+            </div>
+            <div class="toggle_content1">
+              <div class="order_detail_form">
+                <div class="clr">
+                  <div class="order_detail">Order Details</div>
+                </div>
+                <div class="clr">
+                  <table width="91%" border="1" cellspacing="0" cellpadding="0">
+                    <tr class="blue_bg">
+                      <td width="10%" align="center" valign="top" class="border"><strong>QTY</strong></td>
+                      <td width="67%" align="let" valign="top" class="border padleft10"><strong>Item</strong></td>
+                      <td width="22%" align="left" valign="top" class="border padleft10"><strong>Price</strong></td>
+                    </tr>
+                    {% for item in request.session.MyCartItems %}
+                    <tr>
+                      <td align="center" valign="top" class="border">{{item.quantity}}</td>
+                      <td align="let" valign="top" class="border padleft10">{{item.name}}</td>
+                      <td align="left" valign="top" class="border padleft10">{% if item.saleprice > 0 %} ${{ item.saleprice|floatformat:2 }} {% else %} ${{ item.price|floatformat:2 }} {% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                      <td align="center" valign="top" class="border">&nbsp;</td>
+                      <td align="right" valign="top" class="border padright10">Total:</td>
+                      <td align="left" valign="top" class="border padleft10">${{request.session.SubTotal|floatformat:2 }}</td>
+                    </tr>
+                  </table>
+                  <div class="order_detail_content">
+                    <div class="order_content_heading">Gift Certificate</div>
+                    <div class="clr"><span class="dark_bg">Apply</span>Gift Certificate Value of $9,999.00 Available would you like to apply this to your order?</div>
+                    <div class="clr">&nbsp;</div>
+                    <div class="clr">&nbsp;</div>
+                    {% if request.session.PaymentGateway == 'AUTHORIZENET' %}
+                    <!-- Begin Credit Card Information -->
+                    <div class="clr">
+                      <div id="CreditCardPanel"> Enter your Credit card Information:</div>
+                      <div class="clr">Use Previously Saved Credit Card:</div>
+                      {% for radio in form.previous_cards %}
+                      <div class="clr">
+                        <label style="width:300px"><span>{{ radio.tag }}</span>{{ radio.choice_label }}</label>
+                      </div>
+                      {% endfor %}
+                      <div class="clr padtop30">
+                        <table width="100%" border="0" cellspacing="5" cellpadding="0">
+                          <tr>
+                            <td  class="padleft10"align="left" valign="top">Card&nbsp;Holder&nbsp;Name</td>
+                            <td colspan="5" align="left" valign="top">{{form.card_holder_name}}</td>
+                          </tr>
+                          <tr>
+                            <td class="padleft10" align="left" valign="top">Card Type</td>
+                            <td colspan="4" align="left" valign="top">{{ form.card_type }}</td>
+                          </tr>
+                          <tr>
+                            <td  class="padleft10" align="left" valign="top">Card Number </td>
+                            <td width="14%" align="left" valign="top">{{ form.card_number }}</td>
+                          </tr>
+                          <tr>
+                            <td  class="padleft10" align="left" valign="top">Exp Date </td>
+                            <td width="150px" align="left" valign="top">{{ form.card_expdate }}(MM/YY)</td>
+                            <td width="15%" align="left" valign="top">&nbsp;</td>
+                            <td align="right" valign="top">&nbsp;</td>
+                          </tr>
+                          <tr>
+                            <td class="padleft10" align="left" valign="top">CVN</td>
+                            <td colspan="4" align="left" valign="top">{{ form.card_cvn }}<span class="blue_link"><a href="#">What's this?</a></span></td>
+                            <td align="right" valign="top">&nbsp;</td>
+                          </tr>
+                          <tr>
+                            <td class="padleft10" colspan="5" align="left" valign="top">{{ form.is_save_card }}
+                              &nbsp;<span class="blue_text">Save this Credit card for future purchases</span> </td>
+                            <td align="right" valign="top">&nbsp;</td>
+                          </tr>
+                        </table>
+                      </div>
+                    </div>
+                    {% endif %}
+                    <!-- End of Credit Card Panel -->
+                    {% if not request.session.IsLogin %}
+                    <div class="clr padtop30">
+                      <div class="order_content_heading">Create An Account:</div>
+                      <div class="clr">In Order to proceed you are required to create an account. The account is used for<br />
+                      </div>
+                      <div class="login">
+                        <table id="NewAccountForm">
+                          <tr>
+                            <td class="clr padbottom10">Email</td>
+                            <td>{{ form.username }} </td>
+                          </tr>
+                          <tr>
+                            <td class="clr padbottom10">Password</td>
+                            <td> {{ form.password }}</td>
+                          </tr>
+                        </table>
+                      </div>
+                    </div>
+                    {% endif %}
+                    <div class="clr padtop30">
+                      <div class="order_content_heading">Comments About Your Order:</div>
+                      <div class="clr">Enter any comments you may have about your order for the staff to view.</div>
+                      <div class="clr"> {{form.comment}} </div>
+                      <div class="clr">&nbsp;</div>
+                      <div class="clr">
+                        <div class="button">
+                          <input type="submit" name="submit" value="Place Order">
+                        </div>
+                      </div>
+                      <div class="clr">&nbsp;</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="clr"></div>
+            </div>
+          </div>
+        </div>
+        <!-- //Tab3 -->
+        <div class="clr"></div>
+      </div>
+    </form>
+  </div>
+  </div>
+  <div class="toggle_right2">
+    <div class="clr">
+      <div class="order_left">
+        <div class="order_heading" align="left">Order Details:</div>
+      </div>
+      <div class="order_right">
+        <div class="blue_link"><a href="viewcart">Edit Order</a></div>
+      </div>
+      <div class="clr"></div>
+    </div>
+    <div class="clr">&nbsp;</div>
+    <div class="clr">
+      <div class="order_left" align="left">Subtotal</div>
+      <div class="order_right">
+        <div class="float_right">${{ request.session.SubTotal|floatformat:2 }}</div>
+      </div>
+      <div class="clr"></div>
+    </div>
+    <div class="clr">
+      <div class="order_left" align="left">Estimated Shipping</div>
+      <div class="order_right">
+        <div class="float_right">${{ request.session.ShippingTotal|floatformat:2 }}</div>
+      </div>
+      <div class="clr"></div>
+    </div>
+    <div class="clr">
+      <div class="order_left" align="left">Fuel Surcharge</div>
+      <div class="order_right">
+        <div class="float_right">${{ request.session.FuelTotal|floatformat:2 }}</div>
+      </div>
+      <div class="clr"></div>
+    </div>
+    <div class="clr">
+      <div class="order_left" align="left">Estimated Tax</div>
+      <div class="order_right">
+        <div class="float_right">${{ request.session.TaxTotal|floatformat:2 }}</div>
+      </div>
+      <div class="clr"></div>
+    </div>
+    <div class="clr">
+      <div class="order_left" align="left"><span>Promotions Applied</span></div>
+      <div class="order_right">
+        <div class="float_right"><span>${{ request.session.PromotionsTotal|floatformat:2 }}</span></div>
+      </div>
+      <div class="clr"></div>
+    </div>
+    <div class="border"></div>
+    <div class="clr">
+      <div class="order_left" align="left">ORDER TOTAL</div>
+      <div class="order_right">
+        <div class="float_right">${{ request.session.OrderTotal|floatformat:2 }}</div>
+      </div>
+      <div class="clr"></div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" src="http://saltwater2013.dev.mvisolutions.com/sitemap/js2/jquery-1.7.2.min.js"></script>
+<script type="text/javascript">
+/* Toggle Panel start */
+
+  $('.toggle_content1').hide();  //hides the toggled content
+
+	$('.toggle_link').click(function () {
+		if ($(this).is('.toggle_close')) {
+			$(this).removeClass('toggle_close').addClass('toggle_open').parent().next('.toggle_content1').slideToggle(300);
+			
+			return false;
+		} 
+		
+		else {
+			$(this).removeClass('toggle_open').addClass('toggle_close').parent().next('.toggle_content1').slideToggle(300);
+			return false;
+		}
+	});	
+/* Toggle Panel end */
+</script>
+{% endblock content %}

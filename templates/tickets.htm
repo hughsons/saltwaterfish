@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load tagsfilter %}
 <link type="text/css" rel="stylesheet" href="/misc/myaccount.css" />
 
 {% load tagsfilter %}
 <div class="float-left width10">&nbsp;&nbsp;</div>
 <div class="float-left wid748 padtop5">
 <div class="clr my_account_link">Home  <span>&gt; My Account</span><span> &gt; Support Requests</span></div>
- <div class="clr my_account_title padtop20 padbottom13">My Last Support Requests </div>
+ <div class="clr my_account_link padtop20 padbottom13">My Last Support Requests <span style="float:right;" class="my_account_link"><a href="/addrequest">Add Support Request</a></span></div>
 <div class="clr myaccount_bg1">
  
 {% include 'myaccount_links.htm' %}

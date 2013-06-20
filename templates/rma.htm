@@ -23,7 +23,7 @@
 	
   </tr>
 {% for item in product_list %}
-	<tr bgcolor="#FFFFFF"><td align=left><a href="/rmarequest?crmid={{item.orderid}}">{{item.idrma}}</a></td> 
+	<tr bgcolor="#FFFFFF"><td align=left><a href="/rmarequest?crmid={{item.idrma}}">{{item.idrma}}</a></td> 
 	<td><a href="/orderinfo?oid={{item.orderid}}">{{item.orderid|rmaordervalues:"invoicenum_prefix"}}{{item.orderid}}</a></td>
 	<td>{{item.rmadate}}</td>
 	<td>{{item.idrmastatus|rmastatus}}</td>

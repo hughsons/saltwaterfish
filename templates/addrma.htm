@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load tagsfilter %}
+<style>
+.pages {
+    color: #434343;
+    font-family: 'Open Sans',sans-serif; 
+    font-size: 12px !important;
+    line-height: 20px;
+}
+.content-label {
+    color: #000000;
+    font-family: "PT Sans";
+    font-size: 12px;
+    font-weight: bold;
+    line-height: normal;
+    text-align: right;
+    text-decoration: none;
+    text-transform: capitalize;
+    width: 100px;
+}
+</style>
+<div class="float-left width10">&nbsp;&nbsp;</div>
+<div class="float-left wid748 padtop5">
+<div class="clr my_account_link padtop10"><div class="clr">
+<div class="float-left wid163">
+<div class="clr my_account_link">Home  <span>&gt; My Account</span><span> &gt; Guarantee Request Service</span></div>
+</div>
+<div class="float-right wid160"><div class="float-left"><img src="misc/images/arro.jpg" /></div>
+<div class="float-right"><span><a href="/orderstatus">Click here to go back</a></span></div>
+</div>
+</div></div>
+<div class="clr my_account_link padtop20 padbottom13">Create New Guarantee Request</div>
+<div class="clr myaccount_bg1">
+  <div class="clr padtop5">
+  <table width="100%" border="0" cellpadding="2" class="pages">
+  <tbody><tr>
+    <td class="data" colspan="3">
+	        Please note that we do not re-issue credits for product purchased with store credit.<br><br>
+            If you place an order that is paid for using both store credits and
+            cash, the system will calculate the percentage of the Marine Life order
+            that was purchased with cash and apply that percentage for any animals
+            that do not live during the 15 day guarantee.  For instance, if a $100
+            Marine Life purchase is made with $90 cash and a $10 credit, you will be
+            entitled to 90% of the value of any livestock that does not stay alive
+            during the 15 day guarantee period in store credit.   We apologize in
+            advance that we do not re-issue store credits.<br><br>
+            Guarantee requests that do not have photos ( or we have not received the
+            deceased item in our facility) will be closed after 30 days.<br><br>
+        </td>
+  </tr>
+  </tbody></table>
+  <form method="post" action="/generalactions" method=post>
+		{% csrf_token %} 
+		<input type="hidden" name="action" value="addrmarequest">
+		<input type="hidden" name="oid" value="{{item.orderid}}">
+  </div>
+  <div class="clr">
+<div class="clr myaccount_txt1">Order Items</div>
+<div class="clr">&nbsp;</div>
+<table width="700" border="0" cellpadding="3" cellspacing="1" bgcolor="#EFEFEF" style="color: #434343 !important;font-size: 12px !important;">
+  <tr style='background-image: url("/misc/images/content_menu.jpg");height: 31px;'>
+     <td width="50"><b>Item ID</b></td>
+    <td width="300"><b>Description</b></td>
+    <td width="60"><b>Unit Price</b></td>
+	<td width="50"><b>Purchased</b></td>
+    <td width="110"><b>Previously Reported</b></td>
+	 <td width="110"><b>Available to Report</b></td>
+  </tr>
+{% for item in alloiitems %}
+	<tr bgcolor="#FFFFFF" ><td align=left>{{item.itemid}}</td> 
+	<td>{{item.itemname}}</td>
+	<td>${{item.unitprice|floatformat:"2"}}</td>
+	<td>{{item.numitems}}</td>
+	<td>{%for bbb in item.orderitemid|fetchrmaoitem %}
+	{{bbb.qty_return}}
+	{%endfor%}</td>
+		<td>
+			<select name="itemkey_{{item.orderitemid}}" class="item">
+			<option value=0>0</option>
+			{% for i in item.numitems|floatformat:"0" %}
+			<option value={{i}}>{{i}}</option>
+			{%endfor%}
+			</select>
+		</td>
+	</tr>
+{% endfor %}
+</table>
+</div>
+<div class="clr">
+ <div class="clr dot">&nbsp;</div>
+ <div class="clr myaccount_txt1">Order Report Options</div>
+ <div class="clr">&nbsp;</div>
+ <table width="700" border="0" cellpadding="3" cellspacing="1" bgcolor="#EFEFEF" style="color: #434343 !important;font-size: 12px !important;">
+  <tr style='background-image: url("/misc/images/content_menu.jpg");height: 31px;'>
+     <td width="50"><b>Reason</b></td>
+     <td width="110"><b>Method</b></td>
+  </tr>
+ 	<tr bgcolor="#FFFFFF" >
+	<td>DOA</td>
+	<td><select name="Method" id="Method" class="item">
+	<option value="1">Store Credit (Within 15 Days of Delivery - Proof Required)</option></select></td>
+	</tr>
+</table>
+</div>
+<div class="clr dot">&nbsp;</div>
+	<div class="clr">
+	<table width="700" border="0" cellpadding="3" cellspacing="1" bgcolor="#EFEFEF" style="color: #434343 !important;font-size: 12px !important;">
+	  <tr style='background-image: url("/misc/images/content_menu.jpg");height: 31px;'>
+		<td width="300" colspan=3><b>Image Upload:</b></td>
+	  </tr>
+		<tr class="item" bgcolor="#ffffff">
+			<td width="175" valign="top" nowrap="">Upload an image (up to 10 images):</td>
+			<td width="400" valign="top">
+				<input type="file" name="FILE1" class="item"><br><br>
+				<input type="submit" name="Submit" value="Upload">
+			</td>
+			<td rowspan="2" valign="top">
+			</td>
+		</tr>
+	 </table>
+	</div>
+   <div class="clr"></div>
+   <div class="clr">&nbsp;</div>
+		<table width="700" border="0" cellpadding="3" cellspacing="1" bgcolor="#EFEFEF" style="color: #434343 !important;font-size: 12px !important;">
+		  <tr style='background-image: url("/misc/images/content_menu.jpg");height: 31px;'>
+			<td width="300"><b>Comments:</b></td>
+		  </tr>
+			<tr bgcolor="#FFFFFF" ><td align=left> <textarea name="message" rows="4" cols="62"></textarea></td></tr>
+			<tr bgcolor="#FFFFFF" ><td align=left><input type=image src="misc/images/submit.jpg" width="76" height="25" border="0" /></td></tr>
+		 </table>
+	</form>
+<div class="clr">&nbsp;</div>
+</div>
+</div>
+<div class="float-left wid10"></div>
+</div>
+{% endblock content %}

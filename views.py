@@ -17,15 +17,46 @@ from forms import *
 from models import *
 from django.db.models import Count, Min, Sum, Max, Avg
 from django.db import connection
-import random, logging
-import functools
+import random, logging, datetime, json, functools
 from functools import wraps
 from django.core.context_processors import csrf
+from google.appengine.api import memcache
+from google.appengine.api import urlfetch
+import urllib2
+import urllib
+import httplib
 PERPAGE=50
 class CsrfExemptMixin(object):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(CsrfExemptMixin, self).dispatch(request, *args, **kwargs)
+
+def refresh_Token(token_type):
+    tokens = AccessTokens.objects.filter(token_type=token_type)
+    access_token = tokens[0].access_token
+    refresh_token = tokens[0].refresh_key
+    #client_id = tokens[0].client_id
+    #client_secret = tokens[0].client_secret
+    #refresh_token = "1/bAocHPlne_VV3HFSuQQmksILtJ-Q92-shyMy2PSz8aw"
+    client_id = "246972017795.apps.googleusercontent.com"
+    client_secret = "Kc_X6Ap4dd0ubr60t5-pT9BJ"
+    access_tokens = ""
+    data = {}
+    data['refresh_token'] = refresh_token
+    data['client_id'] = client_id
+    data['client_secret'] = client_secret
+    data['grant_type'] = 'refresh_token'
+    req = urllib2.Request('https://accounts.google.com/o/oauth2/token', urllib.urlencode(data))
+    socket = urllib2.urlopen(req)
+    html = socket.read()
+    socket.close()
+    refresh_json = json.loads(html)
+    access_tokens = refresh_json['access_token']
+    token_expiry = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.localtime(time.time() + 3000))
+    logging.info('Access Token-------------------')
+    logging.info(access_tokens)
+    logging.info('Access Token-------------------')
+    return access_tokens
 
 def GetRecaptcha(request):
     value = random.randrange(10000, 99999, 1)
@@ -49,6 +80,32 @@ def checkuserlogin_dispatch(f):
         return f(request, *args, **kwargs)
     return wrap
 
+def BreadParentCategory(category_id):
+     
+    parent_id = 500
+    levels = 0
+    while (parent_id > 0 and levels < 10):
+      row = Category.objects.get(id=category_id)
+      category_id = row.id
+      categoryid=row.id
+      
+      category_name = row.category_name
+      
+      parent_id = row.category_parent
+      category_id = parent_id
+      levels += 1
+    
+    return (categoryid, category_name, parent_id)
+
+def relatedproditems(pid,noi):
+    product_category = ProductCategory.objects.all().filter(catalogid=pid)
+    pcats =""
+    for pwcats in product_category:
+        pcats += str(pwcats.categoryid)+", "
+    pcats = pcats[:-2]+''
+    logging.info('categoryid:: %s',pcats)
+    relateditems=Products.objects.raw('select * from product_category,products where products.catalogid!='+pid+' and product_category.catalogid=products.catalogid and hide=0 and categoryid in ('+pcats+')')[:noi]
+    return relateditems
 
 class LoginRequiredMixin(object):
     @method_decorator(checkuserlogin_dispatch)
@@ -71,6 +128,18 @@ def cartwidget(request):
     if 'CartItems' in request.session:
         cart_items = request.session["CartItems"]
         item_list = cart_items.keys()
+        sub_total = 0
+        for catalog_id, item in cart_items.items():
+          sub_total += item.subtotal
+          selected_items.append(item)
+    
+    return selected_items
+
+def cartwidgetold(request):
+    selected_items = []
+    if 'CartItems' in request.session:
+        cart_items = request.session["CartItems"]
+        item_list = cart_items.keys()
     
         mycart = Products.objects.filter(catalogid__in=item_list)
     
@@ -89,7 +158,6 @@ def cartwidget(request):
 
           sub_total += cart_item.subtotal
           selected_items.append(cart_item)
-    
     return selected_items
 
 def leftwidget(request):
@@ -106,11 +174,13 @@ def leftwidget(request):
     else:
         login_is = ""
     total_fines = sum([item.price for item in cartwidget(request)])
+    popular = Category.objects.all().filter(category_parent=177)
     contents = {'LoginForm':LoginForm,
                 'login_is':login_is,
                 'recaptcha': GetRecaptcha(request),
                 'error_message': error_message,
                 'message': message,
+                'popular': popular,
                 'banner_main': SiteBanners.objects.filter(banner_status=1),
                 'cartsitems':cartwidget(request),'total_fines':total_fines,}
     return contents
@@ -130,32 +200,48 @@ class RegistrationViewClass(TemplateView):
 
 class QuickListClass(TemplateView):
     def get(self, request, *args, **kwargs):
-        if request.method == 'GET' and 'cat' in request.GET:
-            cat=request.GET['cat']
-        else:
-            cat = 15
+        cat = request.GET['cat'] if 'cat' in request.GET else 15
         content = {'title': "Quick List",'cat': cat,}
         content.update(leftwidget(request))
         return render_template(request, "quick_list.htm", content)
 
 class ViewCategoryClass(TemplateView):
     def get(self, request, *args, **kwargs):
-        if request.method == 'GET' and 'id' in request.GET:
-            cat=request.GET['id']
-        else:
-            cat = ""
+        cat = request.GET['id'] if 'id' in request.GET else 3
         category = Category.objects.get(id=cat)
-        content = {'title': "Quick List",
+        categoryid, category_name, parent_id = BreadParentCategory(cat)
+        content = {'title': "Quick List",'catparent':category_name,
                    'cat': category,}
         content.update(leftwidget(request))
         return render_template(request, "category.htm", content)
+
+class ViewCategoryOnSaleClass(TemplateView):
+    def get(self, request, *args, **kwargs):
+        cat = request.GET['id'] if 'id' in request.GET else 3
+        category = Category.objects.get(id=cat)
+        categoryid, category_name, parent_id = BreadParentCategory(cat)
+        prodcats = ProductCategory.objects.filter(categoryid = cat)
+        pcats =""
+        for pwcats in prodcats:
+            pcats += str(pwcats.catalogid)+", "
+        prodids = pcats[:-2]+''
+        try:
+            prods = Products.objects.raw('''select * from product_category,products
+                                         where product_category.catalogid=products.catalogid and hide=0 and categoryspecial=0 and
+                                         product_category.categoryid =%s order by name''',cat)
+        except Exception as e:
+            logging.info('Product Fetch Error:: %s',e)
+        content = {'title': "Quick List",'catparent':category_name,
+                   'cat': category,'allitems': prods,}
+        content.update(leftwidget(request))
+        return render_template(request, "onsale.htm", content)
+
 
 class ViewPagesClass(TemplateView):
     def get(self, request, *args, **kwargs):
         pageid = request.GET['pageid']
         allpages = Extrapages.objects.get(id=pageid)
-        content = {'page_title': "Summary",
-                   'allpages':allpages,}
+        content = {'page_title': "Summary", 'allpages':allpages,}
         content.update(leftwidget(request))
         return render_template(request, "pages.htm", content)
 
@@ -207,8 +293,6 @@ class ChangePwdViewClass(LoginRequiredMixin, TemplateView):
           
           error_message = request.session["ErrorMessage"]
           del request.session["ErrorMessage"]
-
-        
         customer = request.session['Customer']
         prefill_data = {'username':customer.email}
         form = ChangePwdForm(prefill_data)
@@ -357,21 +441,19 @@ class ProductIndexClass(TemplateView):
             page_num = 1
         page_num = int(page_num)
         offset = page_num * 100
-        allitems = Products.objects.all().filter(catalogid__gt=1, stock__gt=0).order_by('name')[offset-100:offset]
+        allitems = Products.objects.all().filter(catalogid__gt=1, stock__gt=0, hide=0).order_by('name')[offset-100:offset]
         totalpages = count/100
         for pages in range(totalpages):
             pages=pages+1
             temp+= '<a href="/productindex?page='+str(pages)+'">'+str(pages)+'</a> | '
         temp+= '<a href="/productindex?page='+str(totalpages+1)+'">'+str(totalpages+1)+'</a>'
-        total_fines = sum([item.price for item in cartwidget(request)])
         content = {'page_title': "Summary",'count': temp,'allitems': allitems,}
         content.update(leftwidget(request))
         return render_template(request, "productindext.htm", content)
 
 class CategoryIndexClass(TemplateView):
     def get(self, request, *args, **kwargs):
-        allitems = Category.objects.all().filter(category_parent=1).order_by('category_parent')
-        total_fines = sum([item.price for item in cartwidget(request)])
+        allitems = Category.objects.all().filter(category_parent=1, hide=0).order_by('category_parent')
         content = {'page_title': "Summary",'allitems': allitems,}
         content.update(leftwidget(request))
         return render_template(request, "categoryindex.htm", content)
@@ -380,17 +462,19 @@ class AddRequestFormClass(LoginRequiredMixin,TemplateView):
     def get(self, request, *args, **kwargs):
         allitems = Category.objects.all().filter(category_parent=1).order_by('category_parent')
         department = CrmDepartment.objects.all().filter(visible=1) 
-        total_fines = sum([item.price for item in cartwidget(request)])
         content = {'page_title': "Summary",'allitems': allitems,'department': department,}
         content.update(leftwidget(request))
         return render_template(request, "addrequestform.htm", content)
 
 class EditRequestFormClass(LoginRequiredMixin,TemplateView):
     def get(self, request, *args, **kwargs):
+        crmid = request.GET['crmid']
         allitems = Category.objects.all().filter(category_parent=1).order_by('category_parent')
-        department = Crm.objects.all().filter(id=request.GET['crmid'], custid=request.session['Customer'].contactid)
-        total_fines = sum([item.price for item in cartwidget(request)])
-        content = {'page_title': "Summary",'allitems': allitems,'department': department,}
+        crmitems = Crm.objects.all().get(id=crmid, custid=request.session['Customer'].contactid)
+        department = CrmDepartment.objects.all().filter(visible=1)
+        crmmessages = CrmMessages.objects.all().filter(crmid=crmid)
+        content = {'page_title': "Summary",'allitems': allitems,
+                   'department': department,'crmitems': crmitems,'crmmessages': crmmessages,}
         content.update(leftwidget(request))
         return render_template(request, "editrequestform.htm", content)
 
@@ -450,6 +534,13 @@ class WaitingPopupViewClass(TemplateView):
         content.update(leftwidget(request))
         return render_template(request, 'waitinglist_popup.htm', content)
 
+class EmailFriendPopupViewClass(TemplateView):
+    def get(self, request, *args, **kwargs):
+        product_list = Products.objects.all().get(catalogid=request.GET['itemid'])
+        content = {'page_title': "My Support Requests","products":product_list}
+        content.update(leftwidget(request))
+        return render_template(request, 'emailfriend_popup.htm', content)
+
 class ReefPackageViewClass(TemplateView):
     def get(self, request, *args, **kwargs):
         content = {'title': "Quick List",}
@@ -458,9 +549,18 @@ class ReefPackageViewClass(TemplateView):
 
 class ProductInfoViewClass(TemplateView):
     def get(self, request, *args, **kwargs):
-        product_list = Products.objects.get(catalogid=request.GET['pid'])
-        content = {'page_title': product_list.name,"products":product_list}
+        pid = request.GET['pid']
+        product_list = Products.objects.get(catalogid=pid)
+        product_reviews = ProductReview.objects.all().filter(catalogid=pid, approved=1)
+        totalreviews = ProductReview.objects.filter(catalogid=pid,approved=1).aggregate(Sum('rating'))
+        if product_reviews.count() >=1:
+            totreviews = totalreviews['rating__sum']/product_reviews.count()
+        else:
+            totreviews = 0
+        content = {'page_title': product_list.name,"products":product_list,'totalreviews':totreviews,
+                   'relateditems':relatedproditems(pid,8),'product_reviews':product_reviews,}
         content.update(leftwidget(request))
+        logging.info('totalreviews:: %s',totreviews)
         return render_template(request, 'product.htm', content)
 
 class OrderInfoViewClass(LoginRequiredMixin,TemplateView):
@@ -469,9 +569,102 @@ class OrderInfoViewClass(LoginRequiredMixin,TemplateView):
         product_list = Orders.objects.get(orderid=oid,
                                           ocustomerid = request.session['Customer'].contactid)
         alloiitems = Oitems.objects.all().filter(orderid=oid)
-        content = {'page_title': 'Orders Page',"item":product_list,'alloiitems':alloiitems,}
+        totalamt = Oitems.objects.filter(orderid=oid).aggregate(Sum('unitprice'))
+        rmaitems = Rma.objects.all().filter(orderid=oid)
+        content = {'page_title': 'Orders Page',"item":product_list,'alloiitems':alloiitems,
+                   'totalamt':totalamt,'rmaitems':rmaitems,}
         content.update(leftwidget(request))
         return render_template(request, 'orderinfo.htm', content)
+
+class RMARequestViewClass(TemplateView):
+    def get(self, request, *args, **kwargs):
+        crmid=request.GET['crmid']
+        product_list = Rma.objects.get(idrma=crmid)
+        #alloiitems = RmaOitem.objects.all().filter(idrma=crmid)
+        alloiitems = Oitems.objects.all().filter(orderid=product_list.orderid)
+        rmamessages = RmaMessages.objects.all().filter(rmaid=crmid)
+        content = {'page_title': "RMA","item":product_list,
+                   'alloiitems':alloiitems,'rmamessages':rmamessages}
+        content.update(leftwidget(request))
+        return render_template(request, 'rmarequest.htm', content)
+
+class RMARequestAddClass(TemplateView):
+    def get(self, request, *args, **kwargs):
+        oid = request.GET['oid']
+        product_list = Orders.objects.get(orderid=oid,
+                                          ocustomerid = request.session['Customer'].contactid)
+        alloiitems = Oitems.objects.all().filter(orderid=oid)
+        content = {'page_title': "RMA","item":product_list,'alloiitems':alloiitems}
+        content.update(leftwidget(request))
+        return render_template(request, 'addrma.htm', content)
+
+class GiftCertViewClass(TemplateView):
+    def get(self, request, *args, **kwargs):
+        pid = request.GET['pid'] if 'pid' in request.GET else 11
+        product_list = Products.objects.get(catalogid=pid)
+        product_reviews = ProductReview.objects.all().filter(catalogid=pid, approved=1)
+        totalreviews = ProductReview.objects.filter(catalogid=pid,approved=1).aggregate(Sum('rating'))
+        if product_reviews.count() >=1:
+            totreviews = totalreviews['rating__sum']/product_reviews.count()
+        else:
+            totreviews = 0
+        content = {'page_title': product_list.name,"products":product_list,'totalreviews':totreviews,
+                   'product_reviews':product_reviews,}
+        content.update(leftwidget(request))
+        logging.info('totalreviews:: %s',totreviews)
+        return render_template(request, 'giftcertificate.htm', content)
+
+class SitemapViewClass(TemplateView):
+    def get(self, request, *args, **kwargs):
+        curdate = datetime.datetime.now()
+        now=curdate.strftime("%Y-%m-%d")
+        xml_str = '''<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.google.com/schemas/sitemap/0.84">'''
+        xml_str += '''<url><loc>http://saltwaterfish-com.appspot.com/</loc><lastmod>'''+now+'''</lastmod><changefreq>daily</changefreq><priority>1</priority></url>'''
+        product_list = Products.objects.all()
+        for items in product_list:
+            xml_str += '''<url><loc>http://saltwaterfish-com.appspot.com/product?pid='''+str(items.catalogid)+'''</loc><lastmod>'''+now+'''</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>'''
+        xml_str +='''</urlset>'''
+        return HttpResponse(xml_str,content_type="application/xhtml+xml")
+
+
+class SearchViewClass(TemplateView):
+    def get(self, request, *args, **kwargs):
+        keyw = request.GET['query'] if 'query' in request.GET else ""
+        pages = request.GET['page'] if 'page' in request.GET else 1
+        params = urllib.urlencode({
+            "key":"AIzaSyAwiWyrN6NyyFLChDPG1fo3COkrf9sy_H0",
+            "q": keyw,
+            "alt": "json"
+            })
+        req=urlfetch.fetch('https://www.googleapis.com/customsearch/v1?cx=017962673971899229735:obihww4qabe&%s'% params,
+                               method='GET', allow_truncated=False, follow_redirects=True, deadline=30,
+                               validate_certificate=False)
+        resultset = json.loads(req.content)
+        #return HttpResponse(req.content)
+        count = resultset['queries']['request'][0]['totalResults']
+        pods=""
+        tempcount = ""
+        if count >= "1":
+            for pitems in resultset['items']:
+                try:
+                    pcats,ids =pitems['link'].split('pid=')
+                    pods += ids+", "
+                    #tempcount += 1
+                    logging.info('search term:: %s',ids)
+                except Exception as e:
+                    logging.info('Product Fetch Error:: %s',pitems['link'])
+            
+            #pcats += str(pwcats.catalogid)+", "
+            prodids = pods[:-2]+''
+            product_list = Products.objects.raw("select * from products where catalogid in ("+prodids+")")
+        else:
+            product_list=""
+        #logging.info('search term:: %s',tempcount)
+        content = {'page_title': "Search "+keyw+"","keyword":keyw,
+                   "countresult":count,'alloiitems':product_list,'page_num':pages}
+        content.update(leftwidget(request))
+        return render_template(request, 'search.htm', content)
+        #return HttpResponse(req.content)
 
 #======================================================================
 class CartItems(object):
@@ -585,7 +778,7 @@ class CartItems(object):
 
       self.category_id = 0
 
-class CartConfirmClass(TemplateView):
+class CartConfirmClasses(TemplateView):
 
   def get(self, request, *args, **kwargs):
     item_id = 0
@@ -640,11 +833,11 @@ class CartConfirmClass(TemplateView):
 
 class CheckOutLoginViewClass(TemplateView):
    def get(self, request, *args, **kwargs):
-    total_fines = sum([item.price for item in cartwidget(request)])
     error_message = ""
     if 'ErrorMessage' in request.session:
       error_message = request.session['ErrorMessage']
-    
+    if 'gateway' in request.GET:
+      request.session['PaymentGateway'] = request.GET['gateway']
     content = {'page_title': "Checkout Login",}
     content.update(leftwidget(request))
     return render_template(request,'CheckOutLogin.html', content)
@@ -768,7 +961,7 @@ class OrderConfirmationView(TemplateView):
     content.update(leftwidget(request))
     return render_template(request,'OrderConfirmation.html', content)
 
-class ViewCartViewClass(TemplateView):
+class ViewCartViewClasses(TemplateView):
   #Page Url: /viewcart
   #Last Modified: 2013-15-19 23:30
 
@@ -869,29 +1062,6 @@ class ViewCartViewClass(TemplateView):
     content.update(csrf(request))
     content.update(leftwidget(request))
     return render_template(request,'ViewCart.html', content)
-
-class CheckOutLoginViewClass(TemplateView):
-
-  def GetRecaptcha(self, request):
-      value = random.randrange(10000, 99999, 1)
-      request.session['ReCaptcha'] = value
-      return value
-
-  def get(self, request, *args, **kwargs):
-    error_message = ""
-    if 'ErrorMessage' in request.session:
-      error_message = request.session['ErrorMessage']
-        
-    if 'gateway' in request.GET:
-      request.session['PaymentGateway'] = request.GET['gateway']
-
-    content = {'page_title': "Checkout Login",
-               'form':LoginForm,
-               'recaptcha':"https://chart.googleapis.com/chart?chst=d_text_outline&chld=FFCC33|16|h|FF0000|b|%s" %self.GetRecaptcha(request),
-               'error_message': error_message,
-              }
-    return render_template(request,'CheckOutLogin.html', content)
-
 
 def SaveOrder(request, transactionid):
     customer = request.session['Customer']

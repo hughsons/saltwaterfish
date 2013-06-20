@@ -7,6 +7,7 @@ from auth_views import *
 from user_actions import *
 from admin.admin_actions import *
 from admin.views import *
+from murthy_views import *
 
 handler500 = 'djangotoolbox.errorviews.server_error'
 admin.autodiscover()
@@ -49,6 +50,12 @@ urlpatterns = patterns('',
 	url(r'^guestlogin', GuestLoginActionClass.as_view(), name = 'GuestLogin'),
     url(r'^checkoutcallback', CheckOutCallBackViewClass.as_view(), name = 'PurchaseConfirmation'),
     url(r'^paypalredirection', PaypalRedirectionViewClass.as_view(), name = 'PaypalRedirection'),
+    url(r'^applystorecredit', CartActionsClass.as_view(), name = 'ApplyStoreCredit'),
+    url(r'^murthytest', MurthyTestViewCalss.as_view(), name = 'MurthyTest'),
+    #url(r'^testradio', RadioButtonTest.as_view(), name='RadioButtonTest'),
+    url(r'shippingcalander', ShippingCalander.as_view(), name="ShippingCalander"),
+	url(r'buygift', GiftCertificateView.as_view(), name = 'GiftCertificateView'),
+    
 
 # Murthy URLS ENDS HERE	
 
@@ -70,8 +77,16 @@ urlpatterns = patterns('',
 	url(r'^termsconditions', TermsConViewClass.as_view(), name='TermsConViewClass'),
 	url(r'^reefpackages', ReefPackageViewClass.as_view(), name='ReefPackageViewClass'),
 	url(r'^waitpopup', WaitingPopupViewClass.as_view(), name='WaitingPopupViewClass'),
+	url(r'^emailfriendpopup', EmailFriendPopupViewClass.as_view(), name='EmailFriendPopupViewClass'),
 	url(r'^product', ProductInfoViewClass.as_view(), name='ProductInfoViewClass'),
 	url(r'^orderinfo', OrderInfoViewClass.as_view(), name='OrderInfoViewClass'),
+	url(r'^rmarequest', RMARequestViewClass.as_view(), name='RMARequestViewClass'),
+	url(r'^addrma', RMARequestAddClass.as_view(), name='RMARequestAddClass'),
+	url(r'^emailfriendpost', EmailToFriendActionClass.as_view(), name='EmailToFriendActionClass'),
+	url(r'^onsale', ViewCategoryOnSaleClass.as_view(), name='onsalecats'),
+	url(r'^giftcert', GiftCertViewClass.as_view(), name='GiftCertViewClass'),
+	url(r'^sitemap', SitemapViewClass.as_view(), name='SitemapViewClass'),
+	url(r'^search', SearchViewClass.as_view(), name='SearchViewClass'),
 # Simon URLS HERE
 
     url(r'^apanel', ApanelViewClass.as_view(), name='apanel'),

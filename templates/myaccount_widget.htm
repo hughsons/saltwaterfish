@@ -38,6 +38,12 @@ FORM_MESSAGES = {
 	'{{ form.password.html_name }}': 'Password is required.',
 	'{{ form.recaptcha.html_name }}': 'Recaptacha is required.',
 };
+$(function() {
+	$('#popitems').change(function() {
+		vals = $('#popitems').val()
+	  window.location.replace("/category?id="+vals);
+	});
+});
 
  </script>
  <div  class="gray-back-new">
@@ -100,7 +106,7 @@ My Account
 </div>
 
  
-	{% if request.session.MyCartItems %}
+	{% if request.session.CartItems %}
 		<div class="clr height9">&nbsp;&nbsp;</div>
 		<div class="blue-border" style="height:100% !important;">
 		<div class="blue-bg-header">My Cart</div>
@@ -113,8 +119,8 @@ My Account
 		<table>
 		<tr>
 			<td class=" padleft2" width="10"><img src="misc/images/1.jpg" border="0" /></td>
-			<td class=" my_cart_txt1 padleft5 padtop3" width="210">{{item.name}}</td>
-			<td class=" my_cart_txt2 padleft5 padtop3">${{item.price|floatformat:2}}</td>
+			<td class=" my_cart_txt1 padleft5 padtop3" width="210"><a href="/product?pid=1938">{{item.item_name}}</a></td>
+			<td class=" my_cart_txt2 padleft5 padtop3">${{item.saleprice|floatformat:2}}</td>
 		</tr>
 		<tr><td colspan=3><img src="misc/images/mycart_line.jpg" border="0" /></td></tr>
 		</table>
@@ -137,14 +143,11 @@ Resources
 <div class="resources clr">
 <div class="height12 clr">&nbsp;&nbsp;</div>
 <div class="wid207 clr">
-  <select name="websites2" id="websites2" class="wid180">
-    <option name="one" value="msDropDown" selected="selected">Popular Searches</option>
-    <option  name="two" value="PrototypeCombobox">Aquacultured</option>
-    <option value="jQuery Tabs">Care Level Easy</option>
-    <option value="Common Accordion">Invert Safe</option>
-    <option value="jQuery Tabs">Light Level Low to Medium</option>
-    <option value="Common Accordion">On Sale</option>
-    <option value="Common Accordion">Reef</option>
+  <select name="popitems" id="popitems" class="wid180">
+    <option  value="" selected="selected">Popular Searches</option>
+   {% for popitems in popular%}
+	 <option value="{{popitems.id}}">{{popitems.category_name}}</option>
+   {%endfor%}
   </select>
 </div>
 <div class="wid187 clr padtop20">
@@ -157,7 +160,7 @@ Resources
 </div>
 <div class="wid187 clr padtop10">
 <div class="float-left padtop3"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
-<div class="float-left"><a href="/pages?pageid=11"  >Gift Certificates</a></div>
+<div class="float-left"><a href="/giftcert"  >Gift Certificates</a></div>
 
 
 </div><div class="wid187 clr padtop10">
@@ -190,13 +193,11 @@ Resources
 <div class="float-left"><a href="http://forums.saltwaterfish.com/"  >Message Board</a></div>
 
 
-</div><div class="wid187 clr padtop10">
+</div>
+<!--<div class="wid187 clr padtop10">
 <div class="float-left padtop3"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
 <div class="float-left"><a href="saltwater.htm"  >SaltWater Fish School </a></div>
-
-
-
-</div>
+</div>-->
 
 </div>
 

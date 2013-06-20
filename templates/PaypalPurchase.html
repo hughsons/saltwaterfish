@@ -1,7 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
+<link type="text/css" rel="stylesheet" href="/misc/css3/style.css" />
+<style>
+.height12 {
+    height: 7px !important;
+}
+</style>
+
 <br><br>
-<h3>  PAYMENT TRANSACTION CONFIRMATION </H3>
+<h3>  TRANSACTION CONFIRMATION </H3>
 <h4><span class="redtext">{{tran_error_message}}</span></h4>
 <table border=0>
 <tr><td>Order ID</td><td><b>{{OrderID}}</b><td></tr>

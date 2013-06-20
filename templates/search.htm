@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block content %}
+ 
+ 
+ <link type="text/css" rel="stylesheet" href="/misc/category.css" />
+
+
+{% load tagsfilter %} 
+<div class="float-left wid20">&nbsp;&nbsp;</div>
+<div class="float-left wid748 padtop15">
+ <div class="clr pad-tb product-align1 marleft10 master-link"><a href="/">Home</a> &gt; <a href="/search?query={{keyword}}">{{keyword}} </a></div>
+<div class="clr">
+ </div>
+ 
+<div   class="clr wid748" align=center><div class="heading_bg2" align=center>Search Results ({{countresult}} Matches found)</div></div>
+
+<div class="clr padtop20 padbottom20">
+<div class="clr">
+<table width="100%"  border="0"   cellspacing="0" cellpadding="0" class="alternative">
+{% for products in alloiitems %}
+
+{% if forloop.counter0|divisibleby:3 %}<tr>{% endif %}
+<td >
+<div class="float_left blue_boxs" align="center"  style="width:180px !important;min-height:256px !important;">
+<div class="clr product_heading product-align">{{ products.name }}</div>
+<div class="clr  product-align">{{ products.description }}&nbsp;</div>
+<div class="clr pad-tb"><span class="clr "><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.thumbnail|strreplace:"assets/images/" }}' width="125" height="125" /></span></div>
+				{% if products.onsale > 0 %}
+					<div class="clr " style="font-size:13px !important;"><strong>Sale:&nbsp;</strong><span class="line-through">${{products.price|floatformat:2}}&nbsp;</span><strong class="orange_text">&nbsp;${{products.saleprice|floatformat:2}}</strong></div>
+				{% else %}
+					<div class="clr " style="font-size:13px !important;"><strong>&nbsp;${{products.price|floatformat:2}}</strong></div>
+				{% endif %}
+
+<div class="clr pad-tb" style="width:200px !important">
+				{% if products.stock >= 1 %}
+					<div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
+				{% else %}
+					<div class="wish-button"><a href="/addtowatchlist?itemid={{ products.catalogid }}">WISH LIST</a></div>
+				{% endif %}
+ <div class="hash-button"><a href="/product?pid={{ products.catalogid }}">more details...</a></div>
+</div>
+</div>
+</td>
+{% if forloop.counter|divisibleby:3 %}</tr>{% endif %}
+{% endfor %}
+<tr><td colspan=3>
+
+<div style="clear:both;  height:21px; line-height:21px; " class="records">Records:<b>{{countresult}} </b> Page {{page_num}} of {% widthratio countresult 100 1 %} |&nbsp;Goto Page: <a href="/search?query={{keyword}}&page=1">First</a> 
+{% if page_num < 2 %}
+<a href="/search?query={{keyword}}&page=1">Previous</a>
+{% elif page_num >= 2 %}
+    <a href="/search?query={{keyword}}&page={{page_num|add:-1}}">Previous</a>
+{% endif %}
+
+
+| <a href="/search?query={{keyword}}&page={{page_num|add:+1}}">Next </a> &nbsp<a href="/search?query={{keyword}}&page={% widthratio countresult 100 1 %}">Last</a></span>
+</div>
+</td></tr>
+ </table>
+ 
+ 
+
+ 
+ 
+ 
+
+ <div class="clr"></div>
+</div>
+
+ 
+
+
+</div>
+<div class="float-left"></div>
+
+</div></div>
+{% endblock content %}

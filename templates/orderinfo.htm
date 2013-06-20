@@ -68,7 +68,7 @@
 </div>
 <div class="clr height10">&nbsp;</div>
 <div class="clr bod-bg1"></div>
-<div class="clr myaccount_txt2" align="center">Order {{item.invoicenum_prefix}}{{item.invoicenum}}</div>
+<div class="clr myaccount_txt2" align="center">Order {{item.invoicenum_prefix}}{{item.invoicenum}} {% if item.order_status == 4 %} <span style="float:right;">(<a href="/addrma?oid={{item.orderid}}">Add New Guarantee Request</a>)</span>{%endif%}</div>
 
 <div class="clr bod-bg1"></div>
 <div class="clr">
@@ -80,7 +80,7 @@
 Fort Pierce, FL 34946</div></div></div>
 </div>
 <div class="float-right bod-title4">
-<div class="clr"><strong>Date Ordered</strong>:&nbsp;{{item.odate}}<br />
+<div class="clr"><br><strong>Date Ordered</strong>:&nbsp;{{item.odate}}<br />
 
 <strong>Order Number</strong>::{{item.invoicenum_prefix}}{{item.invoicenum}}</div>
 </div>
@@ -125,7 +125,7 @@ Fort Pierce, FL 34946</div></div></div>
 <div class="clr bod-title3"><strong>Shipping</strong>&nbsp;:&nbsp;{{item.oshipmethod}}<br />
   <br />
 
-
+{%comment%}
     <strong>Tracking Number</strong>&nbsp;:&nbsp;413421878179<br />
 <br />
 
@@ -135,10 +135,9 @@ Fort Pierce, FL 34946</div></div></div>
 
 
 <strong>Payment Type&nbsp;</strong>: Testing - Nothing Will Ship<br />
-<br />
-
-
-<strong>Discount(s)</strong></div>
+{%endcomment%}
+</div>
+{% if alloiitems|length > 0 %}
 <div class="clr">&nbsp;</div>
 <div class="float-left rightcontent-latest3">
 <table width="750" border="0" cellpadding="3" cellspacing="1" bgcolor="#EFEFEF" style="color: #434343 !important;font-size: 12px !important;">
@@ -155,41 +154,68 @@ Fort Pierce, FL 34946</div></div></div>
 	<td>{{item.itemname|safe}}</td>
 	<td>${{item.unitprice|floatformat:"2"}}</td>
 	<td>{{item.numitems}}</td>
-	<td>{{item.unitprice|floatformat:"2"}}</td>
+	<td>${{item.numitems|multiplyval:item.unitprice|floatformat:"2"}}</td>
 	</tr>
 {% endfor %}
+	<tr bgcolor="#FFFFFF" > 
+	<td colspan=3></td>
+	<td><strong>Subtotal:</strong></td>
+	<td>${{totalamt.unitprice__sum|floatformat:"2"}}</td>
+	</tr>
+ 
+	<tr bgcolor="#FFFFFF" > 
+	<td colspan=3></td>
+	<td><strong>Discount(s):</strong></td>
+	<td>${{item.coupondiscount|floatformat:"2"}}</td>
+	</tr>
+	<tr bgcolor="#FFFFFF" ><td colspan=3></td>
+	<td><strong>Taxes:</strong></td>
+	<td>${{item.odiscount}}</td>
+	</tr>
+	<tr bgcolor="#FFFFFF" ><td colspan=3></td>
+	<td><strong>Shipping:</strong></td>
+	<td>${{item.oshipcost|floatformat:"2"}}</td>
+	</tr>
+	<tr bgcolor="#FFFFFF" ><td colspan=3></td>
+	<td><strong>Total:</strong></td>
+	<td>${{item.orderamount|floatformat:"2"}}</td>
+	</tr>
 </table>
 <div>
  
  
-<div class="clr bod-title7 float-right">	
-<div class="bod-title3 wid9 float-left" align="center"><strong>Subtotal:</strong></div>
-<div class="float-left wid9">$115.76</div>
-
-</div>
-<div class="clr bod-title7 float-right">	
-<div class="bod-title3 wid9 float-left" align="center"><strong>Discount(s):</strong></div>
-<div class="float-left wid9">$0.00</div>
-
-</div>
-<div class="clr bod-title7 float-right">	
-<div class="bod-title3 wid9 float-left" align="center"><strong>Taxes:</strong></div>
-<div class="float-left wid9">$0.00</div>
-
-</div>
-<div class="clr bod-title7 float-right">	
-<div class="bod-title3 wid9 float-left" align="center"><strong>Shipping:</strong></div>
-<div class="float-left wid9">$37.98</div>
-
-</div>
-<div class="clr bod-title7 float-right">	
-<div class="bod-title3 wid9 float-left" align="center"><strong>Total:	</strong></div>
-<div class="float-left wid9 bod-over">$153.74</div>
-
+ 
+ 
 </div>
 </div>
+{%endif%}
+<div class="clr">
+ <div class="clr dot">&nbsp;</div>
+ <div class="clr myaccount_txt1">Guarantee Request Service</div>
+<div class="clr">&nbsp;</div>
+<div class="float-left rightcontent-latest3">
+<table width="750" border="0" cellpadding="3" cellspacing="1" bgcolor="#EFEFEF" style="color: #434343 !important;font-size: 12px !important;">
+  <tr style='background-image: url("/misc/images/content_menu.jpg");height: 31px;'>
+     <td width="100"><b>Request #</b></td>
+    <td width="300"><b>Date</b></td>
+    <td width="70"><b>Status</b></td>
+	
+	
+  </tr>
+{% for item in rmaitems %}
+	<tr bgcolor="#FFFFFF" >
+	<td align=left><a href="/rmarequest?crmid={{item.idrma}}">{{item.idrma}}</a></td> 
+	
+	<td>{{item.rmadate}}</td>
+	<td>{{item.idrmastatus|rmastatus}}</td>
+	
+	</tr>
+{% endfor %}
+	 
+</table>
+<div>
 </div>
-
+{%comment%}
 <div class="clr height25">&nbsp;</div>
 <div class="clr myaccount_txt1 padbottom10" >Guarantee Request Service</div>
 <div class="clr">
@@ -220,7 +246,7 @@ Request pictures for this order</div>
 
 </div>
 
-</div>
+</div>{%endcomment%}
 </div>
 </div>
 

@@ -1,19 +1,41 @@
+{% include 'header.htm' %}
 <style type="text/css">
 <!--
 .style1 {font-weight: bold}
 -->
 </style>
+<div align=center>
 
-{% include 'header.htm' %}
+<div class="wid748 ">
+<div class="clr"></div><br><br>&nbsp;<br>
+<div class="special toggle_right_title padtop10 padbottom5" style="width:62% !important;" align="center">
 <form name="form1" method="post" action="">
   <p>{% csrf_token %}
   <span class="style1">Registration Confirmation</span></p>
   <p>Thank you for registering with us!</p>
-  <p>Click <a href="#">here</a>, to access your account.</p>
+  <p>Click <a href="/login">here</a>, to access your account.</p>
   <p>Account approval may be subject to revision, in this case we'll notify you once your account is active. Feel free to contact us if you have any questions.</p>
   <p><strong>Customer Information</strong></p>
   <table width="392" border="0" cellpadding="3">
+    
+    
     <tr>
+      <td>EMail: </td>
+      <td>{{ customer.email }}</td>
+    </tr>
+    <tr>
+      <td>Company</td>
+      <td>{{ customer.company }}</td>
+    </tr>
+    <!--<tr>
+      <td>Tax ID </td>
+      <td>{{ customer.accountno }}</td>
+    </tr>-->
+	<tr>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+	<tr>
       <td  colspan="2">{{ customer.first_name}}&nbsp;{{ customer.last_name }}</td>
     </tr>
     <tr>
@@ -25,23 +47,11 @@
     <tr>
       <td colspan="2">{{ customer.city }}&nbsp;{{ customer.state }}&nbsp;{{ customer.zip }}&nbsp;{{ customer.country }}</td>
     </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-    </tr>
-    <tr>
-      <td>EMail: </td>
-      <td>{{ customer.email }}</td>
-    </tr>
-    <tr>
-      <td>Company</td>
-      <td>{{ customer.company }}</td>
-    </tr>
-    <tr>
-      <td>Tax ID </td>
-      <td>{{ customer.accountno }}</td>
-    </tr>
   </table>
   <p>&nbsp; </p>
 </form>
+ 
+
+<div class="height12 clr"></div></div></div> 
+  <p>&nbsp; </p>
 {% include 'footer.htm' %}

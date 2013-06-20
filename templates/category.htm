@@ -1,24 +1,27 @@
 {% extends 'base.html' %}
 {% block content %}
  
-<link type="text/css" rel="stylesheet" href="/misc/sty.css" />
+ 
  <link type="text/css" rel="stylesheet" href="/misc/category.css" />
 
 
 {% load tagsfilter %} 
 <div class="float-left wid20">&nbsp;&nbsp;</div>
 <div class="float-left wid725">
+<div class="clr" style="line-height:20px;">
+<div class="clr pad-tb product-align1 marleft10 master-link"><a href="/">Home</a> &gt; <a class="master-link" href="/">{{catparent}} </a> &gt; <a href="/category?id={{cat.id}}">{{cat.category_name}} </a></div>
 <div class="clr">
-<div class="clr pad-tb product-align1 marleft10 master-link"><a href="/">Home</a> > <a href="#" class="master-link">Marine Life </a> > <a href="/category?id={{cat.category_parent}}">Saltwater Fish </a> > <a href="/category?id={{cat.id}}">{{cat.category_name}} </a></div>
-<div class="clr">
-<div class="button"><a href="/category?id={{cat.id}}">{{cat.category_name}} </a></div>
+<div class="orange-txt2"> {{cat.category_name}} </div>
 </div>
+ 
 <div class="clr pad-tb marleft10" align="justify">
-<p>{{cat.category_header|safe}}</p>
+{{cat.category_header|safe}}
 </div>
-<div class="clr">
-<div class="button"><a href="#">Featured Products</a></div>
+{%if cat.id|featuredcount > 0 %}
+<div class="clr  padleft220">
+<div class="blue-button-master"><a href="#">Featured Products</a></div>
 </div>
+
 <div class="clr padtop20 padbottom20">
 <div class="clr">
 
@@ -30,9 +33,9 @@
 		<div class="clr pad-tb"><span class="clr "><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.thumbnail|strreplace:"assets/images/" }}' width="125" height="125" /></span></div>
 		
 				{% if products.onsale > 0 %}
-					<div class="clr "><strong>Sale:&nbsp;</strong><span class="line-through">${{products.price|floatformat:2}}&nbsp;</span><strong class="orange_text">&nbsp;${{products.saleprice|floatformat:2}}</strong></div>
+					<div class="clr " style="font-size:13px !important;"><strong>Sale:&nbsp;</strong><span class="line-through">${{products.price|floatformat:2}}&nbsp;</span><strong class="orange_text">&nbsp;${{products.saleprice|floatformat:2}}</strong></div>
 				{% else %}
-					<div class="clr "><strong>&nbsp;${{products.price|floatformat:2}}</strong></div>
+					<div class="clr " style="font-size:13px !important;"><strong>&nbsp;${{products.price|floatformat:2}}</strong></div>
 				{% endif %}
 		
 
@@ -48,30 +51,29 @@
 		</div>
 	{% endif %}
 {% endfor %}
-
-
-
-
-
-
 </div>
+
 <div class="clr"></div>
 </div>
 </div>
-<div class="clr wid748" align="left"><div class="heading_bg1" align="center">{{cat.id|productsdisplay|length}} {{cat.category_name}}</div></div>
+{%endif%}
+<div align="left" class="clr wid748"><div align="center" class="blue-button-master-new">{{cat.id|productsdisplay:":yes"}} {{cat.category_name}}</div></div>
 
 <div class="clr padtop20 padbottom20">
 <div class="clr">
-
+<table width="100%"  border="0"   cellspacing="0" cellpadding="0" class="alternative">
 {% for products in cat.id|productsdisplay %}
-<div class="float_left blue_boxs" align="center"  style="width:26% !important;min-height:266px !important;">
+
+{% if forloop.counter0|divisibleby:3 %}<tr>{% endif %}
+<td >
+<div class="float_left blue_boxs" align="center"  style="width:200px !important;min-height:256px !important;">
 <div class="clr product_heading product-align">{{ products.name }}</div>
 <div class="clr  product-align">{{ products.description }}&nbsp;</div>
 <div class="clr pad-tb"><span class="clr "><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.thumbnail|strreplace:"assets/images/" }}' width="125" height="125" /></span></div>
 				{% if products.onsale > 0 %}
-					<div class="clr "><strong>Sale:&nbsp;</strong><span class="line-through">${{products.price|floatformat:2}}&nbsp;</span><strong class="orange_text">&nbsp;${{products.saleprice|floatformat:2}}</strong></div>
+					<div class="clr " style="font-size:13px !important;"><strong>Sale:&nbsp;</strong><span class="line-through">${{products.price|floatformat:2}}&nbsp;</span><strong class="orange_text">&nbsp;${{products.saleprice|floatformat:2}}</strong></div>
 				{% else %}
-					<div class="clr "><strong>&nbsp;${{products.price|floatformat:2}}</strong></div>
+					<div class="clr " style="font-size:13px !important;"><strong>&nbsp;${{products.price|floatformat:2}}</strong></div>
 				{% endif %}
 
 <div class="clr pad-tb" style="width:200px !important">
@@ -83,9 +85,11 @@
  <div class="hash-button"><a href="/product?pid={{ products.catalogid }}">more details...</a></div>
 </div>
 </div>
+</td>
+{% if forloop.counter|divisibleby:3 %}</tr>{% endif %}
 {% endfor %}
 
- 
+ </table>
  
  
 

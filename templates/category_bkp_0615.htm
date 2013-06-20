@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block content %}
+ 
+<link type="text/css" rel="stylesheet" href="/misc/sty.css" />
+ <link type="text/css" rel="stylesheet" href="/misc/category.css" />
+
+
+{% load tagsfilter %} 
+<div class="float-left wid20">&nbsp;&nbsp;</div>
+<div class="float-left wid725">
+<div class="clr">
+<div class="clr pad-tb product-align1 marleft10 master-link"><a href="/">Home</a> > <a href="#" class="master-link">Marine Life </a> > <a href="/category?id={{cat.category_parent}}">Saltwater Fish </a> > <a href="/category?id={{cat.id}}">{{cat.category_name}} </a></div>
+<div class="clr">
+<div class="button"><a href="/category?id={{cat.id}}">{{cat.category_name}} </a></div>
+</div>
+<div class="clr pad-tb marleft10" align="justify">
+<p>{{cat.category_header|safe}}</p>
+</div>
+{%if cat.id|featuredcount > 0 %}
+<div class="clr">
+<div class="button"><a href="#">Featured Products</a></div>
+</div>
+{%endif%}
+<div class="clr padtop20 padbottom20">
+<div class="clr">
+
+{% for products in cat.id|productsdisplay %}
+	 {% if products.categoryspecial >= 1 %}
+		<div class="float_left orange_boxs " align="center" style="width:26% !important;min-height:266px !important;">
+		<div class="clr product_heading product-align">{{ products.name }}</div>
+		<div class="clr product-align">{{ products.description }}</div>
+		<div class="clr pad-tb"><span class="clr "><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.thumbnail|strreplace:"assets/images/" }}' width="125" height="125" /></span></div>
+		
+				{% if products.onsale > 0 %}
+					<div class="clr "><strong>Sale:&nbsp;</strong><span class="line-through">${{products.price|floatformat:2}}&nbsp;</span><strong class="orange_text">&nbsp;${{products.saleprice|floatformat:2}}</strong></div>
+				{% else %}
+					<div class="clr "><strong>&nbsp;${{products.price|floatformat:2}}</strong></div>
+				{% endif %}
+		
+
+
+		<div class="clr pad-tb" style="width:200px !important">
+				{% if products.stock >= 1 %}
+					<div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
+				{% else %}
+					<div class="wish-button"><a href="/addtowatchlist?itemid={{ products.catalogid }}">WISH LIST</a></div>
+				{% endif %}
+		<div class="hash-button"><a href="/product?pid={{ products.catalogid }}">more details...</a></div>
+		</div>
+		</div>
+	{% endif %}
+{% endfor %}
+</div>
+
+<div class="clr"></div>
+</div>
+</div>
+<div class="clr wid748" align="left"><div class="heading_bg1" align="center">{{cat.id|productsdisplay|length}} {{cat.category_name}}</div></div>
+
+<div class="clr padtop20 padbottom20">
+<div class="clr">
+
+{% for products in cat.id|productsdisplay %}
+<div class="float_left blue_boxs" align="center"  style="width:26% !important;min-height:266px !important;">
+<div class="clr product_heading product-align">{{ products.name }}</div>
+<div class="clr  product-align">{{ products.description }}&nbsp;</div>
+<div class="clr pad-tb"><span class="clr "><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.thumbnail|strreplace:"assets/images/" }}' width="125" height="125" /></span></div>
+				{% if products.onsale > 0 %}
+					<div class="clr "><strong>Sale:&nbsp;</strong><span class="line-through">${{products.price|floatformat:2}}&nbsp;</span><strong class="orange_text">&nbsp;${{products.saleprice|floatformat:2}}</strong></div>
+				{% else %}
+					<div class="clr "><strong>&nbsp;${{products.price|floatformat:2}}</strong></div>
+				{% endif %}
+
+<div class="clr pad-tb" style="width:200px !important">
+				{% if products.stock >= 1 %}
+					<div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
+				{% else %}
+					<div class="wish-button"><a href="/addtowatchlist?itemid={{ products.catalogid }}">WISH LIST</a></div>
+				{% endif %}
+ <div class="hash-button"><a href="/product?pid={{ products.catalogid }}">more details...</a></div>
+</div>
+</div>
+{% endfor %}
+
+ 
+ 
+ 
+
+ 
+ 
+ 
+
+ <div class="clr"></div>
+</div>
+
+ 
+
+
+</div>
+<div class="float-left"></div>
+
+</div></div>
+{% endblock content %}

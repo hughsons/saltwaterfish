@@ -12,7 +12,7 @@
     <td width="332"><span class="style1">Name</span></td>
     <td width="247"><span class="style1">Add to Cart </span></td>
   </tr>
-  {% for item in product_list %}
+  {% for item in yuiyui %}
   <tr bgcolor="#FFFFFF">
     <td>{{item.catalogid}}</td>
     <td><table width="100%" border="0">
@@ -29,6 +29,23 @@
     <td><a href="addtocart?item_id={{item.catalogid}}">Add to Cart</a></td>
   </tr>
   {% endfor %}
+</table>
+<table>
+<tr>
+	<td><script>
+  (function() {
+    var cx = '017962673971899229735:obihww4qabe';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search></td>
+</tr>
 </table>
 </body>
 </html>

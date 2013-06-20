@@ -121,6 +121,7 @@ LOGGING = {
     }
 }
 
+SESSION_COOKIE_AGE = 1200
 PAYPAL_URL  = 'https://www.sandbox.paypal.com/us/cgi-bin/webscr'
 PAYPAL_MERCHANT_EMAIL = 'swfmerchant@expertsden.com'
 if(os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine')):

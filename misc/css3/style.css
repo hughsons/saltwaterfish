@@ -1,6 +1,5 @@
 body{
-	margin:0;
-	padding:0;
+	
 	font-family: 'PT Sans', sans-serif;
 	 
 	 	
@@ -631,3 +630,76 @@ vertical-align:text-top;
 /* Login page */
 
 /* Login Page */
+.table-bg1 {
+background-color: #FFFFFF;
+background-image: url(images/quick-table-bg.jpg);
+background-repeat: repeat-x;
+background-position: left top;
+width: 570px;
+border: 1px solid #d1d1d1;
+font-family: "Open Sans";
+font-size: 13px;
+color: #434343;
+font-weight: bold;
+}
+table[Attributes Style] {
+width: 100%;
+border-top-width: 0px;
+border-right-width: 0px;
+border-bottom-width: 0px;
+border-left-width: 0px;
+float: left;
+border-spacing: 0px;
+}
+.table-bg1_new {
+font-family: "Open Sans";
+font-size: 13px;
+color: #434343;
+font-weight: bold;
+}
+.table-text1 {
+font-family: Arial, Helvetica, sans-serif;
+font-size: 14px;
+color: #434343;
+text-decoration: underline;
+}
+#tankStats {
+font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+color: #082141;
+font-size: 12px;
+font-style: normal;
+}
+.blue-button-cart {
+    background-color: #7BC9ED;
+    border-radius: 8px 8px 8px 8px;
+    color: #FFFFFF;
+    float: left;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    height: 40px;
+    line-height: 40px;
+    padding-left: 15px;
+    padding-right: 15px;
+    text-align: left;
+    text-transform: capitalize;
+    width: auto;
+}
+.button_top {
+    clear: both;
+    padding-top: 23px;
+}
+.float-right {
+    float: right;
+}
+.clr {
+    clear: both;
+}
+.cart_bottom_heading {
+    color: #000000;
+    font-family: 'Open Sans',sans-serif;
+    font-size: 15px;
+    font-weight: bold;
+    padding-bottom: 15px;
+    padding-left: 20px;
+}

@@ -48,16 +48,16 @@ def CustomerLoginClass(request):
                     return HttpResponseRedirect(target_page)
                 else:
                     request.session['ErrorMessage'] = "Invalid User name or Password."
-                    return HttpResponseRedirect('/login')
+                    return HttpResponseRedirect('/login#forget')
             else:
                 request.session['ErrorMessage'] = "Recaptcha is not matched."
                 return HttpResponseRedirect('/login')
         else:
             request.session['ErrorMessage'] = "Invalid Form data."
-            return HttpResponseRedirect('/login')
+            return HttpResponseRedirect('/login#forget')
     else:
         request.session['ErrorMessage'] = "Form submission is not as expected."
-        return HttpResponseRedirect('/login')
+        return HttpResponseRedirect('/login#forget')
 
 @csrf_exempt
 def AdminLoginClass(request):
@@ -98,6 +98,7 @@ def loginpage(request):
     #recaptcha2 = "https://chart.googleapis.com/chart?chst=d_text_outline&chld=FFCC33|16|h|FF0000|b|%s" %GetRecaptcha(request)
     default_message = ""
     error_message1, error_message2 = "", ""
+    #logging.info('Fetch Started::  %s', request.session["ErrorMessage"])
 
     if 'message' in request.GET:
       default_message = request.GET['message']
@@ -137,4 +138,4 @@ def Adminloginpage(request):
 
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect('/')
+    return HttpResponseRedirect('/login')

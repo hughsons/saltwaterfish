@@ -1,4 +1,5 @@
 from django import forms
+import logging
 
 class LoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={'class' : 'txt-box1', 'autocomplete':'OFF', 'placeholder':'Email Address'}),max_length = 50)
@@ -57,6 +58,50 @@ class ChangePwdForm(forms.Form):
     old_password = forms.CharField(widget=forms.PasswordInput, max_length = 25L)
     new_password = forms.CharField(widget=forms.PasswordInput, max_length = 25L)
 
+
+#--- Murthy Added Forms from 2013-16-17 --
+class BillingShippingAddressForm(forms.Form):
+  STATES = (('AL', 'Alabama'),('AK', 'Alaska'),('AZ', 'Arizona'),('AR', 'Arkansas'),
+            ('CA', 'California'),('CO', 'Colorado'),('CT', 'Connecticut'),('DE', 'Delaware'),
+            ('FL', 'Florida'),('GA', 'Georgia'),('HI', 'Hawaii'),('ID', 'Idaho'),('IL', 'Illinois'),
+            ('IN', 'Indiana'),('IA', 'Iowa'),('KS', 'Kansas'),('KY', 'Kentucky'),('LA', 'Louisiana'),
+            ('ME', 'Maine'),('MD', 'Maryland'),('MA', 'Massachusetts'),('MI', 'Michigan'),
+            ('MN', 'Minnesota'),('MS', 'Mississippi'),('MO', 'Missouri'),('MT', 'Montana'),
+            ('NE', 'Nebraska'),('NV', 'Nevada'),('NH', 'New Hampshire'), ('NJ', 'New Jersey'),
+            ('NM', 'New Mexico'), ('NY', 'New York'), ('NC', 'North Carolina'),
+            ('ND', 'North Dakota'), ('OH', 'Ohio'), ('OK', 'Oklahoma'), ('OR', 'Oregon'),
+            ('PA', 'Pennsylvania'), ('RI', 'Rhode Island'), ('SC', 'South Carolina'), ('SD', 'South Dakota'),
+            ('TN', 'Tennessee'),('TX', 'Texas'),('UT', 'Utah'),('VT', 'Vermont'),('VA', 'Virginia'),
+            ('WA', 'Washington'),('WV', 'West Virginia'),('WI', 'Wisconsin'),('WY', 'Wyoming'))  
+
+  contact_id = forms.CharField(widget=forms.HiddenInput, required=False)
+  billing_first_name = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':30}),max_length = 50, required=False)
+  billing_last_name = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':30}),max_length = 50, required=False)
+  billing_company = forms.CharField(max_length = 255L, required=False)
+  billing_phone_part1 = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':3}),max_length = 50, required=False)
+  billing_phone_part2 = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':3}),max_length = 50, required=False)
+  billing_phone_part3 = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':3}),max_length = 50, required=False)
+  billing_phone_ext = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':3}),max_length = 50, required=False)
+  billing_address1 = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':40}),max_length = 50, required=False)
+  billing_address2 = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':40}),max_length = 50, required=False)
+  billing_city = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':10}),max_length = 50, required=False)
+  billing_state = forms.ChoiceField(choices=STATES) 
+  billing_zip = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':3}),max_length = 50, required=False)
+
+  shipping_first_name = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':30}),max_length = 50, required=True)
+  shipping_last_name = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':30}),max_length = 50, required=True)
+  shipping_company = forms.CharField(max_length = 255L, required=False)
+  shipping_phone_part1 = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':3}),max_length = 50, required=True)
+  shipping_phone_part2 = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':3}),max_length = 50, required=True)
+  shipping_phone_part3 = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':3}),max_length = 50, required=True)
+  shipping_phone_ext = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':3}),max_length = 50, required=False)
+  shipping_address1 = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':40}),max_length = 50, required=True)
+  shipping_address2 = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':40}),max_length = 50, required=False)
+  shipping_city = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':10}),max_length = 50, required=False)
+  shipping_state = forms.ChoiceField(choices=STATES, initial='MO') 
+  shipping_zip = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':3}),max_length = 50, required=False)
+
+
 class CreditCardForm(forms.Form):
   previous_cards = forms.ChoiceField(choices=[], widget=forms.RadioSelect(), required=False)
   card_holder_name = forms.CharField(max_length = 50L)
@@ -67,33 +112,43 @@ class CreditCardForm(forms.Form):
   is_save_card = forms.BooleanField(required=False, label="Check this")
   
   def __init__(self, *args, **kwargs):
+    card_list = kwargs.pop('card_list')
     super(CreditCardForm, self).__init__(*args,**kwargs)
-    #previous_cards = args[0]['previous_cards']
-    #previous_cards = [('4111111111111111', 'Account ending in 2003'), ('378282246310005', 'Account ending in 2004'), ('4111111111111111', 'Account ending in 2005')]
-    #logging.info("\n\n\n\n IN FORMS \n\n\n")
-    #logging.info(args[0]['previous_cards'])
-    #logging.info("\nIN FORMS \n\n\n\n\n")
-    #logging.info(previous_cards)
-    #self.fields['previous_cards'].choices = previous_cards 
+    self.fields['previous_cards'].choices = card_list 
  
-    #self.fields['previous_cards'].choices = [(1, 'Hello'), (2, 'Kiran')]
-  
+ 
   
 class NewAccountForm(forms.Form):
-  username = forms.CharField(max_length = 50L)
-  password = forms.CharField(max_length = 25L)
+  username = forms.CharField(widget=forms.TextInput(attrs={'class' : 'txt-box1', 'autocomplete':'OFF', 'placeholder':'Email Address'}),max_length = 50)
+  password = forms.CharField(widget=forms.PasswordInput(render_value=False,attrs={'class' : 'txt-box1', 'autocomplete':'OFF', 'placeholder':'Password'}), max_length=25)
   
-class PaypalOrderFormNoLogin(AddressForm, NewAccountForm):
+class PaypalOrderFormNoLogin(BillingShippingAddressForm, NewAccountForm):
   comment = forms.CharField(widget=forms.Textarea, max_length = 255L, required=False)
  
-class PaypalOrderFormLoggedIn(AddressForm):
+class PaypalOrderFormLoggedIn(BillingShippingAddressForm):
   comment = forms.CharField(widget=forms.Textarea, max_length = 255L, required=False)
 
-class AuthorizeNetFormNoLogin(AddressForm, CreditCardForm, NewAccountForm):
+class AuthorizeNetFormNoLogin(BillingShippingAddressForm, CreditCardForm, NewAccountForm):
   comment = forms.CharField(widget=forms.Textarea, max_length = 255L, required=False)
 
-class AuthorizeNetFormLoggedIn(AddressForm, CreditCardForm):
+class AuthorizeNetFormLoggedIn(BillingShippingAddressForm, CreditCardForm):
   comment = forms.CharField(widget=forms.Textarea, max_length = 255L, required=False)
 
-class NoGateWay(AddressForm):
-    comment = forms.CharField(widget=forms.Textarea, max_length = 255L, required=False)
+class NoGateWay(BillingShippingAddressForm):
+  comment = forms.CharField(widget=forms.Textarea, max_length = 255L, required=False)
+
+class RadioForm(forms.Form):
+  STATES = (('AL', 'Alabama'),('AK', 'Alaska'),('AZ', 'Arizona'),('AR', 'Arkansas'),
+            ('CA', 'California'),('CO', 'Colorado'),('CT', 'Connecticut'),('DE', 'Delaware'),
+            ('FL', 'Florida'),('GA', 'Georgia'),('HI', 'Hawaii'),('ID', 'Idaho'),('IL', 'Illinois'),
+            ('IN', 'Indiana'),('IA', 'Iowa'),('KS', 'Kansas'),('KY', 'Kentucky'),('LA', 'Louisiana'),
+            ('ME', 'Maine'),('MD', 'Maryland'),('MA', 'Massachusetts'),('MI', 'Michigan'),
+            ('MN', 'Minnesota'),('MS', 'Mississippi'),('MO', 'Missouri'),('MT', 'Montana'),
+            ('NE', 'Nebraska'),('NV', 'Nevada'),('NH', 'New Hampshire'), ('NJ', 'New Jersey'),
+            ('NM', 'New Mexico'), ('NY', 'New York'), ('NC', 'North Carolina'),
+            ('ND', 'North Dakota'), ('OH', 'Ohio'), ('OK', 'Oklahoma'), ('OR', 'Oregon'),
+            ('PA', 'Pennsylvania'), ('RI', 'Rhode Island'), ('SC', 'South Carolina'), ('SD', 'South Dakota'),
+            ('TN', 'Tennessee'),('TX', 'Texas'),('UT', 'Utah'),('VT', 'Vermont'),('VA', 'Virginia'),
+            ('WA', 'Washington'),('WV', 'West Virginia'),('WI', 'Wisconsin'),('WY', 'Wyoming'))  
+
+  shipping_state = forms.ChoiceField(choices=STATES, initial='CA')

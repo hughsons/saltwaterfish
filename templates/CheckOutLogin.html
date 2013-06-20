@@ -5,6 +5,49 @@
 .height12 {
     height: 7px !important;
 }
+.blue-button-cart {
+    background-color: #7BC9ED;
+    border-radius: 8px 8px 8px 8px;
+    color: #FFFFFF;
+    float: left;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    height: 40px;
+    line-height: 40px;
+    padding-left: 15px;
+    padding-right: 15px;
+    text-align: left;
+    text-transform: capitalize;
+    width: auto;
+}
+.card1_txt_right-new6 {
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 11px;
+    text-align: left;
+}
+label {
+    float: left;
+    padding-right: 5px;
+    text-align: right;
+    width: 26%;
+}
+.login_left input[type="text"] {
+    float: left;
+    width: 203px;
+}
+input[type="text"] {
+    background-color: #FFFFFF;
+    border: 1px solid #C9C9C9;
+    height: 22px;
+    margin-bottom: 8px;
+}
+.password_link {
+    clear: both;
+    padding-right: 20px;
+    text-align: right;
+	font-size: 12px;
+}
 </style>
 <script language="javascript" type="text/javascript" src="/misc/js/jquery-1.7.2.min.js"></script>
 <script language="javascript" type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/jquery.validate.min.js"></script>
@@ -61,6 +104,57 @@ $(function() {
 <div class="clr">
 <div class="clr">&nbsp;&nbsp;</div>
 <div class="clr">&nbsp;&nbsp;</div>
+<div class="login_container">
+<div class="login_left">
+<div class="login_heading">
+<form name="form" id="form" action="/custlogin" method="post">
+{% csrf_token %}
+<input type="hidden" name="target" value='/orderconfirmation'>
+{% if message or error_message1 %}
+      <p class="greentext">{{ message }} <span class="redtext">{{ error_message1 }}</span></p>{% endif %}
+  <div align="justify">Returning Customers:</div>
+</div>
+<p align="justify">I am a returning customer signing in   </p><div class="clr padtop15">
+ 
+<div class="clr card1_txt_right-new6" style="height:25px;"><label>Email Address</label>{{ LoginForm.username }}</div>
+
+<div class="clr card1_txt_right-new6"><label>Password</label>{{ LoginForm.password }}</div>
+<div class="clr card1_txt_right-new6"> &nbsp;</div>
+<div class="clr card1_txt_right-new6" style="padding-left:100px !important;"><img src="{{ recaptcha }}" /></div>
+<div class="clr card1_txt_right-new6"> &nbsp;</div>
+<div class="clr card1_txt_right-new6"><label>Verify</label>{{ LoginForm.recaptcha }}</div>
+ 
+</div>
+<div align="center" class="password_link"><a href="/login#forget">Forgot your password?</a></div>
+ <div class="clr padtop10">
+ <input type="submit" name="cmdSubmit" value="Sign to your account" class="blue-button-cart">  
+</form>
+</div>
+<div class="float_right"></div>
+</div>
+<div class="login_right">
+<div align="left" class="login_heading">New Customer:</div>
+<p align="justify">
+  I am a new customer <br>
+<br>
+ By creating an account at Saltwaterfish.com you
+     will be able to shop faster, be up to date on orders
+     status, and keep track of the orders you have
+     previously made.</p>
+
+<div class="clr">
+<form method="POST" action="/guestlogin">
+{% csrf_token %}<div class="clr card1_txt_right-new6"><label>Email Address</label><input type="text" name="EMail" value="" class="wid210" /></div>
+
+</div>
+<div class="clr padtop20">
+<input type="submit" name="cmdSubmit" value="Continue >" class="blue-button-cart">
+</form>
+</div> 
+<p></p>
+
+</div></div>
+{%comment%}
   <div class="login_container">
 <div class="login_left">
   <div class="login_heading">
@@ -75,11 +169,11 @@ $(function() {
 {% if message or error_message1 %}
       <p class="greentext">{{ message }} <span class="redtext">{{ error_message1 }}</span></p>{% endif %}
 <table border="0">
-  <tr><td>EMail</td><td>{{ form.username }}</td></tr>
-  <tr><td>Password</td><td>{{ form.password }}</td></tr>
-  <tr><td colspan="2"><img src="{{ recaptcha }}" /></td></tr>
-  <tr><td>Verify</td><td>{{ form.recaptcha }}<input type="hidden" name="target" value='/orderconfirmation'></td></tr>
-  <tr><td colspan="2"><input type=image src="/misc/images/sign-in.jpg" width="77" height="21" border="0" /></td></tr>
+  <tr><td>Email</td><td>{{ LoginForm.username }}</td></tr>
+  <tr><td>Password</td><td>{{ LoginForm.password }}</td></tr>
+  <tr><td colspan="2" align=center><img src="{{ recaptcha }}" /></td></tr>
+  <tr><td>Verify</td><td>{{ LoginForm.recaptcha }}<input type="hidden" name="target" value='/orderconfirmation'></td></tr>
+  <tr><td colspan="2"><br><input type=image src="/misc/images/sign-in.jpg" width="77" height="21" border="0" /></td></tr>
 </table>
 </form>
 </div>
@@ -99,10 +193,11 @@ Lorem ipsum dolor sit amet, habitasse pretium dolor sociis. Nulla et facilisis i
 <div class="clr">
 <div class="clr"><label>Email</label><input type="text" name="EMail" value="" class="wid210" /></div>
 </div>
-<div><input type="submit" name="cmdSubmit" value="Continue as Guest" class="button"></div>
+<div><input type="submit" name="cmdSubmit" value="Continue as Guest" class="blue-button-cart"></div>
 </div></div></div>
 </div>
 </form>
+{%endcomment%}</div></div>
 <div class="float-left wid10"></div>
 
 </div>

@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load tagsfilter %}
+<link type="text/css" rel="stylesheet" href="/misc/myaccount.css" />
+
+<style>
+.bod-bg1 {
+    background-color: #CCCCCC;
+    height: 1px;
+}
+.my_account_link_new {
+    color: #144789;
+}
+.my_account_link_new {
+    color: #144789;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 14px;
+    text-align: left;
+}
+.myaccount_txt1 {
+    color: #010000;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: left;
+    text-decoration: none;
+}
+.padbottom13 {
+    padding-bottom: 13px;
+}
+.myaccount_txt2 {
+    color: #010000;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    height: 31px;
+    line-height: 31px;
+    text-align: center;
+    text-decoration: none;
+}
+.bod-title3 {
+    color: #434343;
+    float: left;
+    font-family: 'Open Sans',sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+}
+.bod-title4 {
+    color: #434343;
+    float: right;
+    font-family: 'Open Sans',sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+}
+</style>
+<div class="float-left width10">&nbsp;&nbsp;</div>
+<div class="float-left wid748 padtop15">
+<div class="clr my_account_link_new">
+<div class="clr">
+<div class="float-left wid163">
+<div class="clr my_account_link">Home  <span>&gt; My Account</span><span> &gt; Guarantee Request Service</span></div>
+</div>
+<div class="float-right wid160"><div class="float-left"><img src="misc/images/arro.jpg" /></div>
+<div class="float-right"><span><a href="/orderstatus">Click here to go back</a></span></div>
+</div>
+
+</div>
+<div class="clr height10">&nbsp;</div>
+<div class="clr bod-bg1"></div>
+<div class="clr myaccount_txt2" align="center">Guarantee Request Number : {{item.idrma}}</div>
+
+<div class="clr bod-bg1"></div>
+<div class="clr">
+<div class="float-left   padtop27 padbottom13"> 
+<div  class="clr">Customer Name : {{ request.session.Customer.billing_firstname }} {{ request.session.Customer.billing_lastname }}<br>
+
+Order Number : SWF-179612</div></div> 
+</div>
+ 
+
+ 
+<div class="clr">
+ <div class="clr dot">&nbsp;</div>
+ <div class="clr myaccount_txt1">Order Items</div>
+ 
+
+ 
+<div class="clr">&nbsp;</div>
+<div class="float-left rightcontent-latest3">
+<table width="750" border="0" cellpadding="3" cellspacing="1" bgcolor="#EFEFEF" style="color: #434343 !important;font-size: 12px !important;">
+  <tr style='background-image: url("/misc/images/content_menu.jpg");height: 31px;'>
+     <td width="100"><b>Item ID</b></td>
+    <td width="300"><b>Description</b></td>
+    <td width="70"><b>Unit Price</b></td>
+	<td width="70"><b>Purchased</b></td>
+    <td width="70"><b>Returned</b></td>
+	 <td width="70"><b>Received</b></td>
+	
+  </tr>
+{% for item in alloiitems %}
+	<tr bgcolor="#FFFFFF" ><td align=left>{{item.itemid}}</td> 
+	<td>{{item.itemname}}</td>
+	<td>${{item.unitprice|floatformat:"2"}}</td>
+	<td>{{item.numitems}}</td>
+	<td>{%for bbb in item.orderitemid|fetchrmaoitem %}
+	{{bbb.qty_return}}
+	{%endfor%}</td>
+	<td>{%for bbb in item.orderitemid|fetchrmaoitem %}
+	{{bbb.qty_received}}
+	{%endfor%}</td>
+	</tr>
+{% endfor %}
+	 
+</table>
+<div>
+<div class="clr">&nbsp;</div>
+<div class="clr myaccount_txt1">Order Return Options</div> 
+
+<table width="750" border="0" cellpadding="3" cellspacing="1" bgcolor="#EFEFEF" style="color: #434343 !important;font-size: 12px !important;">
+  <tr style='background-image: url("/misc/images/content_menu.jpg");height: 31px;'>
+    <td width="100"><b>Reason</b></td>
+    <td width="300"><b>Method</b></td>
+    <td width="70"><b>Status</b></td>
+	 
+  </tr>
+ 	<tr bgcolor="#FFFFFF" >
+	<td align=left>{{item.idrmareason|rmareasons}}</td> 
+	 
+	<td>{{item.idrmamethod|rmamethods}}</td>
+	<td>{{item.idrmastatus|rmastatus}}</td>
+	</tr>
+ </table>
+<div class="clr">&nbsp;</div>
+<div class="clr myaccount_txt1">Comments</div> 
+<form name="submitrma" id="submitrma" method="POST" action="/generalactions">
+      {% csrf_token %}
+	  <input type=hidden name=action value="addrmaresponse">
+	   <input type=hidden name=rmaid value="{{item.idrma}}">
+<table width="750" border="0" cellpadding="3" cellspacing="1" bgcolor="#EFEFEF" style="color: #434343 !important;font-size: 12px !important;">
+  <tr style='background-image: url("/misc/images/content_menu.jpg");height: 31px;'>
+    <td width="300">Description</td>
+  </tr>
+ 	<tr bgcolor="#FFFFFF" ><td align=left><b>You:</b><br>{{item.comments|safe}}</td></tr>
+	<tr ><td align=left><b>Staff:</b><br>{{item.staffcomments|safe}}</td></tr>
+	{%for rmaitems in rmamessages %}
+	<tr class="{% cycle 'white' 'grey' %}"><td align=left><b>{%if rmaitems.sender > 0 %}You{%else%} Staff{%endif%}:</b><br>{{rmaitems.message|safe}}</td></tr>
+	{%endfor%}
+	<tr bgcolor="#FFFFFF" ><td align=left><br><br><b>Comments:</b><br><textarea name="message" rows="4" cols="62"></textarea></td></tr>
+	<tr bgcolor="#FFFFFF" ><td align=left><input type="submit" name="submit" value="Reply"></td></tr>
+ </table>
+</div>
+</div>
+
+ 
+ 
+ 
+
+</div>
+<div class="clr my_account_title padtop27 padbottom13">
+</div>
+</div>
+<div class="float-left wid10"></div>
+
+</div></div>
+{% endblock content %}

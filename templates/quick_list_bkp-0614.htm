@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+{% block content %}
+ <script language="javascript" type="text/javascript" src="/misc/js/imagetooltip.js"></script>
+ <script language="javascript" type="text/javascript" src="/misc/js/jquery.bpopup.min.js"></script>
+<link type="text/css" rel="stylesheet" href="/misc/category.css" />
+<link type="text/css" rel="stylesheet" href="/misc/style_new.css" />
+<script type="text/javascript">
+	;(function($) {
+         $(function() {
+            $('.pop1').bind('click', function(e) {
+                e.preventDefault();
+				var a_href = $(this).attr('id');
+				$("#contentss").load(a_href);
+                $('#popup').bPopup({
+				});
+			});
+			 
+        });
+
+    })(jQuery);
+
+</script>
+
+<style>
+
+.buttons {
+    background-color: #2B91AF;
+    border-radius: 10px 10px 10px 10px;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    padding: 6px 11px;
+    text-align: left;
+    text-decoration: none;
+}
+
+#popup, #popup2, .bMulti {
+background-color: #fff;
+border-radius: 10px 10px 10px 10px;
+box-shadow: 0 0 25px 5px #999;
+color: #111;
+display: none;
+min-width: 450px;
+padding: 1px;
+}
+#element.style {
+left: 338px;
+position: absolute;
+top: 2163px;
+z-index: 9999;
+opacity: 0;
+display: none;
+height: auto;
+width: auto;
+}
+pre{
+	display:block;
+	font:100% "Courier New", Courier, monospace;
+	padding:10px;
+	border:1px solid #bae2f0;
+	background:#e3f4f9;	
+	margin:.5em 0;
+	overflow:auto;
+	width:800px;
+}
+
+img{border:none;}
+ 
+
+/*  */
+
+#preview{
+	position:absolute;
+	border:1px solid #ccc;
+	background:#333;
+	padding:5px;
+	display:none;
+	color:#fff;
+	margin-left:350px;
+	}
+#screenshot{
+	position:absolute;
+	border:1px solid #ccc;
+	background:#333;
+	padding:5px;
+	display:none;
+	color:#fff;
+	margin-left:300px;
+	margin-top:150px;
+	z-index: 1000;
+	}
+
+/*  */
+</style>
+{% load tagsfilter %}
+<div class="float-left wid20">&nbsp;&nbsp;</div>
+<div class="float-left wid748 padtop10">
+{% if cat|categoriesdisplay|length < 1 %}
+<div class="feature-bg1">Featured Products</div>
+<div class="clr height15">&nbsp;&nbsp;</div>
+{% for products in cat|productsdisplay %}
+	 {% if products.categoryspecial >= 1 %}
+		<div class="float_left orange_boxs " align="center" style="width:26% !important;min-height:266px !important;">
+		<div class="clr product_heading product-align">{{ products.name }}</div>
+		<div class="clr product-align">{{ products.description }}</div>
+		<div class="clr pad-tb"><span class="clr pad-tb"><img src='http://commondatastorage.googleapis.com/swf_product_images/{{  products.thumbnail|strreplace:"assets/images/" }}' width="125" height="125" /></span></div>
+				{% if products.onsale > 0 %}
+					<div class="clr "><strong>Sale:&nbsp;</strong><span class="line-through">${{products.price|floatformat:2}}&nbsp;</span><strong class="orange_text">&nbsp;${{products.saleprice|floatformat:2}}</strong></div>
+				{% else %}
+					<div class="clr "><strong>&nbsp;${{products.price|floatformat:2}}</strong></div>
+				{% endif %}
+		<div class="clr pad-tb" style="width:200px !important">
+				{% if products.stock >= 1 %}
+					<div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
+				{% else %}
+					<div class="wish-button "><a href="/waitpopup?itemid={{ products.catalogid }}" class="pop1">WISH LIST</a></div>
+				{% endif %}
+		<div class="hash-button"><a href="/product?pid={{ products.catalogid }}">more details...</a></div>
+		</div>
+		</div>
+	{% endif %}
+{% endfor %}
+<div class="clr">&nbsp;</div>
+	<div class="clr float-left wid570"><table width="100%" border="0" align="left" cellpadding="10" cellspacing="0">
+	  <tr><td class="table-topbg1"><table width="100%" border="0">
+	  <tr>
+		 <td width="52%" align="left">Description {{ cats.category_name }}</td>
+		 <td width="20%" align="left">Price</td>
+		<td width="20%" align="left">Status</td>
+	  </tr>
+	</table>
+	</td>
+	  </tr>
+	</table>
+	</div>
+	<div class=" clr float_left">
+	<table width="100%" border="0" align="left" cellpadding="10" cellspacing="0" class="table-bg1" >
+		{% for products in cat|productsdisplay %}
+			  <tr>
+				<td width="55%" class="table-text1"><a href="/product?pid={{ products.catalogid }}"  class="screenshot" rel='http://commondatastorage.googleapis.com/swf_product_images/{{ products.image1|strreplace:"assets/images/" }}'>{{ products.name }}</a></td>
+				<td width="22%" class="table-text1">
+				{% if products.onsale == 1 %}
+					<img src="/misc/images/quick-sale-img.png" width="33" height="21" border="0"  />
+				{% else %}
+					${{products.price|floatformat:2}}
+				{% endif %}</td>
+					<td width="153">
+					{% if products.stock >= 1 %}
+					<div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
+				{% else %}
+					<div class="wish-button"><a id="/waitpopup?itemid={{ products.catalogid }}" href="#" class="pop1">WISH LIST</a></div>
+				{% endif %}
+ 					</td>
+				</tr>
+ 			   <tr><td colspan="4"><div class="bg7"> </div></td></tr>
+		   {% endfor %}
+	</table></div>
+{% else %}
+<div class="clr height15">&nbsp;&nbsp;</div>
+	{% for cats in cat|categoriesdisplay %}
+	{% if cats.id|productsdisplay:"yes" > 0 %}
+	<div class="table-topicbg1 padbottom15 float_left" >{{ cats.category_name }}</div>
+	<div class="clr float-left wid570"><table width="100%" border="0" align="left" cellpadding="10" cellspacing="0">
+	  <tr><td class="table-topbg1"><table width="100%" border="0">
+	  <tr>
+		 <td width="52%" align="left">Description {{ cats.category_name }}</td>
+		 <td width="20%" align="left">Price</td>
+		<td width="20%" align="left">Status</td>
+	  </tr>
+	</table>
+	</td>
+	  </tr>
+	</table>
+	</div>
+	<div class=" clr float_left">
+	<table width="100%" border="0" align="left" cellpadding="10" cellspacing="0" class="table-bg1" >
+	{% for products in cats.id|productsdisplay %}
+	  <tr>
+		<td width="52%" class="table-text1"><a href="/product?pid={{ products.catalogid }}"  class="screenshot" rel='http://commondatastorage.googleapis.com/swf_product_images/{{ products.image1|strreplace:"assets/images/" }}'>{{ products.name }}</a></td>
+		<td width="20%">
+					{% if products.onsale == 1 %}
+						${{products.saleprice|floatformat:2}} <img src="/misc/images/quick-sale-img.png" width="33" height="21" border="0"  />
+					{% else %}
+						${{products.price|floatformat:2}}
+					{% endif %}</td>
+		<td width="103">
+					{% if products.stock > 0 %}
+						<div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
+					{% else %}
+						<div class="wish-button "><a href="##" id="/waitpopup?itemid={{ products.catalogid }}" class="pop1">WISH LIST</a>
+						
+						</div>
+					{% endif %}<br>
+					
+		</td>
+	  </tr>
+	   <tr><td colspan="4"><div class="bg7"> </div></td></tr>
+	  {%endfor%}
+	</table>
+	</div>
+	<div class=" clr">&nbsp;</div>
+	{%endif%}
+	{%empty%}
+	No Products currently
+	{%endfor%}
+
+{% endif %}
+
+
+
+
+
+
+<!--wrapper left close--><div class="height1"></div></div>
+
+<!--tab-wrapper close--><div class="height1"></div>
+
+
+<div class="float-left wid10"></div>
+
+</div>
+<div id="popup" style="left: -700px; position: absolute; top: 1177px; z-index: 9999; opacity: 1; display: none;min-height:200px;">
+        
+        <div id="contentss" style="height: auto; width: auto;"></div>
+</div>
+{% endblock content %}

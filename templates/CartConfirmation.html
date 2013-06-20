@@ -2,7 +2,84 @@
 {% block content %}
 {% load tagsfilter %}
 <link type="text/css" rel="stylesheet" href="/misc/css/style.css" />
-
+<link type="text/css" rel="stylesheet" href="/misc/css3/style.css" />
+<style type="text/css">
+ .wid270 {
+    width: 140px !important;
+}
+.wid240 {
+    width: 140px !important;
+}
+.button33 a {
+    font-family: 'Open Sans',sans-serif;
+    font-size: 10px !important;
+    text-align: center;
+    text-transform: uppercase;
+}
+ .order_left {
+    color: #434343;
+    float: left;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 11px;
+    width: 55%;
+}
+.slide_top {
+    background-color: #D7D7D7;
+    clear: both;
+    padding-bottom: 1px;
+    padding-top: 2px;
+    width: 100%;
+}
+.slide_top {
+    background-image: url("/misc/images/cart-bg.jpg");
+    background-position: left top;
+    background-repeat: no-repeat;
+    border-bottom: 1px solid #000000;
+    border-top: 1px solid #000000;
+}
+.slide_top1 {
+    background-color: #F79B49;
+    background-image: url("/misc/images/cart-bg1.jpg");
+    background-position: left top;
+    background-repeat: no-repeat;
+    border-bottom: 1px solid #000000;
+    border-top: 1px solid #000000;
+    clear: both;
+    height: 170px;
+    padding-bottom: 1px;
+    padding-top: 2px;
+    width: 660px;
+}
+.cart_bottom {
+    clear: both;
+    padding-top: 10px !important;
+}
+.slide_middle1 {
+    background: -moz-linear-gradient(center top , #FAF8E3, #FFFFFF) repeat scroll 0 0 transparent;
+    height: 159px !important;
+    margin: -15px auto 0;
+    width: 600px;
+}
+ .slide_middle {
+    background: -moz-linear-gradient(center top , #FAF8E3, #FFFFFF) repeat scroll 0 0 transparent;
+    height: 158px;
+    margin: 0 auto;
+    width: 654px;
+}
+ 
+.slide_middle1 li {
+    border-right: 1px dotted #A5A5A5;
+}
+.slide_middle li {
+    border-right: 1px dotted #A5A5A5;
+    float: left;
+    padding: 5px;
+    width: 31%;
+}
+.slide_middle1 li {
+    border-right: 1px dotted #A5A5A5;
+}
+</style>
 <div class="float-left width4">&nbsp;&nbsp;</div>
 <div class="float-left wid748">
 <div class="clr">
@@ -15,8 +92,8 @@
 <div class="clr">
 <div class="float_left"><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ item.image1|strreplace:"assets/images/" }}' width="194" height="160" /></div>
 <div class="cart_img_right">
-{{ item.name }}
-<br>{{ item.extra_field_3 }}
+{{ item.item_name }}
+<br>{{ item.extra_fied_3 }}
 <br>{{ item.extra_field_2 }}
 </div>
 </div>
@@ -26,72 +103,53 @@
 <div class="close">Close<span><img src="misc/images/close_button.png" width="25" height="25" /></span></div>
 </div>
 <div class="clr card1_txt_right">
-Your Cart Contanins {{ItemCount}} items<br />
-<span class="price-final">Order Subtotal: ${{OrderSubTotal}}</span>
+Your Cart Contains {{ItemCount}} items<br />
+<span class="price-final">Order Subtotal: ${{OrderSubTotal|floatformat:2}}</span>
 </div>
 <div class="button_top float-right">
-<div class="button-latest float-right"><a href="/productindex">Continue Shopping</a></div>
-<div class="height9 clr float-right">&nbsp;</div>
-<div class="button-latest"><a href="/viewcart">View Cart & checkout</a></div>
+<div class="blue-button-cart float-right"><a href="/productindex">Continue Shopping</a></div>
+ 
+<div class="height9 clr float-right" style="width: 100%;">&nbsp;</div>
+<div class="blue-button-cart"><a href="/viewcart">View Cart &amp; checkout</a></div>
+ 
 </div>
 </div>
 <div class="clr"></div>
 </div>
 <div class="cart_bottom">
-<div class="cart_bottom_heading" align="left">You May Also Like</div>
+<div align="left" class="cart_bottom_heading">You May Also Like</div>
 <div class="slide_top">
 <div class="slide_middle">
 <ul>
+{% for items in relateditems %}
 <li>
 <div class="clr">
-<div class="clr"><span class="product_heading">Seachem Reef Carbonate</span><br />250ml</div>
-<div class="clr padtop10">
-<div class="float_left"><img src="misc/images/product_img1.jpg" /></div>
-<div class="float_left padleft5">
-<div class="price-final">$3.99</div>
-<div class="clr"><a href="#"><img src="misc/images/add_tant.png" border="0" /></a></div>
+<div class="clr"><span class="product_heading">{{items.name}}</span></div>
+<div class="clr padtop25">
+<div class="float_left"><img width="71" border="0" height="86" src='http://commondatastorage.googleapis.com/swf_product_images/{{  items.thumbnail|strreplace:"assets/images/" }}'></div>
+<div class="float_right ">
+<div class="price-final">${% if items.onsale > 0 %}{{items.saleprice|floatformat:2}}{% else %}{{items.price|floatformat:2}} 
+				{% endif %}</div>
+<div class="clr"><a href="/addtocart?item_id={{ items.catalogid }}"><img border="0" src="misc/images/add_tant.png"></a></div>
 </div>
 </div>
-<div class="clr">&nbsp;</div>
-</div>
-</li>
-<li>
-<div class="clr">
-<div class="clr"><span class="product_heading">Seachem Reef Carbonate</span><br />300 gram</div>
-<div class="clr padtop10">
-<div class="float_left"><img src="misc/images/product_img2.jpg" /></div>
-<div class="float_left padleft5">
-<div class="price-final">$5.99</div>
-<div class="clr"><a href="#"><img src="misc/images/add_tant.png" border="0" /></a></div>
-</div>
-</div>
-<div class="clr">&nbsp;</div>
+
 </div>
 </li>
-<li>
-<div class="clr">
-<div class="clr"><span class="product_heading">Seachem Reef Carbonate</span><br />500 ml</div>
-<div class="clr padtop10">
-<div class="float_left"><img src="misc/images/product_img3.jpg" /></div>
-<div class="float_left">
-<div class="price-final">$3.99</div>
-<div class="clr"><a href="#"><img src="misc/images/add_tant.png" border="0" /></a></div>
-</div>
-</div>
-<div class="clr">&nbsp;</div>
-</div>
-</li>
+{%endfor%}
+ 
+ 
 </ul>
-</div>
-</div>
-</div>
-
+ 
+ </div>
 </div>
 
 </div>
 
+</div>
 
 
+</div>
 
 </div>
 <div class="float-left wid10"></div>

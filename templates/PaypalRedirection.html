@@ -1,9 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
+<link type="text/css" rel="stylesheet" href="/misc/css3/style.css" />
+<style>
+.height12 {
+    height: 7px !important;
+}
+</style>
 <H2> Redirecting to PAYPAL ....</H2>
 <form name="PaypalForm" id="PaypalForm" action="{{ Settings.PAYPAL_URL }}" method="post">
   {% csrf_token %}
-  <input type="hidden" name="amount" value="{{ request.session.OrderTotal|floatformat:2 }}">
+  <input type="hidden" name="amount" value="{{ request.session.CartInfo.order_total|floatformat:2 }}">
   <input type="hidden" name="cmd" value="_xclick">
   <input type="hidden" name="business" value="{{Settings.PAYPAL_MERCHANT_EMAIL}}">
   <input type="hidden" name="item_name" value="Salt Water Fish">

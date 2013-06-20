@@ -13,20 +13,19 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import unittest
 from django.core.context_processors import csrf
 from forms import *
-from views import LoginRequiredMixin
+from views import *
 from models import *
 from google.appengine.api import mail
 import logging, random, hashlib, datetime, settings
 from quix.pay.transaction import CreditCard
 from quix.pay.gateway.authorizenet import AimGateway
+from classes import *
 #from django.db import connection, transaction
 PERPAGE=50
 class CsrfExemptMixin(object):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(CsrfExemptMixin, self).dispatch(request, *args, **kwargs)
-
- 
 
 @csrf_exempt
 def render_template(request, template, data=None):
@@ -165,8 +164,9 @@ class RegistrationActionClass(TemplateView):
     def get(self, request, *args, **kwargs):
         form = RegistrationForm()
         content = {'form': form, 'page_title': "Customer Registration"}
-        content['recaptcha'] = "https://chart.googleapis.com/chart?chst=d_text_outline&chld=FFCC33|16|h|FF0000|b|%s" %self.GetRecaptcha(request)
+         
         content.update(csrf(request))
+        content.update(leftwidget(request))
         return render_template(request, "registration.htm", content)
     
     def post(self, request, *args, **kwargs):
@@ -251,6 +251,7 @@ class RegistrationActionClass(TemplateView):
                    'recaptcha':"https://chart.googleapis.com/chart?chst=d_text_outline&chld=FFCC33|16|h|FF0000|b|%s" %self.GetRecaptcha(request)
                    }
       content.update(csrf(request))
+      content.update(leftwidget(request))
       return render_to_response('registration.htm', content)
 
 class UpdateAddressActionClass(LoginRequiredMixin,TemplateView):
@@ -414,6 +415,17 @@ class AddToWatchActionClass(TemplateView):
             logging.info('LoginfoMessage:: %s',e)
             return HttpResponse('/mywishlist?err=Item Already Exists')
 
+class EmailToFriendActionClass(TemplateView):
+
+    def get(self, request, *args, **kwargs):
+        try:
+            s = ProductEmailfriend(catalogid=request.GET['itemid'], user_name=request.GET['name'] ,user_email = request.GET['email'],friend_email = request.GET['femails'],
+                                   friend_name = request.GET['fnames'], message = request.GET['emsg'], record_date = datetime.datetime.now())
+            s.save()
+            return HttpResponse('<h2>Successfully Sent</h2><input name="cancel" type="button" value="Close Window" class=" b-close">')
+        except Exception, e:
+            logging.info('LoginfoMessage:: %s',e)
+            return HttpResponse('<h2>Problem Occured</h2><input name="cancel" type="button" value="Close Window" class=" b-close">')
 
 class DeleteCartItemActionClass(TemplateView):
 
@@ -475,8 +487,18 @@ class GeneralActionClass(LoginRequiredMixin,TemplateView):
             except Exception, e:
                 logging.info('LoginfoMessage:: %s',e)
                 return HttpResponseRedirect('/crmedit?id='+crmid+'&err=Form Field Errors')
+        elif "action" in request.POST and request.POST['action'] == "editcrmresponse":
+            crmid = request.POST['crmid']
+            try:
+                s = CrmMessages(crmid = crmid, sendername = "",
+                                sender = 1, message = request.POST['message'],
+                                datentime = datetime.datetime.now())
+                s.save()
+                return HttpResponseRedirect('/editrequestform?crmid='+crmid+'&err=Successfully Updated the Record')
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+                return HttpResponseRedirect('/editrequestform?crmid='+crmid+'&err=Form Field Errors')
         elif "action" in request.POST and request.POST['action'] == "addresponse":
-            
             try:
                 t = Crm(custid=request.session['Customer'].contactid,custemail = request.POST['custemail'] , departmentid = request.POST['departmentid'] ,
                         subject = request.POST['subject'] , customer = request.POST['customer'] ,status=1, datentime = datetime.datetime.now())
@@ -491,6 +513,28 @@ class GeneralActionClass(LoginRequiredMixin,TemplateView):
             except Exception, e:
                 logging.info('LoginfoMessage:: %s',e)
                 return HttpResponseRedirect('/myaccount?err=Form Field Errors')
+        elif "action" in request.POST and request.POST['action'] == "addrmaresponse":
+            try:
+                rmaid=request.POST['rmaid']
+                s = RmaMessages(rmaid = rmaid, sendername = request.session['Customer'].contactid ,
+                                sender = 1 , message = request.POST['message'] ,
+                                datentime = datetime.datetime.now())
+                s.save()
+                return HttpResponseRedirect('/rmarequest?crmid='+rmaid+'&err=Successfully Updated the Record')
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+                return HttpResponseRedirect('/rmarequest?crmid='+rmaid+'&err=Form Field Errors')
+        elif "action" in request.POST and request.POST['action'] == "addrmarequest":
+            try:
+                oid=request.POST['oid']
+                rmaid = oid
+                s = Rma(orderid = oid,idrmamethod = 1, idrmareason=1, idrmastatus=1,comments = request.POST['message'],
+                                rmadate = datetime.datetime.now(), idrmaaction="0",qty_received=0,qty_restock=0)
+                s.save()
+                return HttpResponseRedirect('/rmaservice?crmid='+oid+'&err=Successfully Updated the Record')
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+                return HttpResponseRedirect('/rmaservice?crmid='+rmaid+'&err=Form Field Errors')
         else:
             return HttpResponseRedirect('/myaccount?err=Form Field Errors')
 
@@ -505,6 +549,11 @@ class GuestLoginActionClass(TemplateView):
        if 'EMail' in request.POST:
            request.session['IsGuest'] = True
            request.session['GuestEMail'] = request.POST['EMail']
+           guest_email = request.POST['EMail']
+           customer_list = customers.objects.filter(email = guest_email) 
+           if customer_list:
+             request.session['ErrorMessage2'] = "You are already a registered customer. Please login from left pane."
+             return HttpResponseRedirect('/checkoutlogin');
 
        return HttpResponseRedirect('/orderconfirmation');
 
@@ -514,27 +563,50 @@ class AddToCartActionClass(TemplateView):
       html_text = ""
       item_id = 0
       cart_items = {}
+
       # Checking whether the item_id is available on the query string or not.
       if 'item_id' in request.GET:
         item_id = int(request.GET['item_id'])
         # Checking whether cart itmes are in the session or not
-        if "CartItems" in request.session:
-          cart_items = request.session["CartItems"]
-          # If item is already added to the cart, incrementing the quantity
-          # to the partiuclar item. Else assigning initial quantity as 1.
-          if item_id in cart_items:
-            cart_items[item_id] += 1
-          else:
-            cart_items[item_id] = 1
-          request.session["CartItems"] = cart_items
+        if 'CartItems' not in request.session:
+          cart_dict = {}
+          request.session['CartItems'] = cart_dict
         else:
-          cart_items = {item_id:1}
-          request.session["CartItems"] = cart_items
+          cart_dict = request.session['CartItems']
+
+        cart = CartInfo()
+        cart_dict = cart.Add(cart_dict, item_id)
+        if cart.IsError:
+          html = "<font color='red'> %d " %item_id + cart.Error() +  "</font>"
+          return HttpResponse(html)
+        else:
+          request.session['CartItems'] = cart_dict
+   
+      return HttpResponseRedirect("cartconfirmation?itemid=%d" %item_id)
+
+    def post(self, request, *args, **kwargs):
+      item_id = int(request.POST['item_id'])
+      quantity = int(request.POST['quantity'])
+      price = float(request.POST['GiftAmount'].strip())
+
+      # Checking whether cart itmes are in the session or not
+      if 'CartItems' not in request.session:
+        cart_dict = {}
+        request.session['CartItems'] = cart_dict
+      else:
+        cart_dict = request.session['CartItems']
+
+      cart = CartInfo()
+      cart_dict = cart.AddGift(cart_dict, item_id, quantity, price)
+
+      if cart.IsError:
+        html = "<font color='red'> %d " %item_id + cart.Error() +  "</font>"
+        return HttpResponse(html)
+      else:
+        request.session['CartItems'] = cart_dict
         
-      cart_items = request.session["CartItems"]
-      #for key, value in cart_items.items():
-      #  html_text += "%d - %d<br>\n" %(key, value)
-        
+      #return HttpResponse(cart_dict)
+
       return HttpResponseRedirect("cartconfirmation?itemid=%d" %item_id)
 
 class CartActionsClass(TemplateView):
@@ -542,29 +614,78 @@ class CartActionsClass(TemplateView):
 
     def get(self, request, *args, **kwargs):
 
+      cart = CartInfo()
+      cart_dict = request.session['CartItems']
       if "cmdUpdate" in request.GET:
         item_id = int(request.GET['itemid'])
         quantity = int(request.GET['quantity'])
         # Checking the stock availability
-        product_list = Products.objects.filter(catalogid = item_id, stock__gt = quantity)
-
-        if product_list:
-          cart_items = request.session["CartItems"]
-          cart_items[item_id] = quantity
-          request.session["CartItems"] = cart_items
-          logging.info("\n\n\n\n\nUpdated. %s\n\n\n\n" %str(cart_items))
+        #product_list = Products.objects.filter(catalogid = item_id, stock__gt = quantity)
+        cart_dict = cart.Update(cart_dict, item_id, quantity)
+        if cart.IsError:
+          request.session['ErrorMessage'] = cart.Error()
         else:
-          request.session['ErrorMessage'] = 'Requested quantity is not avaialable in the store.'
+          request.session['CartItems'] = cart_dict
+          
+#        if product_list:
+#          cart_items = request.session["CartItems"]
+#          cart_items[item_id] = quantity
+#          request.session["CartItems"] = cart_items
+#          logging.info("\n\n\n\n\nUpdated. %s\n\n\n\n" %str(cart_items))
+#        else:
+#          request.session['ErrorMessage'] = 'Requested quantity is not avaialable in the store.'
         
         #return HttpResponse(request.session["CartItems"][item_id])
 
       if "cmdDelete" in request.GET:
         item_id = int(request.GET['itemid'])
-        quantity = int(request.GET['quantity'])
-        cart_items = request.session["CartItems"]
-        del cart_items[item_id]
-        request.session["CartItems"] = cart_items
+        #quantity = int(request.GET['quantity'])
+        #cart_items = request.session["CartItems"]
+        cart_dict = cart.Delete(cart_dict, item_id)
+        request.session["CartItems"] = cart_dict
 
+      if ("cmdApplyStoreCredit.x" in request.GET or
+          "cmdApplyStoreCredit.y" in request.GET or
+          "cmdApplyStoreCredit" in request.GET):
+
+        tm = time.localtime()
+        sc = StoreCredit()
+        sc.id = int(request.GET['hdnStoreCreditID'])
+        sc.credit_value = float(request.GET['hdnStoreCredit'])
+        request.session['StoreCredit'] = sc
+        
+
+        #request.session['CartInfo'].is_storecredit_applied = True
+        #request.session['CartInfo'].store_credit_id = int(request.GET['hdnStoreCreditID'])
+        #request.session['CartInfo'].store_credit = float(request.GET['hdnStoreCredit'])
+        
+#         store_credit = float(request.GET['hdnStoreCredit'])
+#         order_total = request.session['CartInfo'].order_total
+#         credit_id = int(request.GET['hdnStoreCreditID'])
+#         current_date = datetime.date(tm.tm_year, tm.tm_mon, tm.tm_mday)
+#         obj_list = SwfCustomerCreditsLog.objects.filter(id = credit_id)
+#         obj = obj_list[0]
+# 
+#         if order_total >= store_credit:
+#           debugText = "Order Total is greater than store credit"
+#           request.session['CartInfo'].store_credit = store_credit
+#           order_total = order_total - store_credit
+#           obj.customers_credit = 0
+#         else:
+#           debugText = "Store credit is greater than Order Total"
+#           obj_list = SwfCustomerCreditsLog.objects.filter(id = credit_id)
+#           obj = obj_list[0]
+#           request.session['CartInfo'].store_credit = order_total
+#           store_credit =  store_credit - order_total
+#           order_total = 0
+#           obj.customers_credit = store_credit
+#           debugText += "\nUpdated Store credit of %f for id %d" %(store_credit, credit_id)
+# 
+#           
+#         request.session['CartInfo'].order_total  = order_total
+#         obj.customers_credit_applied = current_date
+#         request.session["StoreCreditObject"] = obj
+            
       if "cmdApplyCoupon" in request.GET:
         tm = time.localtime()
         current_date = datetime.date(tm.tm_year, tm.tm_mon, tm.tm_mday)
@@ -589,7 +710,6 @@ class CartActionsClass(TemplateView):
           request.session['PromotionalDiscount'] = discounts_hash
         else:
           request.session['ErrorMessage'] = 'Coupon Not found'
-
 
       return HttpResponseRedirect('viewcart')
       #return HttpResponse(request.GET)
@@ -661,13 +781,17 @@ class UpdateAddressInSession(TemplateView):
 class CommitOrderActionClass(TemplateView):
 
   def post(self, request, *args, **kwargs):
-    logging.info('\n\nEntered into Commit Order Page\n\n')
+    logging.info('\n\nEntered into Commit Order Page')
     content = {}
 
     is_login = False;
     is_guest = False;
     is_save_card = False;
     gateway = ''
+    #if form.is_valid():
+    #  return HttpResponse("Form is Valid")
+    #else:
+    #  return HttpResponse("Form is not Valid")
 
     if 'IsLogin' in request.session:
       if request.session['IsLogin']:
@@ -690,22 +814,21 @@ class CommitOrderActionClass(TemplateView):
       gateway = request.session['PaymentGateway']
 
     data = request.POST 
-
     if is_login:
       if gateway == 'paypal':
         form = PaypalOrderFormLoggedIn(data)
       elif gateway == 'AUTHORIZENET':
-        form = AuthorizeNetFormLoggedIn(data)
+        customer = request.session['Customer']
+        form = AuthorizeNetFormLoggedIn(data, card_list = GetCreditCardList(customer.contactid))
+      elif gateway == 'None':
+        form = NoGateWay(data)
     elif is_guest:
       if gateway == 'paypal':
-        form = PaypalOrderFormNoLogin(data)
+        form = PaypalOrderFormNoLogin(data, card_list = [])
       elif gateway == 'AUTHORIZENET':
-        form = AuthorizeNetFormNoLogin(data)
-      
+        form = AuthorizeNetFormNoLogin(data, card_list = [])
       customer = None   
-    logging.info("\n\n\n\nI am in user actions..\n\n")
-    logging.info(request.POST)
-    logging.info("I am in user actions..\n\n\n\n\n\n\n")
+    
     if form.is_valid():
       # If gust, we should save the customer information with login credentials and then continue.
       if is_login: 
@@ -715,18 +838,187 @@ class CommitOrderActionClass(TemplateView):
         customer.email = form.cleaned_data['username'].strip()
         customer.pass_field = form.cleaned_data['password'].strip()
 
-      customer.shipping_firstname = form.cleaned_data['first_name'].strip()
-      customer.shipping_lastname = form.cleaned_data['last_name'].strip()
-      customer.shipping_address = form.cleaned_data['address1'].strip()
-      customer.shipping_address2 = form.cleaned_data['address2'].strip()
-      customer.shipping_city = form.cleaned_data['city'].strip()
-      customer.shipping_state = form.cleaned_data['state'].strip()
-      customer.shipping_country = form.cleaned_data['country'].strip()
-      customer.shipping_zip = form.cleaned_data['zip'].strip()
-      customer.shipping_company = form.cleaned_data['company'].strip()
-      customer.shipping_phone = form.cleaned_data['phone'].strip()
-      customer.save() 
+      customer.shipping_firstname = form.cleaned_data['shipping_first_name'].strip()
+      customer.shipping_lastname = form.cleaned_data['shipping_last_name'].strip()
+      customer.shipping_address = form.cleaned_data['shipping_address1'].strip()
+      customer.shipping_address2 = form.cleaned_data['shipping_address2'].strip()
+      customer.shipping_city = form.cleaned_data['shipping_city'].strip()
+      customer.shipping_state = form.cleaned_data['shipping_state'].strip()
+      customer.shipping_zip = form.cleaned_data['shipping_zip'].strip()
+      customer.shipping_company = form.cleaned_data['shipping_company'].strip()
+      phone_part1 = form.cleaned_data['shipping_phone_part1'].strip()
+      phone_part2 = form.cleaned_data['shipping_phone_part2'].strip()
+      phone_part3 = form.cleaned_data['shipping_phone_part3'].strip()
+      customer.shipping_phone = phone_part1 + phone_part2 + phone_part3
+      
+      isBillingAddressSame = False
+      if "IsBillingAddressSame" in request.POST:
+         isBillingAddressSame = True
 
+      if isBillingAddressSame:
+        customer.billing_firstname = customer.shipping_firstname
+        customer.billing_lastname = customer.shipping_lastname
+        customer.billing_address = customer.shipping_address
+        customer.billing_address2 = customer.shipping_address2
+        customer.billing_city = customer.shipping_city
+        customer.billing_state = customer.shipping_state
+        customer.billing_zip = customer.shipping_zip
+        customer.billing_phone = customer.shipping_phone
+      else:
+        customer.billing_firstname = form.cleaned_data['billing_first_name'].strip()
+        customer.billing_lastname = form.cleaned_data['billing_last_name'].strip()
+        customer.billing_address = form.cleaned_data['billing_address1'].strip()
+        customer.billing_address2 = form.cleaned_data['billing_address2'].strip()
+        customer.billing_city = form.cleaned_data['billing_city'].strip()
+        customer.billing_state = form.cleaned_data['billing_state'].strip()
+        customer.billing_zip = form.cleaned_data['billing_zip'].strip()
+        phone_part1 = form.cleaned_data['billing_phone_part1'].strip()
+        phone_part2 = form.cleaned_data['billing_phone_part2'].strip()
+        phone_part3 = form.cleaned_data['billing_phone_part3'].strip()
+        customer.billing_phone = phone_part1 + phone_part2 + phone_part3
+
+      customer.custenabled = 1
+      customer.save() 
+        
+
+      shipping_method_hash = request.session['ShippingMethod']
+
+      cart = request.session['CartInfo']
+      # Collecting User Selected Data in Shipping Methods
+      data_hash = {}
+      for key, vaue in shipping_method_hash.items():
+
+        if 'OverNightShipping-%d' %key  in request.POST:
+          data_hash['OverNightShipping'] = request.POST['OverNightShipping-%d' %key]
+          cart.order_total += GetPriorityShippingCharge(key)
+            
+        if 'HoldPackageAtFedex' in request.POST:
+          data_hash['HoldPackageAtFedex'] = request.POST['HoldPackageAtFedex']
+
+        if 'HoldPackageAtFedex' in request.POST:
+          data_hash['HoldPackageAtFedex'] = request.POST['HoldPackageAtFedex'] 
+
+        if 'ReqDeliveryDate-%d' %key in request.POST:
+          data_hash['ReqDeliveryDate'] = request.POST['ReqDeliveryDate-%d' %key]
+          if len(data_hash['ReqDeliveryDate'].strip()) > 0:
+            if time.strptime(data_hash['ReqDeliveryDate'], "%m/%d/%Y").tm_wday == 5:
+              cart.order_total += GetSaturdayShippingCharge(key)
+
+        shipping_method_hash[key] = data_hash
+
+#         # If Florida Marine Life
+#         if key == 10:
+#           if 'OverNightShipping-10' in request.POST:
+#             data_hash['OverNightShipping'] = request.POST['OverNightShipping-10']
+#             cart.order_total += GetPriorityShippingCharge(10)
+#             
+#           if 'HoldPackageAtFedex' in request.POST:
+#             data_hash['HoldPackageAtFedex'] = request.POST['HoldPackageAtFedex'] 
+# 
+#           if 'HoldPackageAtFedex' in request.POST:
+#             data_hash['HoldPackageAtFedex'] = request.POST['HoldPackageAtFedex'] 
+# 
+#           if 'ReqDeliveryDate-10' in request.POST:
+#             data_hash['ReqDeliveryDate'] = request.POST['ReqDeliveryDate-10'] 
+#             if len(data_hash['ReqDeliveryDate'].strip()) > 0:
+#               if time.strptime(data_hash['ReqDeliveryDate'], "%m/%d/%Y").tm_wday == 5:
+#                  cart.order_total += GetSaturdayShippingCharge(10)
+# 
+#         # If Free Shipping Store
+#         if key == 11:
+#           if 'OverNightShipping-11' in request.POST:
+#             data_hash['OverNightShipping'] = request.POST['OverNightShipping-11']
+#             cart.order_total += GetPriorityShippingCharge(11)
+#             
+#           if 'HoldPackageAtFedex' in request.POST:
+#             data_hash['HoldPackageAtFedex'] = request.POST['HoldPackageAtFedex'] 
+# 
+#           if 'HoldPackageAtFedex' in request.POST:
+#             data_hash['HoldPackageAtFedex'] = request.POST['HoldPackageAtFedex'] 
+# 
+#           if 'ReqDeliveryDate-11' in request.POST:
+#             data_hash['ReqDeliveryDate'] = request.POST['ReqDeliveryDate-11'] 
+#             if len(data_hash['ReqDeliveryDate'].strip()) > 0:
+#               if time.strptime(data_hash['ReqDeliveryDate'], "%m/%d/%Y").tm_wday == 5:
+#                  cart.order_total += GetSaturdayShippingCharge(11)
+# 
+#         # If Reef Packages
+#         if key == 12:
+#           if 'OverNightShipping-12' in request.POST:
+#             data_hash['OverNightShipping'] = request.POST['OverNightShipping-12']
+#             cart.order_total += GetPriorityShippingCharge(12)
+#             
+#           if 'HoldPackageAtFedex' in request.POST:
+#             data_hash['HoldPackageAtFedex'] = request.POST['HoldPackageAtFedex'] 
+# 
+#           if 'HoldPackageAtFedex' in request.POST:
+#             data_hash['HoldPackageAtFedex'] = request.POST['HoldPackageAtFedex'] 
+# 
+#           if 'ReqDeliveryDate-12' in request.POST:
+#             data_hash['ReqDeliveryDate'] = request.POST['ReqDeliveryDate-12'] 
+#             if len(data_hash['ReqDeliveryDate'].strip()) > 0:
+#               if time.strptime(data_hash['ReqDeliveryDate'], "%m/%d/%Y").tm_wday == 5:
+#                  cart.order_total += GetSaturdayShippingCharge(12)
+# 
+# 
+#         # If Aquarium Supplies
+#         if key == 13:
+#           if 'NextDayDelivery' in request.POST:
+#             data_hash['NextDayDelivery'] = request.POST['NextDayDelivery']
+#             cart.order_total += GetPriorityShippingCharge(13)
+# 
+#           if 'ReceiveDeliveryNotificationEMail' in request.POST:
+#             data_hash['ReceiveDeliveryNotificationEMail'] = request.POST['ReceiveDeliveryNotificationEMail']
+#           if 'ReceiveDeliveryNotificationSMS' in request.POST:
+#             data_hash['ReceiveDeliveryNotificationSMS'] = request.POST["ReceiveDeliveryNotificationSMS"]
+#             
+#           if 'ReqDeliveryDate-13' in request.POST:
+#             data_hash['ReqDeliveryDate'] = request.POST['ReqDeliveryDate-13'] 
+#             if len(data_hash['ReqDeliveryDate'].strip()) > 0:
+#               if time.strptime(data_hash['ReqDeliveryDate'], "%m/%d/%Y").tm_wday == 5:
+#                  cart.order_total += GetSaturdayShippingCharge(13)
+#             
+#           shipping_method_hash[key] = data_hash
+# 
+#         # If Live Rock and Live Sand
+#         if key == 14:
+#           if 'OverNightShipping' in request.POST:
+#             data_hash['OverNightShipping'] = request.POST['OverNightShipping']
+#             cart.order_total += GetPriorityShippingCharge(14)
+#             
+#           if 'HoldPackageAtFedex' in request.POST:
+#             data_hash['HoldPackageAtFedex'] = request.POST['HoldPackageAtFedex'] 
+# 
+#           if 'HoldPackageAtFedex' in request.POST:
+#             data_hash['HoldPackageAtFedex'] = request.POST['HoldPackageAtFedex'] 
+# 
+#           if 'ReqDeliveryDate-14' in request.POST:
+#             data_hash['ReqDeliveryDate'] = request.POST['ReqDeliveryDate-14'] 
+#             if len(data_hash['ReqDeliveryDate'].strip()) > 0:
+#               if time.strptime(data_hash['ReqDeliveryDate'], "%m/%d/%Y").tm_wday == 5:
+#                  cart.order_total += GetSaturdayShippingCharge(14)
+# 
+#         # If Live Rock and Live Sand
+#         if key == 15:
+#           if 'OverNightShipping-15' in request.POST:
+#             data_hash['OverNightShipping'] = request.POST['OverNightShipping-15']
+#             cart.order_total += GetPriorityShippingCharge(15)
+#             
+#           if 'HoldPackageAtFedex' in request.POST:
+#             data_hash['HoldPackageAtFedex'] = request.POST['HoldPackageAtFedex'] 
+# 
+#           if 'HoldPackageAtFedex' in request.POST:
+#             data_hash['HoldPackageAtFedex'] = request.POST['HoldPackageAtFedex'] 
+# 
+#           if 'ReqDeliveryDate-15' in request.POST:
+#             data_hash['ReqDeliveryDate'] = request.POST['ReqDeliveryDate-15'] 
+#             if len(data_hash['ReqDeliveryDate'].strip()) > 0:
+#               if time.strptime(data_hash['ReqDeliveryDate'], "%m/%d/%Y").tm_wday == 5:
+#                  cart.order_total += GetSaturdayShippingCharge(15)
+
+      
+      request.session['CartInfo'] = cart
+      request.session['ShippingMethod'] = shipping_method_hash 
       request.session['OrderComment'] = form.cleaned_data['comment'].strip()
      
       if is_guest:
@@ -737,25 +1029,43 @@ class CommitOrderActionClass(TemplateView):
         is_login = True
         is_guest = False
 
-      if is_login and gateway == 'AUTHORIZENET':      
-        card_holder_name = form.cleaned_data['card_holder_name'].strip()
-        card_number = form.cleaned_data['card_number'].strip()
-        card_type = form.cleaned_data['card_type'].strip()
-        card_expdate = form.cleaned_data['card_expdate'].strip()
-        card_cvn = form.cleaned_data['card_cvn'].strip()
-        is_save_card = form.cleaned_data['is_save_card']
-                
-        # Authenticating Card Number
-        card = CreditCard(
-            number = card_number,
-            month = card_expdate.split('/')[0],
-            year = '20%s' %card_expdate.split('/')[1],
-            first_name = card_holder_name.split(' ')[0],
-            last_name = card_holder_name.split(' ')[1],
-            code = '123'
-        )
+      if is_login and gateway == 'AUTHORIZENET':
+        previous_card = form.cleaned_data['previous_cards']
+        if not previous_card: 
+          card_holder_name = form.cleaned_data['card_holder_name'].strip()
+          card_number = form.cleaned_data['card_number'].strip()
+          card_type = form.cleaned_data['card_type'].strip()
+          card_expdate = form.cleaned_data['card_expdate'].strip()
+          card_cvn = form.cleaned_data['card_cvn'].strip()
+          is_save_card = form.cleaned_data['is_save_card']
+                  
+          # Authenticating Card Number
+          card = CreditCard(
+              number = card_number,
+              month = card_expdate.split('/')[0],
+              year = '20%s' %card_expdate.split('/')[1],
+              first_name = card_holder_name.split(' ')[0],
+              last_name = card_holder_name.split(' ')[1],
+              code = card_cvn
+          )
+        else:
+          is_save_card = False
+          orders = Orders.objects.all().filter(ocardno = previous_card)[0]
+          number = orders.ocardno
+          month = orders.ocardexpiresmonth
+          year = orders.ocardexpiresyear
+          first_name = orders.ocardname.split(' ')[0]
+          last_name = orders.ocardname.split(' ')[1]
+          code = orders.ocardverification        
+          card = CreditCard(
+              number = orders.ocardno,
+              month = orders.ocardexpiresmonth,
+              year = orders.ocardexpiresyear,
+              first_name = orders.ocardname.split(' ')[0],
+              last_name = orders.ocardname.split(' ')[1],
+              code = orders.ocardverification
+          )
 
-        
         gateway = AimGateway(settings.AUTHORIZENET_API_LOGIN_ID, settings.AUTHORIZENET_API_PASSWORD)
         gateway.use_test_mode = settings.TEST_MODE
         gateway.use_test_url = settings.TEST_MODE_URL
@@ -763,13 +1073,13 @@ class CommitOrderActionClass(TemplateView):
         #return HttpResponse("<h1>Done</h1>")
         
         if response.status_strings[response.status] == "Approved":
-          response = gateway.sale("%8.2f" %request.session['OrderTotal'], card)
+          response = gateway.sale("%8.2f" %cart.order_total, card)
           if response.status_strings[response.status] == "Approved":
             if is_save_card:
               # This will trigger the save credit card option in Call Back Code.
               request.session['CreditCard'] = card.__dict__
             return HttpResponseRedirect(settings.CALLBACK_URL + '?tx=%s&st=Approved&amt=%s&cc=USD&item_number=' %(response.trans_id,
-                                                                                                                  "%8.2f" %request.session['OrderTotal']))
+                                                                                                                  "%8.2f" %request.session['CartInfo'].order_total))
           else:
             request.session['ErrorMessage'] =  "<h5>%s - %s: %s</h5>" %(response.trans_id, response.status_strings[response.status], response.message)
         else:
@@ -777,7 +1087,19 @@ class CommitOrderActionClass(TemplateView):
         return HttpResponseRedirect('/orderconfirmation')    
 
       elif is_login and gateway == 'paypal':
-          return  HttpResponseRedirect('/paypalredirection')    
+          return  HttpResponseRedirect('/paypalredirection')  
+      elif is_login and gateway == 'None':
+          #obj = request.session["StoreCredit"]
+          #obj.save()
+          tx = "SC%s" %datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
+          amount = request.session["CartInfo"].store_credit
+          return HttpResponseRedirect(settings.CALLBACK_URL + '?tx=%s&st=Approved&amt=%s&cc=USD&item_number=' %(tx, amount))
+
     else:
-      request.session['ErrorMessage'] = 'Please fill mandatory fields.', form.errors
+      html = ""
+      for key, value in form.errors.items():
+        html += "%s, " %(key)
+      
+      html = html[0:-2]
+      request.session['ErrorMessage'] = 'Please fill mandatory fields. %s' %html
     return HttpResponseRedirect('/orderconfirmation')

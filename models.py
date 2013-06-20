@@ -477,6 +477,20 @@ class ProductCategory(models.Model):
         db_table = u'product_category'
         app_label = ''
 
+class ProductEmailfriend(models.Model):
+    id = models.IntegerField(primary_key=True)
+    catalogid = models.IntegerField(null=True, blank=True)
+    user_name = models.CharField(max_length=150, blank=True)
+    user_email = models.CharField(max_length=150, blank=True)
+    friend_name = models.CharField(max_length=150, blank=True)
+    friend_email = models.CharField(max_length=450, blank=True)
+    message = models.TextField(blank=True)
+    record_date = models.DateTimeField(null=True, blank=True)
+    userid = models.IntegerField(null=True, blank=True)
+    userip = models.CharField(max_length=150, blank=True)
+    class Meta:
+        db_table = u'product_emailfriend'
+        app_label = ''
 
 class ProductReview(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -713,6 +727,16 @@ class Rma(models.Model):
         app_label = ''
         ordering = ["-rmadate"]
 
+class RmaOitem(models.Model):
+    idrma = models.IntegerField(primary_key=True, db_column='idRma', blank=True) # Field name made lowercase.
+    orderitemid = models.IntegerField(null=True, blank=True)
+    qty_return = models.IntegerField(null=True, blank=True)
+    qty_received = models.IntegerField(null=True, blank=True)
+    qty_restock = models.IntegerField(null=True, blank=True)
+    class Meta:
+        db_table = u'rma_oitem'
+        app_label = ''
+
 class Rmastatus(models.Model):
     idrmastatus = models.IntegerField(primary_key=True, db_column='IdRmaStatus') # Field name made lowercase.
     rmastatus = models.CharField(max_length=150, db_column='RmaStatus', blank=True) # Field name made lowercase.
@@ -720,15 +744,85 @@ class Rmastatus(models.Model):
         db_table = u'rmastatus'
         app_label = ''
 
-class ShippingCategory(models.Model):
+class Rmamethod(models.Model):
+    idrmamethod = models.IntegerField(primary_key=True, db_column='IdRmaMethod') # Field name made lowercase.
+    rmamethod = models.CharField(max_length=765, db_column='RmaMethod', blank=True) # Field name made lowercase.
+    visible = models.IntegerField(null=True, db_column='Visible', blank=True) # Field name made lowercase.
+    class Meta:
+        db_table = u'rmamethod'
+        app_label = ''
+
+class Rmareason(models.Model):
+    idrmareason = models.IntegerField(primary_key=True, db_column='IdRmaReason') # Field name made lowercase.
+    rmareason = models.CharField(max_length=765, db_column='RmaReason', blank=True) # Field name made lowercase.
+    visible = models.IntegerField(null=True, db_column='Visible', blank=True) # Field name made lowercase.
+    class Meta:
+        db_table = u'rmareason'
+        app_label = ''
+
+class RmaMessages(models.Model):
     id = models.IntegerField(primary_key=True)
-    ship_categoryname = models.CharField(max_length=150, blank=True)
-    status = models.CharField(max_length=150, blank=True)
-    createddate = models.DateField(auto_now_add = True)
+    rmaid = models.IntegerField(null=True, blank=True)
+    datentime = models.DateTimeField(null=True, blank=True)
+    message = models.TextField(blank=True)
+    sender = models.IntegerField(null=True, blank=True)
+    sendername = models.CharField(max_length=150, blank=True)
+    senderemail = models.CharField(max_length=765, blank=True)
+    class Meta:
+        db_table = u'rma_messages'
+        app_label = ''
+
+class ShippingCategory(models.Model):
+    id = models.BigIntegerField(primary_key=True)
+    category_name = models.CharField(max_length=765, blank=True)
+    status = models.CharField(max_length=75, blank=True)
+    fuel_charge = models.FloatField(null=True, blank=True)
+    use_fedex_shippingrates = models.IntegerField(null=True, blank=True)
+    priority_shipping = models.FloatField(null=True, blank=True)
+    saturday_delivery = models.FloatField(null=True, blank=True)
+    alaska_delivery = models.FloatField(null=True, blank=True)
+    is_free_shipping = models.IntegerField(null=True, blank=True)
+    flatrate_shipping_charge = models.FloatField(null=True, blank=True)
+    createdate = models.DateTimeField(null=True, blank=True)
     class Meta:
         db_table = u'shipping_category'
         app_label = ''
         ordering = ["id"]
+        
+class ShippingCharges(models.Model):
+    id = models.BigIntegerField(primary_key=True)
+    shipping_category_id = models.BigIntegerField(null=True, blank=True)
+    order_total_min = models.FloatField(null=True, blank=True)
+    order_total_max = models.FloatField(null=True, blank=True)
+    shipping_charge = models.FloatField(null=True, blank=True)
+    shipping_state = models.CharField(max_length=6, blank=True)
+    excluded_zip_codes = models.CharField(max_length=1536, blank=True)
+    createdate = models.DateTimeField(null=True, blank=True)
+    class Meta:
+        db_table = u'shipping_charges'
+        app_label = ''
+        
+class ProductShippingCategories(models.Model):
+    id = models.BigIntegerField(primary_key=True)
+    product_category_id = models.BigIntegerField(null=True, blank=True)
+    shipping_category_id = models.BigIntegerField(null=True, blank=True)
+    createdate = models.DateTimeField(null=True, blank=True)
+    class Meta:
+        db_table = u'product_shipping_categories'
+        app_label = ''
+
+class Shippingtuple(models.Model):
+    id = models.BigIntegerField(primary_key=True, db_column='ID') # Field name made lowercase.
+    orderid = models.BigIntegerField(null=True, db_column='OrderID', blank=True) # Field name made lowercase.
+    shippingcategoryid = models.BigIntegerField(null=True, db_column='ShippingCategoryID', blank=True) # Field name made lowercase.
+    name = models.CharField(max_length=765, db_column='Name', blank=True) # Field name made lowercase.
+    stringvalue = models.CharField(max_length=765, db_column='StringValue', blank=True) # Field name made lowercase.
+    intvalue = models.BigIntegerField(null=True, db_column='IntValue', blank=True) # Field name made lowercase.
+    floatvalue = models.FloatField(null=True, db_column='FloatValue', blank=True) # Field name made lowercase.
+    boolvalue = models.IntegerField(null=True, db_column='BoolValue', blank=True) # Field name made lowercase.
+    class Meta:
+        db_table = u'shippingtuple'
+        app_label = ''
 
 class ShippingCountries(models.Model):
     id = models.IntegerField(primary_key=True)

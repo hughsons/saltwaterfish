@@ -330,8 +330,7 @@ padding-left:20px;}
 }
 .blue_boxs{ margin-right:8px; }
 .blue_boxs1{ margin-right:8px;}
-.master-link{ font-size:14px; font-weight:bold; color:#0e5e9b; }
-
+ 
 
 
 /*may18 css*/
@@ -628,14 +627,14 @@ padding-right:20px;
 	background-position: left top;
 	width:570px;
 	border:1px solid #d1d1d1;
-	font-family: "Open Sans";
-	font-size: 13px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
 	color: #434343;
 	font-weight:bold;
 }
 .table-text1{
-	font-family: "Open Sans";
-	font-size: 13px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
 	color: #434343;
 	text-decoration:underline;
 }
@@ -671,6 +670,10 @@ padding-right:20px;
 	text-align:center;
 	margin-right:32px;
 }
+.hash-button1 a:link{ color: #434343; text-decoration:none; }
+.hash-button1 a:visited{ color: #434343; text-decoration:none; }
+.hash-button1 a:hover{ color:#000; text-decoration:none; }
+.hash-button1 a:active{ color: #434343; text-decoration:none; }
 .quick_right_img{
 	margin-top:-700px; width:180px;
 }
@@ -1088,3 +1091,202 @@ line-height:31px;
 .content_menu5 li a:hover{ color:#434343; text-decoration:none; }
 .content_menu5 li a:active{ color:#434343; text-decoration:none; }
 /* / latest css */
+.wid187 {
+    width: 187px;
+}
+.reef-rew-bg {
+    background-image: url("/misc/images/reef-rewards1.jpg");
+    background-position: center center;
+    background-repeat: no-repeat;
+    color: #434343;
+    font-family: "Open Sans Semibold";
+    font-size: 24px;
+    font-weight: bold;
+    height: 101px;
+    line-height: normal;
+    text-decoration: none;
+    text-transform: uppercase;
+    width: 228px;
+}
+.greentext {color: #00CC00; font-size: 12px;}
+.redtext {color: #FF0000; font-size: 12px;}
+label.error { float: none; color: red; padding-left: .5em; vertical-align: top; }
+.style1 {color: #FF0000}
+.promoMsg {
+    background: url("/misc/images/specialBG.png") repeat-x  scroll 0 0 transparent;
+    color: #FFFFFF !important;
+    font-size: 17px;
+    font-weight: bold;
+    text-decoration: none;
+	min-height: 40px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	border-right-color: #d2d2d2;
+	border-bottom-color: #d2d2d2;
+	border-left-color: #d2d2d2;
+}
+.promoMsg A, .promoMsg A:visited {
+font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+font-size: 25px;
+color: #FFF !important;
+font-weight: bold;
+text-decoration: underline;
+}
+.superSpecialBG {
+    background: url("/misc/images/super-specialBG.png") no-repeat scroll left top transparent;
+    padding: 57px 0 23px 25px;
+}
+.price2 {
+font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+font-size: 20px;
+color: #ff5200;
+font-weight: bold;
+}
+A.homeSpecials:visited:hover {
+color: #ff6100;
+text-decoration: none;
+}
+.allSpecials {
+padding: 10px 0px 0px 330px;
+}
+
+.signupBG {
+    background: url("/misc/images/signupBG.png") no-repeat scroll left top transparent;
+    height: 170px;
+    padding: 0;
+}
+.free-ship {
+    background: url("/misc/images/shippingBG.png") no-repeat scroll left center transparent;
+    height: 173px;
+    padding: 26px 30px 0 29px;
+}
+.special {
+    border: 1px solid #DDDDDD;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.055);
+    display: block;
+    line-height: 20px;
+    padding: 4px;
+    transition: all 0.2s ease-in-out 0s;
+}
+.btn {
+border: none;
+background: #ff6100;
+font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+font-weight: normal;
+font-size: 12px;
+color: #FFF;
+text-transform: uppercase;
+cursor: pointer;
+margin: 1px;
+}
+.home-txt1-para {
+    color: #434343;
+    font-family: "Open Sans Semibold";
+    font-size: 9px;
+    font-weight: bold;
+    line-height: normal;
+    text-decoration: none;
+    text-transform: none;
+}
+.feature-bg1-new{
+	padding-left:15px;
+	padding-right:15px;
+	width:auto;
+	float:left;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size:20px;
+	font-weight:bold;
+	color: #ffffff;
+	background-color:#eb5e02;
+	text-align:center;
+	text-transform:capitalize;
+	moz-border-radius:8px;
+	webkit-border-radius:8px;
+	border-radius:8px;
+	height:45px;
+	line-height:45px;
+	margin:0px auto;
+	margin-left:160px;
+	}
+.master-link a {
+    color: #00ADD5 !important;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+}
+.master-link {
+    color: #00ADD5;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+}
+.table-topbg1_new {
+    background-color: #FFFFFF;
+    background-position: left top;
+    background-size: 570px 55px;
+    border: 1px solid #000000;
+    color: #000000;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    height: 55px;
+    text-align: center;
+    text-transform: uppercase;
+    width: 570px;
+}
+.table-topicbg1_new {
+color: #ffffff;
+background-color: #eb5e02;
+background-position: center center;
+height: 30px;
+width: auto;
+font-family: Arial, Helvetica, sans-serif;
+font-size: 18px;
+font-weight: bold;
+line-height: 30px;
+text-align: center;
+moz-border-radius: 8px;
+webkit-border-radius: 8px;
+border-radius: 8px;
+padding-left: 15px;
+padding-right: 15px;
+}
+.orange-txt2 {
+    color: #EC5E00;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 28px;
+    font-weight: bold;
+    line-height: normal;
+    padding-left: 15px;
+    text-align: left;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+.blue-button-master{
+	padding-left:15px;
+	padding-right:15px;
+	width:auto;
+	float:left;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size:20px;
+	font-weight:bold;
+	color: #ffffff;
+	background-color:#eb5e02;
+	text-align:center;
+	text-transform:capitalize;
+	moz-border-radius:8px;
+	webkit-border-radius:8px;
+	border-radius:8px;
+	height:45px;
+	line-height:45px;
+	
+}
+.blue-button-master a:link{ color: #ffffff; text-decoration:none; }
+.blue-button-master a:visited{ color: #ffffff; text-decoration:none; }
+.blue-button-master a:hover{ color: #ffffff; text-decoration:none; }
+.blue-button-master a:active{ color: #ffffff; text-decoration:none; }

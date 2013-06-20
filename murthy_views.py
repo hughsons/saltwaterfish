@@ -13,25 +13,37 @@ from django.contrib.auth.models import User, Group, Permission
 from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import unittest
-from django.db import connection
 from forms import *
-from models import customers, Products, Extrapages, Category, WshWishlist, Products, WsiWishlistitems, ProductWaitinglist, Tax
+from models import *
+from django.db.models import Count, Min, Sum, Max, Avg
+from django.db import connection
 import random, logging
 import functools
 from functools import wraps
-
 from django.core.context_processors import csrf
-PERPAGE=50
+from classes import *
+from views import *
+from django.db.models import Max
 
+import time
+import calendar
+
+PERPAGE=50
 class CsrfExemptMixin(object):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(CsrfExemptMixin, self).dispatch(request, *args, **kwargs)
 
+def GetRecaptcha(request):
+    value = random.randrange(10000, 99999, 1)
+    request.session['ReCaptcha'] = value
+    return "https://chart.googleapis.com/chart?chst=d_text_outline&chld=FFCC33|16|h|FF0000|b|%s"%value
+
 def checkuserlogin_dispatch(f):
     def wrap(request, *args, **kwargs):
         if 'IsLogin' in request.session and request.session['IsLogin'] and request.session['Customer'].email !="":
-            customer_list = customers.objects.filter(email = request.session['Customer'].email, pass_field = request.session['Customer'].pass_field,custenabled=1)
+            customer_list = customers.objects.filter(email = request.session['Customer'].email,
+                                                     pass_field = request.session['Customer'].pass_field,custenabled=1)
             if customer_list:
                 request.session['IsLogin'] = True
                 request.session['Customer'] = customer_list[0]
@@ -61,307 +73,6 @@ def render_template(request, template, data=None):
                               context_instance=RequestContext(request))
     return response
 
-class MyAccountWidget(TemplateView):
-    def get(self, request):
-        content = {'form':LoginForm,}
-        return render_template( "myaccount_widget.htm", content)
-
-class HomePageClass(TemplateView):
-    def GetRecaptcha(self, request):
-        value = random.randrange(10000, 99999, 1)
-        request.session['ReCaptcha'] = value
-        return value
-    def get(self, request, *args, **kwargs):
-        error_message = ""
-        if "ErrorMessage" in request.session:
-          error_message = request.session["ErrorMessage"]
-          del request.session["ErrorMessage"]
-          
-        if 'IsLogin' in request.session and request.session['IsLogin']:
-            login_is = request.session['IsLogin']
-        else:
-            login_is = ""
-        content = {'page_title': "Summary",
-                   'form':LoginForm,
-                   'login_is':login_is,
-                   'recaptcha':"https://chart.googleapis.com/chart?chst=d_text_outline&chld=FFCC33|16|h|FF0000|b|%s" %self.GetRecaptcha(request),
-                   'error_message': error_message,
-                   }
-        return render_template(request, "front.htm", content)
-   
-class RegistrationViewClass(TemplateView):
-    def GetRecaptcha(self, request):
-        value = random.randrange(10000, 99999, 1)
-        request.session['ReCaptcha'] = value
-        return value
-    def get(self, request, *args, **kwargs):
-        message = ""
-        error_message = ""
-        if 'Message' in request.session:
-          message = request.session['Message']
-          del request.session['Message']
-
-        if 'ErrorMessage' in request.session:
-          error_message = request.session['ErrorMessage']
-          del request.session['ErrorMessage']
-            
-        content = {'title': "User Registration",
-                   'form':RegistrationForm,
-                   'loginform':LoginForm,
-                   'recaptcha':"https://chart.googleapis.com/chart?chst=d_text_outline&chld=FFCC33|16|h|FF0000|b|%s" %self.GetRecaptcha(request),
-                   'message': message,
-                   'error_message': error_message
-                   }
-        return render_template(request, "registration.htm", content)
-
-class QuickListClass(TemplateView):
-    def GetRecaptcha(self, request):
-        value = random.randrange(10000, 99999, 1)
-        request.session['ReCaptcha'] = value
-        return value
-
-    def get(self, request, *args, **kwargs):
-        if request.method == 'GET' and 'cat' in request.GET:
-            cat=request.GET['cat']
-        else:
-            cat = 15
-        content = {'title': "Quick List",
-                   'cat': cat,
-                   'form':LoginForm,
-                   'recaptcha':"https://chart.googleapis.com/chart?chst=d_text_outline&chld=FFCC33|16|h|FF0000|b|%s" %self.GetRecaptcha(request),
-                    }
-        return render_template(request, "quick_list.htm", content)
-
-class ViewCategoryClass(TemplateView):
-    def GetRecaptcha(self, request):
-        value = random.randrange(10000, 99999, 1)
-        request.session['ReCaptcha'] = value
-        return value
-
-    def get(self, request, *args, **kwargs):
-        if request.method == 'GET' and 'id' in request.GET:
-            cat=request.GET['id']
-        else:
-            cat = ""
-        category = Category.objects.get(id=cat)
-        content = {'title': "Quick List",
-                   'cat': category,
-                   'form':LoginForm,
-                   'recaptcha':"https://chart.googleapis.com/chart?chst=d_text_outline&chld=FFCC33|16|h|FF0000|b|%s" %self.GetRecaptcha(request),
-                    }
-        return render_template(request, "category.htm", content)
-
-class ViewPagesClass(TemplateView):
-
-    def GetRecaptcha(self, request):
-        value = random.randrange(10000, 99999, 1)
-        request.session['ReCaptcha'] = value
-        return value
-
-    def get(self, request, *args, **kwargs):
-        pageid = request.GET['pageid']
-        allpages = Extrapages.objects.get(id=pageid)
-        content = {'page_title': "Summary",
-                   'allpages':allpages,
-                   'form':LoginForm,
-                   'recaptcha':"https://chart.googleapis.com/chart?chst=d_text_outline&chld=FFCC33|16|h|FF0000|b|%s" %self.GetRecaptcha(request),
-                   }
-        return render_template(request, "pages.htm", content)
-
-
-class MyaccountViewClass(LoginRequiredMixin,TemplateView):
-
-  def get(self, request, *args, **kwargs):
-    content = {'page_title': "Profile"}
-    #content['customerorders'] = Orders.objects.filter(ocustomerid=customer.contactid).all(),
-    content = {'page_title': "Summary",
-               'customer':request.session['Customer'],
-               'form':LoginForm,
-              }
-
-    # Getting number items in the watch list
-    wsh_id = -1
-    if 'WSH_ID' in request.session:
-      wsh_id = request.session['WSH_ID']
-        
-    object_list = WsiWishlistitems.objects.filter(wsh_id = wsh_id)
-    content['wish_list_length'] = len(object_list)
-    
-    return render_template(request, "myaccount.html", content)
-
-  def post(self, request, *args, **kwargs):
-    pass
-
-class MyWishListViewClass(LoginRequiredMixin,TemplateView):
-
-  def get(self, request, *args, **kwargs):
-    message = ""
-    wish_list_items = []
-    content = {'page_title': "My Wish List"}
-    customer = request.session['Customer']
-
-    if 'Message' in request.session:
-      message = request.session['Message']
-      content['message'] = message
-      del request.session['Message']
-
-    if 'ErrorMessage' in request.session:
-      error_message = request.session['ErrorMessage']
-      content['error_message'] = error_message
-      del request.session['ErrorMessage']
-
-    #wish_list_master = WshWishlist.objects.filter(customerid = customer.contactid)
-    wish_list_master = ProductWaitinglist.objects.filter(userid = request.session['Customer'].contactid)
-
-    catalog_list = []
-    for item in wish_list_master:
-        catalog_list.append(item.catalogid)
-
-    product_list = Products.objects.filter(catalogid__in=catalog_list)
-    content['product_list'] = product_list
-    return render_template(request, 'wishlistitems.html', content)
-
-class WishListItemsViewClass(LoginRequiredMixin,TemplateView):
-
-  def get(self, request, *args, **kwargs):
-    message = ""
-    content = {'page_title': "My Watch List"}
-    id = int(request.GET['wsh_id'])
-    customer = request.session['Customer']
-    if 'Message' in request.session:
-        message = request.session['Message']
-        del request.session['Message']
-        
-    wish_list_items = WsiWishlistitems.objects.filter(wsh_id = id).order_by('id')
-    catalog_list = []
-    for item in wish_list_items:
-      catalog_list.append(item.catalogid) 
-
-    product_list = Products.objects.filter(catalogid__in=catalog_list)
-
-    content['wsh_id'] = id
-    content['product_list'] = product_list
-    content['message'] = message
-    return render_template(request, 'wishlistitems.html', content)
-
-
-class ProductListViewClass(TemplateView):
-
-  def get(self, request, *args, **kwargs):
-    content = {}
-    error_message = ''
-    message = ''
-    if 'ErrorMessage' in request.session:
-      error_message = request.session['ErrorMessage']
-      del request.session['ErrorMessage']
-
-    if 'Message' in request.session:
-      message = request.session['Message']
-      del request.session['Message']
-      
-    content['error_message'] = error_message
-    content['message'] = message
-    
-    product_list = Products.objects.all().order_by('stock')[:50]
-    content['product_list'] = product_list 
-    return render_to_response('productlist.html', content)
-
-class ChangePwdViewClass(LoginRequiredMixin, TemplateView):
-    @csrf_exempt
-    def get(self, request, *args, **kwargs):
-        content = {'page_title': "Profile - Password Change"}
-
-        error_message = ""
-        if "ErrorMessage" in request.session:
-          logging.info("\n\nErrors on page submit\n\n")
-          error_message = request.session["ErrorMessage"]
-          del request.session["ErrorMessage"]
-
-        if request.session["IsLogin"] == False: return HttpResponseRedirect('/')
-        customer = request.session['Customer']
-        prefill_data = {'username':customer.email}
-        form = ChangePwdForm(prefill_data)
-        content = {'page_title': "Summary",
-                   'customer':request.session['Customer'],
-                   'form':form,
-                   'error_message':error_message,
-                   }
-        return render_template(request, "ChangePwd.html", content)
-        #content['form'] = form
-        #content['error_message'] = error_message     
-        #content.update(csrf(request))
-        #return render_to_response("ChangePwd.html", content)
-
-class AddressFormViewClass(LoginRequiredMixin,TemplateView):
-    """ Page Name: /GetAddress """
-    @csrf_exempt
-    def get(self, request, *args, **kwargs):
-        if request.session["IsLogin"] == False: return HttpResponseRedirect('/')
-        address_type = request.GET['address_type']
-        customer = request.session['Customer']
-        d = {}
-        if address_type == 'billing':
-          d = {'contact_id':customer.contactid,
-               'first_name':customer.billing_firstname,
-               'last_name':customer.billing_lastname,
-               'address1':customer.billing_address,
-               'address2':customer.billing_address2,
-               'city': customer.billing_city,
-               'state': customer.billing_state,
-               'zip': customer.billing_zip,
-               'country': customer.billing_country,
-               'company': customer.billing_company,
-               'phone': customer.billing_phone,
-               'address_type': 'billing'}
-        elif address_type == 'shipping':
-          d = {'contact_id':customer.contactid,
-               'first_name':customer.shipping_firstname,
-               'last_name':customer.shipping_lastname,
-               'address1':customer.shipping_address,
-               'address2':customer.shipping_address2,
-               'city': customer.shipping_city,
-               'state': customer.shipping_state,
-               'zip': customer.shipping_zip,
-               'country': customer.shipping_country,
-               'company': customer.shipping_company,
-               'phone': customer.shipping_phone,
-               'address_type': 'shipping'}
-
-            
-        content = {}
-        content['customer'] = customer
-        form = AddressForm(d)
-
-        content['form'] = form
-        content.update(csrf(request))
-        return render_to_response("AddressForm.html", content)
-    
-class CartItems(object):
-
-  def __init__(self, id, name, price, saleprice, quantity, shipping, tax, fuelcharge, promotions, thumbnail, image1, image2, image3, extra_field_3=""):
-      self.id = id
-      self.name = name
-      self.quantity = quantity
-      self.price = price
-      self.saleprice = saleprice
-      #self.fuelcharge = fuelcharge
-      self.fuelcharge = 2.99
-      self.promotions = promotions
-      if saleprice <= 0 :
-          self.subtotal = price * quantity
-      else:
-          self.subtotal = saleprice * quantity
-      
-      self.shipping = shipping
-      self.tax = tax
-      self.taxvalue = float(self.subtotal) * float(tax)/float(100)
-      self.total = float(self.subtotal) + float(shipping) + self.taxvalue + self.fuelcharge
-      self.thumbnail = thumbnail
-      self.image1 = image1
-      self.image2 = image2
-      self.image3 = image3
-      self.extra_field_3 = extra_field_3
-
 class CartConfirmClass(TemplateView):
 
   def get(self, request, *args, **kwargs):
@@ -369,130 +80,170 @@ class CartConfirmClass(TemplateView):
     content = {}
     if "itemid" in request.GET:
       item_id = int(request.GET['itemid'])
-    
-    item = Products.objects.filter(catalogid=item_id)[0]
-    if item.stock == 0:
-       # If quantity is out of stock, removing the item from the cart.
-       cart_items = request.session["CartItems"]
-       if cart_items: del cart_items[item_id]
-       request.session["CartItems"] = cart_items
-       return HttpResponse("<h3>Quantity is out of stock. Click <a href='productlist'>here</a> to continue shopping.</h3>")
-    
-    cart_item = CartItems(item.catalogid, item.name, item.price,
-                          item.saleprice, 1, 0.0, 0.0, 0.0, 0.0, item.thumbnail,
-                          item.image1, item.image2, item.image3)
+    product_category = ProductCategory.objects.all().filter(catalogid=request.GET['itemid'])
+    pcats =""
+    for pwcats in product_category:
+        pcats += str(pwcats.categoryid)+", "
+    pcats = pcats[:-2]+''
+    logging.info('categoryid:: %s',pcats)
+    relateditems=Products.objects.raw('select * from product_category,products where products.catalogid!='+request.GET['itemid']+' and product_category.catalogid=products.catalogid and hide=0 and categoryid in ('+pcats+')')[:3]
 
-    # Calculating Sum for all the items.
+    #del request.session['CartItems']
     if 'CartItems' in request.session:
-      cart_items = request.session["CartItems"]
-      item_count = 0
-      sub_total = 0
-      shipping_total = 0
-      fuelcharge_total = 0
-      tax_total = 0
-      promotions_total = 0
-      order_total = 0
-      
-      for key, qty in cart_items.items():
-        if key == item_id:
-          item_count += qty
-          sub_total += (cart_item.subtotal * qty)
-          shipping_total += (cart_item.shipping * qty)
-          tax_total += (cart_item.taxvalue * qty)
-          fuelcharge_total += (cart_item.fuelcharge * qty)
-          promotions_total += (cart_item.promotions * qty)
-    
-      order_total = float(sub_total) + float(shipping_total) + float(fuelcharge_total) + float(tax_total) - float(promotions_total)
-    else:
-      content['ItemsHash'] = {}
+      cart_dict = request.session['CartItems']
+    cart_item = cart_dict[item_id]
+    item_count = 0
+    sub_total = 0
+    html = "<h3>"
+    for key, item in cart_dict.items():
+      html += "%s =>" %key + str(item.quantity) + "<br>"
+      item_count += item.quantity
+      item.CalculateTotals()
+      sub_total += item.subtotal
+
+    #return HttpResponse(html)
+#    item = Products.objects.filter(catalogid=item_id)[0]
+#    if item.stock == 0:
+#       # If quantity is out of stock, removing the item from the cart.
+#       cart_items = request.session["CartItems"]
+#       if cart_items: del cart_items[item_id]
+#       request.session["CartItems"] = cart_items
+#       return HttpResponse("<h3>Quantity is out of stock. Click <a href='productlist'>here</a> to continue shopping.</h3>")
+#    else:
+#      cart_items = request.session["CartItems"]
+#      cart_items[item_id] += 1
+#    
+#    #cart_item = CartItems(item.catalogid, item.name, item.price,
+#    #                      item.saleprice, 1, 0.0, 0.0, 0.0, 0.0, item.thumbnail,
+#    #                      item.image1, item.image2, item.image3)
+#    
+#    cart_item = CartItem(item_id)
+#    
+#
+#
+#    # Calculating Sum for all the items.
+#    if 'CartItems' in request.session:
+#      cart_items = request.session["CartItems"]
+#      item_count = 0
+#      sub_total = 0
+#      shipping_total = 0
+#      fuelcharge_total = 0
+#      tax_total = 0
+#      promotions_total = 0
+#      order_total = 0
+#      
+#      for key, qty in cart_items.items():
+#        item_count += qty
+##       sub_total += (cart_item.subtotal * qty)
+##       shipping_total += (cart_item.shipping * qty)
+##       tax_total += (cart_item.taxvalue * qty)
+##       fuelcharge_total += (cart_item.fuelcharge * qty)
+##       promotions_total += (cart_item.promotions * qty)
+#    
+#      #order_total = float(sub_total) + float(shipping_total) + float(fuelcharge_total) + float(tax_total) - float(promotions_total)
+#    else:
+#      content['ItemsHash'] = {}
 
     content['ItemCount'] = item_count
-    content['OrderSubTotal'] = order_total
-
+    content['OrderSubTotal'] = sub_total
     content['item'] = cart_item
-    
+    content['relateditems'] = relateditems
+    content.update(leftwidget(request))
     return render_template(request,'CartConfirmation.html', content)
 
-
+from random import choice
 class ViewCartViewClass(TemplateView):
   #Page Url: /viewcart
   #Last Modified: 2013-15-19 23:30
 
+  def GetPromotionValue(self, session, item_id):
+    if 'PromotionalDiscount' in session:
+      discounts_hash = session['PromotionalDiscount']
+      if item_id in discounts_hash:
+          return discounts_hash[item_id]
+      else:
+          return 0
+    else:
+      return 0
+
   def get(self, request, *args, **kwargs):
-    sub_total = 0
-    shipping_total = 0
-    fuelcharge_total = 0
-    tax_total = 0
-    promotions_total = 0
-    order_total = 0
+    store_credit_id = 0 # Unique id of swf customer credits table
+    store_credits = 0
 
     content = {}
     content = {'page_title': "My Cart"}
+    
+    next_page = "checkoutlogin"
+
+    # Checking Store Credits
+    if "Customer" in request.session:
+      next_page = 'orderconfirmation'
+      customer = request.session['Customer']    
+      swf_custcredits_objects = SwfCustomerCreditsLog.objects.filter(customers_email_address = customer.email)
+      if swf_custcredits_objects:
+        store_credit_id = swf_custcredits_objects[0].id
+        store_credits = swf_custcredits_objects[0].customers_credit
+        
+    cart_dict = {}
     if 'CartItems' in request.session:
-      cart_items = request.session["CartItems"]
-      content['ItemsHash'] = request.session["CartItems"]
-    else:
-      cart_items = {}
-      content['ItemsHash'] = {}
-      request.session["CartItems"] = cart_items
+      cart_dict = request.session['CartItems']
 
-    logging.info("\n\n\n\nIn View: %s\n\n\n\n" %str(cart_items))
-    item_list = cart_items.keys()
-    mycart = Products.objects.filter(catalogid__in=item_list)
+    # Cleaning up sessions when if cart is empty.
+    if not cart_dict:
+      if 'CartInfo' in request.session:
+        del request.session['CartInfo']
 
-    # Executing custom query to get the product categories
-    #cursor = connection.cursor()
-    #cursor.execute("SELECT catalogid, category_name from product_category PC inner join category C on (PC.categoryid = c.id) where PC.catalogid in (%s) order by catalogid", ", ".join([str(x) for x in item_list]))
-    #cursor.close()
+      if 'StoreCredit' in request.session:
+        del request.session['StoreCredit']
 
-   
+      if 'PaymentGateway' in request.session:
+        del request.session['PaymentGateway']
 
-    #Preparing result to render in html page.
-    selected_items = []
 
-    tax_list = Tax.objects.filter(tax_country = 'US', tax_state = 'FL')
-    if tax_list:
-      tax = tax_list[0]
-    else:
-      tax = 0.0
+    cart = CartInfo()
+    shipping_items = cart.GetItemsByShippingCategory(cart_dict)
+
+    shipping_method_hash = {}
     
-    for item in mycart:
-      logging.info(item.saleprice)
-      cart_item = CartItems(item.catalogid, item.name, item.price, item.saleprice,
-                            cart_items[item.catalogid], 0.0, tax.tax_value1, 0.0, 0.0,
-                            item.thumbnail, item.image1, item.image2, item.image3)
+    #if 'ShippingMethod' not in request.session:
+    for item in shipping_items:
+      if item.id not in shipping_method_hash:
+        sc = ShippingCategory.objects.filter(id = item.id)[0]
+        shipping_method_hash[item.id] = sc 
 
-      sub_total += cart_item.subtotal
-      shipping_total += cart_item.shipping
-      fuelcharge_total += cart_item.fuelcharge
-      tax_total += cart_item.taxvalue
-      promotions_total += cart_item.promotions
-      selected_items.append(cart_item)
-      
-    request.session['MyCartItems'] = selected_items
-    content['MyCartItems'] = selected_items
+    request.session['ShippingMethod'] = shipping_method_hash
 
-    #content['ItemCount'] = item_count
-    content['SubTotal'] = sub_total
-    content['ShippingTotal'] = shipping_total
-    content['FuelTotal'] = fuelcharge_total
-    content['TaxTotal'] = tax_total
-    content['PromotionsTotal'] = promotions_total
-    content['OrderTotal'] = float(sub_total) + float(shipping_total) + float(fuelcharge_total) + float(tax_total) + float(promotions_total)
+    if "StoreCredit" in request.session:
+      sc = request.session['StoreCredit']
+      cart.ApplyStoreCredit(sc)
+      store_credits = cart.store_credit
+    else:
+      cart.store_credit = store_credits 
+
+
+    request.session['CartInfo'] = cart
     
-    request.session['SubTotal'] = sub_total
-    request.session['ShippingTotal'] = shipping_total
-    request.session['FuelTotal'] = fuelcharge_total
-    request.session['TaxTotal'] = tax_total
-    request.session['PromotionsTotal'] = promotions_total
-    request.session['OrderTotal'] = float(sub_total) + float(shipping_total) + float(fuelcharge_total) + float(tax_total) + float(promotions_total)
-
-
+    content['MyCartItems'] =  shipping_items
+    content['CartInfo'] = cart
+    foo = ['3878', '3846', '2447', '2348', '1797']
+    product_category = ProductCategory.objects.all().filter(catalogid=choice(foo))
+    pcats =""
+    for pwcats in product_category:
+        pcats += str(pwcats.categoryid)+", "
+    pcats = pcats[:-2]+''
+    logging.info('categoryid:: %s',pcats)
+    relateditems=Products.objects.raw('select * from product_category,products where products.catalogid!=3878 and product_category.catalogid=products.catalogid and hide=0 and categoryid in ('+pcats+')')[:3]
+    content['NextPage'] = next_page
+    content['relateditems'] = relateditems
+    content['StoreCreditID'] = store_credit_id
+    content['StoreCredit'] = store_credits
     content.update(csrf(request))
+    content.update(leftwidget(request))
+    logging.info('field name:: %s',cart_dict)
     return render_template(request,'ViewCart.html', content)
 
 
-class ForgetPasswordClass(LoginRequiredMixin, TemplateView):
+class ForgetPasswordClass(LoginRequiredMixin,TemplateView):
 
     @csrf_exempt
     def GetRecaptcha(self, request):
@@ -539,72 +290,145 @@ class ForgetPasswordClass(LoginRequiredMixin, TemplateView):
 
 class OrderConfirmationView(TemplateView):
 
+  @csrf_exempt
   def get(self, request, *args, **kwargs):
     data = {}
     content = {'page_title': "Order Confirmation"}
     is_login = False;
     is_guest = False;
+    gateway = ''
+    error_message = ''
+    # Adding 3 days to the current date
+    est_delivery_date = time.strftime("%m/%d/%Y", time.localtime(time.time() + 172800))
+    
+    if 'ErrorMessage' in request.session:
+      error_message = request.session['ErrorMessage']
+      del request.session['ErrorMessage']
 
     if 'IsLogin' in request.session:
       if request.session['IsLogin']:
         is_login = True;
+        is_guest = False;
 
     if 'IsGuest' in request.session:
-      if request.session['IsGuest']:
+      if request.session['IsGuest'] and not is_login:
         is_guest = True;
-        
+
     # If there is no login and no guest, then redirect to checkoutlogin page.
     if not is_login and not is_guest:
       return HttpResponseRedirect('/checkoutlogin')
-
+     
+    
     if 'gateway' in request.GET:
-        request.session['PaymentGateway'] = request.GET['gateway']
+      request.session['PaymentGateway'] = request.GET['gateway']
+      gateway = request.GET['gateway']
+      
+    if 'PaymentGateway' in request.session:
+      gateway = request.session['PaymentGateway']
 
-    cart_items = request.session['MyCartItems']
-    is_login = False
-    if 'IsLogin' in request.session:
-        if request.session['IsLogin'] == True:
-            is_login = True
-        else:
-            is_login = False
-        
+    cart_items = request.session['CartItems']
+    cart_info = request.session['CartInfo'] # Holds grand totals
+    
+    item_list = []
+    
+    for key, value in cart_items.items():
+      item_list.append(value) 
+
     data = {}
     # Populating Customer Information if user is logged in.
-    if is_login:
+    if is_login or 'Customer' in request.session:
+      logging.info("Logged in or Customer info is found in the session")
       customer = request.session['Customer']
       data = {'contact_id':customer.contactid,
-          'first_name':customer.billing_firstname,
-          'last_name':customer.billing_lastname,
-          'address1':customer.billing_address,
-          'address2':customer.billing_address2,
-          'city': customer.billing_city,
-          'state': customer.billing_state,
-          'zip': customer.billing_zip,
-          'country': customer.billing_country,
-          'company': customer.billing_company,
-          'phone': customer.billing_phone,
-          'address_type': 'shipping'}
+          'shipping_first_name':customer.shipping_firstname,
+          'shipping_last_name':customer.shipping_lastname,
+          'shipping_address1':customer.shipping_address,
+          'shipping_address2':customer.shipping_address2,
+          'shipping_city': customer.shipping_city,
+          #'shipping_state': customer.shipping_state,
+          'shipping_zip': customer.shipping_zip,
+          'shipping_country': customer.shipping_country,
+          'shipping_company': customer.shipping_company,
+          'shipping_phone_part1': customer.shipping_phone[0:3],
+          'shipping_phone_part2': customer.shipping_phone[3:6],
+          'shipping_phone_part3': customer.shipping_phone[6:],
 
-    subtotal = 0
-    estimated_shipping = 0
-    fuel_charge = 0
-    order_total = 0
-    promotions = 0
+          'billing_first_name':customer.billing_firstname,
+          'billing_last_name':customer.billing_lastname,
+          'billing_address1':customer.billing_address,
+          'billing_address2':customer.billing_address2,
+          'billing_city': customer.billing_city,
+          #'billing_state': customer.billing_state,
+          'billing_zip': customer.billing_zip,
+          'billing_country': customer.billing_country,
+          'billing_company': customer.billing_company,
+          'billing_phone_part1': customer.billing_phone[0:3],
+          'billing_phone_part2': customer.billing_phone[3:6],
+          'billing_phone_part3': customer.billing_phone[6:],
+          #'billing_phone_ext': customer.billing_phone          
 
-    for item in cart_items:
-      subtotal += item.subtotal
-      estimated_shipping += item.shipping
+          }
+      
+      temp_data = {'card_holder_name':'John Doe', 'card_number': '4111111111111111', 
+                   'card_type':'Master', 'card_expdate':'10/20', 'card_cvn':'123'}
+      data.update(temp_data)
+    else:
+      logging.info("Non Login traverse or No customer information in the session")
+      data = {'contact_id':0,
+          'username': request.session['GuestEMail']
+          }
 
-    order_total = float(subtotal) + float(estimated_shipping)
+      temp_data = {'card_holder_name':'John Doe', 'card_number': '4111111111111111', 
+                   'card_type':'Master', 'card_expdate':'10/20', 'card_cvn':'123'}
+      data.update(temp_data)
 
-    content['form'] = AddressForm(data)
-    content['SubTotal'] = subtotal
-    content['EstimatedShipping'] = estimated_shipping
-    content['FuelSurCharge'] = fuel_charge
-    content['OrderTotal'] = order_total
+    if is_login:
+      if gateway == 'paypal':
+        form = PaypalOrderFormLoggedIn(data)
+      elif gateway == 'AUTHORIZENET':              
+        form = AuthorizeNetFormLoggedIn(data, card_list = GetCreditCardList(customer.contactid))
+      else:
+        form = NoGateWay(data)  
 
+    elif is_guest:
+      if gateway == 'paypal':
+        form = PaypalOrderFormNoLogin(data, card_list = [])
+      elif gateway == 'AUTHORIZENET':
+        form = AuthorizeNetFormNoLogin(data, card_list = [])
+        #form.fields['previous_cards'].choices = [('1', 'Account Ending in xxx - xxx - 2003'), ('2', 'Account Ending in xxx - xxx - 1099')]
+      else:
+        form = NoGateWay()
+
+    index = 1
+    shipping_method_list = []
+    # Creating Linked List
+    num_cats = len(request.session["ShippingMethod"])
+    for key, value in request.session["ShippingMethod"].items():
+      if num_cats > 1 and index <> num_cats: 
+        shipping_method_list.append((index, value, index + 1))
+      elif index == num_cats:
+        shipping_method_list.append((index, value, 0))
+      
+      index += 1
+        
+      #  shipping_method_list.append((index, value, 0))
+      #else:
+      #  shipping_method_list.append((index, value, index + 1))
+      #index+=1
+      
+ 
+
+    content['order_error_message'] = error_message
+    content['form'] = form
+    content['Items'] = item_list
+    content['DeliveryDate'] = est_delivery_date
+    content['ShippingMethodList'] = shipping_method_list
+    content['cal'] = GenerateShippingCalander()
+    content['Settings'] = settings
+    
+    content.update(csrf(request))
+    content.update(leftwidget(request))
     return render_template(request,'OrderConfirmation.html', content)
-
 #======================================================================
 
 class CheckOutLoginViewClass(TemplateView):
@@ -618,12 +442,361 @@ class CheckOutLoginViewClass(TemplateView):
     error_message = ""
     if 'ErrorMessage' in request.session:
       error_message = request.session['ErrorMessage']
-        
+    
+    if 'gateway' in request.GET:
+      request.session['PaymentGateway'] = request.GET['gateway']    
+
     content = {'page_title': "Checkout Login",
-               'form':LoginForm,
+               'LoginForm':LoginForm,
                'recaptcha':"https://chart.googleapis.com/chart?chst=d_text_outline&chld=FFCC33|16|h|FF0000|b|%s" %self.GetRecaptcha(request),
                'error_message': error_message,
               }
+    content.update(leftwidget(request))
     return render_template(request,'CheckOutLogin.html', content)
 
+def SaveOrder(request, transactionid):
+    customer = request.session['Customer']
+    cart_items = request.session['CartItems']
 
+    if request.session['PaymentGateway'] != 'None':
+      payment_method = PaymentMethods.objects.filter(payment_gateway=request.session['PaymentGateway'])[0].gateway_id
+    else:
+      payment_method = -1
+    
+    order = Orders()
+    if customer.contactid == -1:
+      # For guest login
+      order.oemail = request.session['GuestEMail']
+    else:
+      # For customer login
+      order.oemail = customer.email
+
+    order.ocustomerid = customer.contactid
+    order.ofirstname = customer.billing_firstname
+    order.olastname = customer.billing_lastname
+    order.oaddress = customer.billing_address
+    order.oaddress2 = customer.billing_address2
+    order.ocity = customer.billing_city
+    order.ostate = customer.billing_state
+    order.ocountry = customer.billing_country
+    order.ozip = customer.billing_zip
+    order.ophone = customer.billing_phone
+
+    order.oshipfirstname = customer.shipping_firstname
+    order.oshiplastname = customer.shipping_lastname
+    order.oshipaddress = customer.shipping_address
+    order.oshipaddress2 = customer.shipping_address2
+    order.oshipcity = customer.shipping_city
+    order.oshipstate = customer.shipping_state
+    order.oshipcountry = customer.shipping_country
+    order.oshipzip = customer.shipping_zip
+    order.oshipphone = customer.shipping_phone
+
+    order.opaymethod = payment_method
+    order.odate = datetime.datetime.now()
+    order.orderamount = request.session["CartInfo"].order_total
+    order.otax = request.session["CartInfo"].tax_total
+    order.ocomment = request.session['OrderComment']
+    order.order_status = 1
+    
+    if request.session["PaymentGateway"] == 'AUTHORIZENET' and 'CreditCard' in request.session:
+      card_dict = request.session['CreditCard']
+      order.ocardno = card_dict['number'] 
+      order.ocardname = card_dict['first_name'] + " " + card_dict['last_name'] 
+      order.ocardexpiresmonth = card_dict['month']
+      order.ocardexpiresyear = card_dict['year']
+      order.ocardverification =  card_dict['code']
+    
+    if 'CouponCode' in request.session:
+      order.coupon = request.session['CouponCode']
+      order.coupondiscount = request.session["PromotionsTotal"]
+
+    order.oprocessed = 0
+
+    max_invoice =  Orders.objects.aggregate(Max('invoicenum'))['invoicenum__max']   
+    
+    order.invoicenum_prefix = 'SWF-'
+    order.invoicenum = max_invoice + 1 
+    
+    order.save()
+    obj = Orders.objects.all().latest('orderid')
+    
+    # Updating Transaction Details
+    transaction = Transactions()
+    transaction.orderid = obj.orderid # Recent order ID
+    transaction.amount = order.orderamount
+    transaction.transactionid = transactionid # Function Parameter
+    transaction.paymenttype = order.opaymethod
+    transaction.save()
+    
+    reward_points_total = 0 
+    # Adding Items.    
+    for item_id, item in cart_items.items():
+      oitem = Oitems()
+      oitem.orderid = obj.orderid # Recent order ID
+      oitem.catalogid = item.catalog_id
+      oitem.orderitemid = item.catalog_id
+      oitem.itemname = item.item_name
+      oitem.numitems = item.quantity
+      
+      reward_points_total += item.reward_points * item.quantity
+
+      if item.saleprice > 0:
+        oitem.unitprice = item.saleprice
+      else:
+        oitem.unitprice = item.price
+        
+      oitem.save()
+      
+      # Calculating Rewards and Adding to the customer_rewards tables
+      customer_reward = CustomerRewards()
+      customer_reward.contactid = customer.contactid
+      customer_reward.orderid = obj.orderid
+      customer_reward.points = reward_points_total
+      customer_reward.datetime = datetime.datetime.now()
+      customer_reward.giftcertid = 0
+      
+      customer_reward.save()
+      
+      if "ShippingMethod" in request.session:
+        shipping_method_hash = request.session['ShippingMethod']
+        for key, value in shipping_method_hash.items():
+          shp_cat_id = key
+          user_inputs = value
+          for input_field, input_value in user_inputs.items():
+            shipping_tupple = Shippingtuple()
+            shipping_tupple.shippingcategoryid = shp_cat_id
+            shipping_tupple.orderid = obj.orderid
+            shipping_tupple.name =  input_field
+            shipping_tupple.stringvalue = input_value
+            
+#             if input_field == "OverNightShipping":
+#               shipping_tupple.stringvalue = input_value
+#             if input_field == "HoldPackageAtFedex":
+#               shipping_tupple.stringvalue = input_value
+#             if input_field == "ReceiveDeliveryNotificationEMail":
+#               shipping_tupple.stringvalue = input_value
+#             if input_field == "ReceiveDeliveryNotificationSMS":
+#               shipping_tupple.stringvalue = input_value
+
+            shipping_tupple.save()
+        del request.session['ShippingMethod']
+      
+      if 'StoreCredit' in request.session:
+        cart_info = request.session['CartInfo']
+        swf_cust_credit_obj = SwfCustomerCreditsLog.objects.filter(id = cart_info.store_credit_id)[0]
+        swf_cust_credit_obj.customers_credit = cart_info.store_credit
+        swf_cust_credit_obj.customers_credit_applied = datetime.datetime.now()
+        swf_cust_credit_obj.save()
+        del  request.session['CartInfo']
+        del  request.session['StoreCredit']
+        
+      
+      request.session["CartItems"]  = {}
+      
+    return obj.orderid
+
+
+class CheckOutCallBackViewClass(TemplateView):
+
+  @csrf_exempt
+  def get(self, request, *args, **kwargs):
+    error_message = ""
+
+    tx = request.GET['tx']
+    status = request.GET['st']
+    amount = request.GET['amt']
+    currency = request.GET['cc']
+    item_number = request.GET['item_number']
+    
+    tran_list = Transactions.objects.filter(transactionid = tx)
+
+    if not tran_list:
+      order_id = SaveOrder(request, tx)
+    else:
+      tran_obj = tran_list[0]
+      order_id = tran_obj.orderid
+      error_message = "Transaction is already recorded. Please find the order number below"  
+    
+    
+    content = {'page_title': "Payment Confirmation",
+               'tran_error_message': error_message,
+               'tx': tx,
+               'status': status,
+               'amount': amount,
+               'currency': currency,
+               'item_number': item_number,
+               'OrderID': order_id
+              }
+    if 'StoreCredit' in request.session:
+        del request.session['StoreCredit']
+
+        
+    return render_template(request,'PaypalPurchase.html', content)
+
+
+class PaypalRedirectionViewClass(TemplateView):
+  @csrf_exempt
+  def get(self, request, *args, **kwargs):
+    content = {'page_title': "Paypal Redirection", 'Settings': settings}
+    return render_template(request, 'PaypalRedirection.html', content)
+
+class MurthyTestViewCalss(TemplateView):
+
+  def get(self, request, *args, **kwargs):
+    html = "<h3>"
+    cart_dict = {}
+    cart = CartInfo()
+    cart_dict = cart.Add(cart_dict, 186)
+    if cart.IsError:
+      html = "<font color='red'> 186 " + cart.Error() +  "</font>"
+      return HttpResponse(html)
+
+    cart_dict = cart.Add(cart_dict, 249)
+    if cart.IsError:
+      html = "<font color='red'> 249" + cart.Error() +  "</font>"
+      return HttpResponse(html)
+
+    cart_dict = cart.Add(cart_dict, 249)
+    if cart.IsError:
+      html = "<font color='red'> 249" + cart.Error() +  "</font>"
+      return HttpResponse(html)
+
+    cart_dict = cart.Add(cart_dict, 423)
+    if cart.IsError:
+      html = "<font color='red'> 423" + cart.Error() +  "</font>"
+      return HttpResponse(html)
+
+    cart_dict = cart.Update(cart_dict, 423, 5)
+    if cart.IsError:
+      html = "<font color='red'> 423" + cart.Error() +  "</font>"
+      return HttpResponse(html)
+
+    cart_dict = cart.Add(cart_dict, 15)
+    if cart.IsError:
+      html = "<font color='red'> 4884" + cart.Error() +  "</font>"
+      return HttpResponse(html)
+    
+    cart_dict = cart.Add(cart_dict, 16)
+    if cart.IsError:
+      html = "<font color='red'> 4884" + cart.Error() +  "</font>"
+      return HttpResponse(html)
+
+    cart_dict = cart.Add(cart_dict, 18)
+    if cart.IsError:
+      html = "<font color='red'> 4884" + cart.Error() +  "</font>"
+      return HttpResponse(html)
+
+    shipping_items = cart.GetItemsByShippingCategory(cart_dict)
+    for myShipping in shipping_items:
+      html += "<h3>%s</h3>" %myShipping.id
+      if myShipping.shipping_items:
+        for cart_item in myShipping.shipping_items:
+          html += str(cart_item.catalog_id) + "=>" + cart_item.item_name + "=>" + str(cart_item.quantity) + "Shipping Category: %d<br>" %(cart_item.shipping_category)
+
+    request.session['MyCartItems'] = shipping_items
+    return HttpResponse(html)
+
+
+class ShippingCalander(TemplateView):
+  
+  @csrf_exempt
+  def get(self, request, *args, **kwargs):
+    month = [['', '', '','','', '', ''],
+       ['', '', '','','', '', ''],
+       ['', '', '','','', '', ''],
+      ['', '', '','','', '', ''],
+       ['', '', '','','', '', ''],
+       ['', '', '','','', '', ''],
+       ]
+
+    today = time.localtime().tm_mday
+    start_time = time.strptime("2013/06/01", "%Y/%m/01")
+    day = start_time.tm_mday
+    wday = start_time.tm_wday
+    last_day = calendar.monthrange(start_time.tm_year, start_time.tm_mon)[1]
+
+    row_no = 0
+    while day <= last_day:
+      cur_time = time.strptime(time.strftime("%Y/%m/" + str(day), start_time), "%Y/%m/%d")
+      day = cur_time.tm_mday
+      wday = cur_time.tm_wday
+      script = ''
+      bgcolor = "#FFFFFF"
+      if day < today:
+        bgcolor = "#999999"
+      elif day == today:
+        bgcolor = "#CC9966"
+      elif day == today + 1:
+        bgcolor = "#99CC00"
+        script = "alert('Next Day Delivery');"
+      elif day == today + 2:
+        bgcolor = "#663366"
+        script = "alert('Second Day Delivery');"
+      elif day > today + 2:
+        bgcolor = "#00CCCC"
+        script = "alert('Day %d Delivery');" %day        
+
+      if day >= today:
+        if wday == 6:
+           bgcolor = "#DB9E9B"
+           script = ''
+        elif wday == 5:
+           script = "alert('Saturday Day Delivery');"
+           bgcolor = "#FFCC33"
+
+
+      day_hash = {'wday': wday, 'day': day, 'bgcolor':bgcolor, 'script':script}
+      month[row_no][wday] = day_hash 
+      if wday == 6:
+        row_no += 1
+      day += 1
+
+    content = {}
+    content['cal'] = month
+    return render_template(request, 'shipping_calander.html', content)
+
+  @csrf_exempt
+  def post(self, request, *args, **kwargs):
+    cards_list = [('4111111111111111', 'Account ending in 2003'), ('378282246310005', 'Account ending in 2004'), ('4111111111111111', 'Account ending in 2005')]
+    form = RadioForm(request.POST, choices=cards_list) 
+    if form.is_valid():
+      credit_card = form.cleaned_data['previous_cards']
+      return HttpResponse("<h1>Form is Clean => %s</h1>" %credit_card)
+    
+    content = {}
+    return render_template(request, 'RadioTest.html', content)
+
+class RadioButtonTest(TemplateView):
+  
+  @csrf_exempt
+  def get(self, request, *args, **kwargs):
+    data = {}
+    content = {}
+    #data['previous_cards'] = (('4111111111111111', 'Account ending in 2003'), ('378282246310005', 'Account ending in 2004'), ('4111111111111111', 'Account ending in 2005'),)
+    form = RadioForm()
+    content['form'] = form
+    return render_template(request, 'RadioTest.html', content)
+
+  @csrf_exempt
+  def post(self, request, *args, **kwargs):
+    cards_list = [('4111111111111111', 'Account ending in 2003'), ('378282246310005', 'Account ending in 2004'), ('4111111111111111', 'Account ending in 2005')]
+    form = RadioForm(request.POST, choices=cards_list) 
+    if form.is_valid():
+      credit_card = form.cleaned_data['previous_cards']
+      return HttpResponse("<h1>Form is Clean => %s</h1>" %credit_card)
+    
+    content = {}
+    return render_template(request, 'RadioTest.html', content)
+
+class GiftCertificateView(TemplateView):
+  #BuyGift
+  
+  @csrf_exempt
+  def get(self, request, *args, **kwargs):
+    data = {}
+    content = {}
+    #item_id = request.GET['item_id']
+    #cart_item = CartItem(item_id)
+    content["item_id"] = 11
+    return render_template(request, 'BuyGift.html', content)

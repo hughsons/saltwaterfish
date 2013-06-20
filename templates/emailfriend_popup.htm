@@ -1,0 +1,142 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="/misc/style.css" rel="stylesheet" type="text/css" />
+<link href="/misc/sty.css" rel="stylesheet" type="text/css" /> 
+<link type="text/css" rel="stylesheet" href="/misc/myaccount.css" />
+
+<title>Saltwaterfish.com | Email A friend</title>
+ </head>
+ {% load tagsfilter %}
+ 
+<script>
+$(document).ready(function(){
+  $("#cmdUpdateAddress").click(function(){
+	var formData = $('#formsss').serialize();
+	
+	if($('#visitorname').val()==""){
+		alert("Please Provide a Valid Name");
+		return false;
+		}
+	if($('#visitormail').val()==""){
+		alert("Please Provide a Valid Email Address");
+		return false;
+		}
+	if($('#friendname').val()==""){
+		alert("Please Provide a Valid Friend Valid Name");
+		return false;
+		}
+	if($('#friendmail').val()==""){
+		alert("Please Provide a Valid Friend Email Address");
+		return false;
+		}
+	var emails = $('#visitormail').val();
+	var names = $('#visitorname').val();
+	var fnames = $('#friendname').val();
+	var femails = $('#friendmail').val();
+	var emsg = $('#message').val();
+	var itemid = $('#itemid').val();
+	$("#BillingAddressForm").load("/emailfriendpost?itemid={{products.catalogid}}&itemid="+itemid+"&name="+names+"&email="+emails+"&fnames="+fnames+"&femails="+femails+"&emsg="+emsg+"", formData, function(responseText, textStatus, xmlHttpRequest) {
+    html = responseText;
+    });
+	$("#ShippingAddressView").hide();
+	$("#BillingAddressForm").html(responseText);
+	return false;
+  });
+});
+</script>
+<body leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">
+ 
+ 
+<table width="500" cellpadding="0" cellspacing="0" border=0><tr><td class="orange-txt1 clr padtop20 padbottom10 product-align">RECOMMEND A FRIEND</td></tr>
+  <tr>
+					<td><img src="/misc/images/account-line.jpg" width="100%"  height="1" border="0" colspan=2 class="padtop10 padbottom20" /></td>
+				</tr>
+<tr><td class="data" style="padding-top:5; padding-bottom:5">Please complete the fields below to send your friend a link to this product. Your friend will receive an email from you with a link to our site.</td></tr>
+   <tr>
+					<td><img src="/misc/images/account-line.jpg"  height="1" border="0" colspan=2 class="padtop20 padbottom20" /></td>
+				</tr>
+<tr><td>
+<div id="BillingAddressForm"></div>
+<!--START: recomendBlock-->
+
+
+
+<table width="100%" cellpadding="0" cellspacing="0" border="0" id="ShippingAddressView">
+<tr>
+<td width="40%" valign="top">
+<form method="get" action="#" name="formsss" id="formsss">
+				{% csrf_token %}
+				<input type=hidden name="itemid" id="itemid" value="{{products.catalogid}}">
+<!--START: thumbnail-->
+<div align="center" class="price-info">
+<img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.thumbnail|strreplace:"assets/images/" }}' border="1" style="border-color: ced2bf">
+<!--END: thumbnail-->
+<br/>
+<span class="item"><strong>{{products.name}}</strong></span></div>
+</td>
+<td>
+<table width="98%" border="0" align="right" cellpadding="2" cellspacing="0" >
+<tr> 
+<td width="30%" class="price-info"> 
+Your Name</td>
+<td> 
+<input name="visitorname" id="visitorname" value="" type="text" size="25" class="txtBoxStyle"></td>
+</tr>
+<tr> 
+<td class="price-info">
+Your Email</td>
+<td> 
+<input name="visitormail" id="visitormail" value="" type="text" size="25" class="txtBoxStyle">
+</td>
+</tr>
+<tr> 
+<td class="price-info">
+Friend's Name</td>
+<td> 
+<input name="friendname" id="friendname" type="text" size="25" class="txtBoxStyle">
+</td>
+</tr>
+<tr> 
+<td class="price-info">
+Friend's Email</td>
+<td> 
+<input name="friendmail" id="friendmail" type="text" size="25" class="txtBoxStyle"></td>
+</tr>
+<tr> 
+<td colspan="2" class="price-info">
+&nbsp;<br/>
+Note to friend:<br/>
+<textarea name="message" id="message" rows="3" cols="32" wrap="soft" class="txtareaStyle"></textarea>
+</td>
+</tr>
+ 	
+
+
+</table></td>
+</tr>
+ 
+<tr> 
+<td colspan="2" align="right" height="50">
+<input name="cmdRecommend" type="submit"   value="Recommend!" class="btn" id="cmdUpdateAddress"> <input name="cancel" type="button" value="Cancel" class=" b-close">
+</td>
+</tr>
+</table>
+</form>
+</div>
+
+
+<!--END: recomendBlock-->
+</td></tr>
+
+<!--START: errorMsg--><!--END: errorMsg-->
+
+
+
+ 
+</table>
+</td></tr></table>
+
+</html>

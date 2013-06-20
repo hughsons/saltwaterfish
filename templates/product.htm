@@ -2,9 +2,70 @@
 {% block content %}
 {% load tagsfilter %}
 <link type="text/css" rel="stylesheet" href="/misc/css3/style.css" />
+ 
+<script language="javascript" type="text/javascript" src="/misc/js/imagetooltip.js"></script>
+ <script language="javascript" type="text/javascript" src="/misc/js/jquery.bpopup.min.js"></script>
  <script src="/misc/tabcontent.js" type="text/javascript"></script>
+<script type="text/javascript">
+	;(function($) {
+         $(function() {
+            $('.pop1').bind('click', function(e) {
+                e.preventDefault();
+				var a_href = $(this).attr('id');
+				//alert(a_href)
+				$("#contentss").load(a_href);
+                $('#popup').bPopup({
+				});
+			});
+			$('.pop2').bind('click', function(e) {
+                e.preventDefault();
+				var a_href = $(this).attr('id');
+				//alert(a_href)
+				$("#contentss").load(a_href);
+                $('#popup').bPopup({
+				});
+			});
+			$('.pop3').bind('click', function(e) {
+                e.preventDefault();
+				var a_href = $(this).attr('id');
+				//alert(a_href)
+				$("#contentss").load(a_href);
+                $('#popup').bPopup({
+				});
+			});
+        });
+
+    })(jQuery);
+
+$(function() {
+	$('#simage1hid').click(function() {
+		
+		$("#image1hid").show();
+		$("#image2hid").hide();
+		$("#image3hid").hide();
+	});
+	$('#simage2hid').click(function() {
+		$("#image1hid").hide();
+		$("#image2hid").show();
+		$("#image3hid").hide();
+	});
+	$('#simage3hid').click(function() {
+		$("#image1hid").hide();
+		$("#image2hid").hide();
+		$("#image3hid").show();
+	});
+});
+</script>
+
     <link href="/misc/tabcontent.css" rel="stylesheet" type="text/css" />
+	 {% block css %}
+
 	<style>
+	body  a { color:#434343; text-decoration:none; }
+	body a:link{ color:#434343; text-decoration:none;}
+	body a:visited{ color:#434343; text-decoration:none;}
+	body  a:hover { color:#f67720; text-decoration:none; }
+	body a:active{ color:#434343; text-decoration:none;}
 	.free-ship2{
 	border: 1px solid #d9d9d9;
 	height: 194px;
@@ -17,9 +78,37 @@
 	color: #434343;
 	text-decoration: none;
 }
+#popup, #popup2, .bMulti {
+background-color: #fff;
+border-radius: 10px 10px 10px 10px;
+box-shadow: 0 0 25px 5px #999;
+color: #111;
+display: none;
+min-width: 450px;
+padding: 1px;
+}
+#element.style {
+left: 338px;
+position: absolute;
+top: 2163px;
+z-index: 9999;
+opacity: 0;
+display: none;
+height: auto;
+width: auto;
+}
+.thumbnail {
+    border: 1px solid #DDDDDD;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.055);
+    display: block;
+    line-height: 20px;
+    padding: 4px;
+    transition: all 0.2s ease-in-out 0s;
+}
 	</style>
-
-<div class="float-left wid10">&nbsp;&nbsp;</div>
+ {% endblock %}
+<div class="float-left wid20">&nbsp;&nbsp;</div>
 <div class="float-left pwid2">
 <!-- Top area starts -->
 <div class="clr martop20">
@@ -30,45 +119,64 @@
    <span class="tag-txt">{{products.description}}</span></div>
 <div class="clr padtop21">
 <div class="float-left pwid3">
-<div class="clr"><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.image1|strreplace:"assets/images/" }}' width="302" height="297" border="0" /></div>
+<div class="clr" id="image1hid"><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.image1|strreplace:"assets/images/" }}' width="302" height="297" border="0" /></div>
+<div class="clr" id="image2hid" style="display:none"><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.image2|strreplace:"assets/images/" }}' width="302" height="297" border="0" /></div>
+<div class="clr" id="image3hid" style="display:none"><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.image3|strreplace:"assets/images/" }}' width="302" height="297" border="0" /></div>
+
 <div class="clr martop16">
+
 <div class="float-left pwid4">&nbsp;</div>
-<div class="float-left"><img src="misc/images/pro1.jpg" width="54" height="54" border="0" /></div>
+<div class="float-left"><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.image1|strreplace:"assets/images/" }}' id=simage1hid width="54" height="54" border="0" /></div>
+{%if products.image2 %}
 <div class="float-left pwid5">&nbsp;</div>
-<div class="float-left"><img src="misc/images/pro2.jpg" width="54" height="54" border="0" /></div>
+<div class="float-left"><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.image2|strreplace:"assets/images/" }}' id=simage2hid width="54" height="54" border="0" /></div>
+{%endif%}
+{%if products.image3 %}
+
 <div class="float-left pwid5">&nbsp;</div>
-<div class="float-left"><img src="misc/images/pro3.jpg" width="54" height="54" border="0" /></div>
+<div class="float-left"><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.image3|strreplace:"assets/images/" }}' id=simage3hid width="54" height="54" border="0" /></div>
+{%endif%}
 <div class="float-left"></div>
 
 </div>
 <div class="clr">&nbsp;</div>
 <div class="clr">
-<div class="float-left pwid6">&nbsp;</div>
-<div class="float-left"><img src="misc/images/easy.jpg" width="85" height="25" border="0" /></div>
-<div class="float-left pwid6">&nbsp;</div>
-<div class="float-left"><img src="misc/images/moderate.jpg" width="115" height="25" border="0" /></div>
-<div class="float-left pwid6">&nbsp;</div>
-<div class="float-left"><img src="misc/images/expert.jpg" /></div>
+<div class="float-left pwid6">&nbsp;</div><div class="float-left pwid6">&nbsp;</div>
+<div class="float-left"><img src="http://commondatastorage.googleapis.com/swf_product_images/staticswf/{{products.extra_field_10}}"  height="30" border="0" /></div>
 
+</div>
+ 
+
+{% if products.reward_disable < 1 %}
+ 
+ <div class="clr padtop20 product-align" style="margin-left:25px;"><div class="reef-rew-bg padtop20">
+<div class="clr">REEF REWARDS</div>
+<div class="clr home-txt1"><strong>{{products.reward_redeem}} Reef Rewards Points</strong></div>
+<div class="clr home-txt1-para">will be rewarded to you when you buy this item.</div>
 
 
 </div>
-<div class="padtop20 clr"><img src="misc/images/reef-rewards.jpg" width="228" height="101" border="0" /></div>
+</div>
+{%endif%}
+
+
+ 
 </div>
 <div class="pwid7 float-left">&nbsp;</div>
 <div class="float-left pwid8">
-<div class="float-left clr padtop10 padbottom10" align="left"><img src="misc/images/customer-list.jpg" width="201" height="22" border="0" /></div>
-
+{% if totalreviews %}
+<div align="left" class="float-left clr padbottom10"><span class="price1" style="text-decoration: None !important;">Customer Reviews:</span>	<img  border="0" src="misc/images/star{{totalreviews}}.gif"></div>
+{%endif%}
 <div class="free-shipping clr">
-<div class="float-left padtop10 padleft15 pwid9">
-<div class="price clr"><span class="price1">Price Elsewhere: $54.99</span></div>
-<div class="sale-price clr padtop10">Sale Price: $34.99</div>
-<div class="price clr padtop10"><span class="price1">Savings: $20.00</span></div>
+<div class="float-left padtop1 padleft15 pwid9">
+<div class="price clr"><span class="price1">Price Elsewhere: ${{products.price2|floatformat:2}}</span></div>
+<div class="sale-price clr padtop10">Sale Price: ${{products.saleprice|floatformat:2}}</div>
+<div class="price clr padtop10"><span class="price1">Savings: ${{products.price|subtractval:products.saleprice|floatformat:2}}</span></div>
 <div class="clr padtop27">
 <div class="quantity float-left product-height">Quantity</div>
-<div class="float-left padleft8"><input name="" type="text" class="text-box" /></div>
+<div class="float-left padleft8"><form action="/addtocart" method="GET" name="form">{% csrf_token %}<input type="hidden" size="10" value="{{products.catalogid}}" name="item_id"><input name="quantity" type="text" class="text-box" value=1 /></div>
 </div>
-<div class="clr padtop10"><a href="/addtocart?item_id={{products.catalogid}}"><img src="misc/images/addtotank.jpg" width="181" height="35" border="0" /></a></div>
+<div class="clr padtop10"><input type=image src="misc/images/addtotank.jpg" width="181" height="35" border="0" /></form></div>
 
 </div>
 <div class="float-left product-sale-line">&nbsp;</div>
@@ -84,7 +192,7 @@ and Florida Locations</div>
 
 </div>
 
-
+{%comment%}
 <div class="free-ship2 clr">
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
@@ -128,11 +236,15 @@ and Florida Locations</div>
 
 
 </div>
+{%endcomment%}
 <div class="orange-txt1 clr padtop20 padbottom20 product-align">Tank Stats </div>
 <div class="clr">
-<div class="clr"><table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+<div class="clr quest " align=left>
+{{products.extra_field_7|safe}}
+{%comment%}
+<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
   <tr>
-    <td class="details height25 product-align1 valign-top"><span class="quest">Size:</span> 1.5-3 inches</td>
+    <td class="details height25 product-align1 valign-top"><span class="quest">Size:</span> {{products.extra_field_3}}</td>
     <td class="height25 product-align1 valign-top">&nbsp;</td>
     <td class="details height25 product-align1 valign-top"><span class="quest">Origin:</span> Hawaii</td>
   </tr>
@@ -157,15 +269,16 @@ and Florida Locations</div>
     <td class="details height25 product-align1 valign-top"><span class="quest">Minimum Tank Size:</span></td>
   </tr>
 </table>
+{%endcomment%}
 </div>
 <div class="clr">
-<div class="float-left padleft15 padtop20"><img src="misc/images/emailafriend.jpg" width="150" height="30" border="0" /></div>
-<div class="float-right padtop20"><img src="misc/images/addtowishlist.jpg" width="160" height="30" border="0" /></div>
+<div class="float-left padleft15 padtop20"><a href="#" id="/emailfriendpopup?itemid={{ products.catalogid }}" class="pop2"><img src="misc/images/emailafriend.jpg" width="150" height="30" border="0" /></a></div>
+<div class="float-right padtop20" ><a href="#" id="/waitpopup?itemid={{ products.catalogid }}" class="pop1"><img src="misc/images/addtowishlist.jpg" width="160" height="30" border="0" /></a></div>
 </div>
 <div class="clr padtop20">
 <div class="float-left pwid10">
 <div class="float-left padleft15"><img src="misc/images/star.jpg" width="20" height="20" border="0" /></div>
-<div class="free-shipping1 float-left padleft7">Write a review</div>
+<div class="free-shipping1 float-left padleft7"><a href="#" id="/waitpopup?itemid={{ products.catalogid }}" class="pop3">Write a review</a></div>
 </div>
 <div class="float-right"><img src="misc/images/share-button.jpg" width="161" height="22" border="0" /></div>
 </div>
@@ -184,24 +297,34 @@ and Florida Locations</div>
 <div class="clr padtop20">
 <div style="line-height:20px !important;">
         <ul class="tabs" persist="true">
-            <li><a href="#" rel="view1">Descriptions</a></li>
+            <li><a href="#" rel="view1">Description</a></li>
             <li><a href="#" rel="view2">Customer Reviews</a></li>
-            <li><a href="#" rel="view3">Articles</a></li>
+            <!--<li><a href="#" rel="view3">Articles</a></li>-->
         </ul>
-        <div class="tabcontents martop8less">
-            <div id="view1" class="tabcontent">
-              <p>{{products.extended_description|safe}}<br />
-<br />
-<span class="read">Read More>>            </span></div>
-            <div id="view2" class="tabcontent">
-                         Yellow Tangs can be kept in groups of 3 or more, or singly. They are voracious algae eaters.The Surgeonfish family consists of fish which are colorful, thin-bodied, and usually have an oval shape. Yellow Tangs have long continuous dorsal and anal fins and crescent tailfins. The scalpel at the base of their tailfin is very sharp and is used by the fish for protection from predators as well as a way of establishing itself with other fish. Yellow Tangs are usually seen at reefs eating algae all day long.Photo by Saltwaterfish.com member ElitePhoto: Jay Hague If you understand they cannot be kept together, but would like to purchase two or more in the same order(separate tanks, group order, etc.) you will need to write in the Special Instructions area at the end of the shopping cart that you understand they cannot be kept together. Tremendous time and effort is put into ensuring the health of these fish and it is very important that you're fully aware two Angelfish should not be kept in the same tank.Photo by Saltwaterfish.com member, natemd.<br />
-<br />
-<span class="read">Read More>></span> </div>
-            <div id="view3" class="tabcontent">
-                      <p> The scalpel at the base of their tailfin is very sharp and is used by the fish for protection from predators as well as a way of establishing itself with other fish. Yellow Tangs are usually seen at reefs eating algae all day long.Photo by Saltwaterfish.com member ElitePhoto: Jay Hague If you understand they cannot be kept together, but would like to purchase two or more in the same order(separate tanks, group order, etc.) you will need to write in the Special Instructions area at the end of the shopping cart that you understand they cannot be kept together. Tremendous time and effort is put into ensuring the health of these fish and it is very important that you're fully aware two Angelfish should not be kept in the same tank.Photo by Saltwaterfish.com member, natemd.<br />
-<br />
-<span class="read">Read More >></span> </p>
-            </div>
+        <div class="tabcontents martop8less" style="height: auto !important;">
+            <div id="view1" class="tabcontent" style="min-height:200px !important;">
+              <table style="min-height:200px !important;"><tr><td><p>{{products.extra_field_6|safe}}</p></td></tr></table>
+
+</div>
+            <div id="view2" class="tabcontent" style="height:min-height:200px !important;">
+			{% for items in product_reviews %}
+                         <table width="100%" cellpadding="4" cellspacing="0">
+                        <tbody><tr>
+                          <td class="start">{{items.short_review}} <img src="misc/images/star{{items.rating}}.gif"></td>
+                        </tr>
+                        <tr>
+                          <td class="item">{{items.long_review}}</td>
+                        </tr>
+                        <tr>
+                          <td class="item">Reviewed by: &nbsp;<b>{{items.user_name}}</b> from {{items.user_city}} on {{items.review_date}}</td>
+                        </tr>
+                      </tbody></table> 
+		  {%empty%}
+		  No Reviews
+		  {%endfor%}
+
+					  </div>
+             
             
         </div>
         
@@ -213,126 +336,43 @@ and Florida Locations</div>
 
 <!-- Bottom area starts -->
 
+
 <div class="clr">
-<div class="matching-text clr padtop20 padbottom20 product-align1">Matching Aquarium Supplies |<span class="compatible"> Compatible Fish  Related Items </span></div>
-<div class="bottom-bg padtop15 clr product-align"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+<div class="matching-text clr padtop10 padbottom20 product-align1"><span class="compatible">Matching {{products.catalogid|relatedpitems}} </span></div>
+<div class="bottom-bg padtop15 clr product-align">
+ <table   style="width:22% !important;margin-left:14px;margin-top:14px;min-height:196px !important;">
+{% for items in relateditems %}
+
+{% if forloop.counter0|divisibleby:4 %}<tr>{% endif %}
+<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  style="width:22% !important;margin-left:14px;margin-bottom:14px;min-height:196px !important;">
   <tr>
-    <td class="padleft15"><table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td><img src="misc/images/p1.jpg" width="158" height="146" border="0" /></td>
+    <td><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ items.image1|strreplace:"assets/images/" }}' width="158" height="146" border="0" /></td>
   </tr>
   <tr>
-    <td class="product-align padtop25 valign-middle">ORA Yellow Polyp Sinularia<br />
+    <td class="product-align padtop25 valign-middle"><a href="/product?pid={{ items.catalogid }}">{{items.name}}</a><br />
 
-      <span class="bottom-bg-price">$47.99</span></td>
+      <span class="bottom-bg-price">${% if items.onsale > 0 %}{{items.saleprice|floatformat:2}}{% else %}{{items.price|floatformat:2}} 
+				{% endif %}</span>
+				</td>
   </tr>
 </table>
 </td>
-    <td>&nbsp;</td>
-    <td><td><table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td><img src="misc/images/p2.jpg" width="158" height="146" border="0" /></td>
-  </tr>
-  <tr>
-     <td class="product-align valign-middle padtop25">Australian Red Prism #1<br />
 
-      <span class="bottom-bg-price">$125.00</span></td>
-  </tr>
-</table>
-</td></td>
-    <td>&nbsp;</td>
-    <td><td><table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td><img src="misc/images/p3.jpg" width="158" height="146" border="0" /></td>
-  </tr>
-  <tr>
-    <td class="product-align valign-middle padtop25">Mushroom Polyp - Yuma #26<br />
+{% if forloop.counter|divisibleby:4 %}</tr>{% endif %}
 
-      <span class="bottom-bg-price">$35.99</span></td>
-  </tr>
-</table>
-</td></td>
-    <td>&nbsp;</td>
-    <td><td><table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td><img src="misc/images/p4.jpg" width="158" height="146" border="0" /></td>
-  </tr>
-  <tr>
-     <td class="product-align valign-middle padtop25">Mushrooms - Blue #42<br />
-
-      <span class="bottom-bg-price">$54.99</span></td>
-  </tr>
-</table>
-</td></td>
-  </tr>
-  
-  <tr>
-  <td class="padtop15">&nbsp;</td>
-  <td class="padtop15">&nbsp;</td>
-  <td class="padtop15">&nbsp;</td>
-  <td class="padtop15">&nbsp;</td>
-  <td class="padtop15">&nbsp;</td>
-  <td class="padtop15">&nbsp;</td>
-    <td class="padtop15">&nbsp;</td>
-       
-  
-  </tr>
-<tr>
-    <td class="padtop15"><table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td><img src="misc/images/p5.jpg" width="158" height="146" border="0" /></td>
-  </tr>
-  <tr>
-    <td class="product-align valign-middle padtop25">Half Black Angelfish (A)<br />
-
-      <span class="bottom-bg-price">$17.99</span></td>
-  </tr>
-</table>
-</td>
-    <td>&nbsp;</td>
-    <td><td><table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td><img src="misc/images/p6.jpg" width="158" height="146" border="0" /></td>
-  </tr>
-  <tr>
-     <td class="product-align valign-middle padtop25">Multicolor Pygmy Angelfish (A)<br />
-
-      <span class="bottom-bg-price">$79.99</span></td>
-  </tr>
-</table>
-</td></td>
-    <td>&nbsp;</td>
-    <td><td><table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td><img src="misc/images/p7.jpg" width="158" height="146" border="0" /></td>
-  </tr>
-  <tr>
-    <td class="product-align valign-middle padtop25">Keyhole Angelfish (A)<br />
-
-      <span class="bottom-bg-price">$17.99</span></td>
-  </tr>
-</table>
-</td></td>
-    <td>&nbsp;</td>
-    <td><td><table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td><img src="misc/images/p8.jpg" width="158" height="146" border="0" /></td>
-  </tr>
-  <tr>
-     <td class="product-align padtop25" > Eibli Angelfish (A)<br />
-
-      <span class="bottom-bg-price">$24.99</span></td>
-  </tr>
-</table>
-</td></td>
-  </tr>
+ 
+{%endfor%}
 </table>
 
 </div>
 <!-- Bottom area ends -->
 </div>
 </div>
-
+<div id="popup" style="left: -700px; position: absolute; top: 1177px; z-index: 9999; opacity: 1; display: none;min-height:200px;">
+        
+        <div id="contentss" style="height: auto; width: auto;"></div>
+</div>
 <div class="float-left wid20">&nbsp;&nbsp;</div>
 <div class="float-left wid20">&nbsp;&nbsp;</div>
 </div>
