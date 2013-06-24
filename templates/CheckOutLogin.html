@@ -120,10 +120,11 @@ $(function() {
 
 <div class="clr card1_txt_right-new6"><label>Password</label>{{ LoginForm.password }}</div>
 <div class="clr card1_txt_right-new6"> &nbsp;</div>
+{%comment%}
 <div class="clr card1_txt_right-new6" style="padding-left:100px !important;"><img src="{{ recaptcha }}" /></div>
 <div class="clr card1_txt_right-new6"> &nbsp;</div>
 <div class="clr card1_txt_right-new6"><label>Verify</label>{{ LoginForm.recaptcha }}</div>
- 
+ {%endcomment%}
 </div>
 <div align="center" class="password_link"><a href="/login#forget">Forgot your password?</a></div>
  <div class="clr padtop10">
@@ -143,12 +144,12 @@ $(function() {
      previously made.</p>
 
 <div class="clr">
-<form method="POST" action="/guestlogin">
-{% csrf_token %}<div class="clr card1_txt_right-new6"><label>Email Address</label><input type="text" name="EMail" value="" class="wid210" /></div>
+<form method="POST" action="/guestlogin" name="form2" id="form2">
+{% csrf_token %}<div class="clr card1_txt_right-new6"><label>Email Address</label><input type="text" name="EMail" value="" class="wid210" id="emailcheckout" /></div>
 
 </div>
 <div class="clr padtop20">
-<input type="submit" name="cmdSubmit" value="Continue >" class="blue-button-cart">
+<input type="submit" name="cmdSubmit" value="Continue >" class="blue-button-cart" id="checkoutlogin">
 </form>
 </div> 
 <p></p>
@@ -188,12 +189,12 @@ $(function() {
 <div class="login_heading">Returning Customers:</div>
 <p align="justify">
 Lorem ipsum dolor sit amet, habitasse pretium dolor sociis. Nulla et facilisis interdum elit amet erat, consectetuer condimentum eaque, ante maecenas. Suspendisse libero diam, doloribus aliquam consectetuer nec.</p>
-<form method="POST" action="/guestlogin">
+<form method="POST" action="/guestlogin" name="form2" id="form2">
 {% csrf_token %}
 <div class="clr">
-<div class="clr"><label>Email</label><input type="text" name="EMail" value="" class="wid210" /></div>
+<div class="clr"><label>Email</label><input type="text" name="EMail" value="" class="wid210" id="emailcheckout" /></div>
 </div>
-<div><input type="submit" name="cmdSubmit" value="Continue as Guest" class="blue-button-cart"></div>
+<div><input type="button" name="cmdSubmit" value="Continue as Guest" class="blue-button-cart" id="checkoutlogin"></div>
 </div></div></div>
 </div>
 </form>
@@ -201,4 +202,17 @@ Lorem ipsum dolor sit amet, habitasse pretium dolor sociis. Nulla et facilisis i
 <div class="float-left wid10"></div>
 
 </div>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script type="text/javascript">
+
+    $('#checkoutlogin').click(function() {
+        
+	   if ($("#emailcheckout").val().match(/^\s*$/gi))
+	   {
+		 alert("Please provide valid email address");
+		 $("#emailcheckout").focus();
+		 return false;
+	   }
+    });
+ </script>
 {% endblock content %}

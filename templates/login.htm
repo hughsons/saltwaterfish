@@ -103,7 +103,7 @@ Returning Customers
 </div>{{ request.session.IsLogin }}
 <form name="form" id="form" action="/custlogin" method="post">
 {% csrf_token %}
-<div class="my-account " style="min-height:200px !important;">
+<div class="my-account " style="min-height:150px !important;">
  {% if error_message1 %}
        <small style="color:red;font-size:15px;">{{ message }}  {{ error_message1 }} </small>
 {%else%}
@@ -114,10 +114,11 @@ Returning Customers
 <div class="height12 clr">&nbsp;&nbsp;</div>
 <div style="font-size:15px" >Pass: {{ form.password }}</div>
 <div class="height12 clr">&nbsp;&nbsp;</div>
-<div class=" " ><img src="{{ recaptcha }}" /></div>
+{%comment%}<div class=" " ><img src="{{ recaptcha }}" /></div>
 <div class="height12 clr">&nbsp;&nbsp;</div>
 <div style="font-size:15px" >Verify: {{ form.recaptcha }}</div>
 <div class="height12 clr">&nbsp;&nbsp;</div>
+{%endcomment%}
 <div class="wid187 clr">
 <div class="float-left"><input type=image src="/misc/images/sign-in.jpg" width="77" height="21" border="0" /></div>
 

@@ -1,26 +1,84 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %}{% load tagsfilter %}
 {% block content %}
 
 <div class="width10 float-left">&nbsp;&nbsp;</div>
 <div class="wid748 float-left">
 <div class="height12 clr"></div>
 <div  class="padtop20 clr">
-  <table><tr><td style="max-height:220px;">{% for banners in banner_main %}
+  <table><tr><td style="max-height:220px;">
+{%comment%}
+{% for banners in banner_main %}
 	{% if banners.banner_type == "TopMain" %}
-		{%comment%}<a href="{{banners.banner_link}}" target=blank><img src="http://commondatastorage.googleapis.com/{{banners.banner_image}}"></a>{%endcomment%}
+		 <a href="{{banners.banner_link}}" target=blank><img src="http://commondatastorage.googleapis.com/{{banners.banner_image}}"></a> 
 		{{banners.banner_content|safe}}
 	{%endif%}
-{%endfor%}</td></tr></table>
+{%endfor%}
+{%endcomment%}
+
+<table width="708" cellspacing="0" cellpadding="0" border="0">
+          <tbody><tr>
+            <td valign="top" height=215  align="left" class="superSpecialBG"><table cellspacing="0" cellpadding="0" border="0">
+                <tbody><tr>
+                  <td valign="top" align="center"><a href="/product?pid={{ homespecial.catalogid }}"><img border="0" alt="{{homespecial.name}}" src='http://commondatastorage.googleapis.com/swf_product_images/{{  homespecial.thumbnail|strreplace:"assets/images/" }}' width=210 height=180></a></td>
+                  <td width="25"><img width="25" height="1" alt="" src="http://commondatastorage.googleapis.com/swf_product_images/templates/saltwaterfish/images/spacer.gif"></td>
+                  <td valign="top" align="center"><table width="100%" cellspacing="0" cellpadding="0" border="0">
+                      <tbody><tr>
+                        <td><img width="1" height="12" alt="" src="http://commondatastorage.googleapis.com/swf_product_images/templates/saltwaterfish/images/spacer.gif"></td>
+                      </tr>
+                      <tr>
+                        <td valign="top" height="45" align="left" ><a href="/product?pid={{ homespecial.catalogid }}" class="clr resources "><b>{{homespecial.name}}</b></a><br>{{homespecial.description}}</td>
+                      </tr>
+                      <tr>
+                        <td valign="middle" align="left" class="home-item">{{homespecial.extra_field_3}}</td>
+                      </tr>
+                      <tr>
+                        <td valign="middle" align="left" class="home-item"><!--START: ITEMPRICE--><!--END: ITEMPRICE--> 
+                          <!--START: SALEPRICE-->
+                          
+                          <table>
+                            <tbody><tr>
+                              <td class="home-item">Orginial Price: ${{ homespecial.price2|floatformat:2 }}</td>
+                              <td><img width="13" height="1" alt="" src="http://commondatastorage.googleapis.com/swf_product_images/templates/saltwaterfish/images/spacer.gif"></td>
+                              <td valign="top"><span class="price2">Now ${{ homespecial.price|floatformat:2 }}</span></td>
+                            </tr>
+                          </tbody></table>
+                          
+                          <!--END: SALEPRICE--></td>
+                      </tr>
+                      <tr>
+                        <td><img width="1" height="12" alt="" src="http://commondatastorage.googleapis.com/swf_product_images/templates/saltwaterfish/images/spacer.gif"></td>
+                      </tr>
+                      <tr>
+                        <td valign="middle" align="left" class="item"><a href="/addtocart?item_id={{homespecial.catalogid}}"><img width="130" height="35" border="0" alt="Add to Tank" src="/misc/images/add_tant.png"></a></td>
+                      </tr>
+                    </tbody></table></td>
+                </tr>
+              </tbody></table>
+              <div class="allSpecials">
+                <table cellspacing="0" cellpadding="0" border="0">
+                  <tbody><tr>
+                    <td><img width="12" hspace="10" height="9" alt="Specials" src="http://commondatastorage.googleapis.com/swf_product_images/templates/saltwaterfish/images/green-arrow.png"></td>
+                    <td><a class="homeSpecials" target="_blank" href="search.asp?keyword=OnSale&amp;search.x=0&amp;search.y=0">Show All Specials</a></td>
+                  </tr>
+                </tbody></table>
+              </div></td>
+          </tr>
+        </tbody></table>
+
+
+</td></tr></table>
 </div>
 <div class="height1 clr"></div>
 <div class=" clr"><div class="">
 <table border="0" cellpadding="0" cellspacing="0" width="700">
       <tbody><tr>
-        <td>{% for banners in banner_main %}
+        <td>
+		{% for banners in banner_main %}
 			{% if banners.banner_type == "MainChild1" %}
 				{{banners.banner_content|safe}}
 			{%endif%}
-		{%endfor%}</td>
+		{%endfor%}
+		</td>
 		<td width=1>&nbsp;</td>
         <td>
 		{% for banners in banner_main %}

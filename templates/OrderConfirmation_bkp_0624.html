@@ -383,15 +383,15 @@
                   </h1>
                   </strong></div>
                 <div class="toggle_main">
-                  <div class="clr"> {% for i, value, next_index, key in ShippingMethodList %}
+                  <div class="clr"> {% for key, value, next_index in ShippingMethodList %}
                     <!-- Tab1 starts -->
                     <div class="clr">
                       <div class="toggle_container">
                         <div class="toggle_header2">
 						  <!-- toggle_link toggle_open -->
-                          <div class="padleft10" align="left"  id="ShippingCategoryName{{i}}">{{value.category_name}}</div>
+                          <div class="padleft10" align="left"  id="ShippingCategoryName{{key}}">{{value.category_name}}</div>
                         </div>
-                        <div id = "ShippingCategoryContent{{i}}" align="left" style="display:none" >
+                        <div id = "ShippingCategoryContent{{key}}" align="left" style="display:none" >
                           <div class="padtop10 padbottom5"><strong>{{value.category_name}} Shipping method:</strong></div>
                           <div><strong>{{value.category_name}} Arrival Date</strong></div>
                           <div>
@@ -400,9 +400,29 @@
                               request cannot be honored.</p>
                           </div>
                           <strong>Estimated Delivery Date:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{DeliveryDate}}</strong><br />
-                           <div class="blue_link padbottom7 padtop7" id="ChangeDeliveryDate{{ i }}"><strong>Change Delivery Dates Or Upgrade Shipping Options</strong></div><div>Requested Delivery Date<input type="text"  id="ReqDeliveryDate{{ key }}" name="ReqDeliveryDate{{ key }}" value="" readonly="true" /></div>
+                          <div class="blue_link padbottom7 padtop7" id="ChangeDeliveryDate{{ key }}"><strong>Change Delivery Dates Or Upgrade Shipping Options</strong></div>
+                          <div id="calander_panel{{ key }}"  style="display:none"> <strong>Requested Delivery Date:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="text"  id="ReqDeliveryDate-{{ key }}" name="ReqDeliveryDate-{{ key }}" value="" />
+                            </strong><br />
+                            <table width="400" border="0" cellpadding="3" cellspacing="3">
+                              <tr>
+                                <td>Mon</td>
+                                <td>Tue</td>
+                                <td>Wed</td>
+                                <td>Thu</td>
+                                <td>Fri</td>
+                                <td>Sat</td>
+                                <td>Sun</td>
+                              </tr>
+                              {% for week in cal %}
+                              <tr>{% for day in week %}
+                                <td bgcolor="{{day.bgcolor}}">{% if day.script %}<a href="javascript:SetDeliveryDate('ReqDeliveryDate-8',{{day.day}}, '{{day.script}}')">{{day.day}}</a>{% else %}{{day.day}}{% endif %}</td>
+                                {% endfor %}</tr>
+                              {% endfor %}
+                            </table>
+                          </div>
                           <div class="padbottom8">
-                            <input type="radio" name="OverNightShipping{{ key }}"/>
+                            <input type="radio" name="OverNightShipping-{{ key }}"/>
                             &nbsp;&nbsp;<strong>Overnight Shipping with Priority Upgrade (${{value.priority_shipping|floatformat:2}})</strong><br />
                           </div>
                           <div class="padbottom25"><strong>. This Category Requires a Fuel Surcharge of $9.99</strong></div>
@@ -436,7 +456,7 @@
                           <div class="clr">&nbsp;</div>
 						  {% if next_index > 0 %}
                           <div class="clr">
-                            <div class="button11"><input type="button" id="ContinueToNextCategory{{i}}" value="Continue To Next Category" /></div>
+                            <div class="button11"><input type="button" id="ContinueToNextCategory{{key}}" value="Continue To Next Category" /></div>
                             <div class="clr">&nbsp;</div>
                           </div>
 						  {% endif %}
@@ -666,23 +686,46 @@ $(document).ready(function(){
      $("#test").hide();
   });
 
-{% for i, value, next_index in ShippingMethodList %}
-  $("#ShippingCategoryName{{i}}").click(function(){ 
-     $("#ShippingCategoryContent{{i}}").slideToggle(300);
+{% for key, value, next_index in ShippingMethodList %}
+  $("#ShippingCategoryName{{key}}").click(function(){ 
+     $("#ShippingCategoryContent{{key}}").slideToggle(300);
   });
 
-  $("#ContinueToNextCategory{{i}}").click(function(){ 
-     $("#ShippingCategoryContent{{i}}").slideToggle(300);
+  $("#ContinueToNextCategory{{key}}").click(function(){ 
+     $("#ShippingCategoryContent{{key}}").slideToggle(300);
      $("#ShippingCategoryContent{{next_index}}").slideToggle(300);
   });
 
- $("#ChangeDeliveryDate{{i}}").click(function(){
-    window.open("/shippingcalander?seq={{i}}&catid={{value.id}}",'','width=800,height=600');
+ $("#ChangeDeliveryDate{{key}}").click(function(){
+	  
+    $("#calander_panel{{key}}").slideToggle("slow");
   });
   
 {% endfor %}
 
+
  
+
+  $("#ChangeDeliveryDate13").click(function(){ 
+    $("#calander_panel13").slideToggle("slow");
+  });
+
+  $("#ChangeDeliveryDate11").click(function(){ 
+    $("#calander_panel11").slideToggle("slow");
+  });
+  
+  $("#ChangeDeliveryDate10").click(function(){ 
+    $("#calander_panel10").slideToggle("slow");
+  });
+
+  $("#ChangeDeliveryDate12").click(function(){ 
+    $("#calander_panel12").slideToggle("slow");
+  });
+
+  $("#ChangeDeliveryDate14").click(function(){ 
+    $("#calander_panel14").slideToggle("slow");
+  });
+
   $("#IsBillingAddressSame").change(function(){
      if (flag == true)
      {
@@ -849,6 +892,12 @@ $(document).ready(function(){
 
 
 });
+
+function SetDeliveryDate(pInputField, day, shipping_date)
+{
+  element = document.getElementById(pInputField);
+  element.value = shipping_date;
+}
 
 </script></div>
 <div class="clr">&nbsp;</div>

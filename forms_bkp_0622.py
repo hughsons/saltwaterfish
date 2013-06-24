@@ -20,19 +20,6 @@ class UploadForm(forms.Form):
     description = forms.CharField ( widget=forms.widgets.Textarea() )
 
 class AddressForm(forms.Form):
-    STATES = (('AL', 'Alabama'),('AK', 'Alaska'),('AZ', 'Arizona'),('AR', 'Arkansas'),
-            ('CA', 'California'),('CO', 'Colorado'),('CT', 'Connecticut'),('DE', 'Delaware'),
-            ('FL', 'Florida'),('GA', 'Georgia'),('HI', 'Hawaii'),('ID', 'Idaho'),('IL', 'Illinois'),
-            ('IN', 'Indiana'),('IA', 'Iowa'),('KS', 'Kansas'),('KY', 'Kentucky'),('LA', 'Louisiana'),
-            ('ME', 'Maine'),('MD', 'Maryland'),('MA', 'Massachusetts'),('MI', 'Michigan'),
-            ('MN', 'Minnesota'),('MS', 'Mississippi'),('MO', 'Missouri'),('MT', 'Montana'),
-            ('NE', 'Nebraska'),('NV', 'Nevada'),('NH', 'New Hampshire'), ('NJ', 'New Jersey'),
-            ('NM', 'New Mexico'), ('NY', 'New York'), ('NC', 'North Carolina'),
-            ('ND', 'North Dakota'), ('OH', 'Ohio'), ('OK', 'Oklahoma'), ('OR', 'Oregon'),
-            ('PA', 'Pennsylvania'), ('RI', 'Rhode Island'), ('SC', 'South Carolina'), ('SD', 'South Dakota'),
-            ('TN', 'Tennessee'),('TX', 'Texas'),('UT', 'Utah'),('VT', 'Vermont'),('VA', 'Virginia'),
-            ('WA', 'Washington'),('WV', 'West Virginia'),('WI', 'Wisconsin'),('WY', 'Wyoming'))  
-
     contact_id = forms.CharField(widget=forms.HiddenInput, required=False)
     first_name = forms.CharField(max_length = 50L, required=True)
     last_name = forms.CharField(max_length = 50L, required=True)
@@ -42,14 +29,38 @@ class AddressForm(forms.Form):
     address2 = forms.CharField(max_length = 255L, required=False)
     city = forms.CharField(max_length = 50L, required=True)
     country = forms.CharField(max_length = 100L, required=True)
-    state = forms.ChoiceField(choices=STATES,  initial='FL')
+    state = forms.CharField(max_length = 100L, required=True)
     zip = forms.CharField(max_length = 20L, required=True)
     address_type = forms.CharField(widget=forms.HiddenInput, required=False)
 
+class RegistrationForm(forms.Form):
+  email = forms.CharField(max_length = 25L)
+  password = forms.CharField(widget=forms.PasswordInput, max_length = 25L)
+  first_name = forms.CharField(max_length = 50L)
+  last_name = forms.CharField(max_length = 50L)
+  account_no = forms.CharField(max_length = 50L, required=False)
+  company = forms.CharField(max_length = 255L, required=False)
+  phone = forms.CharField(max_length = 50L, required=False)
+  address1 = forms.CharField(max_length = 255L)
+  address2 = forms.CharField(max_length = 255L, required=False)
+  city = forms.CharField(max_length = 50L)
+  country = forms.CharField(max_length = 100L)
+  state = forms.CharField(max_length = 100L)
+  zip = forms.CharField(max_length = 20L, required=False)
+  comments = forms.CharField(max_length = 255L, required=False)
+  recaptcha = forms.CharField(max_length = 20L)
 
+class ChangePwdForm(forms.Form):
+    #username = forms.CharField(widget=forms.TextInput(attrs={'class' : 'txt-box1', 'autocomplete':'OFF', 'placeholder':'Email Address', 'disabled':"disabled"}),max_length = 50)
+    #old_password = forms.CharField(widget=forms.PasswordInput(render_value=False,attrs={'class' : 'txt-box1', 'autocomplete':'OFF', 'placeholder':'Password'}), max_length=50)
+    #new_password = forms.CharField(widget=forms.PasswordInput(render_value=False,attrs={'class' : 'txt-box1', 'autocomplete':'OFF', 'placeholder':'Password'}), max_length=50)
+    username = forms.CharField(widget=forms.TextInput(attrs={'class' : 'txt-box1', 'autocomplete':'OFF', 'placeholder':'Email Address', 'disabled':"disabled"}),max_length = 50, required=False)
+    old_password = forms.CharField(widget=forms.PasswordInput, max_length = 25L)
+    new_password = forms.CharField(widget=forms.PasswordInput, max_length = 25L)
+
+
+#--- Murthy Added Forms from 2013-16-17 --
 class BillingShippingAddressForm(forms.Form):
-  COUNTRIES = (('USA','United States'), ('UK', 'United Kingdom'))
-
   STATES = (('AL', 'Alabama'),('AK', 'Alaska'),('AZ', 'Arizona'),('AR', 'Arkansas'),
             ('CA', 'California'),('CO', 'Colorado'),('CT', 'Connecticut'),('DE', 'Delaware'),
             ('FL', 'Florida'),('GA', 'Georgia'),('HI', 'Hawaii'),('ID', 'Idaho'),('IL', 'Illinois'),
@@ -74,72 +85,22 @@ class BillingShippingAddressForm(forms.Form):
   billing_address1 = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':40}),max_length = 50, required=False)
   billing_address2 = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':40}),max_length = 50, required=False)
   billing_city = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':10}),max_length = 50, required=False)
-  billing_state = forms.ChoiceField(choices=STATES,  initial='FL')
-  billing_country =  forms.ChoiceField(choices=COUNTRIES, initial='USA')
+  billing_state = forms.ChoiceField(choices=STATES) 
   billing_zip = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':3}),max_length = 50, required=False)
 
-  shipping_first_name = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':30}),max_length = 50, required=False)
-  shipping_last_name = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':30}),max_length = 50, required=False)
+  shipping_first_name = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':30}),max_length = 50, required=True)
+  shipping_last_name = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':30}),max_length = 50, required=True)
   shipping_company = forms.CharField(max_length = 255L, required=False)
-  shipping_phone_part1 = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':3}),max_length = 50, required=False)
-  shipping_phone_part2 = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':3}),max_length = 50, required=False)
-  shipping_phone_part3 = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':3}),max_length = 50, required=False)
+  shipping_phone_part1 = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':3}),max_length = 50, required=True)
+  shipping_phone_part2 = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':3}),max_length = 50, required=True)
+  shipping_phone_part3 = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':3}),max_length = 50, required=True)
   shipping_phone_ext = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':3}),max_length = 50, required=False)
-  shipping_address1 = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':40}),max_length = 50, required=False)
+  shipping_address1 = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':40}),max_length = 50, required=True)
   shipping_address2 = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':40}),max_length = 50, required=False)
   shipping_city = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':10}),max_length = 50, required=False)
-  shipping_state = forms.ChoiceField(choices=STATES, initial='FL') 
+  shipping_state = forms.ChoiceField(choices=STATES, initial='MO') 
   shipping_zip = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':3}),max_length = 50, required=False)
 
-#  def __init__(self, *args, **kwargs):
-#    b_state = ''
-#    b_country = ''
-#    s_state = ''
-#
-#    if 'bstate' in kwargs:
-#      b_state = kwargs.pop('bstate')
-#
-#    if 'bcountry' in kwargs:
-#      b_country = kwargs.pop('bcountry')
-#
-#    if 'shpstate' in kwargs:
-#      s_state = kwargs.pop('shpstate')
-#    
-#    super(BillingShippingAddressForm, self).__init__(*args,**kwargs)
-#    self.fields['billing_state'].initial = b_state
-#    self.fields['billing_country'].initial = 'UK'
-#    self.fields['shipping_state'].initial = s_state
-   
-
-
-class RegistrationForm(BillingShippingAddressForm):
-  email = forms.CharField(max_length = 25L)
-  password = forms.CharField(widget=forms.PasswordInput, max_length = 25L)
-#   first_name = forms.CharField(max_length = 50L)
-#   last_name = forms.CharField(max_length = 50L)
-#   account_no = forms.CharField(max_length = 50L, required=False)
-#   company = forms.CharField(max_length = 255L, required=False)
-#   phone = forms.CharField(max_length = 50L, required=False)
-#   address1 = forms.CharField(max_length = 255L)
-#   address2 = forms.CharField(max_length = 255L, required=False)
-#   city = forms.CharField(max_length = 50L)
-#   country = forms.CharField(max_length = 100L)
-#   state = forms.CharField(max_length = 100L)
-#   zip = forms.CharField(max_length = 20L, required=False)
-#   comments = forms.CharField(max_length = 255L, required=False)
-#   recaptcha = forms.CharField(max_length = 20L)
-  IsProdUpdatesNeeded = forms.BooleanField(required=False)
-
-class ChangePwdForm(forms.Form):
-    #username = forms.CharField(widget=forms.TextInput(attrs={'class' : 'txt-box1', 'autocomplete':'OFF', 'placeholder':'Email Address', 'disabled':"disabled"}),max_length = 50)
-    #old_password = forms.CharField(widget=forms.PasswordInput(render_value=False,attrs={'class' : 'txt-box1', 'autocomplete':'OFF', 'placeholder':'Password'}), max_length=50)
-    #new_password = forms.CharField(widget=forms.PasswordInput(render_value=False,attrs={'class' : 'txt-box1', 'autocomplete':'OFF', 'placeholder':'Password'}), max_length=50)
-    username = forms.CharField(widget=forms.TextInput(attrs={'class' : 'txt-box1', 'autocomplete':'OFF', 'placeholder':'Email Address', 'disabled':"disabled"}),max_length = 50, required=False)
-    old_password = forms.CharField(widget=forms.PasswordInput, max_length = 25L)
-    new_password = forms.CharField(widget=forms.PasswordInput, max_length = 25L)
-
-
-#--- Murthy Added Forms from 2013-16-17 --
 
 class CreditCardForm(forms.Form):
   previous_cards = forms.ChoiceField(choices=[], widget=forms.RadioSelect(), required=False)
@@ -172,8 +133,6 @@ class AuthorizeNetFormNoLogin(BillingShippingAddressForm, CreditCardForm, NewAcc
 
 class AuthorizeNetFormLoggedIn(BillingShippingAddressForm, CreditCardForm):
   comment = forms.CharField(widget=forms.Textarea, max_length = 255L, required=False)
-
-
 
 class NoGateWay(BillingShippingAddressForm):
   comment = forms.CharField(widget=forms.Textarea, max_length = 255L, required=False)

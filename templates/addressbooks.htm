@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load tagsfilter %}
+<link type="text/css" rel="stylesheet" href="/misc/myaccount.css" />
+<script language="javascript" type="text/javascript" src="/misc/js/imagetooltip.js"></script>
+ <script language="javascript" type="text/javascript" src="/misc/js/jquery.bpopup.min.js"></script>
+ <link type="text/css" rel="stylesheet" href="/misc/style_new.css" />
+<script type="text/javascript">
+	;(function($) {
+         $(function() {
+            $('.pop1').bind('click', function(e) {
+                e.preventDefault();
+				var a_href = $(this).attr('id');
+				$("#contentss").load(a_href);
+                $('#popup').bPopup({
+				});
+			});
+			 
+        });
+
+    })(jQuery);
+
+</script>
+<style>
+
+.buttons {
+    background-color: #2B91AF;
+    border-radius: 10px 10px 10px 10px;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    padding: 6px 11px;
+    text-align: left;
+    text-decoration: none;
+}
+
+#popup, #popup2, .bMulti {
+background-color: #fff;
+border-radius: 10px 10px 10px 10px;
+box-shadow: 0 0 25px 5px #999;
+color: #111;
+display: none;
+min-width: 450px;
+padding: 1px;
+}
+</style>
+<div class="float-left width10">&nbsp;&nbsp;</div>
+<div class="float-left wid748 padtop5">
+<div class="clr my_account_link">Home  <span>&gt; My Account</span><span> &gt; Address Book</span></div>
+ <div class="clr my_account_link padtop20 padbottom13">My Addresses <span style="float:right;" class="my_account_link"><a id="/addaddressbook" href="#" class="pop1">Add New Address</a></span></div>
+<div class="clr myaccount_bg1">
+ 
+{% include 'myaccount_links.htm' %}
+<div class="clr">&nbsp;&nbsp;</div>
+  
+ {% if product_list %}
+<table  border="0" cellpadding="0" cellspacing="3" bgcolor="#EFEFEF"> 
+ <tr>
+{% for item in product_list %}
+ {% if forloop.counter0|divisibleby:2 %}
+ 
+        <tr>{% endif %}
+		<td align=left>
+ <table width="330" border="0" cellpadding="3" cellspacing="1">
+	<tr bgcolor="#FFFFFF"><td align=left width=100><b>First Name</b></td> <td align=left>{{item.shipping_firstname}}</td> </tr>
+	<tr bgcolor="#FFFFFF"><td align=left><b>Last Name</b></td> <td align=left>{{item.shipping_lastname}}</td> </tr>
+	<tr bgcolor="#FFFFFF"><td align=left><b>City</b></td> <td align=left>{{item.shipping_city}}</td> </tr>
+	<tr bgcolor="#FFFFFF"><td align=left><b>State</b></td> <td align=left>{{item.shipping_state}}</td> </tr>
+	<tr bgcolor="#FFFFFF"><td align=left><b>Zipcode</b></td> <td align=left>{{item.shipping_zip}}</td> </tr>
+	<tr bgcolor="#FFFFFF"><td align=left><b>Country</b></td> <td align=left>{{item.shipping_country}}</td> </tr>
+	<tr bgcolor="#FFFFFF"><td align=left><b>Address</b></td> <td align=left>{{item.shipping_address}}</td> </tr>
+	<tr bgcolor="#FFFFFF"><td align=left><b>Address2</b></td> <td align=left>{{item.shipping_address2}}</td> </tr>
+</table>
+</td>
+{% if forloop.counter|divisibleby:2 %}</tr>
+        {% endif %}
+{% endfor %}
+</table>
+{% endif %}
+
+ 
+ </div>
+</div>
+
+
+
+
+
+
+<div class="float-left wid10"></div>
+
+</div>
+ <div id="popup" style="left: -700px; position: absolute; top: 1177px; z-index: 9999; opacity: 1; display: none;min-height:200px;">
+        
+        <div id="contentss" style="height: auto; width: auto;"></div>
+</div>
+
+{% endblock content %}

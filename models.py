@@ -159,6 +159,28 @@ class CrmStatus(models.Model):
         db_table = u'crm_status'
         app_label = ''
 
+class CustomersAddressbook(models.Model):
+    id = models.IntegerField(primary_key=True)
+    contactid = models.IntegerField(null=True, blank=True)
+    address_alias = models.CharField(max_length=150, blank=True)
+    shipping_firstname = models.CharField(max_length=150, blank=True)
+    shipping_lastname = models.CharField(max_length=150, blank=True)
+    shipping_address = models.CharField(max_length=765, blank=True)
+    shipping_address2 = models.CharField(max_length=150, blank=True)
+    shipping_city = models.CharField(max_length=300, blank=True)
+    shipping_state = models.CharField(max_length=300, blank=True)
+    shipping_zip = models.CharField(max_length=60, blank=True)
+    shipping_country = models.CharField(max_length=300, blank=True)
+    shipping_company = models.CharField(max_length=765, blank=True)
+    shipping_phone = models.CharField(max_length=150, blank=True)
+    date_added = models.DateTimeField(null=True, blank=True)
+    addres_type = models.IntegerField(null=True, blank=True)
+    userid = models.CharField(max_length=150, blank=True)
+    last_update = models.DateTimeField(null=True, blank=True)
+    class Meta:
+        db_table = u'customers_addressbook'
+        app_label = ''
+
 class CustomerRewards(models.Model):
     id = models.IntegerField(primary_key=True)
     contactid = models.IntegerField(null=True, blank=True)

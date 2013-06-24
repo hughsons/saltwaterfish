@@ -337,7 +337,7 @@ and Florida Locations</div>
 <!-- Bottom area starts -->
 
 
-<div class="clr">
+<div class="clr">{% if relateditems|length > 0 %}
 <div class="matching-text clr padtop10 padbottom20 product-align1"><span class="compatible">Matching {{products.catalogid|relatedpitems}} </span></div>
 <div class="bottom-bg padtop15 clr product-align">
  <table   style="width:22% !important;margin-left:14px;margin-top:14px;min-height:196px !important;">
@@ -366,6 +366,7 @@ and Florida Locations</div>
 </table>
 
 </div>
+{% endif %}
 <!-- Bottom area ends -->
 </div>
 </div>

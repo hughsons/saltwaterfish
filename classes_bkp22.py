@@ -4,33 +4,7 @@ import collections
 
 import time
 import calendar
-import datetime
 
-
-def DateSub(d):
-  t = time.strptime(d, "%m/%d/%Y")
-  month = t.tm_mon
-  year = t.tm_year
-  if month == 1:
-    month = 12
-    year -= 1
-  else:
-    month -= 1
-    ret_value = "%s/01/%s" %(str(month).zfill(2), str(year))
-  return ret_value
-
-def DateAdd(d):
-  t = time.strptime(d, "%m/%d/%Y")
-  month = t.tm_mon
-  year = t.tm_year  
-  if month == 12:
-    month = 1
-    year += 1
-  else:
-    month += 1
-
-  ret_value = "%s/01/%s" %(str(month).zfill(2), str(year))
-  return ret_value
 
 def GetCreditCardList(contactid):
   cards_list = []
@@ -47,7 +21,7 @@ def GetCreditCardList(contactid):
     cards_list.append((key, value))
   return cards_list  
 
-def GenerateShippingCalander(dt):
+def GenerateShippingCalander():
   month = [['', '', '','','', '', ''],
      ['', '', '','','', '', ''],
      ['', '', '','','', '', ''],
@@ -57,51 +31,42 @@ def GenerateShippingCalander(dt):
      ]
 
   today = time.localtime().tm_mday
-
-  start_time = time.strptime(dt, "%m/%d/%Y")
+  start_time = time.strptime("2013/06/01", "%Y/%m/01")
   day = start_time.tm_mday
   wday = start_time.tm_wday
   last_day = calendar.monthrange(start_time.tm_year, start_time.tm_mon)[1]
 
   row_no = 0
   while day <= last_day:
-    d1 = datetime.datetime(start_time.tm_year, start_time.tm_mon, day)
-    d2 = datetime.datetime.now()
     cur_time = time.strptime(time.strftime("%Y/%m/" + str(day), start_time), "%Y/%m/%d")
     day = cur_time.tm_mday
     wday = cur_time.tm_wday
     script = ''
-    method = ''
     bgcolor = "#FFFFFF"
-    days_diff = (d1 - d2).days + 1
-    if days_diff <  0:
-      bgcolor = "card5_grey"
-    elif days_diff == 0:
-      bgcolor = "card5_color2"
-    elif days_diff ==  1:
-      bgcolor = "card5_color3"
-      method = "NextDay"
+    if day < today:
+      bgcolor = "#999999"
+    elif day == today:
+      bgcolor = "#CC9966"
+    elif day == today + 1:
+      bgcolor = "#99CC00"
       script = time.strftime("%m/" + str(day).zfill(2) + "/%Y", start_time)
-    elif days_diff ==  2:
-      method = "SecondDay"
-      bgcolor = "card5_color4"
+    elif day == today + 2:
+      bgcolor = "#663366"
       script = time.strftime("%m/" + str(day).zfill(2) + "/%Y", start_time)
-    elif days_diff > 2:
-      method = "GroundShipping"
-      bgcolor = "card5_color7"
+    elif day > today + 2:
+      bgcolor = "#00CCCC"
       script = time.strftime("%m/" + str(day).zfill(2) + "/%Y", start_time)        
 
-    if days_diff >= 0:
+    if day >= today:
       if wday == 6:
-         bgcolor = "card5_color6"
+         bgcolor = "#DB9E9B"
          script = ''
       elif wday == 5:
-         method = "Saturday"
          script = time.strftime("%m/" + str(day).zfill(2) + "/%Y", start_time)
-         bgcolor = "card5_color5"
+         bgcolor = "#FFCC33"
 
 
-    day_hash = {'wday': wday, 'day': day, 'bgcolor':bgcolor, 'script':script, 'method': method}
+    day_hash = {'wday': wday, 'day': day, 'bgcolor':bgcolor, 'script':script}
     month[row_no][wday] = day_hash 
     if wday == 6:
       row_no += 1
@@ -176,39 +141,6 @@ class CartInfo(Error):
     
     self.cc_approval_code = ''
     
-  def GetProductCategories(self, catalog_id):
-    product_cat_list = []
-    obj_list = ProductCategory.objects.filter(catalogid = catalog_id)
-    if obj_list:
-      for obj in obj_list:
-        product_cat_list.append(obj.categoryid)
-    
-    return product_cat_list
-
-  def ApplyPromotions(self, ship_cat_items, discounts_hash):
-    for key, promotion_value in discounts_hash.items():
-      if len(key) == 3:
-        d_type = key[0]
-        column = key[1]
-        column_value = key[1]
-        if d_type == "PromotionalDiscount" and column == "ProductID":
-          for shp_cat_id, cart_items in ship_cat_items.items():
-            new_list = []
-            for cart_item in cart_items:
-              if cart_item.catalog_id == column_value:
-                cart_item.saleprice = cart_item.saleprice - promotion_value
-              new_list.append(cart_item) 
-
-            ship_cat_items[shp_cat_id] = new_list
-           #cat_list = self.GetProductCategories(cart_item.catalog_id)
-    return ship_cat_items         
-      #if d_type == "FreeShipping" and column == "ProductCategory":
-      #  for shp_cat_id, cart_items in ship_cat_items.items():
-      #    for cart_item in cart_items:
-      #      cat_list = self.GetProductCategories(cart_item.catalog_id)
-      #      if cart_item.catalog_id in cat_list:
-              
-      
 
   def ApplyStoreCredit(self, obj):
     self.store_credit_id = obj.id
@@ -222,67 +154,26 @@ class CartInfo(Error):
       self.order_total = 0
 
   
-#   def GetShippingCategoryID(self, catalog_id):
-#     #pc_object = ProductCategory.objects.get(catalogid=catalog_id)  
-#     #psc_object = ProductShippingCategories.objects.get(product_category_id = pc_object.categoryid)
-#     cursor = connection.cursor()
-#     cursor.execute("SELECT psc.shipping_category_id, sc.category_name FROM product_shipping_categories psc  "
-#                    "inner join product_category pc on (psc.product_category_id = pc.categoryid)  "
-#                    "inner join shipping_category sc on (psc.shipping_category_id = sc.id)"
-#                    "where product_category_id in (SELECT categoryid FROM product_category WHERE catalogid = %d) " %catalog_id)
-# 
-#     row = cursor.fetchone()
-#     #shipping_category_id = 0
-#     #while shipping_category_id == 0:
-#     #  cursor.execute("select categoryid from product_category where catalogid = %d limit 1" %catalog_id)
-#    
-#     cursor.close()
-#  
-#     shipping_category_id = row[0]
-#     shipping_category_name =  row[1]
-# 
-#     return shipping_category_id, shipping_category_name
-  
   def GetShippingCategoryID(self, catalog_id):
+    #pc_object = ProductCategory.objects.get(catalogid=catalog_id)  
+    #psc_object = ProductShippingCategories.objects.get(product_category_id = pc_object.categoryid)
     cursor = connection.cursor()
-    cursor.execute("SELECT categoryid FROM product_category where catalogid = %d order by categoryid" %catalog_id)
+    cursor.execute("SELECT psc.shipping_category_id, sc.category_name FROM product_shipping_categories psc  "
+                   "inner join product_category pc on (psc.product_category_id = pc.categoryid)  "
+                   "inner join shipping_category sc on (psc.shipping_category_id = sc.id)"
+                   "where product_category_id in (SELECT categoryid FROM product_category WHERE catalogid = %d) " %catalog_id)
+
     row = cursor.fetchone()
-    if not row:
-      return 16, 'Miscellaneous'
-     
-    s_cat = 0
-    s_name = ''
-    category_id = row[0]
-    parent_id = 99999
-    levels = 0
-    while (parent_id > 0 and levels < 10):
-      cursor.execute("SELECT shipping_category_id FROM product_shipping_categories where product_category_id = %d limit 1" %category_id)
-      row = cursor.fetchone()
-      
-      if row:
-         s_cat = row[0]
-         #print "Shipping Category: %d" %s_cat
-         cursor.execute("SELECT category_name FROM shipping_category where id = %d limit 1" %s_cat)
-         row = cursor.fetchone()
-         s_name = row[0]
-         #print s_cat, s_name
-         break
-     
-      cursor.execute("SELECT id, category_name, category_parent from category where id = %d" %category_id)
-      row = cursor.fetchone()
-      category_id = row[0]
-      category_name = row[1]
-      parent_id = row[2]
-      category_id = parent_id
-      levels += 1
-     
+    #shipping_category_id = 0
+    #while shipping_category_id == 0:
+    #  cursor.execute("select categoryid from product_category where catalogid = %d limit 1" %catalog_id)
+   
     cursor.close()
-  
-    shipping_category_id = s_cat
-    shipping_category_name =  s_name
+ 
+    shipping_category_id = row[0]
+    shipping_category_name =  row[1]
 
     return shipping_category_id, shipping_category_name
-
   
   def AddReef(self, cart_dict, catalog_id, quantity):
     items_dict = cart_dict

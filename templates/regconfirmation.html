@@ -36,16 +36,16 @@
       <td>&nbsp;</td>
     </tr>
 	<tr>
-      <td  colspan="2">{{ customer.first_name}}&nbsp;{{ customer.last_name }}</td>
+      <td  colspan="2">{{ customer.billing_firstname}}&nbsp;{{ customer.billing_lastname }}</td>
     </tr>
     <tr>
-      <td colspan="2">{{ customer.address1 }}</td>
+      <td colspan="2">{{ customer.billing_address }}</td>
     </tr>
     <tr>
-      <td colspan="2">{{ customer.address2 }}</td>
+      <td colspan="2">{{ customer.billing_address2 }}</td>
     </tr>
     <tr>
-      <td colspan="2">{{ customer.city }}&nbsp;{{ customer.state }}&nbsp;{{ customer.zip }}&nbsp;{{ customer.country }}</td>
+      <td colspan="2">{{ customer.billing_city }},&nbsp;{{ customer.billing_state }},&nbsp;{{ customer.billing_zip }},&nbsp;{{ customer.billing_country }}</td>
     </tr>
   </table>
   <p>&nbsp; </p>

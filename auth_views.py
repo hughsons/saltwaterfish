@@ -20,7 +20,7 @@ def GetRecaptcha(request):
 
 
 @csrf_exempt
-def CustomerLoginClass(request):
+def CustomerLoginClassold(request):
     if request.method == 'POST':
         if 'target' in request.POST:
             target_page = request.POST['target']
@@ -58,6 +58,44 @@ def CustomerLoginClass(request):
     else:
         request.session['ErrorMessage'] = "Form submission is not as expected."
         return HttpResponseRedirect('/login#forget')
+
+@csrf_exempt
+def CustomerLoginClass(request):
+    if request.method == 'POST':
+        if 'target' in request.POST:
+            target_page = request.POST['target']
+        else:
+            target_page = "/myaccount"
+        #logout(request)
+        customer_list=""
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            logging.info('Form Is clean')
+            email = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            
+            customer_list = customers.objects.filter(email = email,
+                                                     pass_field= password, custenabled=1)
+            if customer_list:
+                t = customers.objects.get(email = email,
+                                          pass_field= password, custenabled=1)
+                t.lastlogindate = datetime.datetime.now()
+                t.save()
+                request.session['IsLogin'] = True
+                request.session['Customer'] = customer_list[0]
+                success = True
+                logging.info('LoginfoMessage:: %s',customer_list[0])
+                return HttpResponseRedirect(target_page)
+            else:
+                request.session['ErrorMessage'] = "Invalid User name or Password."
+                return HttpResponseRedirect('/login#forget')
+        else:
+            request.session['ErrorMessage'] = "Invalid Form data."
+            return HttpResponseRedirect('/login#forget')
+    else:
+        request.session['ErrorMessage'] = "Form submission is not as expected."
+        return HttpResponseRedirect('/login#forget')
+
 
 @csrf_exempt
 def AdminLoginClass(request):
@@ -137,5 +175,7 @@ def Adminloginpage(request):
     return HttpResponse(t.render(c))
 
 def logout_view(request):
+    if "CartItems" in request.session:
+        del request.session["CartItems"]
     logout(request)
     return HttpResponseRedirect('/login')

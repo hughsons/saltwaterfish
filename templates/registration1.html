@@ -1,0 +1,381 @@
+{% extends 'base.html' %}
+{% block content %}
+<link type="text/css" rel="stylesheet" href="/misc/css/style.css" />
+<style>
+.login_heading {
+    color: #3C9BD1;
+    font-family: 'Open Sans',sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+.card1_txt_right-new {
+    color: #000000;
+    font-family: Arial,Helvetica,sans-serif;
+    font-weight: normal;
+	font-size: 13px;
+}
+.wid200 {
+    width: 200px;
+}
+ 
+.martop5 {
+    margin-top: 5px;
+}
+input[type="text"] {
+    background-color: #FFFFFF;
+    border: 1px solid #C9C9C9;
+    height: 22px;
+    margin-bottom: 8px;
+}
+.button33 {
+    background: -moz-linear-gradient(center top , #01AED6, #0385B9) repeat scroll 0 0 transparent;
+    border: 1px solid #017DB1;
+    border-radius: 5px 5px 5px 5px;
+    color: #FFFFFF;
+    float: left;
+    font-family: 'Open Sans',sans-serif;
+    font-size: 15px;
+    padding: 5px 15px;
+    text-align: center;
+    text-transform: uppercase;
+    width: auto;
+}
+</style>
+<div class="float-left width10">&nbsp;&nbsp;</div>
+<div class="float-left wid500 padleft5">
+  <div class="clr">&nbsp;&nbsp;</div>
+  <div class="clr login_heading" align="left">Customer Billing  Address &  Login</div>
+  <div class="clr">&nbsp;&nbsp;</div>
+  <div class="clr card1_txt_right-new " align="left">Returning Customer? Please enter your credentials and use the  LOGIN button.</div>
+  <div class="clear padtop20 padleft30">
+  <form name="form" id="form" action="/custlogin" method="post">
+{% csrf_token %}
+    <div class="float-left  martop5 card1_txt_right-new wid200" align="right">Email :</div>
+    <div class="float-left padleft7">
+      {{ LoginForm.username }}
+      *</div>
+  </div>
+  <div class="clear padtop10 padleft30">
+    <div class="float-left  martop5 wid200 card1_txt_right-new" align="right">Password :</div>
+    <div class="float-left padleft7">
+      {{ LoginForm.password }}
+      *</div>
+  </div>
+  <div class="clr padtop20 padleft100 wid200"  align="right" style="width:170px !important" >
+    <input type=submit width="77" height="21" border="0" class="button33" value="Login" style="background-color:#01AED6;" /> </form>
+  </div>
+  <form name="CustomerRegistration" method="post" action="/registeruser">
+  {% csrf_token %} 
+  {% if message or error_message %}
+      <p class="greentext">{{ message }} <span class="redtext">{{ error_message }}</span></p>
+      {% endif %}
+    <div class="float-left wid500 padtop20">
+      <div class="clr padtop40 card1_txt_right-new padleft20" align="left">New Customer? Create your Saltwaterfish.com account and continue below.<br />
+        Creating a login profile with Saltwaterfish.com allows you to shop faster, track the status of your</div>
+      <div class="clear padtop20 padleft30">
+        <div class="float-left  martop5 wid200 card1_txt_right-new" align="right">Email :</div>
+        <div class="float-left padleft7"> {{form.email}}
+          *</div>
+      </div>
+      <div class="clear padtop20 padleft30">
+        <div class="float-left  martop5 wid200 card1_txt_right-new" align="right">Password :</div>
+        <div class="float-left padleft7"> {{form.password}}
+          *</div>
+      </div>
+      <div class="clear padtop20 padleft30">
+        <div class="float-left  martop5 wid200 card1_txt_right-new" align="right">Company :</div>
+        <div class="float-left padleft7"> {{form.billing_company}} </div>
+      </div>
+      <div class="clear padtop20 padleft30">
+        <div class="float-left  martop5 wid200 card1_txt_right-new" align="right">First Name :</div>
+        <div class="float-left padleft7"> {{ form.billing_first_name}}
+          *</div>
+      </div>
+      <div class="clear padtop20 padleft30">
+        <div class="float-left  martop5 wid200 card1_txt_right-new" align="right">Last Name :</div>
+        <div class="float-left padleft7"> {{ form.billing_last_name}}
+          *</div>
+      </div>
+      <div class="clear padtop20 padleft30">
+        <div class="float-left  martop5 wid200 card1_txt_right-new" align="right">Address1 :</div>
+        <div class="float-left padleft7"> {{ form.billing_address1}}
+          *</div>
+      </div>
+      <div class="clear padtop20 padleft30">
+        <div class="float-left  martop5 wid200 card1_txt_right-new" align="right">Address2 :</div>
+        <div class="float-left padleft7"> {{ form.billing_address2 }} </div>
+      </div>
+      <div class="clear padtop20 padleft30">
+        <div class="float-left  martop5 wid200 card1_txt_right-new" align="right">City :</div>
+        <div class="float-left padleft7"> {{ form.billing_city }}
+          *</div>
+      </div>
+      <div class="clear padtop20 padleft30">
+        <div class="float-left  martop5 wid200 card1_txt_right-new" align="right">Country :</div>
+        <div class="float-left padleft7"> {{form.billing_country}} </div>
+      </div>
+      <div class="clear padtop20 padleft30">
+        <div class="float-left  martop5 wid200 card1_txt_right-new" align="right">State :</div>
+        <div class="float-left padleft7"> {{ form.billing_state }}
+          *</div>
+      </div>
+      <div class="clear padtop20 padleft30">
+        <div class="float-left  martop5 wid200 card1_txt_right-new" align="right">Zip :</div>
+        <div class="float-left padleft7"> {{ form.billing_zip }} </div>
+      </div>
+      <div class="clear padtop20 padleft30">
+        <div class="float-left  martop5 wid200 card1_txt_right-new" align="right">Phone :</div>
+        <div class="float-left padleft7"> {{ form.billing_phone_part1 }}&nbsp;{{ form.billing_phone_part2 }}&nbsp;{{ form.billing_phone_part3 }} </div>
+      </div>
+      <div class="clr  card1_txt_right-new" align="center"> {{form.IsProdUpdatesNeeded}}
+        &nbsp;Yes I would Like To Be Notified Of Product Updates</div>
+      <div class="clr  card1_txt_right-new padtop20" align="center">
+        <input type="checkbox" checked="checked" name="IsShippingAddressSame" id="IsShippingAddressSame"/>
+        &nbsp;This is also my shipping address</div>
+      <!-- Begin Shipping address Form -->
+      <div id="panel" style="display:none">
+        <div class="clr">
+          <div class="float-left">
+            <h4>Enter Your Shipping Address:</h4>
+          </div>
+           
+        </div>
+        <div class="clear padtop10 padleft30">
+          <div class="float-left  martop5 wid200 card1_txt_right-new" align="right">First Name<span class="red_star">*</span></div>
+          <div class="float-left padleft7">{{ form.shipping_first_name}}</div>
+        </div>
+       
+        <div class="clear padtop20 padleft30">
+          <div class="float-left  martop5 wid200 card1_txt_right-new" align="right">Last Name<span class="red_star">*</span></div>
+          <div class="float-left" align="left">{{ form.shipping_last_name}}</div>
+        </div>
+         
+        <div class="clear padtop20 padleft30">
+          <div class="float-left  martop5 wid200 card1_txt_right-new" align="right">Address Line1<span class="red_star">*</span></div>
+          <div class="float-left">{{ form.shipping_address1}}</div>
+        </div>
+         
+        <div class="clear padtop20 padleft30">
+          <div class="float-left  martop5 wid200 card1_txt_right-new" align="right">Address Line2<span class="red_star">*</span></div>
+          <div class="float-left">{{ form.shipping_address2 }}</div>
+        </div>
+        
+       <div class="clear padtop20 padleft30">
+          <div class="float-left  martop5 wid200 card1_txt_right-new" align="right">City<span class="red_star">*</span>&nbsp;&nbsp;</div>
+            <div class="float-left">{{ form.shipping_city }}</div>
+          </div>
+          <div class="clear padtop20 padleft30">
+          <div class="float-left  martop5 wid200 card1_txt_right-new" align="right">State<span class="red_star">*</span>&nbsp;&nbsp;</div>
+            <div class="float-left">{{ form.shipping_state }}</div>
+          </div>
+         
+         
+        <div class="clear padtop20 padleft30">
+          <div class="float-left  martop5 wid200 card1_txt_right-new" align="right">Zip code<span class="red_star">*</span>&nbsp;&nbsp;</div>
+            <div class="float-left">{{ form.shipping_zip }}</div>
+          </div>
+          <div class="clear padtop20 padleft30">
+          <div class="float-left  martop5 wid200 card1_txt_right-new" align="right">Phone Number<span class="red_star">*</span>&nbsp;&nbsp;</div>
+            <div class="float-left padleft7"> {{ form.shipping_phone_part1 }} 
+               {{ form.shipping_phone_part2 }} 
+               {{ form.shipping_phone_part3 }}</div>
+            </div>
+          </div>
+        </div>
+         
+         
+      </div>
+      <!-- End Shipping address form -->
+      <div class="clr padtop20"  align="right" style="width:220px !important">
+        
+          <input type="submit" name="ContinueToShippingMethod" value="Submit Details" class="button33" id="ContinueToShippingMethod" style="background-color:#01AED6;">
+         
+      </div>
+      <div class="clr">&nbsp;&nbsp;</div>
+    </div>
+  </form> 
+  <div class="float-left wid10"></div>
+  <script type="text/javascript">
+var flag = true
+$(document).ready(function(){
+  $("button").click(function(){
+     $("#test").hide();
+  });
+
+  $("#ContinueToShippingMethod").click(function(){
+    //alert($("#id_shipping_first_name").val());
+	//alert($("#IsBillingAddressSame").val());
+   element = document.getElementById("IsShippingAddressSame");
+   if ($("#id_email").val().match(/^\s*$/gi))
+   {
+	 alert("Please provide valid email address");
+	 $("#id_email").focus();
+	 return false;
+   }
+  /* if ($("#id_password").val().match(/^\s*$/gi))
+   {
+	 alert("Please provide password");
+	 $("#id_password").focus();
+	 return false;
+   }
+   if ($("#email").val().match(/^\s*$/gi))
+   {
+	 alert("Please provide valid email address");
+	 $("#email").focus();
+	 return false;
+   }*/
+   if ($("#id_billing_company").val().match(/^\s*$/gi))
+   {
+	 alert("Please provide your company name");
+	 $("#id_billing_company").focus();
+	 return false;
+   }
+   if ($("#id_billing_first_name").val().match(/^\s*$/gi))
+   {
+	 alert("Please enter first name");
+	 $("#id_billing_first_name").focus();
+	 return false;
+   }
+
+   if ($("#id_billing_last_name").val().match(/^\s*$/gi))
+   {
+	 alert("Please enter last name");
+	 $("#id_billing_last_name").focus();
+	 return false;
+   }
+
+   if ($("#id_billing_address1").val().match(/^\s*$/gi))
+   {
+	 alert("Address is needed.");
+	 $("#id_billing_address1").focus();
+	 return false;
+   }
+
+   if ($("#id_billing_address2").val().match(/^\s*$/gi))
+   {
+	 alert("Address is needed.");
+	 $("#id_billing_address2").focus();
+	 return false;
+   }
+
+   if ($("#id_billing_city").val().match(/^\s*$/gi))
+   {
+	 alert("Please enter city.");
+	 $("#id_billing_city").focus();
+	 return false;
+   }
+
+   if ($("#id_billing_zip").val().match(/^\s*$/gi))
+   {
+	 alert("Zip Code is mandatory.");
+	 $("#id_billing_zip").focus();
+	 return false;
+   }
+   
+   if (!$("#id_billing_phone_part1").val().match(/^\d{3}/gi))
+   {
+	 alert("Invalid input in Phone.");
+	 $("#id_billing_phone_part1").focus();
+	 return false;
+   }
+
+   if (!$("#id_billing_phone_part2").val().match(/^\d{3}$/gi))
+   {
+	 alert("Invalid input in Phone.");
+	 $("#id_billing_phone_part2").focus();
+	 return false;
+   }
+
+   if (!$("#id_billing_phone_part3").val().match(/^\d{4}$/gi))
+   {
+	 alert("Invalid input in Phone.");
+	 $("#id_billing_phone_part3").focus();
+	 return false;
+   }
+
+   if (!element.checked)
+   {
+	   //Validating Shipping Address
+	   if ($("#id_shipping_first_name").val().match(/^\s*$/gi))
+	   {
+		 alert("Please enter first name");
+		 $("#id_shipping_first_name").focus();
+		 return false;
+	   }
+	
+	   if ($("#id_shipping_last_name").val().match(/^\s*$/gi))
+	   {
+		 alert("Please enter last name");
+		 $("#id_shipping_last_name").focus();
+		 return false;
+	   }
+	
+	   if ($("#id_shipping_address1").val().match(/^\s*$/gi))
+	   {
+		 alert("Address is needed.");
+		 $("#id_shipping_address1").focus();
+		 return false;
+	   }
+	
+	   if ($("#id_shipping_address2").val().match(/^\s*$/gi))
+	   {
+		 alert("Address is needed.");
+		 $("#id_shipping_address2").focus();
+		 return false;
+	   }
+	
+	   if ($("#id_shipping_city").val().match(/^\s*$/gi))
+	   {
+		 alert("Please enter city.");
+		 $("#id_shipping_city").focus();
+		 return false;
+	   }
+	
+	   if ($("#id_shipping_zip").val().match(/^\s*$/gi))
+	   {
+		 alert("Zip Code is mandatory.");
+		 $("#id_shipping_zip").focus();
+		 return false;
+	   }
+	
+	   if (!$("#id_shipping_phone_part1").val().match(/^\d{3}$/gi))
+	   {
+		 alert("Invalid input in Phone.");
+		 $("#id_shipping_phone_part1").focus();
+		 return false;
+	   }
+	
+	   if (!$("#id_shipping_phone_part2").val().match(/^\d{3}$/gi))
+	   {
+		 alert("Invalid input in Phone.");
+		 $("#id_shipping_phone_part2").focus();
+		 return false;
+	   }
+	
+	   if (!$("#id_shipping_phone_part3").val().match(/^\d{4}$/gi))
+	   {
+		 alert("Invalid input in Phone.");
+		 $("#id_shipping_phone_part3").focus();
+		 return false;
+	   }
+    }	
+   });
+
+  flag = true
+  $("#IsShippingAddressSame").change(function(){
+     if (flag == true)
+     {
+       flag = false;
+	   $("#panel").slideToggle("slow");
+     }
+     else
+     {
+       flag = true;
+	   $("#panel").slideToggle("slow");
+     }
+  });
+
+});
+</script>
+{% endblock content %} 

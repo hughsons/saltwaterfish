@@ -1,14 +1,48 @@
 {% extends 'base.html' %}
 {% block content %}
 {% load tagsfilter %}
+ 
+<script type="text/javascript" src="/misc/js/jcarousellite_1.0.1.pack.js"></script>
+<script type="text/javascript">
+	 
+$(function() {
+    $(".anyClass").jCarouselLite({
+        btnNext: ".next",
+        btnPrev: ".prev",
+		scroll: 2
+    });
+});
+	 
+</script>
 <link type="text/css" rel="stylesheet" href="/misc/css/style.css" />
 <link type="text/css" rel="stylesheet" href="/misc/css3/style.css" />
 <style type="text/css">
+ .slide_top2 {
+    background-image: url("http://saltwater2013.dev.mvisolutions.com/sitemap/image/cart-bg.jpg");
+    background-position: left top;
+    background-repeat: no-repeat;
+    border-bottom: 1px solid #000000;
+    border-top: 1px solid #000000;
+    clear: both;
+    height: 174px;
+    padding-bottom: 0;
+    padding-top: 0;
+    width: 100%;
+}
  .wid270 {
     width: 140px !important;
 }
 .wid240 {
     width: 140px !important;
+}
+#new-arr {
+    margin-left: 5px;
+    margin-right: 8px;
+    margin-top: 65px;
+}
+#new-arr1 {
+    margin-right: 5px;
+    margin-top: 65px;
 }
 .button33 a {
     font-family: 'Open Sans',sans-serif;
@@ -58,7 +92,7 @@
     background: -moz-linear-gradient(center top , #FAF8E3, #FFFFFF) repeat scroll 0 0 transparent;
     height: 159px !important;
     margin: -15px auto 0;
-    width: 600px;
+    width: 650px;
 }
  .slide_middle {
     background: -moz-linear-gradient(center top , #FAF8E3, #FFFFFF) repeat scroll 0 0 transparent;
@@ -66,7 +100,29 @@
     margin: 0 auto;
     width: 654px;
 }
- 
+ .slide_middle2 {
+    background: -moz-linear-gradient(center top , #FAF8E3, #FFFFFF) repeat scroll 0 0 transparent;
+	background-color:#FAF8E3;
+    height: 174px;
+    margin: 0 auto;
+    width: 654px;
+}
+.slide_middle2 li:first-child {
+    border-left: 0 dotted #A5A5A5;
+    float: left;
+    height: 172px;
+    padding-left: 5px;
+    padding-right: 5px;
+    width: 31%;
+}
+.slide_middle2 li {
+    border-left: 1px dotted #A5A5A5;
+    float: left;
+    height: 172px;
+    padding-left: 5px;
+    padding-right: 5px;
+    width: 31%;
+}
 .slide_middle1 li {
     border-right: 1px dotted #A5A5A5;
 }
@@ -79,6 +135,23 @@
 .slide_middle1 li {
     border-right: 1px dotted #A5A5A5;
 }
+ 
+.prev1 {  
+		 
+		position:absolute;
+		width:30px;
+		left: 432px;
+		top: 611px;
+		background:url("/misc/images/btn_prev.gif") no-repeat 0 0;	
+		}	
+	.next1{
+		 
+		position:absolute;
+		width:30px;
+		left: 1118px;
+		top: 611px;
+		background:url("/misc/images/btn_next.gif") no-repeat 0 0;	
+		}	
 </style>
 <div class="float-left width4">&nbsp;&nbsp;</div>
 <div class="float-left wid748">
@@ -118,11 +191,46 @@ Your Cart Contains {{ItemCount}} items<br />
 </div>
 <div class="cart_bottom">
 <div align="left" class="cart_bottom_heading">You May Also Like</div>
-<div class="slide_top">
-<div class="slide_middle">
+
+
+<div class="slide_top2">
+<div class="float-left"><img width="19" border="0" height="30" class="prev" id="new-arr" src="http://saltwater2013.dev.mvisolutions.com/sitemap/image/new-arrow-left.png"></div>
+<div class="float-left">
+<div class="slide_middle2">
+<div class="anyClass">
 <ul>
 {% for items in relateditems %}
-<li>
+	<li>
+	<div class="clr">
+	<div class="clr" style="min-height:50px;"><span class="product_heading">{{items.name}}</span><br>{{items.extra_field_3}}</div>
+	<div class="clr padtop15">
+	<div class="float_left"><img width="78" border="0" height="86" src='http://commondatastorage.googleapis.com/swf_product_images/{{  items.thumbnail|strreplace:"assets/images/" }}'></div>
+	<div class="float_right ">
+	<div class="price-final">${% if items.onsale > 0 %}{{items.saleprice|floatformat:2}}{% else %}{{items.price|floatformat:2}} 
+				{% endif %}</div>
+	<div class="clr"><a href="/addtocart?item_id={{ items.catalogid }}"><img border="0" src="misc/images/add_tant.png"></a></div>
+	</div>
+	</div>
+	<div class="clr">&nbsp;</div>
+	</div>
+	</li>
+{%endfor%} 
+</ul>
+</div>
+
+</div></div> 
+<div class="float-right"><img width="19" border="0" height="30" class="next" id="new-arr1" src="http://saltwater2013.dev.mvisolutions.com/sitemap/image/new-arrow-right.png"></div> 
+
+
+</div>
+{%comment%}
+   <div class="slide_top">
+<div class="slide_middle">
+<div class="anyClass">
+    <ul>
+        {% for items in relateditems %}
+				 
+ <li>
 <div class="clr">
 <div class="clr"><span class="product_heading">{{items.name}}</span></div>
 <div class="clr padtop25">
@@ -135,15 +243,21 @@ Your Cart Contains {{ItemCount}} items<br />
 </div>
 
 </div>
+ 
+
 </li>
+ 
 {%endfor%}
- 
- 
-</ul>
- 
- </div>
+    </ul>
 </div>
 
+</div>
+ 
+</div>
+
+ <img src="/misc/images/btn_prev.gif" class="prev"> 
+ <img src="/misc/images/btn_next.gif" class="next"> 
+{%endcomment%}
 </div>
 
 </div>

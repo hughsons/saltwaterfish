@@ -1,0 +1,319 @@
+{% extends 'base.html' %}
+{% block content %}
+ <style>
+.orange_heading {
+    color: #EC5E00;
+    font-family: 'Open Sans',sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.item_list2 ul {
+    margin: 0;
+    padding: 0;
+}
+.item_list2 {
+    clear: both;
+    float: left;
+    margin: 0;
+    padding: 0;
+    width: 340px;
+}
+.item_list2 ul li {
+    background-color: #F9FBFF;
+    border: 1px solid #D3D3D3;
+    height: auto;
+    line-height: 28px;
+    list-style-type: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 329px;
+	color: #434343;
+    font-family: 'PT Sans',sans-serif;
+    font-size: 13px;
+}
+.table_left{ float:left; width:48%;}
+.table_middle{ float:left; width:4%;}
+.table_right{ float:left; width:48%;}
+.orange_heading{
+font-family: 'Open Sans', sans-serif !important;
+color:#ec5e00;
+font-size:28px;
+font-weight:700;
+text-transform:uppercase;
+}
+.gray_bg{
+width:98%;
+background-color:#e1e4ed;
+font-family: 'Open Sans', sans-serif !important;
+font-size:20px;
+line-height:36px;
+color:#1f497d;
+padding-left:10px;
+border:1px solid #d3d3d3;
+}
+.item_list ul li{ 
+width:98%;
+list-style-type:none;
+background-color:#f9fbff;
+border:1px solid #d3d3d3;
+height:auto;
+line-height:28px;
+padding-left:10px;
+}
+.item_list li span{
+font-family: 'Open Sans', sans-serif !important;
+font-size:15px;
+color:#434343;
+font-weight:700;
+float:right;
+padding-right:20px;
+}
+.read_more{ color:#ec5e00; text-align:right; text-decoration:underline; }
+.read_more a:link{ color:#ec5e00; text-decoration:underline;}
+.read_more a:visited{ color:#ec5e00; text-decoration:underline;}
+.read_more a:hover{ color:#ec5e00; text-decoration:none;}
+.read_more a:active{ color:#ec5e00; text-decoration:underline;}
+/* //Pg feb21 */
+
+/* View cart */
+.view_cart_heading{
+	clear:both;
+	background-color:#efefef;
+	background: -webkit-gradient(linear, left top, left bottom, from(#efefef), to(#ffffff));
+	background: -moz-linear-gradient(top,  #efefef,  #ffffff);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#efefef', endColorstr='#ffffff');
+	background-repeat:repeat;
+	border:1px solid #dddddd; 
+	line-height:36px;
+}
+.toggle_right_title{
+	font-family: 'Open Sans', sans-serif;	
+	font-size:15px;
+	color:#434343;
+	text-transform:capitalize;
+}
+.item_list2 li span {
+    color: #434343;
+    float: right;
+    font-family: 'Open Sans',sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    padding-right: 20px;
+}
+/* //View cart */
+		
+/* //Checkout user address section */ 
+
+/*  reef package */
+.blue_heading{
+font-family: 'Open Sans', sans-serif;	
+font-size:30px;
+font-weight:700;
+color:#00b2d9;
+text-transform:capitalize;
+}
+.orange_box, .orange_box1, .orange_box2{
+	width:20%;
+	padding:20px 20px 10px 20px;
+	background-color:#fffdf9;
+	background: -webkit-gradient(linear, left top, left bottom, from(#fffdf9), to(#ffcd80));
+	background: -moz-linear-gradient(top,  #fffdf9,  #ffcd80);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffdf9', endColorstr='#ffcd80');
+	background-repeat:repeat;
+}
+.orange_box{ margin-right:30px; }
+.orange_box1{ margin-right:30px; margin-left:30px;}
+.orange_box2{ margin-left:30px; }
+.clrs {
+    clear: both;
+    width: 100%;
+}
+</style>
+
+<div class="float-left wid20">&nbsp;&nbsp;</div>
+<div class="float-left wid748">
+
+<div class="orange_heading padtop20">Saltwater Fish School</div>
+<div class="clrs">&nbsp;</div>
+<div class="clrs wid80">
+<div class="clrs">
+<div class="table_left">
+<div class="gray_bg1">Recent Articles </div>
+	<div class="item_list2">
+	<ul>
+	{% for items in product_articles %}
+	<li>{{items.article_title}}<span>{{items.review_date|date:"j/m/Y"}}</span></li>
+	 
+	{%empty%}
+		<li>No articles Found</li>
+	{%endfor%}
+	
+	</ul>
+	<div class="clrs"><div class="read_more"><a href="#">read more</a></div></div>
+	</div>
+</div>
+<div class="table_middle" >&nbsp;</div>
+<div class="table_right">
+<div class="gray_bg1">Customer Reviews</div>
+	<div class="item_list2">
+	<ul>
+	{% for items in product_reviews %}
+	<li>{{items.short_review}}<span>{{items.review_date|date:"j/m/Y"}}</span></li>
+	 
+	{%empty%}
+		<li>  No Reviews Found </li>
+		  {%endfor%}
+	</ul>
+	<div class="clrs"><div class="read_more"><a href="#">read more</a></div></div>
+	</div>	
+</div>
+<div class="clrs"></div>
+</div>
+
+<div class="clrs padtop20">
+<div class="table_left">
+<div class="gray_bg1">Video Links</div>
+	<div class="item_list2">
+	<ul>
+	<li>
+	No Videos
+	</li>
+	</ul>
+	<div class="clrs"><div class="read_more"><a href="#">read more</a></div></div>
+	</div>
+</div>
+<div class="table_middle" >&nbsp;</div>
+<div class="table_right">
+<img src="misc/images/fish_img1.jpg" border="0" />
+</div>
+<div class="clrs"></div>
+</div>
+
+<div class="clrs padtop20">
+<div class="table_left">
+	<div class="gray_bg1">Message Board</div>
+	<div class="item_list2">
+	<ul>
+	<li>
+	Messenger API  if available will post here The  osts will run down the page depending  How
+the nformation is parsed to the shopping Cart.  We are not aware of any API for such now. Scott is working with Dan Gill
+	</li>
+	</ul>
+	<div class="clrs"><div class="read_more"><a href="forums.saltwaterfish.com">read more</a></div></div>
+	</div>
+</div>
+<div class="table_middle" >&nbsp;</div>
+<div class="table_right">
+	<div class="gray_bg1">Deep Blue Seas</div>
+	<div class="item_list2">
+	<ul>
+	<li>
+	The Deep Blue Seas Foundation is a non-profit 
+foundation established by Saltwaterfish.com to provide scholarships to the children of the fishermen where our livestock is collected.<br />
+<br />
+	</li>
+	</ul>
+	<div class="clrs"><div class="read_more"><a href="/pages?pageid=92">read more</a></div></div>
+	</div>
+</div>
+<div class="clrs"></div>
+</div>
+
+<div class="clrs padtop20">
+<div class="table_left">
+	<div class="gray_bg1">Reef Rewards</div>
+	<div class="item_list2">
+	<ul>
+	<li>
+	With your Marine Life purchase, you will accrueSaltWaterFish Reef Rewards Points. With every qualifying purchase, you will get Reef Reward points. You can redeem these points for FREE merchandise<br /><br /><br />
+
+	</li>
+	</ul>
+	<div class="clrs"><div class="read_more"><a href="/pages?pageid=43">read more</a></div></div>
+	</div>
+</div>
+<div class="table_middle" >&nbsp;</div>
+<div class="table_right">
+	<div class="gray_bg1">Acclimation</div>
+	<div class="item_list2">
+	<ul>
+	<li>
+	A tremendous amount of time and effort tretching across the globe has gone into bringing these living works of art into your home, so please take the time to read and use the Acclimation rocedure on this website. We cannot stress enough how important it is that you follow the altwaterfish.com Acclimation Drip Method.
+	</li>
+	</ul>
+	<div class="clrs"><div class="read_more"><a href="/pages?pageid=48">read more</a></div></div>
+	</div>
+</div>
+<div class="clrs"></div>
+</div>
+
+<div class="clrs padtop20">
+<div class="table_left"><img src="misc/images/fish_img2.jpg" width="333" height="151" border="0" /></div>
+<div class="table_middle" >&nbsp;</div>
+<div class="table_right">
+	<div class="gray_bg1">15 Day Live Guarantee</div>
+	<div class="item_list2">
+	<ul>
+	<li>
+	If your marine life purchase dies within 15 days of the shipping date, Saltwaterfish.com will issue you a store credit for a future marine life purchase.<br /><br />
+
+</li>
+	</ul>
+	<div class="clr"><div class="read_more"><a href="/pages?pageid=78">read more</a></div></div>
+	</div>
+</div>
+<div class="clr"></div>
+</div>
+
+<div class="clr padtop20">
+<div class="table_left">
+	<div class="gray_bg1">Lowest Shipping Rate</div>
+	<div class="item_list2">
+	<ul>
+	<li>
+	Saltwaterfish.com uses FedEx to ship your fish, 
+inverts, corals and aquarium supplies to your door! We take the utmost care to insure that your order is packed and shipped as soon as possible and it gets to you with all of its precious cargo ready to be acclimated to your tank.
+	</li>
+	</ul>
+	<div class="clr"><div class="read_more"><a href="/pages?pageid=77">read more</a></div></div>
+	</div>	
+</div>
+<div class="table_middle" >&nbsp;</div>
+<div class="table_right">
+	<div class="gray_bg1">Free Shipping Store</div>
+	<div class="item_list2">
+	<ul>
+	<li>
+	Introducing our FREE SHIPPING STORE.  It's a 
+whole new way to buy Marine Life and save a 
+bundle in the process.Simply purchase $89.99 
+or more from this category and you will receive
+FREE SHIPPING on your ENTIRE ORDER!<br /> 
+	</li>
+	</ul>
+	<div class="clr"><div class="read_more"><a href="/pages?pageid=72">read more</a></div></div>
+	</div>
+</div>
+<div class="clr"></div>
+</div>
+
+</div>
+
+
+
+<div class="clr"></div>
+
+
+</div>
+
+
+<div class="float-left wid10"></div>
+
+</div>
+ 
+ 
+{% endblock content %}
+
+
+

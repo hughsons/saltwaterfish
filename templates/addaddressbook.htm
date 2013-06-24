@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Saltwaterfish.com | Add Address</title>
+<link href="/misc/style.css" rel="stylesheet" type="text/css" />
+
+<link href="/misc/sty.css" rel="stylesheet" type="text/css" /> <link type="text/css" rel="stylesheet" href="/misc/myaccount.css" />
+ </head>
+ <body leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">
+
+
+ <div  padtop10 padbottom5" style="width:400px !important;" align="center"><br>
+<form method="post" action="generalactions" name="formsss" id="formsss">
+				{% csrf_token %}
+				<input type="hidden" name="action" value="addaddressbook">
+				<table width="430" border="0" cellpadding="5" cellspacing="1">
+				<tr>
+					<td   class="orange-txt1 clr padtop10 padbottom10 " colspan=2>Add New Address</td>
+				</tr>
+	<tr bgcolor="#FFFFFF"><td align=left width=100><b>First Name</b></td> <td align=left><input type="text" name="shipping_firstname"> </td> </tr>
+	<tr bgcolor="#FFFFFF"><td align=left><b>Last Name</b></td> <td align=left><input type="text" name="shipping_lastname"> </td> </tr>
+	<tr bgcolor="#FFFFFF"><td align=left><b>City</b></td> <td align=left><input type="text" name="shipping_city"></td> </tr>
+	<tr bgcolor="#FFFFFF"><td align=left><b>State</b></td> <td align=left><input type="text" name="shipping_state"></td> </tr>
+	<tr bgcolor="#FFFFFF"><td align=left><b>Zipcode</b></td> <td align=left><input type="text" name="shipping_zip"></td> </tr>
+	<tr bgcolor="#FFFFFF"><td align=left><b>Country</b></td> <td align=left><input type="text" name="shipping_country"></td> </tr>
+	<tr bgcolor="#FFFFFF"><td align=left><b>Address</b></td> <td align=left><input type="text" name="shipping_address"></td> </tr>
+	<tr bgcolor="#FFFFFF"><td align=left><b>Address2</b></td> <td align=left><input type="text" name="shipping_address2"></td> </tr>
+	<tr bgcolor="#FFFFFF"><td align=left> </td> <td align=left> <input type="submit"></td> </tr>
+</table>
+
+			
+					 
+				</form><br>&nbsp;<br>&nbsp;
+			</div><div class="clr"></div>
+			 

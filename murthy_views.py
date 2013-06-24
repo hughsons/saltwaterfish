@@ -80,13 +80,13 @@ class CartConfirmClass(TemplateView):
     content = {}
     if "itemid" in request.GET:
       item_id = int(request.GET['itemid'])
-    product_category = ProductCategory.objects.all().filter(catalogid=request.GET['itemid'])
-    pcats =""
-    for pwcats in product_category:
-        pcats += str(pwcats.categoryid)+", "
-    pcats = pcats[:-2]+''
-    logging.info('categoryid:: %s',pcats)
-    relateditems=Products.objects.raw('select * from product_category,products where products.catalogid!='+request.GET['itemid']+' and product_category.catalogid=products.catalogid and hide=0 and categoryid in ('+pcats+')')[:3]
+    #product_category = ProductCategory.objects.all().filter(catalogid=request.GET['itemid'])
+    #pcats =""
+    #for pwcats in product_category:
+    #    pcats += str(pwcats.categoryid)+", "
+    #pcats = pcats[:-2]+''
+    #logging.info('categoryid:: %s',pcats)
+    #relateditems=Products.objects.raw('select * from product_category,products where products.catalogid!='+request.GET['itemid']+' and product_category.catalogid=products.catalogid and hide=0 and categoryid in ('+pcats+')')[:8]
 
     #del request.session['CartItems']
     if 'CartItems' in request.session:
@@ -147,7 +147,7 @@ class CartConfirmClass(TemplateView):
     content['ItemCount'] = item_count
     content['OrderSubTotal'] = sub_total
     content['item'] = cart_item
-    content['relateditems'] = relateditems
+    content['relateditems'] = relatedproditems(request.GET['itemid'],8)
     content.update(leftwidget(request))
     return render_template(request,'CartConfirmation.html', content)
 
@@ -288,6 +288,156 @@ class ForgetPasswordClass(LoginRequiredMixin,TemplateView):
       c.update(csrf(request))
       return render_to_response('login.htm', c)
 
+class OrderConfirmationViewolder(TemplateView):
+
+  @csrf_exempt
+  def get(self, request, *args, **kwargs):
+    data = {}
+    content = {'page_title': "Order Confirmation"}
+    is_login = False;
+    is_guest = False;
+    gateway = ''
+    error_message = ''
+    # Adding 3 days to the current date
+    est_delivery_date = time.strftime("%m/%d/%Y", time.localtime(time.time() + 172800))
+    
+    if 'ErrorMessage' in request.session:
+      error_message = request.session['ErrorMessage']
+      del request.session['ErrorMessage']
+
+    if 'IsLogin' in request.session:
+      if request.session['IsLogin']:
+        is_login = True;
+        is_guest = False;
+
+    if 'IsGuest' in request.session:
+      if request.session['IsGuest'] and not is_login:
+        is_guest = True;
+
+    # If there is no login and no guest, then redirect to checkoutlogin page.
+    if not is_login and not is_guest:
+      return HttpResponseRedirect('/checkoutlogin')
+     
+    
+    if 'gateway' in request.GET:
+      request.session['PaymentGateway'] = request.GET['gateway']
+      gateway = request.GET['gateway']
+      
+    if 'PaymentGateway' in request.session:
+      gateway = request.session['PaymentGateway']
+
+    cart_items = request.session['CartItems']
+    cart_info = request.session['CartInfo'] # Holds grand totals
+    
+    item_list = []
+    
+    for key, value in cart_items.items():
+      item_list.append(value) 
+
+    data = {}
+    # Populating Customer Information if user is logged in.
+    if is_login or 'Customer' in request.session:
+      logging.info("Logged in or Customer info is found in the session")
+      customer = request.session['Customer']
+      data = {'contact_id':customer.contactid,
+          'shipping_first_name':customer.shipping_firstname,
+          'shipping_last_name':customer.shipping_lastname,
+          'shipping_address1':customer.shipping_address,
+          'shipping_address2':customer.shipping_address2,
+          'shipping_city': customer.shipping_city,
+          'shipping_state': customer.shipping_state,
+          'shipping_zip': customer.shipping_zip,
+          'shipping_country': customer.shipping_country,
+          'shipping_company': customer.shipping_company,
+          'shipping_phone_part1': customer.shipping_phone[0:3],
+          'shipping_phone_part2': customer.shipping_phone[3:6],
+          'shipping_phone_part3': customer.shipping_phone[6:],
+
+          'billing_first_name':customer.billing_firstname,
+          'billing_last_name':customer.billing_lastname,
+          'billing_address1':customer.billing_address,
+          'billing_address2':customer.billing_address2,
+          'billing_city': customer.billing_city,
+          'billing_state': customer.billing_state,
+          'billing_zip': customer.billing_zip,
+          'billing_country': customer.billing_country,
+          'billing_company': customer.billing_company,
+          'billing_phone_part1': customer.billing_phone[0:3],
+          'billing_phone_part2': customer.billing_phone[3:6],
+          'billing_phone_part3': customer.billing_phone[6:],
+          #'billing_phone_ext': customer.billing_phone          
+
+          }
+      
+      temp_data = {'card_holder_name':'John Doe', 'card_number': '4111111111111111', 
+                   'card_type':'Master', 'card_expdate':'10/20', 'card_cvn':'123'}
+      data.update(temp_data)
+    else:
+      logging.info("Non Login traverse or No customer information in the session")
+      data = {'contact_id':0,
+          'username': request.session['GuestEMail']
+          }
+
+      temp_data = {'card_holder_name':'John Doe', 'card_number': '4111111111111111', 
+                   'card_type':'Master', 'card_expdate':'10/20', 'card_cvn':'123'}
+      data.update(temp_data)
+
+    if is_login:
+      if gateway == 'paypal':
+        form = PaypalOrderFormLoggedIn(initial=data)
+      elif gateway == 'AUTHORIZENET':
+        #address_form = BillingShippingAddressForm(initial=data, bstate='FL', shpstate='FL')              
+        #form = AuthorizeNetFormLoggedIn(data, card_list = GetCreditCardList(customer.contactid))
+        #form = AuthorizeNetFormLoggedIn(initial = data, 
+        #                                card_list = GetCreditCardList(customer.contactid), 
+        #                                bstate=customer.billing_state, 
+                                        #bcountry='UK', 
+        #                                shpstate=customer.shipping_state)
+        form = AuthorizeNetFormLoggedIn(initial = data, card_list = GetCreditCardList(customer.contactid))
+      else:
+        form = NoGateWay(data)  
+
+    elif is_guest:
+      if gateway == 'paypal':
+        form = PaypalOrderFormNoLogin(initial = data, card_list = [])
+      elif gateway == 'AUTHORIZENET':
+        form = AuthorizeNetFormNoLogin(initial = data, card_list = [])
+        #form.fields['previous_cards'].choices = [('1', 'Account Ending in xxx - xxx - 2003'), ('2', 'Account Ending in xxx - xxx - 1099')]
+      else:
+        form = NoGateWay()
+
+    index = 1
+    shipping_method_list = []
+    # Creating Linked List
+    num_cats = len(request.session["ShippingMethod"])
+    for key, value in request.session["ShippingMethod"].items():
+      if num_cats > 1 and index <> num_cats: 
+        shipping_method_list.append((index, value, index + 1))
+      elif index == num_cats:
+        shipping_method_list.append((index, value, 0))
+      
+      index += 1
+        
+      #  shipping_method_list.append((index, value, 0))
+      #else:
+      #  shipping_method_list.append((index, value, index + 1))
+      #index+=1
+      
+ 
+
+    content['order_error_message'] = error_message
+    #content['address_form'] = address_form
+    content['form'] = form
+    content['Items'] = item_list
+    content['DeliveryDate'] = est_delivery_date
+    content['ShippingMethodList'] = shipping_method_list
+    content['cal'] = GenerateShippingCalander()
+    content['Settings'] = settings
+    
+    content.update(csrf(request))
+    content.update(leftwidget(request))
+    return render_template(request,'OrderConfirmation.html', content)
+
 class OrderConfirmationView(TemplateView):
 
   @csrf_exempt
@@ -345,7 +495,7 @@ class OrderConfirmationView(TemplateView):
           'shipping_address1':customer.shipping_address,
           'shipping_address2':customer.shipping_address2,
           'shipping_city': customer.shipping_city,
-          #'shipping_state': customer.shipping_state,
+          'shipping_state': customer.shipping_state,
           'shipping_zip': customer.shipping_zip,
           'shipping_country': customer.shipping_country,
           'shipping_company': customer.shipping_company,
@@ -358,7 +508,7 @@ class OrderConfirmationView(TemplateView):
           'billing_address1':customer.billing_address,
           'billing_address2':customer.billing_address2,
           'billing_city': customer.billing_city,
-          #'billing_state': customer.billing_state,
+          'billing_state': customer.billing_state,
           'billing_zip': customer.billing_zip,
           'billing_country': customer.billing_country,
           'billing_company': customer.billing_company,
@@ -384,17 +534,24 @@ class OrderConfirmationView(TemplateView):
 
     if is_login:
       if gateway == 'paypal':
-        form = PaypalOrderFormLoggedIn(data)
-      elif gateway == 'AUTHORIZENET':              
-        form = AuthorizeNetFormLoggedIn(data, card_list = GetCreditCardList(customer.contactid))
+        form = PaypalOrderFormLoggedIn(initial=data)
+      elif gateway == 'AUTHORIZENET':
+        #address_form = BillingShippingAddressForm(initial=data, bstate='FL', shpstate='FL')              
+        #form = AuthorizeNetFormLoggedIn(data, card_list = GetCreditCardList(customer.contactid))
+        #form = AuthorizeNetFormLoggedIn(initial = data, 
+        #                                card_list = GetCreditCardList(customer.contactid), 
+        #                                bstate=customer.billing_state, 
+                                        #bcountry='UK', 
+        #                                shpstate=customer.shipping_state)
+        form = AuthorizeNetFormLoggedIn(initial = data, card_list = GetCreditCardList(customer.contactid))
       else:
         form = NoGateWay(data)  
 
     elif is_guest:
       if gateway == 'paypal':
-        form = PaypalOrderFormNoLogin(data, card_list = [])
+        form = PaypalOrderFormNoLogin(initial = data, card_list = [])
       elif gateway == 'AUTHORIZENET':
-        form = AuthorizeNetFormNoLogin(data, card_list = [])
+        form = AuthorizeNetFormNoLogin(initial = data, card_list = [])
         #form.fields['previous_cards'].choices = [('1', 'Account Ending in xxx - xxx - 2003'), ('2', 'Account Ending in xxx - xxx - 1099')]
       else:
         form = NoGateWay()
@@ -405,9 +562,9 @@ class OrderConfirmationView(TemplateView):
     num_cats = len(request.session["ShippingMethod"])
     for key, value in request.session["ShippingMethod"].items():
       if num_cats > 1 and index <> num_cats: 
-        shipping_method_list.append((index, value, index + 1))
+        shipping_method_list.append((index, value, index + 1, key))
       elif index == num_cats:
-        shipping_method_list.append((index, value, 0))
+        shipping_method_list.append((index, value, 0, key))
       
       index += 1
         
@@ -419,16 +576,18 @@ class OrderConfirmationView(TemplateView):
  
 
     content['order_error_message'] = error_message
+    #content['address_form'] = address_form
     content['form'] = form
     content['Items'] = item_list
     content['DeliveryDate'] = est_delivery_date
     content['ShippingMethodList'] = shipping_method_list
-    content['cal'] = GenerateShippingCalander()
+    content['cal'] = GenerateShippingCalander(time.strftime("%m/%d/%Y", time.localtime()))
     content['Settings'] = settings
     
     content.update(csrf(request))
     content.update(leftwidget(request))
     return render_template(request,'OrderConfirmation.html', content)
+
 #======================================================================
 
 class CheckOutLoginViewClass(TemplateView):
@@ -611,8 +770,11 @@ class CheckOutCallBackViewClass(TemplateView):
     
     tran_list = Transactions.objects.filter(transactionid = tx)
 
+    invoice_no = ""
     if not tran_list:
       order_id = SaveOrder(request, tx)
+      oobj = Orders.objects.get(orderid = order_id)
+      invoice_no = oobj.invoicenum_prefix + str(oobj.invoicenum)
     else:
       tran_obj = tran_list[0]
       order_id = tran_obj.orderid
@@ -626,14 +788,13 @@ class CheckOutCallBackViewClass(TemplateView):
                'amount': amount,
                'currency': currency,
                'item_number': item_number,
-               'OrderID': order_id
+               'OrderID': invoice_no 
               }
     if 'StoreCredit' in request.session:
         del request.session['StoreCredit']
 
         
     return render_template(request,'PaypalPurchase.html', content)
-
 
 class PaypalRedirectionViewClass(TemplateView):
   @csrf_exempt
@@ -702,59 +863,46 @@ class ShippingCalander(TemplateView):
   
   @csrf_exempt
   def get(self, request, *args, **kwargs):
-    month = [['', '', '','','', '', ''],
-       ['', '', '','','', '', ''],
-       ['', '', '','','', '', ''],
-      ['', '', '','','', '', ''],
-       ['', '', '','','', '', ''],
-       ['', '', '','','', '', ''],
-       ]
-
-    today = time.localtime().tm_mday
-    start_time = time.strptime("2013/06/01", "%Y/%m/01")
-    day = start_time.tm_mday
-    wday = start_time.tm_wday
-    last_day = calendar.monthrange(start_time.tm_year, start_time.tm_mon)[1]
-
-    row_no = 0
-    while day <= last_day:
-      cur_time = time.strptime(time.strftime("%Y/%m/" + str(day), start_time), "%Y/%m/%d")
-      day = cur_time.tm_mday
-      wday = cur_time.tm_wday
-      script = ''
-      bgcolor = "#FFFFFF"
-      if day < today:
-        bgcolor = "#999999"
-      elif day == today:
-        bgcolor = "#CC9966"
-      elif day == today + 1:
-        bgcolor = "#99CC00"
-        script = "alert('Next Day Delivery');"
-      elif day == today + 2:
-        bgcolor = "#663366"
-        script = "alert('Second Day Delivery');"
-      elif day > today + 2:
-        bgcolor = "#00CCCC"
-        script = "alert('Day %d Delivery');" %day        
-
-      if day >= today:
-        if wday == 6:
-           bgcolor = "#DB9E9B"
-           script = ''
-        elif wday == 5:
-           script = "alert('Saturday Day Delivery');"
-           bgcolor = "#FFCC33"
-
-
-      day_hash = {'wday': wday, 'day': day, 'bgcolor':bgcolor, 'script':script}
-      month[row_no][wday] = day_hash 
-      if wday == 6:
-        row_no += 1
-      day += 1
-
     content = {}
-    content['cal'] = month
-    return render_template(request, 'shipping_calander.html', content)
+    catid = int(request.GET['catid'])
+    sc_obj = ShippingCategory.objects.get(id=catid)
+    
+    cartinfo = request.session["CartInfo"]
+    (shipping_charge, fuel_charge, freeshipping_diff) = cartinfo.GetShippingCharge(catid, cartinfo.subtotal, 'FL', [])
+    
+    if 'dt'  in request.GET:
+      dt = request.GET['dt']
+    else:
+      dt = time.strftime("%m/%d/%Y", time.localtime())
+      
+    if "prev" in request.GET:
+      dt = DateSub(dt)
+      
+    if "next" in request.GET:
+      dt = DateAdd(dt)
+    
+    next_day_shipping = 0
+    if catid == 13:  
+      next_day_shipping = 15
+    else:
+      next_day_shipping = 10
+    
+    second_day_shipping = shipping_charge # For considering same as Ground Shipping.
+    
+    shp_method_seq = int(request.GET['seq'])
+    selected_month = time.strftime("%B %Y", time.strptime(dt, "%m/%d/%Y"))
+    content['category_id'] = catid
+    content['dt'] = dt
+    content['selected_month'] = selected_month
+    content['key'] = shp_method_seq 
+    content['cal'] = GenerateShippingCalander(dt)
+    content['GroundShipping'] = shipping_charge
+    content['OverNightShipping'] = next_day_shipping
+    content['SecondDayShipping'] = second_day_shipping
+    content['SaturdayDelivey'] = sc_obj.saturday_delivery
+ 
+     
+    return render_template(request, 'ShippingDeliveryCal.html', content)
 
   @csrf_exempt
   def post(self, request, *args, **kwargs):

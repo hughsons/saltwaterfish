@@ -1290,3 +1290,17 @@ padding-right: 15px;
 .blue-button-master a:visited{ color: #ffffff; text-decoration:none; }
 .blue-button-master a:hover{ color: #ffffff; text-decoration:none; }
 .blue-button-master a:active{ color: #ffffff; text-decoration:none; }
+.button22 {
+    background: -moz-linear-gradient(center top , #01AED6, #0385B9) repeat scroll 0 0 transparent;
+    border: 1px solid #017DB1;
+    border-radius: 5px 5px 5px 5px;
+    color: #FFFFFF;
+    float: left;
+    font-family: 'Open Sans',sans-serif;
+    font-size: 15px;
+    padding: 0px 15px;
+    text-align: center;
+    text-transform: uppercase;
+    width: auto;
+}
+ 

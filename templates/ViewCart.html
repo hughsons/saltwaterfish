@@ -4,6 +4,18 @@
 <link type="text/css" rel="stylesheet" href="/misc/css3/style.css" />
  <link type="text/css" rel="stylesheet" href="/misc/myaccount.css" />
  <link type="text/css" rel="stylesheet" href="/misc/css/style.css" />
+ <script type="text/javascript" src="/misc/js/jcarousellite_1.0.1.pack.js"></script>
+<script type="text/javascript">
+	 
+$(function() {
+    $(".anyClass").jCarouselLite({
+        btnNext: ".next",
+        btnPrev: ".prev",
+		scroll: 2
+    });
+});
+	 
+</script>
  <style type="text/css">
  .wid270 {
     width: 140px !important;
@@ -16,16 +28,37 @@
 }
 .button33 a {
     font-family: 'Open Sans',sans-serif;
-    font-size: 10px !important;
+    font-size: 12px !important;
     text-align: center;
     text-transform: uppercase;
+	padding: 8px 10px;
+	
 }
- .order_left {
+.order_left1 {
     color: #434343;
     float: left;
     font-family: Arial,Helvetica,sans-serif;
-    font-size: 11px;
-    width: 55%;
+    font-size: 12px;
+    width: 57%;
+}
+ .order_left1 {
+    color: #434343;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+}
+.order_right {
+    color: #434343;
+    
+    font-family: 'Open Sans',sans-serif;
+    font-size: 13px;
+    width: 35%;
+}
+.order_right {
+    color: #434343;
+	float: right;
+    font-family: 'Open Sans',sans-serif;
+    font-size: 13px;
+	width:35% !important;
 }
 .slide_top1 {
     background-color: #F79B49;
@@ -35,10 +68,30 @@
     border-bottom: 1px solid #000000;
     border-top: 1px solid #000000;
     clear: both;
-    height: 170px;
+    height: 176px;
     padding-bottom: 1px;
     padding-top: 2px;
     width: 660px;
+}
+.button44 a {
+    background: -moz-linear-gradient(center top , #9BDCFA, #74C7E5) repeat scroll 0 0 transparent;
+    border: 0 solid #017DB1;
+    border-radius: 10px 10px 10px 10px;
+    color: #FFFFFF;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    height: 25px;
+    line-height: 25px;
+    padding: 4px 25px;
+    text-align: center;
+    text-transform: uppercase;
+    width: auto;
+}
+.slide_middle {
+    background:  linear-gradient(center top , #FAF8E3, #FFFFFF) repeat scroll 0 0 transparent;
+    height: 174px;
+    margin: 0 auto;
+    width: 602px !important;
 }
 .cart_bottom {
     clear: both;
@@ -76,7 +129,83 @@
     border-right: 1px dotted #A5A5A5;
 }
 .toggle_right11{ clear:both; width:240px; height:auto; border:1px solid #e4e4e4; padding:5px; margin-left:2px !important;}
-
+.prev1 {  
+		 
+		position:relative;
+		width:30px;
+		 
+		background:url("/misc/images/btn_prev.gif") no-repeat 0 0;	
+		}	
+	.next1{
+		 
+		position:relative;
+		width:30px;
+		 
+		background:url("/misc/images/btn_next.gif") no-repeat 0 0;	
+		}
+.toggle_right_title {
+    color: #434343;
+    font-family: 'Open Sans',sans-serif;
+    font-size: 15px;
+    text-transform: capitalize;
+}
+.blue_text_new {
+    color: #EC5E00;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    width: 158px;
+}
+.blue_text_new a:link {
+    color: #EC5E00;
+    text-decoration: none;
+}
+#new-arr {
+    margin-left: 5px;
+    margin-right: 8px;
+    margin-top: 65px;
+}
+#new-arr1 {
+    margin-right: 5px;
+    margin-top: 65px;
+}
+ .slide_top2 {
+    background-image: url("http://saltwater2013.dev.mvisolutions.com/sitemap/image/cart-bg.jpg");
+    background-position: left top;
+    background-repeat: no-repeat;
+    border-bottom: 1px solid #000000;
+    border-top: 1px solid #000000;
+    clear: both;
+    height: 174px;
+    padding-bottom: 0;
+    padding-top: 0;
+    width: 87%;
+}
+.slide_middle2 {
+   background: -moz-linear-gradient(center top , #FAF8E3, #FFFFFF) repeat scroll 0 0 transparent;
+	background-color:#FAF8E3;
+    height: 174px;
+    margin: 0 auto;
+    width: 649px;
+}
+.slide_middle2 li:first-child {
+    border-left: 0 dotted #A5A5A5;
+    float: left;
+    height: 172px;
+    padding-left: 5px;
+    padding-right: 5px;
+    width: 31%;
+}
+.slide_middle2 li {
+    border-left: 1px dotted #A5A5A5;
+    float: left;
+    height: 172px;
+    padding-left: 5px;
+    padding-right: 5px;
+    width: 31%;
+}
 </style>
  <div class="float-left wid768 padleft5">
 
@@ -171,8 +300,8 @@ Cart is Empty
  
 
 
-<div class="clr">
-<div class="order_left" align="left">Subtotal</div>
+<div class="clr padtop5">
+<div class="order_left1" align="left">Subtotal</div>
 <div class="order_right">
 <div class="float_right">${{CartInfo.subtotal|floatformat:2}}</div>
 
@@ -180,8 +309,8 @@ Cart is Empty
 <div class="clr"></div>
 </div>
 
-<div class="clr">
-<div class="order_left  " align="left">Estimated Shipping</div>
+<div class="clr padtop5">
+<div class="order_left1 " align="left">Est.Shipping</div>
 <div class="order_right">
 <div class="float_right">${{CartInfo.shipping_total|floatformat:2}}</div>
 
@@ -189,8 +318,8 @@ Cart is Empty
 <div class="clr"></div>
 </div>
 
-<div class="clr">
-<div class="order_left" align="left">Fuel Surcharge</div>
+<div class="clr padtop5">
+<div class="order_left1" align="left">Fuel Surcharge</div>
 <div class="order_right">
 <div class="float_right">${{CartInfo.fuelcharge_total|floatformat:2}}</div>
 
@@ -198,8 +327,8 @@ Cart is Empty
 <div class="clr"></div>
 </div>
 
-<div class="clr">
-<div class="order_left" align="left">Estimated Tax</div>
+<div class="clr padtop5">
+<div class="order_left1" align="left">Est.Tax</div>
 <div class="order_right">
 <div class="float_right">${{CartInfo.tax_total|floatformat:2}}</div>
 
@@ -207,8 +336,8 @@ Cart is Empty
 <div class="clr"></div>
 </div>
 
-<div class="clr padbottom10">
-<div class="order_left" align="left"><span>Promotions Applied</span></div>
+<div class="clr padtop10 padbottom10">
+<div class="order_left" align="left"><span>Discounts:</span></div>
 <div class="order_right">
 <div class="float_right"><span>${{CartInfo.promotions_total|floatformat:2}}</span></div>
 </div>
@@ -216,14 +345,14 @@ Cart is Empty
 </div>
 <div class="border"></div>
 <div class="clr">
-<div class="order_left" align="left"><strong>ORDER TOTAL</strong></div>
+<div class="order_left" align="left"><strong>TOTAL</strong></div>
 <div class="order_right">
 <div class="float_right"><strong>${{CartInfo.order_total|floatformat:2}}</strong></div>
 </div>
 <div class="clr"></div>
 </div>
 {% if MyCartItems %}
-<div class="clr padtop15 padbottom15" align="left"><img width="140" border="0" height="24" src="misc/images/paypal_icon1.jpg"> </div>
+<div class="clr padtop15 padbottom15" align="left"><img width="156" border="0" height="24" src="misc/images/paypal_icon1.jpg"> </div>
 <div class="wid270 pad-tb"><div class="button33 padbottom20">
 {% if request.session.StoreCredit %} 
   {% if request.session.CartInfo.order_total > 0 %}
@@ -248,7 +377,7 @@ Cart is Empty
   {% endif %}
 {% else %}
   {% if request.session.CartInfo.order_total > 0 %}
-     <a href="/{{NextPage}}?gateway=paypal"><img src="/misc/images/new-paypal.jpg" width="140" height="40px" /></a>
+     <br><a href="/{{NextPage}}?gateway=paypal"><img src="/misc/images/new-paypal.jpg" width="140" height="40px" /></a>
   {% else %}
      &nbsp;
   {% endif %}
@@ -258,8 +387,7 @@ Cart is Empty
 {% endif %} <!-- END IF to check Empty Cart Items -->
 <div class="clr " >
 {% if request.session.IsLogin and StoreCredit > 0 %}
-<div class="blue_text1  padtop5 padbottom10 padleft5">Login to View Any Store Credits</div>
-
+ 
 <div class="wid240">
 <div class="toggle_right_title" align="left"><font size="3"><strong>Store Credit</strong></font></div>
 <div align="justify" class="clr">You have a store credit of ${{StoreCredit|floatformat:2}} available
@@ -272,31 +400,70 @@ would you like to apply it to this order?</div>
   </div>
  </form>
 </div>
+{%else%}
+<div class="clr wid160 blue_text_new padtop10 padbottom15"><a href="/login" style="color: #EC5E00;">Login to View Any Store Credits</a></div>
 {% endif %}
 
 <form name="CouponForm" method="GET" action="/cartaction">
-<div class="clr">
+<div class="clr padtop10">
 <div class="toggle_right_title wid240 padbottom5" align="left"><font size="3"><strong>Discount Codes</strong></font></div>
 <div align="justify" class="wid240 padbottom5">Enter your coupon code if you have one.<br /></div>
 <input name="txtCoupon" type="text" value="" size="20" />
-<div class="clr" align="left"><input type="submit" name="cmdApplyCoupon" value="Apply Coupon"/></div>
+
+<div class="clr padtop10" align="left"><input type="submit" name="cmdApplyCoupon" value="Apply Coupon" class="button22" style="background-color:#01AED6;"/></div>
 </div>
-<div class="padtop20 wid240" align="left"><font color="#FF6600"><strong><font size="3">Promotional Discounts:</font></strong><br />
-<U>Free Standard Shipping On $49! Exclusions Apply.?</U><br />
-You have not yet qualified for this promtion</font></div>
+ <br>&nbsp;<br>&nbsp;
 </div>
+ 
 </form>
 
-</div>
+</div><div class="clr">&nbsp;</div>
+<div class="toggle_right11 wid165"><div align="left" class="padtop5 padleft5 padright5"><font color="#FF6600"><strong><font size="3">Promotional Discounts:</font></strong><br>
+<u>Free Standard Shipping On $49! Exclusions Apply.?</u><br>
+You have not yet qualified for this promtion</font></div></div>
 </div><div class="clr"><div class="cart_bottom">
 <div class="cart_bottom_heading  " align="left">You May Also Like</div>
 
-<div class="slide_top1">
-<div class="slide_middle1">
+<div class="slide_top2">
+
+<div class="float-left"><img width="19" border="0" height="30" class="prev" id="new-arr" src="http://saltwater2013.dev.mvisolutions.com/sitemap/image/new-arrow-left.png"></div>
+
+<div class="float-left">
+<div class="slide_middle">
+<div class="anyClass">
+
 <ul>
 {% for items in relateditems %}
- 
-<li>
+	<li>
+	<div class="clr">
+	<div class="clr" style="min-height:50px;"><span class="product_heading">{{items.name}}</span><br>{{items.extra_field_3}}</div>
+	<div class="clr padtop15">
+	<div class="float_left"><img width="78" border="0" height="86" src='http://commondatastorage.googleapis.com/swf_product_images/{{  items.thumbnail|strreplace:"assets/images/" }}'></div>
+	<div class="float_right ">
+	<div class="price-final">${% if items.onsale > 0 %}{{items.saleprice|floatformat:2}}{% else %}{{items.price|floatformat:2}} 
+				{% endif %}</div>
+	<div class="clr"><a href="/addtocart?item_id={{ items.catalogid }}"><img border="0" src="misc/images/add_tant.png"></a></div>
+	</div>
+	</div>
+	<div class="clr">&nbsp;</div>
+	</div>
+	</li>
+{%endfor%} 
+</ul>
+</div></div></div> 
+
+<div class="float-right"><img width="19" border="0" height="30" class="next" id="new-arr1" src="http://saltwater2013.dev.mvisolutions.com/sitemap/image/new-arrow-right.png"></div> 
+
+
+</div>
+{%comment%}
+   <div class="slide_top1">
+<div class="slide_middle">
+<div class="anyClass">
+    <ul>
+        {% for items in relateditems %}
+				 
+ <li>
 <div class="clr">
 <div class="clr"><span class="product_heading">{{items.name}}</span></div>
 <div class="clr padtop25">
@@ -307,16 +474,20 @@ You have not yet qualified for this promtion</font></div>
 <div class="clr"><a href="/addtocart?item_id={{ items.catalogid }}"><img border="0" src="misc/images/add_tant.png"></a></div>
 </div>
 </div>
-<div class="clr">&nbsp;</div>
+
 </div>
+ 
+
 </li>
+ 
 {%endfor%}
- 
- 
-</ul>
+    </ul>
 </div>
+
 </div>
-					
+ 
+</div>
+{%endcomment%}
  
 </div></div> 
 </div>

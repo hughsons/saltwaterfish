@@ -25,6 +25,7 @@ from google.appengine.api import urlfetch
 import urllib2
 import urllib
 import httplib
+from xml.dom import minidom
 PERPAGE=50
 class CsrfExemptMixin(object):
     @method_decorator(csrf_exempt)
@@ -99,12 +100,17 @@ def BreadParentCategory(category_id):
 
 def relatedproditems(pid,noi):
     product_category = ProductCategory.objects.all().filter(catalogid=pid)
+    catcount = product_category.count()
     pcats =""
-    for pwcats in product_category:
-        pcats += str(pwcats.categoryid)+", "
-    pcats = pcats[:-2]+''
-    logging.info('categoryid:: %s',pcats)
-    relateditems=Products.objects.raw('select * from product_category,products where products.catalogid!='+pid+' and product_category.catalogid=products.catalogid and hide=0 and categoryid in ('+pcats+')')[:noi]
+    if catcount >= 1:
+        for pwcats in product_category:
+            pcats += str(pwcats.categoryid)+", "
+        pcats = pcats[:-2]+''
+        logging.info('categoryid:: %s',pcats)
+        relateditems=Products.objects.raw('select * from product_category,products where products.catalogid!='+pid+' and product_category.catalogid=products.catalogid and hide=0 and categoryid in ('+pcats+')')[:noi]
+    else:
+        relateditems=""
+        
     return relateditems
 
 class LoginRequiredMixin(object):
@@ -175,12 +181,14 @@ def leftwidget(request):
         login_is = ""
     total_fines = sum([item.price for item in cartwidget(request)])
     popular = Category.objects.all().filter(category_parent=177)
+    homespecial = Products.objects.filter(homespecial=1).order_by('?')[0]
     contents = {'LoginForm':LoginForm,
                 'login_is':login_is,
                 'recaptcha': GetRecaptcha(request),
                 'error_message': error_message,
                 'message': message,
                 'popular': popular,
+                'homespecial': homespecial,
                 'banner_main': SiteBanners.objects.filter(banner_status=1),
                 'cartsitems':cartwidget(request),'total_fines':total_fines,}
     return contents
@@ -196,7 +204,7 @@ class RegistrationViewClass(TemplateView):
         content = {'title': "User Registration",
                    'form':RegistrationForm,}
         content.update(leftwidget(request))
-        return render_template(request, "registration.htm", content)
+        return render_template(request, "registration1.html", content)
 
 class QuickListClass(TemplateView):
     def get(self, request, *args, **kwargs):
@@ -298,7 +306,7 @@ class ChangePwdViewClass(LoginRequiredMixin, TemplateView):
         form = ChangePwdForm(prefill_data)
         content = {'page_title': "Summary",'customer':request.session['Customer'],'form':form}
         content.update(leftwidget(request))
-        return render_template(request, "ChangePwd.html", content)
+        return render_template(request, "ChangePWD.html", content)
         #content['form'] = form
         #content['error_message'] = error_message     
         #content.update(csrf(request))
@@ -493,6 +501,13 @@ class MyTicketsViewClass(LoginRequiredMixin,TemplateView):
         content.update(leftwidget(request))
         return render_template(request, 'tickets.htm', content)
 
+class AddressBookViewClass(LoginRequiredMixin,TemplateView):
+    def get(self, request, *args, **kwargs):
+        product_list = CustomersAddressbook.objects.all().filter(contactid=request.session['Customer'].contactid)
+        content = {'page_title': "My Address Book",'product_list':product_list,}
+        content.update(leftwidget(request))
+        return render_template(request, 'addressbooks.htm', content)
+
 class MyRewardsViewClass(LoginRequiredMixin,TemplateView):
     def get(self, request, *args, **kwargs):
         cid = request.session['Customer'].contactid
@@ -540,6 +555,12 @@ class EmailFriendPopupViewClass(TemplateView):
         content = {'page_title': "My Support Requests","products":product_list}
         content.update(leftwidget(request))
         return render_template(request, 'emailfriend_popup.htm', content)
+
+class AddAddressBookViewClass(TemplateView):
+    def get(self, request, *args, **kwargs):
+        content = {'page_title': "My Support Requests"}
+        content.update(leftwidget(request))
+        return render_template(request, 'addaddressbook.htm', content)
 
 class ReefPackageViewClass(TemplateView):
     def get(self, request, *args, **kwargs):
@@ -627,7 +648,17 @@ class SitemapViewClass(TemplateView):
         return HttpResponse(xml_str,content_type="application/xhtml+xml")
 
 
-class SearchViewClass(TemplateView):
+class FishSchoolViewClass(TemplateView):
+    def get(self, request, *args, **kwargs):
+        product_reviews = ProductReview.objects.all().filter(approved=1, rating=5).order_by( '-id' )[:5]
+        product_articles = ProductArticle.objects.all().filter(approved=1).order_by( '-id' )[:5]
+        logging.info('Articles Found Any?:: %s',product_articles.count())
+        content = {'title': "SaltwaterFish School",'product_reviews':product_reviews,
+                   'product_articles':product_articles, }
+        content.update(leftwidget(request))
+        return render_template(request, "fishschool.htm", content)
+
+class SearchViewClassold(TemplateView):
     def get(self, request, *args, **kwargs):
         keyw = request.GET['query'] if 'query' in request.GET else ""
         pages = request.GET['page'] if 'page' in request.GET else 1
@@ -664,7 +695,74 @@ class SearchViewClass(TemplateView):
                    "countresult":count,'alloiitems':product_list,'page_num':pages}
         content.update(leftwidget(request))
         return render_template(request, 'search.htm', content)
+
+import xml.dom.minidom
+from xml.etree import ElementTree as ET
+
+class SearchViewClass(TemplateView):
+    def get(self, request, *args, **kwargs):
+        pods=""
+        tempcount = 0
+        bucket_list = []
+        paginate=""
+        keyw = request.GET['query'] if 'query' in request.GET else ""
+        pages = request.GET['page'] if 'page' in request.GET else 1
+        start = (int(pages)*20)-20 if pages > 1 else 1
+        params = urllib.urlencode({
+            "client":"google-csbe",
+            "q": keyw,
+            "output": "xml",
+            "num": 20,
+            "start": start
+            })
+        req=urlfetch.fetch('https://www.google.com/cse?cx=017962673971899229735:obihww4qabe&%s'% params,
+                               method='GET', allow_truncated=False, follow_redirects=True, deadline=30,
+                               validate_certificate=False)
         #return HttpResponse(req.content)
+        try:
+            parsed = xml.dom.minidom.parseString(req.content)
+            xmlTag = parsed.getElementsByTagName('RES')[0]
+            
+            children =  xmlTag.childNodes
+            counttag=children[1].toxml()
+            counttag = counttag.replace("<M>", "")
+            counttag = counttag.replace("</M>", "")
+        except Exception as e:
+            logging.info('XMl Parse Error:: %s',e)
+            counttag=0
+        logging.info('Count Result:: %s',counttag)
+        if counttag >= "1":
+            for node in children:
+                if node.nodeName == 'R':
+                    bucket_list.append(node.childNodes[0].toxml())
+                    try:
+                        pcats,ids =node.childNodes[0].toxml().split('pid=')
+                        pods += ids+", "
+                        tempcount += 1
+                        logging.info('search term:: %s',ids)
+                    except Exception as e:
+                        logging.info('Product Fetch Error:: %s',node.childNodes[0].toxml())
+
+            prodids = pods[:-2]+''
+            prodids = prodids.replace("</U>", "")
+            logging.info('Actual Product Count %s',tempcount)
+            product_list = Products.objects.raw("select * from products where catalogid in ("+prodids+")")
+            if counttag >= "21":
+                pagecount = int(counttag)/20
+                logging.info('Page Count %s',pagecount)
+                for nopages in range(pagecount):
+                    paginate+='<a href="/search?query='+keyw+'&page='+str((nopages+1))+'">'+str((nopages+1))+'</a> | '
+                paginate+='<a href="/search?query='+keyw+'&page='+str((pagecount+1))+'">'+str((pagecount+1))+'</a>'
+                logging.info(paginate)
+            else:
+                pagecount=""
+        else:
+            product_list=""
+        content = {'page_title': "Search "+keyw+"","keyword":keyw,'paginate':paginate,
+                   "countresult":int(counttag),'alloiitems':product_list,'page_num':pages}
+        content.update(leftwidget(request))
+        return render_template(request, 'search.htm', content)
+        return HttpResponse(bucket_list)        
 
 #======================================================================
 class CartItems(object):

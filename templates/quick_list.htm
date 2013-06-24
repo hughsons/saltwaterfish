@@ -102,8 +102,8 @@ img{border:none;}
 <div class="clr height15" >&nbsp;&nbsp;</div>
 {% for products in cat|featureddisplay %}
 	 
-		<div align="center" class="float_left orang_boxs">
-		<div class="clr product_heading product-align">{{ products.name }}</div>
+		<div align="center" class="float_left orang_boxs" style="min-height:330px !important;">
+		<div class="clr product_heading product-align" style="min-height:60px !important;">{{ products.name }}</div>
 		<div class="clr product-align">{{ products.description }}</div>
 		<div class="clr pad-tb"><img width="125" height="125" src='http://commondatastorage.googleapis.com/swf_product_images/{{  products.thumbnail|strreplace:"assets/images/" }}'></div>
 		{% if products.onsale > 0 %}
@@ -152,7 +152,13 @@ img{border:none;}
 					{% if products.stock >= 1 %}
 					<div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
 				{% else %}
-					<div class="wish-button"><a id="/waitpopup?itemid={{ products.catalogid }}" href="#" class="pop1">WISH LIST</a></div>
+					{% if request.session.IsLogin %}
+							<div class="wish-button "><a href="##" id="/addtowatchlist?itemid={{products.catalogid}}&name=" class="pop1">WISH LIST</a></div>
+						{% else %}
+							<div class="wish-button"><a id="/waitpopup?itemid={{ products.catalogid }}" href="#" class="pop1">WISH LIST</a></div>
+							 
+						{% endif %}
+					
 				{% endif %}
 				<div class="clr orange_text1">&nbsp;&nbsp;<a href="/product?pid={{ products.catalogid }}" class="clr orange_text1">More Details </a></div>
  					</td>
@@ -166,8 +172,8 @@ img{border:none;}
 <div class="clr height15" >&nbsp;&nbsp;</div>
 {% for products in cat|featureddisplay %}
 	  
-		<div align="center" class="float_left orang_boxs">
-		<div class="clr product_heading product-align">{{ products.name }}</div>
+		<div align="center" class="float_left orang_boxs" style="min-height:330px !important;">
+		<div class="clr product_heading product-align" style="min-height:60px !important;">{{ products.name }}</div>
 		<div class="clr product-align">{{ products.description }}</div>
 		<div class="clr pad-tb"><img width="125" height="125" src='http://commondatastorage.googleapis.com/swf_product_images/{{  products.thumbnail|strreplace:"assets/images/" }}'></div>
 		{% if products.onsale > 0 %}
@@ -179,7 +185,11 @@ img{border:none;}
 				{% if products.stock >= 1 %}
 					<div class="blue-button marleft25"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
 				{% else %}
+					{% if request.session.IsLogin %}
+						<div class="wish-button marleft25"><a href="/addtowatchlist?itemid={{products.catalogid}}&name=" class="pop1">WISH LIST</a></div>
+					{% else %}
 					<div class="wish-button marleft25"><a href="/waitpopup?itemid={{ products.catalogid }}" class="pop1">WISH LIST</a></div>
+					{% endif %}
 				{% endif %}
 
 		<div class="clr">&nbsp;</div>
@@ -224,7 +234,13 @@ img{border:none;}
 						<div class="blue-button" ><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
 						<div class="clr orange_text1">&nbsp;&nbsp;<a href="/product?pid={{ products.catalogid }}" class="clr orange_text1">More Details </a></div>
 					{% else %}
-						<div class="wish-button "><a href="##" id="/waitpopup?itemid={{ products.catalogid }}" class="pop1">WISH LIST</a></div>
+						{% if request.session.IsLogin %}
+							<div class="wish-button "><a href="##" id="/addtowatchlist?itemid={{products.catalogid}}&name=" class="pop1">WISH LIST</a></div>
+						{% else %}
+							<div class="wish-button "><a href="##" id="/waitpopup?itemid={{ products.catalogid }}" class="pop1">WISH LIST</a></div>
+							 
+						{% endif %}
+						
 						<div class="clr orange_text1">&nbsp;&nbsp;<a href="/product?pid={{ products.catalogid }}" class="clr orange_text1">More Details </a></div>
 						
 					{% endif %}

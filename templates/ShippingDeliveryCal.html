@@ -1,0 +1,132 @@
+<html>
+<head>
+<link href="http://saltwater2013.dev.mvisolutions.com/sitemap/style.css" rel="stylesheet" type="text/css" />
+<link href="http://saltwater2013.dev.mvisolutions.com/sitemap/sty.css" rel="stylesheet" type="text/css" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js">
+</script>
+
+<script>
+
+function OnConfim()
+{
+  element = document.getElementById("hdnShippingDate");
+  opener.document.OrderConfirmationForm.ReqDeliveryDate{{category_id}}.value= element.value;
+  window.close()
+}
+
+function SetPriorityShipping()
+{
+   element = document.getElementById("IsPriorityShipping");
+   if (element.checked)
+   {
+      opener.document.OrderConfirmationForm.OverNightShipping{{category_id}}.checked = true;
+   }
+   else
+   {
+      opener.document.OrderConfirmationForm.OverNightShipping{{category_id}}.checked = false;
+   }
+}
+
+function SetDeliveryDate(pInputField, day, shipping_date, method)
+{
+  element = document.getElementById("hdnShippingDate");
+  //element.value = shipping_date;
+  shipping_charge = {{GroundShipping}};
+  next_day = {{OverNightShipping}};
+  second_day = {{SecondDayShipping}};
+  saturday = {{SaturdayDelivey}};
+  
+  total = shipping_charge;
+
+  if (method == "NextDay")
+  {
+    total += next_day
+  }
+
+  if (method == "SecondDay")
+  {
+    //total += second_day
+  }
+
+  if (method == "Saturday")
+  {
+    total += saturday
+  }
+
+  element.value = shipping_date; 
+
+  $("#shipping_date").text(shipping_date);
+  $("#shipping_charge").text(total.toFixed(2));
+  //window.close()
+}
+</script>
+</head>
+<body>
+<div class="float-left wid748">
+  <div class="clr">
+    <div class="card5_container">
+      <div class="card5_shade">
+        <div class="clr card5_title card5_mar180">
+          <div class="float_left padtop30 padright20"><a href='/shippingcalander?seq={{key}}&catid={{category_id}}&prev=1&dt={{dt}}'><img src="http://saltwater2013.dev.mvisolutions.com/sitemap/images/cared5_leftarrow.jpg"/></a></div>
+          <div class="float_left padtop15 padbottom15">{{selected_month}}</div>
+          <div class="float_left padtop30 padleft20"><a href="/shippingcalander?seq={{key}}&catid={{category_id}}&next=1&dt={{dt}}"><img src="http://saltwater2013.dev.mvisolutions.com/sitemap/images/cared5_righttarrow.jpg"/></a></div>
+        </div>
+        <div class="clr card5_line_shade">
+          <table width="100%" border="0" cellpadding="3" cellspacing="3">
+            <tr class="clr card5_line_shade">
+              <td class="card5_mon marright5">Mon</td>
+              <td class="card5_mon marright5">Tue</td>
+              <td class="card5_mon marright5">Wed</td>
+              <td class="card5_mon marright5">Thu</td>
+              <td class="card5_mon marright5">Fri</td>
+              <td class="card5_mon marright5">Sat</td>
+              <td class="card5_mon marright5">Sun</td>
+            </tr>
+            {% for week in cal %}
+            <tr>{% for day in week %}
+              <td class="{{day.bgcolor}}">{% if day.script %}<a href="javascript:SetDeliveryDate('ReqDeliveryDate-{{category_id}}',{{day.day}}, '{{day.script}}', '{{day.method}}')">{{day.day}}</a>{% else %}{{day.day}}{% endif %}</td>
+              {% endfor %}</tr>
+            {% endfor %}
+          </table>
+          <div class="clr card5_height1"></div>
+        </div>
+        <div class="clr card5_height1"></div>
+      </div>
+      <div class="clr card5_txt1 padtop10 padbottom10">Time frames noted are for delivery only and are in addition to the time needed for your order</div>
+      <div class="clr">
+        <div class="card5_color_left">
+          <div class="clr">
+            <div class="float_left padtop3 padright5 padbottom5"><img src="http://saltwater2013.dev.mvisolutions.com/sitemap/images/gren_col.jpg" /></div>
+            <div class="float_left card5_txt2">${{OverNightShipping}}&nbsp;&nbsp;Overnight Shipping</div>
+          </div>
+          <div class="clr">
+            <div class="float_left padtop3 padright5 padbottom5"><img src="http://saltwater2013.dev.mvisolutions.com/sitemap/images/pink_col.jpg" /></div>
+            <div class="float_left card5_txt2">${{SecondDayShipping}}&nbsp;&nbsp;&nbsp;Second Day Delivery</div>
+          </div>
+          <div class="clr">
+            <div class="float_left padtop3 padright5 padbottom5"><img src="http://saltwater2013.dev.mvisolutions.com/sitemap/images/lblue.jpg" /></div>
+            <div class="float_left card5_txt2">${{GroundShipping}}&nbsp;Ground Shipping(Estimated 3-5 Days)</div>
+          </div>
+          <div class="clr">
+            <div class="float_left padtop3 padright5 padbottom5"><img src="http://saltwater2013.dev.mvisolutions.com/sitemap/images/yellow.jpg" /></div>
+            <div class="float_left card5_txt2">${{SaturdayDelivey}}&nbsp;Saturday Delivery</div>
+          </div>
+          <div class="clr">
+            <div class="float_left padtop3 padright5 padbottom5"><img src="http://saltwater2013.dev.mvisolutions.com/sitemap/images/cyan.jpg" /></div>
+            <div class="float_left card5_txt2">Delivery Not Available</div>
+          </div>
+        </div>
+        <div class="card5_color_right card5_txt3">Selected Estimated Delivery Date:<span id="shipping_date"></span>
+          Shipping Price for option Selected:<span id="shipping_charge"></span></div>
+        <div class="clr">
+          <div class="float_left padtop3 padright5 padbottom5 card5_close card5_txt3"><input type="checkbox" name="IsPriorityShipping" id="IsPriorityShipping" onClick="SetPriorityShipping()" />Upgrade to priority shipping Delivery (by10am) $10.00</div>
+        </div>
+        <div align="center" class="clr padtop20"><img src="http://saltwater2013.dev.mvisolutions.com/sitemap/images/continue.jpg" width="187" height="35" border="0" id="Image1" onMouseOver="MM_swapImage('Image1','','http://saltwater2013.dev.mvisolutions.com/sitemap/images/continue-over.jpg',1)" onMouseOut="MM_swapImgRestore()" onClick="OnConfim()" /></div>
+      </div>
+    </div>
+  </div>
+</div>
+<input type="hidden" id = "hdnShippingDate" value = "">
+<input type="hidden" id = "hdnShippingTotal" value = "">
+</body>
+</html>

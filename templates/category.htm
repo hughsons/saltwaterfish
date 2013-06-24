@@ -1,11 +1,40 @@
 {% extends 'base.html' %}
 {% block content %}
- 
+{% load tagsfilter %} 
  
  <link type="text/css" rel="stylesheet" href="/misc/category.css" />
 
+ <script language="javascript" type="text/javascript" src="/misc/js/imagetooltip.js"></script>
+ <script language="javascript" type="text/javascript" src="/misc/js/jquery.bpopup.min.js"></script>
+ 
+<script type="text/javascript">
+	;(function($) {
+         $(function() {
+            $('.pop1').bind('click', function(e) {
+                e.preventDefault();
+				var a_href = $(this).attr('id');
+				$("#contentss").load(a_href);
+                $('#popup').bPopup({
+				});
+			});
+			 
+        });
 
-{% load tagsfilter %} 
+    })(jQuery);
+
+</script>
+<style>
+ 
+#popup, #popup2, .bMulti {
+background-color: #fff;
+border-radius: 10px 10px 10px 10px;
+box-shadow: 0 0 25px 5px #999;
+color: #111;
+display: none;
+min-width: 450px;
+padding: 1px;
+}
+</style>
 <div class="float-left wid20">&nbsp;&nbsp;</div>
 <div class="float-left wid725">
 <div class="clr" style="line-height:20px;">
@@ -80,7 +109,13 @@
 				{% if products.stock >= 1 %}
 					<div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
 				{% else %}
-					<div class="wish-button"><a href="/addtowatchlist?itemid={{ products.catalogid }}">WISH LIST</a></div>
+						{% if request.session.IsLogin %}
+							<div class="wish-button "><a href="##" id="/addtowatchlist?itemid={{products.catalogid}}&name=" class="pop1">WISH LIST</a></div>
+						{% else %}
+							<div class="wish-button"><a  href="##" id="/waitpopup?itemid={{ products.catalogid }}" class="pop1">WISH LIST</a></div>
+							 
+						{% endif %}
+					
 				{% endif %}
  <div class="hash-button"><a href="/product?pid={{ products.catalogid }}">more details...</a></div>
 </div>
@@ -107,4 +142,8 @@
 <div class="float-left"></div>
 
 </div></div>
+<div id="popup" style="left: -700px; position: absolute; top: 1177px; z-index: 9999; opacity: 1; display: none;min-height:200px;">
+        
+        <div id="contentss" style="height: auto; width: auto;"></div>
+</div>
 {% endblock content %}

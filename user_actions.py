@@ -121,7 +121,7 @@ class CustomerLoginActionClass(TemplateView):
             return HttpResponseRedirect('/login')
     return HttpResponseRedirect('/login')
 
-class RegistrationActionClass(TemplateView):
+class RegistrationActionClassOld(TemplateView):
     '''Page: /registeruser '''
 
     def SaveFormData(self, p_form):
@@ -253,6 +253,165 @@ class RegistrationActionClass(TemplateView):
       content.update(csrf(request))
       content.update(leftwidget(request))
       return render_to_response('registration.htm', content)
+
+class RegistrationActionClass(TemplateView):
+    '''Page: /registeruser '''
+
+    def SaveFormData(self, p_form, IsShippingSame):
+          c = customers()
+          c.email = p_form.cleaned_data['email']
+          c.pass_field = p_form.cleaned_data['password']
+
+          c.billing_firstname =  p_form.cleaned_data['billing_first_name']
+          c.billing_lastname =  p_form.cleaned_data['billing_last_name']
+          #c.accountno = p_form.cleaned_data['account_no']
+          c.billing_company =  p_form.cleaned_data['billing_company']
+          c.billing_address =  p_form.cleaned_data['billing_address1']
+          c.billing_address2 =  p_form.cleaned_data['billing_address2']
+          c.billing_city =  p_form.cleaned_data['billing_city']            
+          c.billing_state =  p_form.cleaned_data['billing_state']
+          c.billing_country = p_form.cleaned_data['billing_country']
+          c.billing_zip = p_form.cleaned_data['billing_zip']
+          c.billing_phone =  p_form.cleaned_data['billing_phone_part1'] +  p_form.cleaned_data['billing_phone_part1'] +  p_form.cleaned_data['billing_phone_part1']
+          c.custenabled = 1
+
+          
+          if IsShippingSame:
+            c.shipping_firstname = c.billing_firstname =  p_form.cleaned_data['billing_first_name']
+            c.shipping_lastname = c.billing_lastname =  p_form.cleaned_data['billing_last_name']
+            #c.accountno = p_form.cleaned_data['account_no']
+            c.shipping_company = c.billing_company =  p_form.cleaned_data['billing_company']
+            c.shipping_address = c.billing_address =  p_form.cleaned_data['billing_address1']
+            c.shipping_address2 = c.billing_address2 = p_form.cleaned_data['billing_address2']
+            c.shipping_city = c.billing_city = p_form.cleaned_data['billing_city']            
+            c.shipping_state = c.billing_state =  p_form.cleaned_data['billing_state']
+            c.shipping_country = c.billing_country =  p_form.cleaned_data['billing_country']
+            c.shipping_zip = c.billing_zip =  p_form.cleaned_data['billing_zip']
+            c.shipping_phone = c.billing_phone = p_form.cleaned_data['billing_phone_part1'] +  p_form.cleaned_data['billing_phone_part1'] +  p_form.cleaned_data['billing_phone_part1']
+            
+          else: 
+            c.shipping_firstname =  p_form.cleaned_data['shipping_first_name']
+            c.shipping_lastname =  p_form.cleaned_data['shipping_last_name']
+            #c.accountno = p_form.cleaned_data['account_no']
+            #c.shipping_company =  p_form.cleaned_data['company']
+            c.shipping_address =  p_form.cleaned_data['shipping_address1']
+            c.shipping_address2 =  p_form.cleaned_data['shipping_address2']
+            c.shipping_city =  p_form.cleaned_data['shipping_city']            
+            c.shipping_state =  p_form.cleaned_data['shipping_state']
+            c.shipping_country = p_form.cleaned_data['shipping_country']
+            c.shipping_zip = p_form.cleaned_data['shipping_zip']
+            c.shipping_phone =  p_form.cleaned_data['shipping_phone_part1'] +  p_form.cleaned_data['shipping_phone_part1'] +  p_form.cleaned_data['shipping_phone_part1'] 
+            
+            
+            c.comments = p_form.cleaned_data['comments']
+
+          if not self.IsDuplicate(c.email):
+            c.save();
+            return (True, "", "Customer successfully registered", c)
+          else:
+            return (False, "You are already a registered customer. Duplicate registrations are not allowed.", "",  None)
+
+    def IsDuplicate(self, p_email):
+      customer_list = customers.objects.filter(email=p_email)
+      if customer_list:
+        is_dup =  True;
+      else:
+        is_dup = False;
+      return is_dup 
+
+    def GetRecaptcha(self, request):
+          value = random.randrange(10000, 99999, 1)
+          request.session['ReCaptcha'] = value
+          return value
+
+    def get(self, request, *args, **kwargs):
+        form = RegistrationForm()
+        content = {'form': form, 'page_title': "Customer Registration"}
+         
+        content.update(csrf(request))
+        content.update(leftwidget(request))
+        return render_template(request, "registration.htm", content)
+    
+    def post(self, request, *args, **kwargs):
+      content = {}
+      form = RegistrationForm(request.POST)
+      
+      if 'IsShippingAddressSame' in request.POST:
+        is_shipping_address_same = True
+      else:
+        is_shipping_address_same = False
+
+      if form.is_valid():
+        (success, error_msg, msg, customer) = self.SaveFormData(form, is_shipping_address_same)
+      else:
+        success = False
+        error_msg = "Incomplete or invalid form data" 
+
+      if  success:
+        content = {'page_title': "Customer Registration",
+                   'customer': customer
+                   }
+
+        email_template = Emails.objects.filter(id=22)[0]
+        recent_customer = customers.objects.latest("contactid")
+        store_info_list = StoreSettings2.objects.filter(id__in=[3, 5, 32]).order_by('id')
+        store_name = store_info_list[0].varvalue
+        store_logo = store_info_list[1].varvalue
+        store_url =  store_info_list[2].varvalue
+
+        mail_body = email_template.body_html
+        mail_body = mail_body.replace("[billing_firstname]", recent_customer.billing_firstname)
+        mail_body = mail_body.replace("[billing_lastname]", recent_customer.billing_lastname) 
+        mail_body = mail_body.replace("[email]", recent_customer.email)
+        mail_body = mail_body.replace("[billing_address]", recent_customer.billing_address)
+        mail_body = mail_body.replace("[billing_address2]", recent_customer.billing_address2)
+        mail_body = mail_body.replace("[billing_city]", recent_customer.billing_city)
+        mail_body = mail_body.replace("[billing_state]", recent_customer.billing_state)
+        mail_body = mail_body.replace("[billing_zip]", recent_customer.billing_zip)
+        mail_body = mail_body.replace("[billing_country]", recent_customer.billing_country)
+        mail_body = mail_body.replace("[billing_company]", recent_customer.billing_company)
+        mail_body = mail_body.replace("[comments]", recent_customer.comments)
+        #mail_body = mail_body.replace("[accountno]", recent_customer.accountno)
+        mail_body = mail_body.replace("[store_name]", store_name)
+        mail_body = mail_body.replace("[store_url]", store_url)
+
+        try:
+          mail.send_mail(sender="support@saltwaterfish.com",
+                to=customer.email,
+                subject="Saltwaterfish.com: Customer Registration",
+                body=mail_body)
+        except Exception:
+          request.session['ErrorMessage'] = "Unable to send confirmation email."
+
+        message = ''
+        error_message = ''
+        if 'Message' in request.session:
+          message = request.session['Message']
+          del request.session['Message']
+
+        if 'ErrorMessage' in request.session:
+          error_message = request.session['ErrorMessage']
+          del request.session['ErrorMessage']
+
+        content['message'] = message
+        content['error_message'] = error_message
+        
+        content.update(csrf(request))
+        if 'target_page' in request.session:
+          render_to_response(request.session[target_page], content)
+
+        return  render_to_response('regconfirmation.html', content)
+      else:
+        content = {'form': form,
+                   'page_title': "Customer Registration",
+                   'error_message': error_msg,
+                   'recaptcha':"https://chart.googleapis.com/chart?chst=d_text_outline&chld=FFCC33|16|h|FF0000|b|%s" %self.GetRecaptcha(request)
+                   }
+
+      content.update(csrf(request))
+      content.update(leftwidget(request))
+      return render_to_response('registration1.html', content)
+
 
 class UpdateAddressActionClass(LoginRequiredMixin,TemplateView):
 
@@ -535,6 +694,19 @@ class GeneralActionClass(LoginRequiredMixin,TemplateView):
             except Exception, e:
                 logging.info('LoginfoMessage:: %s',e)
                 return HttpResponseRedirect('/rmaservice?crmid='+rmaid+'&err=Form Field Errors')
+        elif "action" in request.POST and request.POST['action'] == "addaddressbook":
+            
+            try:
+                s = CustomersAddressbook(contactid = request.session['Customer'].contactid, shipping_firstname = request.POST['shipping_firstname'],
+                                         shipping_lastname = request.POST['shipping_lastname'], shipping_city = request.POST['shipping_city'],
+                                         shipping_state = request.POST['shipping_state'], shipping_zip = request.POST['shipping_zip'],
+                                         shipping_country = request.POST['shipping_country'], shipping_address = request.POST['shipping_address'],
+                                         shipping_address2 = request.POST['shipping_address2'], date_added = datetime.datetime.now())
+                s.save()
+                return HttpResponseRedirect('/addressbook?err=Successfully Updated the Record')
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+                return HttpResponseRedirect('/addressbook?&err=Form Field Errors')
         else:
             return HttpResponseRedirect('/myaccount?err=Form Field Errors')
 
@@ -609,7 +781,7 @@ class AddToCartActionClass(TemplateView):
 
       return HttpResponseRedirect("cartconfirmation?itemid=%d" %item_id)
 
-class CartActionsClass(TemplateView):
+class CartActionsClassolder(TemplateView):
     '''Page Name: /cartaction '''
 
     def get(self, request, *args, **kwargs):
@@ -714,6 +886,118 @@ class CartActionsClass(TemplateView):
       return HttpResponseRedirect('viewcart')
       #return HttpResponse(request.GET)
 
+class CartActionsClass(TemplateView):
+    '''Page Name: /cartaction '''
+
+    def get(self, request, *args, **kwargs):
+
+      cart = CartInfo()
+      cart_dict = request.session['CartItems']
+      if "cmdUpdate" in request.GET:
+        item_id = int(request.GET['itemid'])
+        quantity = int(request.GET['quantity'])
+        # Checking the stock availability
+        #product_list = Products.objects.filter(catalogid = item_id, stock__gt = quantity)
+        cart_dict = cart.Update(cart_dict, item_id, quantity)
+        if cart.IsError:
+          request.session['ErrorMessage'] = cart.Error()
+        else:
+          request.session['CartItems'] = cart_dict
+          
+#        if product_list:
+#          cart_items = request.session["CartItems"]
+#          cart_items[item_id] = quantity
+#          request.session["CartItems"] = cart_items
+#          logging.info("\n\n\n\n\nUpdated. %s\n\n\n\n" %str(cart_items))
+#        else:
+#          request.session['ErrorMessage'] = 'Requested quantity is not avaialable in the store.'
+        
+        #return HttpResponse(request.session["CartItems"][item_id])
+
+      if "cmdDelete" in request.GET:
+        item_id = int(request.GET['itemid'])
+        #quantity = int(request.GET['quantity'])
+        #cart_items = request.session["CartItems"]
+        cart_dict = cart.Delete(cart_dict, item_id)
+        request.session["CartItems"] = cart_dict
+
+      if ("cmdApplyStoreCredit.x" in request.GET or
+          "cmdApplyStoreCredit.y" in request.GET or
+          "cmdApplyStoreCredit" in request.GET):
+
+        tm = time.localtime()
+        sc = StoreCredit()
+        sc.id = int(request.GET['hdnStoreCreditID'])
+        sc.credit_value = float(request.GET['hdnStoreCredit'])
+        request.session['StoreCredit'] = sc
+        
+
+        #request.session['CartInfo'].is_storecredit_applied = True
+        #request.session['CartInfo'].store_credit_id = int(request.GET['hdnStoreCreditID'])
+        #request.session['CartInfo'].store_credit = float(request.GET['hdnStoreCredit'])
+        
+#         store_credit = float(request.GET['hdnStoreCredit'])
+#         order_total = request.session['CartInfo'].order_total
+#         credit_id = int(request.GET['hdnStoreCreditID'])
+#         current_date = datetime.date(tm.tm_year, tm.tm_mon, tm.tm_mday)
+#         obj_list = SwfCustomerCreditsLog.objects.filter(id = credit_id)
+#         obj = obj_list[0]
+# 
+#         if order_total >= store_credit:
+#           debugText = "Order Total is greater than store credit"
+#           request.session['CartInfo'].store_credit = store_credit
+#           order_total = order_total - store_credit
+#           obj.customers_credit = 0
+#         else:
+#           debugText = "Store credit is greater than Order Total"
+#           obj_list = SwfCustomerCreditsLog.objects.filter(id = credit_id)
+#           obj = obj_list[0]
+#           request.session['CartInfo'].store_credit = order_total
+#           store_credit =  store_credit - order_total
+#           order_total = 0
+#           obj.customers_credit = store_credit
+#           debugText += "\nUpdated Store credit of %f for id %d" %(store_credit, credit_id)
+# 
+#           
+#         request.session['CartInfo'].order_total  = order_total
+#         obj.customers_credit_applied = current_date
+#         request.session["StoreCreditObject"] = obj
+            
+      if "cmdApplyCoupon" in request.GET:
+        tm = time.localtime()
+        current_date = datetime.date(tm.tm_year, tm.tm_mon, tm.tm_mday)
+        
+        coupon_code = request.GET['txtCoupon'].strip()
+        promotion_list = Promotions.objects.filter(promotion_enabled = 1, coupon = coupon_code, promotion_start__lte = current_date, promotion_end__gte = current_date)
+                                                   
+        if promotion_list:
+          if 'PromotionalDiscount' in request.session:
+              discounts_hash = request.session['PromotionalDiscount']
+          else:
+              discounts_hash = {}
+
+          if len(promotion_list) > 1:
+            for promotion in promotion_list:
+              product_id = promotion.promotion_product
+              if product_id:
+                discounts_hash[('PromotionalDiscount', 'ProductID', product_id)] = promotion.promotion_amount
+          else:
+            promotion = promotion_list[0]
+            if promotion.by_category:
+              product_cat_list = promotion.by_category.split(',')
+              if promotion.promotion_freeshipping == 1:
+                for cat_id in product_cat_list:
+                  if cat_id:  
+                    discounts_hash[('FreeShipping', 'ProductCategory', int(cat_id))] = 0
+          
+          request.session['CouponCode'] = coupon_code
+          request.session['PromotionalDiscount'] = discounts_hash
+        else:
+          request.session['ErrorMessage'] = 'Coupon Not found or expired.'
+
+      return HttpResponseRedirect('viewcart')
+      #return HttpResponse(request.GET)
+
 class PaypalStatusActionClass(TemplateView):
 
    def get(self, request, *args, **kwargs):
@@ -778,7 +1062,7 @@ class UpdateAddressInSession(TemplateView):
     return HttpResponseRedirect("/orderconfirmation")
         
       
-class CommitOrderActionClass(TemplateView):
+class CommitOrderActionClassolder(TemplateView):
 
   def post(self, request, *args, **kwargs):
     logging.info('\n\nEntered into Commit Order Page')
@@ -1103,3 +1387,261 @@ class CommitOrderActionClass(TemplateView):
       html = html[0:-2]
       request.session['ErrorMessage'] = 'Please fill mandatory fields. %s' %html
     return HttpResponseRedirect('/orderconfirmation')
+
+class CommitOrderActionClass(TemplateView):
+
+  def post(self, request, *args, **kwargs):
+    logging.info('\n\nEntered into Commit Order Page')
+    content = {}
+
+    is_login = False;
+    is_guest = False;
+    is_save_card = False;
+    gateway = ''
+    #if form.is_valid():
+    #  return HttpResponse("Form is Valid")
+    #else:
+    #  return HttpResponse("Form is not Valid")
+
+    if 'IsLogin' in request.session:
+      if request.session['IsLogin']:
+        is_login = True;
+        is_guest = False;
+
+    if 'IsGuest' in request.session:
+      if request.session['IsGuest'] and not is_login:
+        is_guest = True;
+        
+    # If there is no login and no guest, then redirect to checkoutlogin page.
+    if not is_login and not is_guest:
+      return HttpResponseRedirect('/checkoutlogin')
+        
+    if 'gateway' in request.GET:
+      request.session['PaymentGateway'] = request.GET['gateway']
+      gateway = request.GET['gateway']
+      
+    if 'PaymentGateway' in request.session:
+      gateway = request.session['PaymentGateway']
+
+    data = request.POST 
+    if is_login:
+      if gateway == 'paypal':
+        form = PaypalOrderFormLoggedIn(data)
+      elif gateway == 'AUTHORIZENET':
+        customer = request.session['Customer']
+        form = AuthorizeNetFormLoggedIn(data, card_list = GetCreditCardList(customer.contactid))
+      elif gateway == 'None':
+        form = NoGateWay(data)
+    elif is_guest:
+      if gateway == 'paypal':
+        form = PaypalOrderFormNoLogin(data, card_list = [])
+      elif gateway == 'AUTHORIZENET':
+        form = AuthorizeNetFormNoLogin(data, card_list = [])
+      customer = None   
+    
+    if form.is_valid():
+      # If gust, we should save the customer information with login credentials and then continue.
+      if is_login: 
+        customer = request.session['Customer']        
+      elif is_guest:
+        customer = customers()
+        customer.email = form.cleaned_data['username'].strip()
+        customer.pass_field = form.cleaned_data['password'].strip()
+
+      customer.shipping_firstname = form.cleaned_data['shipping_first_name'].strip()
+      customer.shipping_lastname = form.cleaned_data['shipping_last_name'].strip()
+      customer.shipping_address = form.cleaned_data['shipping_address1'].strip()
+      customer.shipping_address2 = form.cleaned_data['shipping_address2'].strip()
+      customer.shipping_city = form.cleaned_data['shipping_city'].strip()
+      customer.shipping_state = form.cleaned_data['shipping_state'].strip()
+      customer.shipping_zip = form.cleaned_data['shipping_zip'].strip()
+      customer.shipping_company = form.cleaned_data['shipping_company'].strip()
+      phone_part1 = form.cleaned_data['shipping_phone_part1'].strip()
+      phone_part2 = form.cleaned_data['shipping_phone_part2'].strip()
+      phone_part3 = form.cleaned_data['shipping_phone_part3'].strip()
+      customer.shipping_phone = phone_part1 + phone_part2 + phone_part3
+      
+      isBillingAddressSame = False
+      if "IsBillingAddressSame" in request.POST:
+         isBillingAddressSame = True
+
+      if isBillingAddressSame:
+        customer.billing_firstname = customer.shipping_firstname
+        customer.billing_lastname = customer.shipping_lastname
+        customer.billing_address = customer.shipping_address
+        customer.billing_address2 = customer.shipping_address2
+        customer.billing_city = customer.shipping_city
+        customer.billing_state = customer.shipping_state
+        customer.billing_zip = customer.shipping_zip
+        customer.billing_phone = customer.shipping_phone
+      else:
+        customer.billing_firstname = form.cleaned_data['billing_first_name'].strip()
+        customer.billing_lastname = form.cleaned_data['billing_last_name'].strip()
+        customer.billing_address = form.cleaned_data['billing_address1'].strip()
+        customer.billing_address2 = form.cleaned_data['billing_address2'].strip()
+        customer.billing_city = form.cleaned_data['billing_city'].strip()
+        customer.billing_state = form.cleaned_data['billing_state'].strip()
+        customer.billing_zip = form.cleaned_data['billing_zip'].strip()
+        phone_part1 = form.cleaned_data['billing_phone_part1'].strip()
+        phone_part2 = form.cleaned_data['billing_phone_part2'].strip()
+        phone_part3 = form.cleaned_data['billing_phone_part3'].strip()
+        customer.billing_phone = phone_part1 + phone_part2 + phone_part3
+
+      customer.custenabled = 1
+      customer.save() 
+        
+
+      shipping_method_hash = request.session['ShippingMethod']
+
+      cart = request.session['CartInfo']
+
+      #html = ""
+      #for key, value in request.POST.items():
+      #  html += "%s -> %s<br>" %(key, value)
+ 
+      # Collecting User Selected Data in Shipping Methods
+      data_hash = {}
+      for key, vaue in shipping_method_hash.items():
+        if 'OverNightShipping%d' %key  in request.POST:
+          data_hash['OverNightShipping'] = request.POST['OverNightShipping%d' %key]
+          overnight_shipping_value = GetPriorityShippingCharge(key)
+          cart.order_total += overnight_shipping_value
+          data_hash['Over Night Shipping'] = overnight_shipping_value
+            
+        if 'HoldPackageAtFedex' in request.POST:
+          data_hash['HoldPackageAtFedex'] = request.POST['HoldPackageAtFedex']
+
+        if 'HoldPackageAtFedex' in request.POST:
+          data_hash['HoldPackageAtFedex'] = request.POST['HoldPackageAtFedex'] 
+
+        if 'ReqDeliveryDate%d' %key in request.POST:
+          data_hash['ReqDeliveryDate'] = request.POST['ReqDeliveryDate%d' %key]
+          if len(data_hash['ReqDeliveryDate'].strip()) > 0:
+            if time.strptime(data_hash['ReqDeliveryDate'], "%m/%d/%Y").tm_wday == 5:
+              sat_delivery_value = GetSaturdayShippingCharge(key)
+              data_hash['Saturday Delivery'] = sat_delivery_value
+              cart.order_total += sat_delivery_value 
+
+        shipping_method_hash[key] = data_hash
+      
+      #for key, value in shipping_method_hash.items():
+      #  html += "%s -> %s<br>" %(key, value)
+        
+      #html += "<br><b>" + str(cart.order_total) + "</b>" 
+
+      #return HttpResponse(html)
+    
+      request.session['CartInfo'] = cart
+      request.session['ShippingMethod'] = shipping_method_hash 
+      request.session['OrderComment'] = form.cleaned_data['comment'].strip()
+     
+      if is_guest:
+        customer = customers.objects.all().latest('contactid')
+        request.session['Customer'] = customer
+        request.session['IsLogin'] = True
+        del request.session['GuestEMail']
+        is_login = True
+        is_guest = False
+
+      if is_login and gateway == 'AUTHORIZENET':
+        previous_card = form.cleaned_data['previous_cards']
+        if not previous_card: 
+          card_holder_name = form.cleaned_data['card_holder_name'].strip()
+          card_number = form.cleaned_data['card_number'].strip()
+          card_type = form.cleaned_data['card_type'].strip()
+          card_expdate = form.cleaned_data['card_expdate'].strip()
+          card_cvn = form.cleaned_data['card_cvn'].strip()
+          is_save_card = form.cleaned_data['is_save_card']
+                  
+          # Authenticating Card Number
+          card = CreditCard(
+              number = card_number,
+              month = card_expdate.split('/')[0],
+              year = '20%s' %card_expdate.split('/')[1],
+              first_name = card_holder_name.split(' ')[0],
+              last_name = card_holder_name.split(' ')[1],
+              code = card_cvn
+          )
+        else:
+          is_save_card = False
+          orders = Orders.objects.all().filter(ocardno = previous_card)[0]
+          number = orders.ocardno
+          month = orders.ocardexpiresmonth
+          year = orders.ocardexpiresyear
+          first_name = orders.ocardname.split(' ')[0]
+          last_name = orders.ocardname.split(' ')[1]
+          code = orders.ocardverification        
+          card = CreditCard(
+              number = orders.ocardno,
+              month = orders.ocardexpiresmonth,
+              year = orders.ocardexpiresyear,
+              first_name = orders.ocardname.split(' ')[0],
+              last_name = orders.ocardname.split(' ')[1],
+              code = orders.ocardverification
+          )
+
+        gateway = AimGateway(settings.AUTHORIZENET_API_LOGIN_ID, settings.AUTHORIZENET_API_PASSWORD)
+        gateway.use_test_mode = settings.TEST_MODE
+        gateway.use_test_url = settings.TEST_MODE_URL
+        response = gateway.authorize(1, card)
+        #return HttpResponse("<h1>Done</h1>")
+        
+        if response.status_strings[response.status] == "Approved":
+          response = gateway.sale("%8.2f" %cart.order_total, card)
+          if response.status_strings[response.status] == "Approved":
+            if is_save_card:
+              # This will trigger the save credit card option in Call Back Code.
+              request.session['CreditCard'] = card.__dict__
+            return HttpResponseRedirect(settings.CALLBACK_URL + '?tx=%s&st=Approved&amt=%s&cc=USD&item_number=' %(response.trans_id,
+                                                                                                                  "%8.2f" %request.session['CartInfo'].order_total))
+          else:
+            request.session['ErrorMessage'] =  "<h5>%s - %s: %s</h5>" %(response.trans_id, response.status_strings[response.status], response.message)
+        else:
+          request.session['ErrorMessage'] =  "%s - %s: %s" %(response.trans_id, response.status_strings[response.status], response.message)
+        return HttpResponseRedirect('/orderconfirmation')    
+
+      elif is_login and gateway == 'paypal':
+          return  HttpResponseRedirect('/paypalredirection')  
+      elif is_login and gateway == 'None':
+          #obj = request.session["StoreCredit"]
+          #obj.save()
+          tx = "SC%s" %datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
+          amount = request.session["CartInfo"].store_credit
+          return HttpResponseRedirect(settings.CALLBACK_URL + '?tx=%s&st=Approved&amt=%s&cc=USD&item_number=' %(tx, amount))
+
+    else:
+      html = ""
+      for key, value in form.errors.items():
+        html += "%s, " %(key)
+      
+      html = html[0:-2]
+      request.session['ErrorMessage'] = 'Please fill mandatory fields. %s' %html
+    return HttpResponseRedirect('/orderconfirmation')
+
+
+class AddReefPackagesActionClass(TemplateView):
+  '''Page Name: Reef Packages'''
+  def post(self, request, *args, **kwargs):
+    html = "Hi<br>"
+    item_count = len(request.POST)
+    #for key, value in   
+
+    if 'CartItems' not in request.session:
+      cart_dict = {}
+      request.session['CartItems'] = cart_dict
+    else:
+      cart_dict = request.session['CartItems']
+
+    for i in range(1, item_count):
+      if "quantity%d" %i in request.POST:
+        #html += "%s -  %s<br>" %(request.POST["catalogid%s" %i], request.POST["quantity%s" %i])
+        quantity = request.POST["quantity%s" %i]
+        if quantity:
+          item_id = int(request.POST["catalogid%s" %i])
+          quantity = int(quantity)
+          #html += "%s - %s<br>" %(item_id, quantity)
+          cart = CartInfo()
+          cart_dict = cart.AddReef(cart_dict, item_id, quantity)
+
+    request.session['CartItems'] = cart_dict
+    return HttpResponseRedirect("/viewcart")

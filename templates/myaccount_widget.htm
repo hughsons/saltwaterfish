@@ -76,16 +76,16 @@ My Account
 {% else %}
 <form name="form" id="form" action="custlogin" method="post">
 {% csrf_token %}
-<div class="my-account " style="height:100%;min-height:230px;">
+<div class="my-account " style="height:100%;min-height:160px;">
 <div class="height23 clr">&nbsp;&nbsp;</div>
 <div class="redtext">{{ error_message }}</div>
 <div class=" " >{{ LoginForm.username }}</div>
 <div class="height12 clr">&nbsp;&nbsp;</div>
 <div class=" " >{{ LoginForm.password }}</div>
-<div class="height12 clr">&nbsp;&nbsp;</div>
+{%comment%}<div class="height12 clr">&nbsp;&nbsp;</div>
 <div class=" " ><img src="{{ recaptcha }}" /></div>
 <div class="height12 clr">&nbsp;&nbsp;</div>
-<div class=" " >{{ LoginForm.recaptcha }}</div>
+<div class=" " >{{ LoginForm.recaptcha }}</div>{%endcomment%}
 <div class="height12 clr">&nbsp;&nbsp;</div>
 <div class="wid187 clr">
 <div class="float-left"><input type=image src="misc/images/sign-in.jpg" width="77" height="21" border="0" /></div>
@@ -127,7 +127,7 @@ My Account
 		{%endfor%}
 		</td>
 		</tr>
-		<tr><td  class="float_right padright10">Total:&nbsp;&nbsp;<strong>${{total_fines|floatformat:2}}</strong></td></tr>
+		<tr><td  class="float_right padright10">Total:&nbsp;&nbsp;<strong>${{request.session.CartInfo.order_total|floatformat:2}}</strong></td></tr>
 		<tr><td align=center> <a href="/viewcart"><img src="misc/images/view_cart.jpg" border="0" /></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/checkoutlogin"><img src="misc/images/chk_out.jpg" border="0" /></a> </td></tr>
 		</table>
  		
@@ -194,10 +194,10 @@ Resources
 
 
 </div>
-<!--<div class="wid187 clr padtop10">
+ <div class="wid187 clr padtop10">
 <div class="float-left padtop3"><img src="misc/images/arrow.jpg" width="15" height="12" border="0" /></div>
-<div class="float-left"><a href="saltwater.htm"  >SaltWater Fish School </a></div>
-</div>-->
+<div class="float-left"><a href="/fishschool"  >SaltWater Fish School </a></div>
+</div> 
 
 </div>
 

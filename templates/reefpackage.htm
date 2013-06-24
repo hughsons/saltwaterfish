@@ -1,9 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
- 
 <link type="text/css" rel="stylesheet" href="/misc/sty.css" />
 <link type="text/css" rel="stylesheet" href="/misc/css3/style.css" />
-
 <script>
 $(document).ready(function(){
 	
@@ -27,172 +25,164 @@ $(document).ready(function(){
 	
 });
 </script>
-{% load tagsfilter %} 
+{% load tagsfilter %}
 <div class="float-left wid20">&nbsp;&nbsp;</div>
 <div class="float-left wid725">
-<div class="clr">
-<div class="clr pad-tb reef_package_link"><a href="#">Home</a> &gt; <a href="#">Search</a> &gt; <a href="#">Create A Reef Package</a> </div>
-<div class="clr blue_heading1 reef_package_link">Create A Reef Package - No Additional Shipping Cost </div>
-<div class="clr pad-tb reef_package_link">
-<p>Add the items to your Tank from the list below with $75.00 or more worth and we'll ship them to you at no additional shipping charge. When you select the item and the quantity the page will automatically totalize your order.   You can place any items on this page into the yourReef Package and add other items after you have exceeded he minimum quota. *Shipping charges will still be assessed to any other items ordered. You can not use items not on this page to fulfill your minimum quota of $75.   </p>
-</div>
-<div class="clr">
-<div class="float_left padtop10">
-<strong>Your Reef Package Total:</strong> <span class="orange_text"><strong>$<span id=totalamt>0.00</span></strong></span>
-</div>
-<div class="float_left padleft30"><a href="#"><img src="misc/images/add_tank.png" width="260" height="35" border="0"></a></div>
-</div>
-<div class="clr padtop20 padbottom20 reef_package_link">Please note: <span class="orange_text"><strong>Due to variations within species, your item may not look identical to the image provided.</strong></span></div>
-
-<form method="post" action="#" name="formsss" id="formsss">
-				{% csrf_token %}
-					<input type="hidden" name="itemid[]" value="{{products.catalogid}}">
-<div class="clr">
-<table  width="700" border="0" cellpadding="3" cellspacing="1" >
-<tr>
-{% for products in 2|productsdisplay %}
-{% if forloop.counter0|divisibleby:3 %}<tr>{% endif %}
-<td ><div class="float_left orange_boxs" align="center" style="width:70% !important;margin-right: 10px;min-height:276px !important;">
-<div class="clr product_heading product-align"><a href="/product?pid={{products.catalogid}}" class="product_heading">{{ products.name }}</a></div>
-<div class="clr product-align pad-tb">{{ products.description }}</div>
-<div class="clr padtop10 padbottom10"><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.thumbnail|strreplace:"assets/images/" }}'></div>
-<div class="clr orange_text"><strong>Price :{% if products.onsale > 0 %}
-					${{products.saleprice|floatformat:2}}<input type="hidden" value="{{products.saleprice|floatformat:2}}" name="priced[]" id="priced" size="1">
-				{% else %}
-					${{products.price|floatformat:2}}<input type="hidden" value="{{products.price|floatformat:2}}" name="priced[]" id="priced" size="1">
-				{% endif %}</strong></div>
-<div class="price_box">
-<div class="clr">
-<div class="float_left blue_text"><strong>Qty.:</strong></div>
-<div class="float_right"><input type="text" value="" name="quantity[]" id="quantity" size="1"></div>
-<div class="clr"></div>
-</div>
-<div class="clr">
-<div class="float_left blue_text"><strong>Cost:</strong></div>
-<div class="float_right"><span class="dollar">$</span>
-  <input type="text" value="" size="1" readonly></div>
-<div class="clr"></div>
-</div>
-</div>
-<div class="clr pad-tb"><div class="more_blue"><a href="/product?pid={{products.catalogid}}">More Details</a></div></div>
-</div></td>
-{% if forloop.counter|divisibleby:3 %}</tr>{% endif %}
-{% endfor %}
-</table>
-
- 
- 
-
- 
- 
- 
-
-<div class="clr padtop50">
-<div class="float_left padtop10">
-<strong>Your Reef Package Total:</strong> <span class="orange_text"><strong>$0.00</strong></span>
-</div>
-<div class="float_left padleft30"><a href="#"><img src="misc/images/add_tank.png" width="260" height="35" border="0"></a></div>
-</div>
-<div class="clr">&nbsp;</div>
-</form>
-
-</div>
-{%comment%}
-<div class="clr">
-<div class="clr pad-tb product-align1 marleft10 master-link"><a href="/">Home</a> > <a href="#" class="master-link">Marine Life </a> > <a href="/category?id={{cat.category_parent}}">Saltwater Fish </a> > <a href="/category?id={{cat.id}}">{{cat.category_name}} </a></div>
-<div class="clr">
-<div class="button"><a href="/category?id={{cat.id}}">{{cat.category_name}} </a></div>
-</div>
-<div class="clr pad-tb marleft10" align="justify">
-<p>{{cat.category_header|safe}}</p>
-</div>
-<div class="clr">
-<div class="button"><a href="#">Featured Products</a></div>
-</div>
-<div class="clr padtop20 padbottom20">
-<div class="clr">
-
-{% for products in cat.id|productsdisplay %}
-	 {% if products.categoryspecial >= 1 %}
-		<div class="float_left orange_boxs " align="center" style="width:26% !important;min-height:266px !important;">
-		<div class="clr product_heading product-align">{{ products.name }}</div>
-		<div class="clr product-align">{{ products.description }}</div>
-		<div class="clr pad-tb"><span class="clr "><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.thumbnail|strreplace:"assets/images/" }}' width="125" height="125" /></span></div>
-		
-				{% if products.onsale > 0 %}
-					<div class="clr "><strong>Sale:&nbsp;</strong><span class="line-through">${{products.price|floatformat:2}}&nbsp;</span><strong class="orange_text">&nbsp;${{products.saleprice|floatformat:2}}</strong></div>
-				{% else %}
-					<div class="clr "><strong>&nbsp;${{products.price|floatformat:2}}</strong></div>
-				{% endif %}
-		
-
-
-		<div class="clr pad-tb" style="width:200px !important">
-				{% if products.stock >= 1 %}
-					<div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
-				{% else %}
-					<div class="wish-button"><a href="/addtowatchlist?itemid={{ products.catalogid }}">WISH LIST</a></div>
-				{% endif %}
-		<div class="hash-button"><a href="#">more details...</a></div>
-		</div>
-		</div>
-	{% endif %}
-{% endfor %}
-
-
-
-
-
-
-</div>
-<div class="clr"></div>
-</div>
-</div>
-<div class="clr wid748" align="left"><div class="heading_bg1" align="center">{{cat.id|productsdisplay|length}} {{cat.category_name}}</div></div>
-
-<div class="clr padtop20 padbottom20">
-<div class="clr">
-
-{% for products in cat.id|productsdisplay %}
-<div class="float_left blue_boxs" align="center"  style="width:26% !important;min-height:266px !important;">
-<div class="clr product_heading product-align">{{ products.name }}</div>
-<div class="clr  product-align">{{ products.description }}&nbsp;</div>
-<div class="clr pad-tb"><span class="clr "><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.thumbnail|strreplace:"assets/images/" }}' width="125" height="125" /></span></div>
-				{% if products.onsale > 0 %}
-					<div class="clr "><strong>Sale:&nbsp;</strong><span class="line-through">${{products.price|floatformat:2}}&nbsp;</span><strong class="orange_text">&nbsp;${{products.saleprice|floatformat:2}}</strong></div>
-				{% else %}
-					<div class="clr "><strong>&nbsp;${{products.price|floatformat:2}}</strong></div>
-				{% endif %}
-
-<div class="clr pad-tb" style="width:200px !important">
-				{% if products.stock >= 1 %}
-					<div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
-				{% else %}
-					<div class="wish-button"><a href="/addtowatchlist?itemid={{ products.catalogid }}">WISH LIST</a></div>
-				{% endif %}
- <div class="hash-button"><a href="#">more details...</a></div>
-</div>
-</div>
-{% endfor %}
-
- 
- 
- 
-
- 
- 
- 
-
- <div class="clr"></div>
-</div>
-
- 
-
-
-</div>
-
-{%endcomment%}</div>
+  <div class="clr">
+    <div class="clr pad-tb reef_package_link"><a href="#">Home</a> &gt; <a href="#">Search</a> &gt; <a href="#">Create A Reef Package</a> </div>
+    <div class="clr blue_heading1 reef_package_link">Create A Reef Package - No Additional Shipping Cost </div>
+    <div class="clr pad-tb reef_package_link">
+      <p>Add the items to your Tank from the list below with $75.00 or more worth and we'll ship them to you at no additional shipping charge. When you select the item and the quantity the page will automatically totalize your order.   You can place any items on this page into the yourReef Package and add other items after you have exceeded he minimum quota. *Shipping charges will still be assessed to any other items ordered. You can not use items not on this page to fulfill your minimum quota of $75. </p>
+    </div>
+    <form method="post" action="AddReefPackages" name="formsss" id="formsss">
+      {% csrf_token %}
+    <div class="clr">
+      <div class="float_left padtop10"> <strong>Your Reef Package Total:</strong> <span class="orange_text"><strong>$<span id="TotalCost1"></span></strong></span> </div>
+      <div class="float_left padleft30">
+        <input type="image" src="misc/images/add_tank.png" width="260" height="35" border="0">
+        </div>
+    </div>
+    <div class="clr padtop20 padbottom20 reef_package_link">Please note: <span class="orange_text"><strong>Due to variations within species, your item may not look identical to the image provided.</strong></span></div>
+      <input type="hidden" name="itemid[]" value="{{products.catalogid}}">
+      <div class="clr">
+      <table  width="700" border="0" cellpadding="3" cellspacing="1" >
+        <tr> {% for products in 2|productsdisplay %}
+          {% if forloop.counter0|divisibleby:3 %}
+        <tr>{% endif %}
+          <td ><div class="float_left orange_boxs" align="center" style="width:70% !important;margin-right: 10px;min-height:276px !important;">
+              <div class="clr product_heading product-align"><a href="/product?pid={{products.catalogid}}" class="product_heading">{{ products.name }}</a></div>
+              <div class="clr product-align pad-tb">{{ products.description }}</div>
+              <div class="clr padtop10 padbottom10"><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.thumbnail|strreplace:"assets/images/" }}'></div>
+              <div class="clr orange_text"><strong>Price :{% if products.onsale > 0 %}
+                ${{products.saleprice|floatformat:2}}
+                <input type="hidden" value="{{products.saleprice|floatformat:2}}" name="price{{forloop.counter}}" id="priced" size="1">
+                {% else %}
+                ${{products.price|floatformat:2}}
+                <input type="hidden" value="{{products.price|floatformat:2}}" name="price{{forloop.counter}}" id="priced" size="1">
+                {% endif %}</strong></div>
+              <div class="price_box">
+                <div class="clr">
+                  <div class="float_left blue_text"><strong>Qty.:</strong></div>
+                  <div class="float_right">
+                    <input type="text" value="" name="quantity{{forloop.counter}}" id="quantity" size="3"  onChange="CalculateSum()">
+                  </div>
+                  <div class="clr"></div>
+                </div>
+                <div class="clr">
+                  <div class="float_left blue_text"><strong>Cost:</strong></div>
+                  <div class="float_right"><span class="dollar">$</span>
+                    <input type="text" name="NetPrice{{forloop.counter}}" value="" size="3" readonly>
+                  </div>
+                  <div class="clr"></div>
+                </div>
+              </div>
+              <div class="clr pad-tb">
+                <div class="more_blue">
+                  <input type="hidden" name="catalogid{{forloop.counter}}" value={{products.catalogid}} />
+                  <a href="/product?pid={{products.catalogid}}">More Details</a> </div>
+              </div>
+            </div></td>
+          {% if forloop.counter|divisibleby:3 %}</tr>
+        {% endif %}
+        {% endfor %}
+      </table>
+      <div class="clr padtop50">
+        <div class="float_left padtop10"> <strong>Your Reef Package Total:</strong><span class="orange_text"><strong>$<span id="TotalCost2"></span></strong></span> </div>
+        <div class="float_left padleft30"><a href="#"><img src="misc/images/add_tank.png" width="260" height="35" border="0"></a></div>
+      </div>
+      <div class="clr">&nbsp;</div>
+    </form>
+  </div>
+  {%comment%}
+  <div class="clr">
+    <div class="clr pad-tb product-align1 marleft10 master-link"><a href="/">Home</a> > <a href="#" class="master-link">Marine Life </a> > <a href="/category?id={{cat.category_parent}}">Saltwater Fish </a> > <a href="/category?id={{cat.id}}">{{cat.category_name}} </a></div>
+    <div class="clr">
+      <div class="button"><a href="/category?id={{cat.id}}">{{cat.category_name}} </a></div>
+    </div>
+    <div class="clr pad-tb marleft10" align="justify">
+      <p>{{cat.category_header|safe}}</p>
+    </div>
+    <div class="clr">
+      <div class="button"><a href="#">Featured Products</a></div>
+    </div>
+    <div class="clr padtop20 padbottom20">
+      <div class="clr"> {% for products in cat.id|productsdisplay %}
+        {% if products.categoryspecial >= 1 %}
+        <div class="float_left orange_boxs " align="center" style="width:26% !important;min-height:266px !important;">
+          <div class="clr product_heading product-align">{{ products.name }}</div>
+          <div class="clr product-align">{{ products.description }}</div>
+          <div class="clr pad-tb"><span class="clr "><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.thumbnail|strreplace:"assets/images/" }}' width="125" height="125" /></span></div>
+          {% if products.onsale > 0 %}
+          <div class="clr "><strong>Sale:&nbsp;</strong><span class="line-through">${{products.price|floatformat:2}}&nbsp;</span><strong class="orange_text">&nbsp;${{products.saleprice|floatformat:2}}</strong></div>
+          {% else %}
+          <div class="clr "><strong>&nbsp;${{products.price|floatformat:2}}</strong></div>
+          {% endif %}
+          <div class="clr pad-tb" style="width:200px !important"> {% if products.stock >= 1 %}
+            <div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
+            {% else %}
+            <div class="wish-button"><a href="/addtowatchlist?itemid={{ products.catalogid }}">WISH LIST</a></div>
+            {% endif %}
+            <div class="hash-button"><a href="#">more details...</a></div>
+          </div>
+        </div>
+        {% endif %}
+        {% endfor %} </div>
+      <div class="clr"></div>
+    </div>
+  </div>
+  <div class="clr wid748" align="left">
+    <div class="heading_bg1" align="center">{{cat.id|productsdisplay|length}} {{cat.category_name}}</div>
+  </div>
+  <div class="clr padtop20 padbottom20">
+    <div class="clr"> {% for products in cat.id|productsdisplay %}
+      <div class="float_left blue_boxs" align="center"  style="width:26% !important;min-height:266px !important;">
+        <div class="clr product_heading product-align">{{ products.name }}</div>
+        <div class="clr  product-align">{{ products.description }}&nbsp;</div>
+        <div class="clr pad-tb"><span class="clr "><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.thumbnail|strreplace:"assets/images/" }}' width="125" height="125" /></span></div>
+        {% if products.onsale > 0 %}
+        <div class="clr "><strong>Sale:&nbsp;</strong><span class="line-through">${{products.price|floatformat:2}}&nbsp;</span><strong class="orange_text">&nbsp;${{products.saleprice|floatformat:2}}</strong></div>
+        {% else %}
+        <div class="clr "><strong>&nbsp;${{products.price|floatformat:2}}</strong></div>
+        {% endif %}
+        <div class="clr pad-tb" style="width:200px !important"> {% if products.stock >= 1 %}
+          <div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
+          {% else %}
+          <div class="wish-button"><a href="/addtowatchlist?itemid={{ products.catalogid }}">WISH LIST</a></div>
+          {% endif %}
+          <div class="hash-button"><a href="#">more details...</a></div>
+        </div>
+      </div>
+      {% endfor %}
+      <div class="clr"></div>
+    </div>
+  </div>
+  {%endcomment%}</div>
 <div class="float-left"></div>
+</div>
+</div>
+<script language="javascript">
+function  CalculateSum()
+{
+   //var form = document.getElementById('ReefPackagesForm');
+   itemid_list = document.querySelectorAll('[name^="catalogid"]');
+   qty_list = document.querySelectorAll('[name^="quantity"]');
+   price_list = document.querySelectorAll('[name^="price"]');
+   cost_list = document.querySelectorAll('[name^="NetPrice"]');
+   TotalCost = document.querySelectorAll('#TotalCost')[0];
+      
+   var sum = 0
+   for(var i = 0; i < itemid_list.length; i++)
+   {
+      var netprice = parseInt(qty_list[i].value) * parseFloat(price_list[i].value);
+	  if (!isNaN(netprice))
+	  {
+        cost_list[i].value = netprice;
+	    sum  += netprice;
+	  }
+   }
 
-</div></div>
+   TotalCost1.innerText = parseFloat(sum).toFixed(2);   
+   TotalCost2.innerText = parseFloat(sum).toFixed(2);
+}
+</script>
 {% endblock content %}
