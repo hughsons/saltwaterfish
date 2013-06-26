@@ -99,7 +99,7 @@ class CartConfirmClass(TemplateView):
       html += "%s =>" %key + str(item.quantity) + "<br>"
       item_count += item.quantity
       item.CalculateTotals()
-      sub_total += to_decimal(item.subtotal)
+      sub_total += item.subtotal
 
     #return HttpResponse(html)
 #    item = Products.objects.filter(catalogid=item_id)[0]

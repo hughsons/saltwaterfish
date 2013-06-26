@@ -1,4 +1,4 @@
- 
+{% extends 'base.html' %}
 {% block content %}
 {% load tagsfilter %}
  
@@ -154,10 +154,7 @@ $(function() {
 		}	
 </style>
 <div class="float-left width4">&nbsp;&nbsp;</div>
-<div class="float-left wid748" style="width:712px !important;">
-{% if error_message %}
-<div class='alert-danger alert-error' style='width:300px;'><button data-dismiss='alert' class='close' type='button'>*</button><h5>Error! {{error_message}}</h5></div>
-{% endif %}
+<div class="float-left wid748">
 <div class="clr">
 <div class="clr">&nbsp;</div>
 
@@ -176,14 +173,14 @@ $(function() {
 </div>
 <div class="cart_right">
 <div class="clr">
-<div class="close"><a href="##" class="b-close">Close<span><img src="misc/images/close_button.png" width="25" height="25" /></a></span></div>
+<div class="close">Close<span><img src="misc/images/close_button.png" width="25" height="25" /></span></div>
 </div>
 <div class="clr card1_txt_right">
 Your Cart Contains {{ItemCount}} items<br />
 <span class="price-final">Order Subtotal: ${{OrderSubTotal|floatformat:2}}</span>
 </div>
 <div class="button_top float-right">
-<div class="blue-button-cart float-right"><a href="##" class="b-close">Continue Shopping</a></div>
+<div class="blue-button-cart float-right"><a href="/productindex">Continue Shopping</a></div>
  
 <div class="height9 clr float-right" style="width: 100%;">&nbsp;</div>
 <div class="blue-button-cart"><a href="/viewcart">View Cart &amp; checkout</a></div>

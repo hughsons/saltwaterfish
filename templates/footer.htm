@@ -81,14 +81,30 @@ Copyright 2013 Saltwaterfish.com  All Rights Reserved</div>
 </div>
 </div>
 </div>
+<script language="javascript" type="text/javascript" src="/misc/js/imagetooltip.js"></script>
+ <script language="javascript" type="text/javascript" src="/misc/js/jquery.bpopup.min.js"></script>
+ 
+<script type="text/javascript">
+	;(function($) {
+         $(function() {
+            $('.pop1').bind('click', function(e) {
+                e.preventDefault();
+				var a_href = $(this).attr('id');
+				$("#contentss").load(a_href);
+                $('#popup').bPopup({
+				});
+			});
+			 
+        });
 
+    })(jQuery);
 
+</script>
 
-</body>
-</html>
-<!-- Place this tag where you want the +1 button to render. -->
-
-
+<div id="popup" style="left: -700px; position: absolute; top: 1177px; z-index: 9999; opacity: 1; display: none;min-height:200px;">
+        
+        <div id="contentss" style="height: auto; width: auto;"><img src="misc/images/ajax_loader.gif"></div>
+</div>
 <!-- Place this tag after the last +1 button tag. -->
 <script type="text/javascript">
   (function() {
@@ -97,3 +113,8 @@ Copyright 2013 Saltwaterfish.com  All Rights Reserved</div>
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
   })();
 </script>
+</body>
+</html>
+<!-- Place this tag where you want the +1 button to render. -->
+
+

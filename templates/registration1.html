@@ -45,8 +45,9 @@ input[type="text"] {
 <div class="float-left width10">&nbsp;&nbsp;</div>
 <div class="float-left wid500 padleft5">
   <div class="clr">&nbsp;&nbsp;</div>
-  <div class="clr login_heading" align="left">Customer Billing  Address &  Login</div>
+  <div class="clr login_heading" align="left">Customer Registration New Account</div>
   <div class="clr">&nbsp;&nbsp;</div>
+  {%comment%}
   <div class="clr card1_txt_right-new " align="left">Returning Customer? Please enter your credentials and use the  LOGIN button.</div>
   <div class="clear padtop20 padleft30">
   <form name="form" id="form" action="/custlogin" method="post">
@@ -65,13 +66,15 @@ input[type="text"] {
   <div class="clr padtop20 padleft100 wid200"  align="right" style="width:170px !important" >
     <input type=submit width="77" height="21" border="0" class="button33" value="Login" style="background-color:#01AED6;" /> </form>
   </div>
+   {%endcomment%}
+     <div class="clear padtop10 padleft30">
   <form name="CustomerRegistration" method="post" action="/registeruser">
   {% csrf_token %} 
   {% if message or error_message %}
       <p class="greentext">{{ message }} <span class="redtext">{{ error_message }}</span></p>
       {% endif %}
-    <div class="float-left wid500 padtop20">
-      <div class="clr padtop40 card1_txt_right-new padleft20" align="left">New Customer? Create your Saltwaterfish.com account and continue below.<br />
+    <div class="float-left wid500 padtop5">
+      <div class="clr padtop40 card1_txt_right-new padleft5" align="left">New Customer? Create your Saltwaterfish.com account and continue below.<br />
         Creating a login profile with Saltwaterfish.com allows you to shop faster, track the status of your</div>
       <div class="clear padtop20 padleft30">
         <div class="float-left  martop5 wid200 card1_txt_right-new" align="right">Email :</div>
@@ -117,7 +120,59 @@ input[type="text"] {
       </div>
       <div class="clear padtop20 padleft30">
         <div class="float-left  martop5 wid200 card1_txt_right-new" align="right">State :</div>
-        <div class="float-left padleft7"> {{ form.billing_state }}
+        <div class="float-left padleft7"> <select id="id_billing_state" name="billing_state">
+		<option value="" selected="selected">Select State</option>
+<option value="AL">Alabama</option>
+<option value="AK">Alaska</option>
+<option value="AZ">Arizona</option>
+<option value="AR">Arkansas</option>
+<option value="CA">California</option>
+<option value="CO">Colorado</option>
+<option value="CT">Connecticut</option>
+<option value="DE">Delaware</option>
+<option value="FL">Florida</option>
+<option value="GA">Georgia</option>
+<option value="HI">Hawaii</option>
+<option value="ID">Idaho</option>
+<option value="IL">Illinois</option>
+<option value="IN">Indiana</option>
+<option value="IA">Iowa</option>
+<option value="KS">Kansas</option>
+<option value="KY">Kentucky</option>
+<option value="LA">Louisiana</option>
+<option value="ME">Maine</option>
+<option value="MD">Maryland</option>
+<option value="MA">Massachusetts</option>
+<option value="MI">Michigan</option>
+<option value="MN">Minnesota</option>
+<option value="MS">Mississippi</option>
+<option value="MO">Missouri</option>
+<option value="MT">Montana</option>
+<option value="NE">Nebraska</option>
+<option value="NV">Nevada</option>
+<option value="NH">New Hampshire</option>
+<option value="NJ">New Jersey</option>
+<option value="NM">New Mexico</option>
+<option value="NY">New York</option>
+<option value="NC">North Carolina</option>
+<option value="ND">North Dakota</option>
+<option value="OH">Ohio</option>
+<option value="OK">Oklahoma</option>
+<option value="OR">Oregon</option>
+<option value="PA">Pennsylvania</option>
+<option value="RI">Rhode Island</option>
+<option value="SC">South Carolina</option>
+<option value="SD">South Dakota</option>
+<option value="TN">Tennessee</option>
+<option value="TX">Texas</option>
+<option value="UT">Utah</option>
+<option value="VT">Vermont</option>
+<option value="VA">Virginia</option>
+<option value="WA">Washington</option>
+<option value="WV">West Virginia</option>
+<option value="WI">Wisconsin</option>
+<option value="WY">Wyoming</option>
+</select>
           *</div>
       </div>
       <div class="clear padtop20 padleft30">
@@ -195,7 +250,7 @@ input[type="text"] {
       <div class="clr">&nbsp;&nbsp;</div>
     </div>
   </form> 
-  <div class="float-left wid10"></div>
+  <div class="float-left wid10"></div></div>
   <script type="text/javascript">
 var flag = true
 $(document).ready(function(){

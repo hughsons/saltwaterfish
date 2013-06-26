@@ -1,0 +1,35 @@
+<html>
+<head>
+<link href="/misc/style.css" rel="stylesheet" type="text/css" />
+<link href="/misc/sty.css" rel="stylesheet" type="text/css" />
+<link href="http://saltwater2013.dev.mvisolutions.com/sitemap/css/style.css" rel="stylesheet" type="text/css" />
+
+</head>
+<body>
+<div class="fedexbox" width="600px">
+  <div class="clr">
+    <div class="logo_left"><img src="http://saltwater2013.dev.mvisolutions.com/sitemap/images1/fedex_logo.jpg" /><br />
+      Select a location to pickup your package: </div>
+    <div class="logo_right"><a href="#"><img src="http://saltwater2013.dev.mvisolutions.com/sitemap/images1/close_button.png" /></a></div>
+    <div class="clr"></div>
+  </div>
+  <div class="address">
+    <ul>
+	  {% for location in Locations %}
+      <li>
+        <input type="radio" name="Locations" />{{ location.address }},&nbsp;{{ location.city }} 
+	  </li>
+	  {% endfor %}
+      <div class="clr"></div>
+    </ul>
+  </div>
+  <div class="clr">
+    <div class="button"><input type="submit" value="Use This Location" onclick="document.window.close()">
+      <input name="submit" type="submit" value="Cancel">
+    </div>
+    <div class="button"></div>
+    <div class="clr"></div>
+  </div>
+</div>
+</body>
+</html>

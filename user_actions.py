@@ -778,8 +778,8 @@ class AddToCartActionClass(TemplateView):
         request.session['CartItems'] = cart_dict
         
       #return HttpResponse(cart_dict)
-
-      return HttpResponseRedirect("cartconfirmation?itemid=%d" %item_id)
+      return HttpResponseRedirect("/viewcart")
+      #return HttpResponseRedirect("cartconfirmation?itemid=%d" %item_id)
 
 class CartActionsClassolder(TemplateView):
     '''Page Name: /cartaction '''

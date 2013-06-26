@@ -38,21 +38,42 @@
     })(jQuery);
 
 $(function() {
-	$('#simage1hid').click(function() {
-		
-		$("#image1hid").show();
-		$("#image2hid").hide();
-		$("#image3hid").hide();
+	$('#GiftAmount').change(function() {
+		amount = $('#GiftAmount').val()
+		if (amount <=0)
+		{
+			alert("Please select Gift Amount");
+			return false;
+		}
+		$('#TotalCost1').text(amount);
 	});
-	$('#simage2hid').click(function() {
-		$("#image1hid").hide();
-		$("#image2hid").show();
-		$("#image3hid").hide();
-	});
-	$('#simage3hid').click(function() {
-		$("#image1hid").hide();
-		$("#image2hid").hide();
-		$("#image3hid").show();
+	
+	 $('#addtotanks').click(function() {
+		amount = $('#GiftAmount').val()
+		if (amount <=0)
+		{
+			alert("Please select Gift Amount");
+			return false;
+		}
+		 if ($("#gc_fromname").val()=="")
+	   {
+		 alert("Please Provide Sender's name");
+		 $("#gc_fromname").focus();
+		 return false;
+	   }
+	   if ($("#gc_toname").val()=="")
+	   {
+		 alert("Please Provide Recipient's name");
+		 $("#gc_toname").focus();
+		 return false;
+	   }
+	    if ($("#gc_toemail").val()=="")
+	   {
+		 alert("Please Provide Recipient's email address");
+		 $("#gc_toemail").focus();
+		 return false;
+	   }
+		$('#TotalCost1').text(amount);
 	});
 });
 </script>
@@ -172,11 +193,11 @@ border-color: gray;
 <div class="price clr"> </div>
 
 <div class="price clr padtop10"> </div>
-<div class="clr padtop27"><div class="sale-price clr padtop10"> Price: ${{products.saleprice|floatformat:2}}</div>
+<div class="clr padtop27"><div class="sale-price clr padtop10"> Price: $<span id="TotalCost1">0.00</span></div>
 <div class="quantity float-left product-height">Quantity</div>
 <div class="float-left padleft8"><form action="/addtocart" method="POST" name="form">{% csrf_token %}<input type="hidden" size="10" value="11" name="item_id"><input name="quantity" type="text" class="text-box" value=1 /></div>
 </div>
-<div class="clr padtop10"><input type=image src="misc/images/addtotank.jpg" width="181" height="35" border="0" /></div>
+<div class="clr padtop10"><input type=image src="misc/images/addtotank.jpg" width="181" height="35" border="0" id="addtotanks"/></div>
 
 </div>
 <div class="float-left product-sale-line">&nbsp;</div>
@@ -204,7 +225,7 @@ and Florida Locations</div>
          
           <!--START: freeshippingblock-->
           <tr>
-            <td class="font3" colspan="2"><img src="misc/images/freeship.gif"></td>
+            <td class="font3" colspan="2"><img src="misc/images/FreeShip.gif"></td>
           </tr>
           <tr>
             <td>&nbsp;</td>
@@ -226,7 +247,7 @@ and Florida Locations</div>
                               <td width="40"><img src="assets/templates/common/images/spacer.gif" border="0" alt="" width="40" height="1"></td>
                               <td class="item" align="left" width="100%"> 
                           &nbsp;
-                          <select name="GiftAmount" onchange="validateValues(document.add,1);" class="txtBoxStyle">
+                          <select name="GiftAmount" id="GiftAmount" class="txtBoxStyle">
                             <!--START: option-->
                             <option value="" [selected]="">Gift Certificate Amount </option>
                             
@@ -265,20 +286,20 @@ and Florida Locations</div>
                   <td align="left"><table cellspacing="6" cellpadding="0" border="0" class="alternative">
                       <tbody><tr>
                         <td valign="top" class="item" align="right"><b>From</b></td>
-                        <td valign="top" class="item" align="left"><input type="text" size="23" name="gc_fromname" class="txtBoxStyle">
+                        <td valign="top" class="item" align="left"><input type="text" size="23" name="gc_fromname" id="gc_fromname" class="txtBoxStyle">
                           <br>
                           (Sender's name)</td>
                       </tr>
                       <tr>
                         <td valign="top" class="item" align="right"><b>To</b></td>
-                        <td valign="top" class="item" align="left"><input type="text" size="23" name="gc_toname" class="txtBoxStyle">
+                        <td valign="top" class="item" align="left"><input type="text" size="23" name="gc_toname" id="gc_toname" class="txtBoxStyle">
                           <br>
                           (Recipient's name)</td>
                         <td valign="top" class="price-info" align="left"></td>
                       </tr>
                       <tr>
                         <td valign="top" class="item" align="right"><b>Email</b></td>
-                        <td valign="top" class="item" align="left"><input type="text" size="23" name="gc_toemail" class="txtBoxStyle">
+                        <td valign="top" class="item" align="left"><input type="text" size="23" name="gc_toemail" id="gc_toemail" class="txtBoxStyle">
                           <br>
                           (Recipient's email address)</td>
                         <td valign="middle" class="price-info" align="left"></td>
@@ -301,7 +322,15 @@ and Florida Locations</div>
 </form>
 <div class="clr">
 <div class="float-left padleft15 padtop20"><a href="#" id="/emailfriendpopup?itemid={{ products.catalogid }}" class="pop2"><img src="misc/images/emailafriend.jpg" width="150" height="30" border="0" /></a></div>
-<div class="float-right padtop20" ><a href="#" id="/waitpopup?itemid={{ products.catalogid }}" class="pop1"><img src="misc/images/addtowishlist.jpg" width="160" height="30" border="0" /></a></div>
+
+						{% if request.session.IsLogin %}
+							<div class="float-right padtop20" ><a href="#" id="/addtowatchlist?itemid={{products.catalogid}}" class="pop1"><img src="misc/images/addtowishlist.jpg" width="160" height="30" border="0" /></a></div>
+						{% else %}
+							<div class="float-right padtop20" ><a href="#" id="/waitpopup?itemid={{ products.catalogid }}" class="pop1"><img src="misc/images/addtowishlist.jpg" width="160" height="30" border="0" /></a></div>
+							 
+						{% endif %}
+ 
+
 </div>
 <div class="clr padtop20">
 <div class="float-left pwid10">
@@ -372,5 +401,9 @@ and Florida Locations</div>
 </div>
 <div class="float-left wid20">&nbsp;&nbsp;</div>
 <div class="float-left wid20">&nbsp;&nbsp;</div>
+</div>
+<div id="popup" style="left: -700px; position: absolute; top: 1177px; z-index: 9999; opacity: 1; display: none;min-height:200px;">
+        
+        <div id="contentss" style="height: auto; width: auto;"></div>
 </div>
 {% endblock content %}

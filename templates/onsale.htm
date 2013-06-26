@@ -4,7 +4,25 @@
  
  <link type="text/css" rel="stylesheet" href="/misc/category.css" />
 
+ <script language="javascript" type="text/javascript" src="/misc/js/imagetooltip.js"></script>
+ <script language="javascript" type="text/javascript" src="/misc/js/jquery.bpopup.min.js"></script>
+ <link type="text/css" rel="stylesheet" href="/misc/style_new.css" />
+<script type="text/javascript">
+	;(function($) {
+         $(function() {
+            $('.pop1').bind('click', function(e) {
+                e.preventDefault();
+				var a_href = $(this).attr('id');
+				$("#contentss").load(a_href);
+                $('#popup').bPopup({
+				});
+			});
+			 
+        });
 
+    })(jQuery);
+
+</script>
 {% load tagsfilter %} 
 <div class="float-left wid20">&nbsp;&nbsp;</div>
 <div class="float-left wid725">
@@ -39,7 +57,7 @@
 
 <div class="clr pad-tb" style="width:200px !important">
 				{% if products.stock >= 1 %}
-					<div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
+					<div class="blue-button"><a href="##"  class="pop1" id="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
 				{% else %}
 					<div class="wish-button"><a href="/addtowatchlist?itemid={{ products.catalogid }}">WISH LIST</a></div>
 				{% endif %}
@@ -57,4 +75,5 @@
 <div class="float-left"></div>
 
 </div></div></div>
+ 
 {% endblock content %}

@@ -128,6 +128,9 @@ def render_template(request, template, data=None):
     response = render_to_response(template, data,
                               context_instance=RequestContext(request))
     return response
+from decimal import Decimal
+def to_decimal(float_price):
+    return Decimal('%.2f' % float_price)
 
 def cartwidget(request):
     selected_items = []
@@ -135,8 +138,8 @@ def cartwidget(request):
         cart_items = request.session["CartItems"]
         item_list = cart_items.keys()
         sub_total = 0
-        for catalog_id, item in cart_items.items():
-          sub_total += item.subtotal
+        for catalog_id, item in cart_items.items():          
+          sub_total += to_decimal(item.subtotal)
           selected_items.append(item)
     
     return selected_items
@@ -179,9 +182,9 @@ def leftwidget(request):
         login_is = request.session['IsLogin']
     else:
         login_is = ""
-    total_fines = sum([item.price for item in cartwidget(request)])
+    total_fines = ""
     popular = Category.objects.all().filter(category_parent=177)
-    homespecial = Products.objects.filter(homespecial=1).order_by('?')[0]
+    homespecial = Products.objects.filter(homespecial=1, stock__gte=1).order_by('?')[0]
     contents = {'LoginForm':LoginForm,
                 'login_is':login_is,
                 'recaptcha': GetRecaptcha(request),

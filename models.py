@@ -1009,3 +1009,14 @@ class WsiWishlistitems(models.Model):
     class Meta:
         db_table = u'wsi_wishlistitems'
         app_label = ''
+
+class Fedexlocations(models.Model):
+    id = models.BigIntegerField(primary_key=True, db_column='ID') # Field name made lowercase.
+    locationcode = models.CharField(max_length=30, db_column='LocationCode', blank=True) # Field name made lowercase.
+    address = models.CharField(max_length=765, db_column='Address', blank=True) # Field name made lowercase.
+    city = models.CharField(max_length=300, db_column='City', blank=True) # Field name made lowercase.
+    state = models.CharField(max_length=6, db_column='State', blank=True) # Field name made lowercase.
+    zip = models.CharField(max_length=30, db_column='Zip', blank=True) # Field name made lowercase.
+    class Meta:
+        db_table = u'fedexlocations'
+        app_label = ''

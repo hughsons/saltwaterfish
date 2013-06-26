@@ -2,6 +2,25 @@
 {% block content %}
 <link type="text/css" rel="stylesheet" href="/misc/sty.css" />
 <link type="text/css" rel="stylesheet" href="/misc/css3/style.css" />
+<script language="javascript" type="text/javascript" src="/misc/js/imagetooltip.js"></script>
+ <script language="javascript" type="text/javascript" src="/misc/js/jquery.bpopup.min.js"></script>
+ <link type="text/css" rel="stylesheet" href="/misc/style_new.css" />
+<script type="text/javascript">
+	;(function($) {
+         $(function() {
+            $('.pop1').bind('click', function(e) {
+                e.preventDefault();
+				var a_href = $(this).attr('id');
+				$("#contentss").load(a_href);
+                $('#popup').bPopup({
+				});
+			});
+			 
+        });
+
+    })(jQuery);
+
+</script>
 <script>
 $(document).ready(function(){
 	
@@ -180,9 +199,15 @@ function  CalculateSum()
 	    sum  += netprice;
 	  }
    }
-
+	//alert(parseFloat(sum).toFixed(2));
    TotalCost1.innerText = parseFloat(sum).toFixed(2);   
    TotalCost2.innerText = parseFloat(sum).toFixed(2);
+   $('#TotalCost1').text(parseFloat(sum).toFixed(2));
+   $('#TotalCost2').text(parseFloat(sum).toFixed(2));
 }
 </script>
+<div id="popup" style="left: -700px; position: absolute; top: 1177px; z-index: 9999; opacity: 1; display: none;min-height:200px;">
+        
+        <div id="contentss" style="height: auto; width: auto;"></div>
+</div>
 {% endblock content %}

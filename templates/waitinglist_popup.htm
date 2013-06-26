@@ -59,7 +59,14 @@ $(document).ready(function(){
 					<input type="hidden" name="itemid" value="{{products.catalogid}}">
 					<tr>
 						<td class="item" width="200px"  valign="top"><!--START: thumbnail-->
-							<div align="center"><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.thumbnail|strreplace:"assets/images/" }}' border="1" style="border-color: ced2bf">
+							<div align="center">
+							{% if products.catalogid == 11 %}
+							<img src='misc/images/{{ products.image1|strreplace:"/assets/templates/default/images/" }}' border="1" style="border-color: ced2bf" width=100>
+							{%else%}
+							<img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.thumbnail|strreplace:"assets/images/" }}' border="1" style="border-color: ced2bf">
+							{%endif%}
+
+
 								<!--END: thumbnail-->
 								<br>
 								<span class="item">{{products.name}}</span></div></td>

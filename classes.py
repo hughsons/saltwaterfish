@@ -301,7 +301,7 @@ class CartInfo(Error):
   def AddGift(self, cart_dict, catalog_id, quantity, price):
     items_dict = cart_dict
     if catalog_id in items_dict.keys():
-      self.RaiseError("This Gift Certificate is already in your Cart.")
+      self.RaiseError("<div class='alert-danger alert-error' style='width:300px;'><button data-dismiss='alert' class='close' type='button'>*</button><h5>This Gift Certificate is already in your Cart.</h5></div>")
       return cart_dict
     
     cart_item = CartItem(catalog_id)
@@ -322,7 +322,7 @@ class CartInfo(Error):
       cart_item = items_dict[catalog_id]
       # Checking whether the one more item is allowed the the existing quantity. 
       if (cart_item.quantity + 1) > cart_item.qoh:
-        self.RaiseError("Quantity out of order. You can not add more items.")
+        self.RaiseError("<div class='alert-danger alert-error' style='width:300px;'><button data-dismiss='alert' class='close' type='button'>*</button><h5>Error! Quantity Request Exceeds Inventory. You can not add more items.</h5></div>")
         return items_dict
       
       cart_item.quantity += 1
@@ -330,7 +330,7 @@ class CartInfo(Error):
     else:
       cart_item = CartItem(catalog_id)
       if cart_item.qoh <= 0:
-        self.RaiseError("Quantity is out of order")
+        self.RaiseError("Quantity Request Exceeds Inventory")
         return cart_dict
       
       cart_item.shipping_category, cart_item.shipping_category_name = self.GetShippingCategoryID(catalog_id)
@@ -409,17 +409,19 @@ class CartInfo(Error):
     return (shipping_charge, fuel_charge, free_shipping_diff)
  
  
-  def GetItemsByShippingCategory(self, cart_dict):
+  def GetItemsByShippingCategory(self, cart_dict, customer=None):
     items_dict = cart_dict
-    state = 'FL'
+    tax_list = []
     excluded_zips = []
-    
-    tax_list = Tax.objects.filter(tax_country = 'US', tax_state = state)
+    state = 'FL'
+    if customer:
+      state = customer.billing_state  
+      tax_list = Tax.objects.filter(tax_country = 'US', tax_state = state)
 
     if tax_list:
       tax = tax_list[0].tax_value1
     else:
-      tax = 7.0
+      tax = 0.0
 
     # Dictionary contains shipping category id as a key and a list of items as values.
     shipping_categories_dict = {}

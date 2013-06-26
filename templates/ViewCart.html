@@ -209,9 +209,7 @@ $(function() {
 </style>
  <div class="float-left wid768 padleft5">
 
-{% if error_message %}
-  <span class="redtext"><h4> {{error_message}}</h4></span>
-{% endif %}
+
 {%if MyCartItems|length > 0 %}
 
 <div class="clr">
@@ -262,17 +260,21 @@ $(function() {
    <td>${{shippingCategory.shipping_charge|floatformat:2}}</td>
 </tr>
 <tr>
-	<td>Fuel surcharge</td>
+	<td>Fuel Surcharge</td>
 	<td>${{shippingCategory.fuel_charge|floatformat:2}}</td>
 </tr>
 <tr>
 	<td>Promotions:</td>
 	<td>$0.00</td>
 </tr>
-<tr>
-	<td>{{shippingCategory.tax|floatformat:2}}% of Tax</td>
-	<td>$<b>{{shippingCategory.tax_value|floatformat:2}}</td>
-</tr>
+{% if request.session.IsLogin %}
+	{% if request.session.Customer.billing_state == "FL"  %}
+		<tr>
+			<td>{{shippingCategory.tax|floatformat:2}}% of Tax</td>
+			<td>$<b>{{shippingCategory.tax_value|floatformat:2}}</td>
+		</tr>
+	{%endif%}
+{%endif%}
 <tr>
 	<td><b>Supplies Total</b></td>
 	<td>$<b>{{shippingCategory.supplies_total|floatformat:2}}</b></td>
@@ -308,7 +310,6 @@ Cart is Empty
 </div>
 <div class="clr"></div>
 </div>
-
 <div class="clr padtop5">
 <div class="order_left1 " align="left">Est.Shipping</div>
 <div class="order_right">
@@ -326,7 +327,8 @@ Cart is Empty
 </div>
 <div class="clr"></div>
 </div>
-
+{% if request.session.IsLogin %}
+{% if request.session.Customer.billing_state == "FL"  %}
 <div class="clr padtop5">
 <div class="order_left1" align="left">Est.Tax</div>
 <div class="order_right">
@@ -335,7 +337,8 @@ Cart is Empty
 </div>
 <div class="clr"></div>
 </div>
-
+{%endif%}
+{%endif%}
 <div class="clr padtop10 padbottom10">
 <div class="order_left" align="left"><span>Discounts:</span></div>
 <div class="order_right">
