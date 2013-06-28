@@ -169,7 +169,6 @@ class ViewCartViewClass(TemplateView):
   def get(self, request, *args, **kwargs):
     store_credit_id = 0 # Unique id of swf customer credits table
     store_credits = 0
-    customer = None
 
     content = {}
     content = {'page_title': "My Cart"}
@@ -202,7 +201,7 @@ class ViewCartViewClass(TemplateView):
 
 
     cart = CartInfo()
-    shipping_items = cart.GetItemsByShippingCategory(cart_dict, customer)
+    shipping_items = cart.GetItemsByShippingCategory(cart_dict)
 
     shipping_method_hash = {}
     
@@ -400,7 +399,7 @@ class OrderConfirmationViewolder(TemplateView):
 
     elif is_guest:
       if gateway == 'paypal':
-        form = PaypalOrderFormNoLogin(initial = data)
+        form = PaypalOrderFormNoLogin(initial = data, card_list = [])
       elif gateway == 'AUTHORIZENET':
         form = AuthorizeNetFormNoLogin(initial = data, card_list = [])
         #form.fields['previous_cards'].choices = [('1', 'Account Ending in xxx - xxx - 2003'), ('2', 'Account Ending in xxx - xxx - 1099')]
@@ -447,7 +446,6 @@ class OrderConfirmationView(TemplateView):
     content = {'page_title': "Order Confirmation"}
     is_login = False;
     is_guest = False;
-    gift_cert_balance = 0
     gateway = ''
     error_message = ''
     # Adding 3 days to the current date
@@ -478,7 +476,6 @@ class OrderConfirmationView(TemplateView):
     if 'PaymentGateway' in request.session:
       gateway = request.session['PaymentGateway']
 
-    
     cart_items = request.session['CartItems']
     cart_info = request.session['CartInfo'] # Holds grand totals
     
@@ -492,7 +489,6 @@ class OrderConfirmationView(TemplateView):
     if is_login or 'Customer' in request.session:
       logging.info("Logged in or Customer info is found in the session")
       customer = request.session['Customer']
-      gift_cert_balance = GetGiftCertificateBalance(customer.contactid)
       data = {'contact_id':customer.contactid,
           'shipping_first_name':customer.shipping_firstname,
           'shipping_last_name':customer.shipping_lastname,
@@ -553,7 +549,7 @@ class OrderConfirmationView(TemplateView):
 
     elif is_guest:
       if gateway == 'paypal':
-        form = PaypalOrderFormNoLogin(initial = data)
+        form = PaypalOrderFormNoLogin(initial = data, card_list = [])
       elif gateway == 'AUTHORIZENET':
         form = AuthorizeNetFormNoLogin(initial = data, card_list = [])
         #form.fields['previous_cards'].choices = [('1', 'Account Ending in xxx - xxx - 2003'), ('2', 'Account Ending in xxx - xxx - 1099')]
@@ -585,7 +581,6 @@ class OrderConfirmationView(TemplateView):
     content['Items'] = item_list
     content['DeliveryDate'] = est_delivery_date
     content['ShippingMethodList'] = shipping_method_list
-    content['GiftCertificateBalance'] = gift_cert_balance
     content['cal'] = GenerateShippingCalander(time.strftime("%m/%d/%Y", time.localtime()))
     content['Settings'] = settings
     
@@ -658,10 +653,8 @@ def SaveOrder(request, transactionid):
 
     order.opaymethod = payment_method
     order.odate = datetime.datetime.now()
-    order.date_started  = datetime.datetime.now()
     order.orderamount = request.session["CartInfo"].order_total
     order.otax = request.session["CartInfo"].tax_total
-    order.oshipcost = request.session["CartInfo"].shipping_total
     order.ocomment = request.session['OrderComment']
     order.order_status = 1
     
@@ -701,7 +694,6 @@ def SaveOrder(request, transactionid):
       oitem = Oitems()
       oitem.orderid = obj.orderid # Recent order ID
       oitem.catalogid = item.catalog_id
-      oitem.itemid = item.catalog_id
       oitem.orderitemid = item.catalog_id
       oitem.itemname = item.item_name
       oitem.numitems = item.quantity
@@ -736,6 +728,15 @@ def SaveOrder(request, transactionid):
             shipping_tupple.orderid = obj.orderid
             shipping_tupple.name =  input_field
             shipping_tupple.stringvalue = input_value
+            
+#             if input_field == "OverNightShipping":
+#               shipping_tupple.stringvalue = input_value
+#             if input_field == "HoldPackageAtFedex":
+#               shipping_tupple.stringvalue = input_value
+#             if input_field == "ReceiveDeliveryNotificationEMail":
+#               shipping_tupple.stringvalue = input_value
+#             if input_field == "ReceiveDeliveryNotificationSMS":
+#               shipping_tupple.stringvalue = input_value
 
             shipping_tupple.save()
         del request.session['ShippingMethod']
@@ -792,14 +793,13 @@ class CheckOutCallBackViewClass(TemplateView):
     if 'StoreCredit' in request.session:
         del request.session['StoreCredit']
 
-    content.update(leftwidget(request))
+        
     return render_template(request,'PaypalPurchase.html', content)
 
 class PaypalRedirectionViewClass(TemplateView):
   @csrf_exempt
   def get(self, request, *args, **kwargs):
     content = {'page_title': "Paypal Redirection", 'Settings': settings}
-    content.update(leftwidget(request))
     return render_template(request, 'PaypalRedirection.html', content)
 
 class MurthyTestViewCalss(TemplateView):
@@ -914,20 +914,6 @@ class ShippingCalander(TemplateView):
     
     content = {}
     return render_template(request, 'RadioTest.html', content)
-
-class FedexLocationsViewClass(TemplateView):
-
-  def get(self, request, *args, **kwargs):
-    content = {}
-    
-    state = request.GET['state']
-    seq = request.GET['seq']
-    locations = Fedexlocations.objects.filter(state = state)
-    
-    content['Locations'] = locations
-    content['seq'] = seq  
-    return render_template(request, 'FedexLocations.html', content)
-
 
 class RadioButtonTest(TemplateView):
   

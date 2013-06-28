@@ -431,12 +431,11 @@
                         please use the "new address" selection in the Address Book option above.
                         Call 1 -800 -GOFEDEX for the station nearest you <span class="blue_text" style="cursor: pointer;" id="FedexLocation{{i}}"><strong>or click here to use the online FedEx location tool.</strong></span> </div>
                       <div class="float-right card7_select martop50">
-                        <select name="HoldPackageAtFedex{{key}}">
+                        <select name="HoldPackageAtFedex">
                           <option value="No">No</option>
                           <option value="Yes">Yes</option>
                         </select>
                       </div>
-					  <input type="hidden" name="FedexLocationCode{{key}}" id="FedexLocationCode{{i}}" value="" />
                       <div class="clr">&nbsp;</div>
                     </div>
                     <div class="marbottom15 martop10"><strong>Delivery Notifications:</strong></div>
@@ -537,9 +536,7 @@
               </tr>
             </table>
             <div class="order_detail_content">
-			  {% if GiftCertificateBalance > 0 %}
               <div class="order_content_heading">Gift Certificate</div>
-			  {% endif %}
               <!--<div class="clr"><span class="dark_bg">Apply</span>Gift Certificate Value of $9,999.00 Available would you like to apply this to your order?</div>-->
               <div class="clr">&nbsp;</div>
               <div class="clr">&nbsp;</div>
@@ -547,16 +544,12 @@
               <!-- Begin Credit Card Information -->
               <div class="clr">
                 <div id="CreditCardPanel"> Enter your Credit card Information:</div>
-				{% if request.session.IsLogin %}
-	  			  {% if form.previous_cards %}
-                    <div class="clr">Use Previously Saved Credit Card:</div>
-                    {% for radio in form.previous_cards %}
-                      <div class="clr">
-                      <label style="width:300px"><span>{{ radio.tag }}</span>{{ radio.choice_label }}</label>
-                      </div>
-                    {% endfor %}
-				  {% endif %}
-                {% endif %}
+                <div class="clr">Use Previously Saved Credit Card:</div>
+                {% for radio in form.previous_cards %}
+                <div class="clr">
+                  <label style="width:300px"><span>{{ radio.tag }}</span>{{ radio.choice_label }}</label>
+                </div>
+                {% endfor %}
                 <div class="clr padtop30">
                   <table width="100%" border="0" cellspacing="5" cellpadding="0">
                     <tr>
@@ -655,7 +648,7 @@
     <div class="clr"></div>
   </div>
   <div class="clr">
-    <div class="order_left" align="left">Est. Shipping</div>
+    <div class="order_left" align="left">Estimated Shipping</div>
     <div class="order_right">
       <div class="float_right">${{ request.session.CartInfo.shipping_total|floatformat:2 }}</div>
     </div>
@@ -670,7 +663,7 @@
   </div>
 {% if request.session.IsLogin %}
   <div class="clr">
-    <div class="order_left" align="left">Est. Tax</div>
+    <div class="order_left" align="left">Estimated Tax</div>
     <div class="order_right">
       <div class="float_right">${{ request.session.CartInfo.tax_total|floatformat:2 }}</div>
     </div>
@@ -785,23 +778,8 @@ function IsFormValid()
 	 return false;
    }
 
-   if (!$("#id_shipping_state").val().match(/^[A-Z]+$/gi))
-   {
-     alert("Please select State in Shipping Address.");
-	 $("#id_shipping_state").focus();
-	 return false;
-   }
-
-
    if (!element.checked)
    {
-	   if ($("#id_billing_first_name").val().match(/^\s*$/gi))
-	   {
-		 alert("Please enter first name");
-		 $("#id_billing_first_name").focus();
-		 return false;
-	   }
-
 	   if ($("#id_billing_last_name").val().match(/^\s*$/gi))
 	   {
 		 alert("Please enter last name");
@@ -857,14 +835,6 @@ function IsFormValid()
 		 $("#id_billing_phone_part3").focus();
 		 return false;
 	   }
-
-	   if (!$("#id_billing_state").val().match(/^[A-Z]+$/gi))
-	   {
-         alert("Please select State in Billing Address.");
-		 $("#id_billing_state").focus();
-		 return false;
-	   }
-
    }
   return true;
 }
@@ -917,51 +887,15 @@ $(document).ready(function(){
   });
   
   $("#ShippingAddress").click(function(){ 
-  	if (!$("#ShippingMethodsPanel").is(":hidden"))
-	{
-      $("#ShippingMethodsPanel").slideToggle("slow");
-	}
-
-  	if (!$("#PaymentInfoPanel").is(":hidden"))
-	{
-      $("#PaymentInfoPanel").slideToggle("slow");
-	}
-
     $("#ShippingAddressPanel").slideToggle("slow");
   });
 
   $("#ShippingMethods").click(function(){ 
-  	if (!$("#ShippingAddressPanel").is(":hidden"))
-	{
-      $("#ShippingAddressPanel").slideToggle("slow");
-	}
-
-  	if (!$("#PaymentInfoPanel").is(":hidden"))
-	{
-      $("#PaymentInfoPanel").slideToggle("slow");
-	}
-
     $("#ShippingMethodsPanel").slideToggle("slow");
-  	if ($("#ShippingCategoryContent1").is(":hidden"))
-	{
-       $("#ShippingCategoryContent1").slideToggle("slow");
-	}
-
   });
 
   $("#PaymentInfo").click(function(){ 
-  	if (!$("#ShippingAddressPanel").is(":hidden"))
-	{
-      $("#ShippingAddressPanel").slideToggle("slow");
-	}
-
-  	if (!$("#ShippingMethodsPanel").is(":hidden"))
-	{
-      $("#ShippingMethodsPanel").slideToggle("slow");
-	}
-
     $("#PaymentInfoPanel").slideToggle("slow");
-
   });
   
   $("#ContinueToShippingMethod").click(function(){
@@ -973,7 +907,6 @@ $(document).ready(function(){
     if ($("#ShippingMethodsPanel").is(":hidden"))
 	{
 	  $("#ShippingMethodsPanel").slideToggle("slow");
-	  $("#ShippingCategoryContent1").slideToggle("slow");
 	}
   });
 
@@ -981,6 +914,7 @@ $(document).ready(function(){
     $("#ShippingMethodsPanel").slideToggle("slow");
     $("#PaymentInfoPanel").slideToggle("slow");
   });
+
 
 });
 

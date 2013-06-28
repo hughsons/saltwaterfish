@@ -1108,7 +1108,7 @@ class CommitOrderActionClass(TemplateView):
         form = NoGateWay(data)
     elif is_guest:
       if gateway == 'paypal':
-        form = PaypalOrderFormNoLogin(data)
+        form = PaypalOrderFormNoLogin(data, card_list = [])
       elif gateway == 'AUTHORIZENET':
         form = AuthorizeNetFormNoLogin(data, card_list = [])
       customer = None   
@@ -1190,7 +1190,7 @@ class CommitOrderActionClass(TemplateView):
 
         if 'ReqDeliveryDate%d' %key in request.POST:
           data_hash['Requested Delivery Date'] = request.POST['ReqDeliveryDate%d' %key]
-          if len(data_hash['Requested Delivery Date'].strip()) > 0:
+          if len(data_hash['ReqDeliveryDate'].strip()) > 0:
             if time.strptime(data_hash['Requested Delivery Date'], "%m/%d/%Y").tm_wday == 5:
               sat_delivery_value = GetSaturdayShippingCharge(key)
               data_hash['Saturday Delivery'] = sat_delivery_value

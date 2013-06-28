@@ -785,23 +785,8 @@ function IsFormValid()
 	 return false;
    }
 
-   if (!$("#id_shipping_state").val().match(/^[A-Z]+$/gi))
-   {
-     alert("Please select State in Shipping Address.");
-	 $("#id_shipping_state").focus();
-	 return false;
-   }
-
-
    if (!element.checked)
    {
-	   if ($("#id_billing_first_name").val().match(/^\s*$/gi))
-	   {
-		 alert("Please enter first name");
-		 $("#id_billing_first_name").focus();
-		 return false;
-	   }
-
 	   if ($("#id_billing_last_name").val().match(/^\s*$/gi))
 	   {
 		 alert("Please enter last name");
@@ -857,14 +842,6 @@ function IsFormValid()
 		 $("#id_billing_phone_part3").focus();
 		 return false;
 	   }
-
-	   if (!$("#id_billing_state").val().match(/^[A-Z]+$/gi))
-	   {
-         alert("Please select State in Billing Address.");
-		 $("#id_billing_state").focus();
-		 return false;
-	   }
-
    }
   return true;
 }
@@ -917,51 +894,15 @@ $(document).ready(function(){
   });
   
   $("#ShippingAddress").click(function(){ 
-  	if (!$("#ShippingMethodsPanel").is(":hidden"))
-	{
-      $("#ShippingMethodsPanel").slideToggle("slow");
-	}
-
-  	if (!$("#PaymentInfoPanel").is(":hidden"))
-	{
-      $("#PaymentInfoPanel").slideToggle("slow");
-	}
-
     $("#ShippingAddressPanel").slideToggle("slow");
   });
 
   $("#ShippingMethods").click(function(){ 
-  	if (!$("#ShippingAddressPanel").is(":hidden"))
-	{
-      $("#ShippingAddressPanel").slideToggle("slow");
-	}
-
-  	if (!$("#PaymentInfoPanel").is(":hidden"))
-	{
-      $("#PaymentInfoPanel").slideToggle("slow");
-	}
-
     $("#ShippingMethodsPanel").slideToggle("slow");
-  	if ($("#ShippingCategoryContent1").is(":hidden"))
-	{
-       $("#ShippingCategoryContent1").slideToggle("slow");
-	}
-
   });
 
   $("#PaymentInfo").click(function(){ 
-  	if (!$("#ShippingAddressPanel").is(":hidden"))
-	{
-      $("#ShippingAddressPanel").slideToggle("slow");
-	}
-
-  	if (!$("#ShippingMethodsPanel").is(":hidden"))
-	{
-      $("#ShippingMethodsPanel").slideToggle("slow");
-	}
-
     $("#PaymentInfoPanel").slideToggle("slow");
-
   });
   
   $("#ContinueToShippingMethod").click(function(){
@@ -973,7 +914,6 @@ $(document).ready(function(){
     if ($("#ShippingMethodsPanel").is(":hidden"))
 	{
 	  $("#ShippingMethodsPanel").slideToggle("slow");
-	  $("#ShippingCategoryContent1").slideToggle("slow");
 	}
   });
 

@@ -17,19 +17,35 @@
     <ul>
 	  {% for location in Locations %}
       <li>
-        <input type="radio" name="Locations" />{{ location.address }},&nbsp;{{ location.city }} 
+        <input type="radio" name="Locations" onClick="SetLocation('{{location.locationcode}}')" />{{ location.address }},&nbsp;{{ location.city }} 
 	  </li>
 	  {% endfor %}
       <div class="clr"></div>
     </ul>
   </div>
   <div class="clr">
-    <div class="button"><input type="submit" value="Use This Location" onclick="document.window.close()">
-      <input name="submit" type="submit" value="Cancel">
+    <div class="button"><input type="submit" value="Use This Location" onClick="SendLocationToParnet()">
+      <input name="submit" type="submit" value="Cancel"  onClick="window.close()">
     </div>
     <div class="button"></div>
     <div class="clr"></div>
   </div>
 </div>
+<input type="hidden" id="hdnLocation" value = "">
 </body>
 </html>
+
+<script type="text/javascript" src="http://saltwater2013.dev.mvisolutions.com/sitemap/js2/jquery-1.7.2.min.js"></script>
+<script type="text/javascript">
+
+function SetLocation(code)
+{
+  $('#hdnLocation').val(code);
+}
+
+function SendLocationToParnet()
+{
+  opener.document.OrderConfirmationForm.FedexLocationCode{{seq}}.value =  $('#hdnLocation').val();
+  window.close();
+}
+</script>

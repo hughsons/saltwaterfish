@@ -74,9 +74,9 @@ class BillingShippingAddressForm(forms.Form):
   billing_address1 = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':40}),max_length = 50, required=False)
   billing_address2 = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':40}),max_length = 50, required=False)
   billing_city = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':10}),max_length = 50, required=False)
-  billing_state = forms.ChoiceField(choices=STATES, required = False)
+  billing_state = forms.ChoiceField(choices=STATES)
   billing_country =  forms.ChoiceField(choices=COUNTRIES, initial='USA')
-  billing_zip = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':5, 'maxlength':5, 'style':'width:40px'}), max_length = 5, required=False)
+  billing_zip = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':3}),max_length = 50, required=False)
 
   shipping_first_name = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':30}),max_length = 50, required=False)
   shipping_last_name = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':30}),max_length = 50, required=False)
@@ -89,7 +89,7 @@ class BillingShippingAddressForm(forms.Form):
   shipping_address2 = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':40}),max_length = 50, required=False)
   shipping_city = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':10}),max_length = 50, required=False)
   shipping_state = forms.ChoiceField(choices=STATES) 
-  shipping_zip = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':5, 'maxlength':5, 'style':'width:40px'}), max_length = 5, required=False)
+  shipping_zip = forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'ON', 'size':3}),max_length = 50, required=False)
 
 #  def __init__(self, *args, **kwargs):
 #    b_state = ''

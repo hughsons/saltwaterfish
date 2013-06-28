@@ -478,7 +478,6 @@ class OrderConfirmationView(TemplateView):
     if 'PaymentGateway' in request.session:
       gateway = request.session['PaymentGateway']
 
-    
     cart_items = request.session['CartItems']
     cart_info = request.session['CartInfo'] # Holds grand totals
     
@@ -658,10 +657,8 @@ def SaveOrder(request, transactionid):
 
     order.opaymethod = payment_method
     order.odate = datetime.datetime.now()
-    order.date_started  = datetime.datetime.now()
     order.orderamount = request.session["CartInfo"].order_total
     order.otax = request.session["CartInfo"].tax_total
-    order.oshipcost = request.session["CartInfo"].shipping_total
     order.ocomment = request.session['OrderComment']
     order.order_status = 1
     
@@ -701,7 +698,6 @@ def SaveOrder(request, transactionid):
       oitem = Oitems()
       oitem.orderid = obj.orderid # Recent order ID
       oitem.catalogid = item.catalog_id
-      oitem.itemid = item.catalog_id
       oitem.orderitemid = item.catalog_id
       oitem.itemname = item.item_name
       oitem.numitems = item.quantity
@@ -792,7 +788,7 @@ class CheckOutCallBackViewClass(TemplateView):
     if 'StoreCredit' in request.session:
         del request.session['StoreCredit']
 
-    content.update(leftwidget(request))
+    content.update(leftwidget(request))    
     return render_template(request,'PaypalPurchase.html', content)
 
 class PaypalRedirectionViewClass(TemplateView):

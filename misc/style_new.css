@@ -482,7 +482,7 @@ text-transform:capitalize;
 	padding:10px;
 }
 .price_box input[type="text"]{
-width:20px;
+width:30px;
 height:10px;
 border:1px solid #e5b56c;
 vertical-align:text-top;

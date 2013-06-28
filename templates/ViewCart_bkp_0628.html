@@ -236,9 +236,9 @@ $(function() {
 {% for item in shippingCategory.shipping_items %}
 <div class="clr card2_100 padtop10">
 <input type="hidden" name="itemid" value="{{ item.catalog_id }}" size="10" />
-<div class="float_left card2_alignC wid140 blue_text_new1"><img src="http://www.saltwaterfish.com/{{item.thumbnail}}" width=60 height=60 alt="{{item.catalog_id}}"/></div>
+<div class="float_left card2_alignC wid140 blue_text_new1"><img src="http://www.saltwaterfish.com/{{item.thumbnail}}" width=60 height=60/></div>
 <div class="float_left card2_alignC padleft5 wid150">{{item.item_name}}<br>{{item.extra_fied_3}}</div>
-<div class="float_left card2_alignC wid100"><span {% if item.onsale == 1 %}class="card2_strike" {% endif %}>${{item.price|floatformat:2}}<br></span>{% if item.onsale == 1 %} <span class="orange_text">${{ item.saleprice|floatformat:2 }}</span>{% endif %}</div>
+<div class="float_left orange_text card2_alignC wid100"><span {% if item.saleprice > 0 %}class="card2_strike" {% endif %}>${{item.price|floatformat:2}}<br></span>{% if item.saleprice > 0 %} <span class="orange_text">${{ item.saleprice|floatformat:2 }}</span> {% endif %}</div>
 <div class="float_left card2_alignC wid100"><input type="text" name="quantity" value="{{ item.quantity }}" size="1" /><br><input type="submit" name="cmdUpdate" value="Update"><br /><input type="submit" name="cmdDelete" value="Delete" onclick="javascript:return confirm('Are you sure you want to delete this item from your cart ?')"></div>
 <div class="float_left card2_alignC wid5 padleft7">${{item.subtotal|floatformat:2}}</div>
 <div class="clr"></div>
@@ -389,8 +389,8 @@ Cart is Empty
  
 {% endif %} <!-- END IF to check Empty Cart Items -->
 <div class="clr " >
-{% if request.session.IsLogin %} 
-{% if StoreCredit > 0  %}
+{% if request.session.IsLogin %}
+ {% if StoreCredit > 0 %}
 <div class="wid240">
 <div class="toggle_right_title" align="left"><font size="3"><strong>Store Credit</strong></font></div>
 <div align="justify" class="clr">You have a store credit of ${{StoreCredit|floatformat:2}} available

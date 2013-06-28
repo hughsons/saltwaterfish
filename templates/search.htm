@@ -62,7 +62,7 @@ padding: 1px;
 
 <div class="clr pad-tb" style="width:200px !important">
 				{% if products.stock >= 1 %}
-					<div class="blue-button"><a href="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
+					<div class="blue-button"><a href="##"  class="pop1" id="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
 				{% else %}
 						{% if request.session.IsLogin %}
 							<div class="wish-button "><a href="##" id="/addtowatchlist?itemid={{products.catalogid}}&name=" class="pop1">WISH LIST</a></div>
@@ -100,8 +100,5 @@ padding: 1px;
 <div class="float-left"></div>
 
 </div></div>
-<div id="popup" style="left: -700px; position: absolute; top: 1177px; z-index: 9999; opacity: 1; display: none;min-height:200px;">
-        
-        <div id="contentss" style="height: auto; width: auto;"></div>
-</div>
+ 
 {% endblock content %}

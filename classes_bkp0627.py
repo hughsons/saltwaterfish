@@ -498,7 +498,6 @@ class CartItem(Error):
     self.catalog_id = -1
     self.item_name = ''
     self.price = 0.0
-    self.onsale = 0
     self.saleprice = 0.0
     self.quantity = 0
     self.qoh = 0 # (Quantity on Hand)
@@ -529,7 +528,7 @@ class CartItem(Error):
       return
 
   def CalculateTotals(self):
-    if self.onsale > 0:
+    if self.saleprice > 0:
       self.subtotal = self.saleprice * self.quantity
     else:
       self.subtotal = self.price * self.quantity  
@@ -556,7 +555,6 @@ class CartItem(Error):
     self.catalog_id = product.catalogid
     self.item_name = product.name
     self.price = product.price
-    self.onsale = product.onsale
     self.saleprice = product.saleprice
     self.qoh = product.stock # (Quantity on Hand)
     
@@ -723,12 +721,3 @@ class CartItem(Error):
 #
 #      return (shipping_charge, free_shipping_min_value)
 
-def GetGiftCertificateBalance(customer_id):
-  gift_cert_balance = 0
-  cursor = connection.cursor()
-  cursor.execute("SELECT sum(certificate_balance) from orders o inner join gift_certificates gc on (o.orderid = gc.orderid) where ocustomerid = %d" %customer_id)
-  row = cursor.fetchone()
-  if row:
-    gift_cert_balance = row[0]
-    
-  return gift_cert_balance
