@@ -587,13 +587,30 @@ class ProductInfoViewClass(TemplateView):
         logging.info('totalreviews:: %s',totreviews)
         return render_template(request, 'product.htm', content)
 
-class OrderInfoViewClass(LoginRequiredMixin,TemplateView):
+class OrderInfoViewClassold(LoginRequiredMixin,TemplateView):
     def get(self, request, *args, **kwargs):
         oid = request.GET['oid']
         product_list = Orders.objects.get(orderid=oid,
                                           ocustomerid = request.session['Customer'].contactid)
         alloiitems = Oitems.objects.all().filter(orderid=oid)
         totalamt = Oitems.objects.filter(orderid=oid).aggregate(Sum('unitprice'))
+        rmaitems = Rma.objects.all().filter(orderid=oid)
+        content = {'page_title': 'Orders Page',"item":product_list,'alloiitems':alloiitems,
+                   'totalamt':totalamt,'rmaitems':rmaitems,}
+        content.update(leftwidget(request))
+        return render_template(request, 'orderinfo.htm', content)
+
+class OrderInfoViewClass(LoginRequiredMixin,TemplateView):
+    def get(self, request, *args, **kwargs):
+        oid = request.GET['oid']
+        product_list = Orders.objects.get(orderid=oid,
+                                          ocustomerid = request.session['Customer'].contactid)
+        alloiitems = Oitems.objects.all().filter(orderid=oid)
+        totalamt = 0.0
+        for item in alloiitems:
+          totalamt += float(item.numitems) * float(item.unitprice)
+          
+        #totalamt = Oitems.objects.filter(orderid=oid).aggregate(Sum('unitprice'))
         rmaitems = Rma.objects.all().filter(orderid=oid)
         content = {'page_title': 'Orders Page',"item":product_list,'alloiitems':alloiitems,
                    'totalamt':totalamt,'rmaitems':rmaitems,}

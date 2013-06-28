@@ -160,7 +160,7 @@ Fort Pierce, FL 34946</div></div></div>
 	<tr bgcolor="#FFFFFF" > 
 	<td colspan=3></td>
 	<td><strong>Subtotal:</strong></td>
-	<td>${{totalamt.unitprice__sum|floatformat:"2"}}</td>
+	<td>${{totalamt|floatformat:"2"}}</td>
 	</tr>
  
 	<tr bgcolor="#FFFFFF" > 
@@ -175,6 +175,10 @@ Fort Pierce, FL 34946</div></div></div>
 	<tr bgcolor="#FFFFFF" ><td colspan=3></td>
 	<td><strong>Shipping:</strong></td>
 	<td>${{item.oshipcost|floatformat:"2"}}</td>
+	</tr>
+	<tr bgcolor="#FFFFFF" ><td colspan=3></td>
+	<td><strong>Fuel Charge:</strong></td>
+	<td>$2.99</td>
 	</tr>
 	<tr bgcolor="#FFFFFF" ><td colspan=3></td>
 	<td><strong>Total:</strong></td>

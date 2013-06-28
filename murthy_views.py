@@ -708,7 +708,7 @@ def SaveOrder(request, transactionid):
       
       reward_points_total += item.reward_points * item.quantity
 
-      if item.saleprice > 0:
+      if item.onsale > 0:
         oitem.unitprice = item.saleprice
       else:
         oitem.unitprice = item.price
@@ -792,14 +792,13 @@ class CheckOutCallBackViewClass(TemplateView):
     if 'StoreCredit' in request.session:
         del request.session['StoreCredit']
 
-    content.update(leftwidget(request))
+        
     return render_template(request,'PaypalPurchase.html', content)
 
 class PaypalRedirectionViewClass(TemplateView):
   @csrf_exempt
   def get(self, request, *args, **kwargs):
     content = {'page_title': "Paypal Redirection", 'Settings': settings}
-    content.update(leftwidget(request))
     return render_template(request, 'PaypalRedirection.html', content)
 
 class MurthyTestViewCalss(TemplateView):
