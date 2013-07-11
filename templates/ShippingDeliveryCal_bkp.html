@@ -64,7 +64,7 @@ function SetDeliveryDate(pInputField, day, shipping_date, method)
 <body>
 <div class="float-left wid748">
   <div class="clr">
-    <div class="card5_container" align="center">
+    <div class="card5_container">
       <div class="card5_shade">
         <div class="clr card5_title card5_mar180">
           <div class="float_left padtop30 padright20"><a href='/shippingcalander?seq={{key}}&catid={{category_id}}&prev=1&dt={{dt}}'><img src="http://saltwater2013.dev.mvisolutions.com/sitemap/images/cared5_leftarrow.jpg"/></a></div>
@@ -116,8 +116,8 @@ function SetDeliveryDate(pInputField, day, shipping_date, method)
             <div class="float_left card5_txt2">Delivery Not Available</div>
           </div>
         </div>
-        <div class="card5_color_right card5_txt3">Selected Estimated Delivery Date:&nbsp;<span id="shipping_date"></span><br>
-          Shipping Price for option Selected:&nbsp;$<span id="shipping_charge">0.00</span></div>
+        <div class="card5_color_right card5_txt3">Selected Estimated Delivery Date:<span id="shipping_date"></span>
+          Shipping Price for option Selected:<span id="shipping_charge"></span></div>
         <div class="clr">
           <div class="float_left padtop3 padright5 padbottom5 card5_close card5_txt3"><input type="checkbox" name="IsPriorityShipping" id="IsPriorityShipping" onClick="SetPriorityShipping()" />Upgrade to priority shipping Delivery (by10am) $10.00</div>
         </div>

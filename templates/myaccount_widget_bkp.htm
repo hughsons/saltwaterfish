@@ -130,8 +130,7 @@ My Account
 		<tr><td  class="float_right padright10">Estimated.Tax:&nbsp;&nbsp;<strong>${{request.session.CartInfo.tax_total|floatformat:2}}</strong></td></tr>
 		{%endif%}
 		{%endif%}
-		<tr><td  class="float_right padright10">Total:&nbsp;&nbsp;<strong>${{request.session.CartInfo.subtotal|floatformat:2}}</strong></td>
-		</tr>
+		<tr><td  class="float_right padright10">Total:&nbsp;&nbsp;<strong>${{request.session.CartInfo.order_total|floatformat:2}}</strong></td></tr>
 		<tr><td align=center> <a href="/viewcart"><img src="misc/images/view_cart.jpg" border="0" /></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/checkoutlogin?gateway=AUTHORIZENET"><img src="misc/images/chk_out.jpg" border="0" /></a> </td></tr>
 		</table>
  		

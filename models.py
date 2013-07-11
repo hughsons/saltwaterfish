@@ -463,15 +463,15 @@ class ProductAccessories(models.Model):
         app_label = ''
 
 class ProductArticle(models.Model):
-    id = models.IntegerField(primary_key=True)
-    catalogid = models.IntegerField(null=True, blank=True)
-    article_title = models.CharField(max_length=150, blank=True)
-    short_review = models.CharField(max_length=450, blank=True)
-    long_review = models.TextField(blank=True)
-    rating = models.IntegerField(null=True, blank=True)
-    review_date = models.DateTimeField(null=True, blank=True)
-    approved = models.IntegerField(null=True, blank=True)
-    userid = models.IntegerField(null=True, blank=True)
+    id = models.IntegerField(db_index=True,primary_key=True)
+    catalogid = models.IntegerField(db_index=True,null=True, blank=True)
+    article_title = models.CharField(db_index=True,max_length=150, blank=True)
+    short_review = models.CharField(db_index=True,max_length=450, blank=True)
+    long_review = models.TextField(db_index=True,blank=True)
+    rating = models.IntegerField(db_index=True,null=True, blank=True)
+    review_date = models.DateTimeField(db_index=True,null=True, blank=True)
+    approved = models.IntegerField(db_index=True,null=True, blank=True)
+    userid = models.IntegerField(db_index=True,null=True, blank=True)
     userip = models.CharField(max_length=150, blank=True)
     class Meta:
         db_table = u'product_article'
@@ -491,10 +491,10 @@ class ProductBoxes(models.Model):
 
 class ProductCategory(models.Model):
     id = models.IntegerField()
-    catalogid = models.IntegerField(null=True, blank=True)
-    categoryid = models.IntegerField(null=True, blank=True)
-    ismain = models.CharField(max_length=150, blank=True)
-    sorting = models.IntegerField(null=True, blank=True)
+    catalogid = models.IntegerField(db_index=True,null=True, blank=True)
+    categoryid = models.IntegerField(db_index=True,null=True, blank=True)
+    ismain = models.CharField(db_index=True,max_length=150, blank=True)
+    sorting = models.IntegerField(db_index=True,null=True, blank=True)
     class Meta:
         db_table = u'product_category'
         app_label = ''
@@ -515,17 +515,17 @@ class ProductEmailfriend(models.Model):
         app_label = ''
 
 class ProductReview(models.Model):
-    id = models.IntegerField(primary_key=True)
-    catalogid = models.IntegerField(null=True, blank=True)
-    user_name = models.CharField(max_length=150, blank=True)
-    user_email = models.CharField(max_length=150, blank=True)
-    user_city = models.CharField(max_length=150, blank=True)
-    short_review = models.CharField(max_length=450, blank=True)
-    long_review = models.TextField(blank=True)
-    rating = models.IntegerField(null=True, blank=True)
-    review_date = models.DateTimeField(null=True, blank=True)
-    approved = models.IntegerField(null=True, blank=True)
-    userid = models.IntegerField(null=True, blank=True)
+    id = models.IntegerField(db_index=True,primary_key=True)
+    catalogid = models.IntegerField(db_index=True,null=True, blank=True)
+    user_name = models.CharField(db_index=True,max_length=150, blank=True)
+    user_email = models.CharField(db_index=True,max_length=150, blank=True)
+    user_city = models.CharField(db_index=True,max_length=150, blank=True)
+    short_review = models.CharField(db_index=True,max_length=450, blank=True)
+    long_review = models.TextField(db_index=True,blank=True)
+    rating = models.IntegerField(db_index=True,null=True, blank=True)
+    review_date = models.DateTimeField(db_index=True,null=True, blank=True)
+    approved = models.IntegerField(db_index=True,null=True, blank=True)
+    userid = models.IntegerField(db_index=True,null=True, blank=True)
     userip = models.CharField(max_length=150, blank=True)
     class Meta:
         db_table = u'product_review'
@@ -556,11 +556,11 @@ class ProductWaitinglist(models.Model):
         app_label = ''
 
 class Products(models.Model):
-    catalogid = models.IntegerField(primary_key=True)
-    id = models.CharField(max_length=150, blank=True)
-    name = models.CharField(max_length=765, blank=True)
-    categoriesaaa = models.CharField(max_length=300, blank=True)
-    mfgid = models.CharField(max_length=150, blank=True)
+    catalogid = models.IntegerField(db_index=True, primary_key=True)
+    id = models.CharField(db_index=True, max_length=150, blank=True)
+    name = models.CharField(db_index=True, max_length=765, blank=True)
+    categoriesaaa = models.CharField(db_index=True, max_length=300, blank=True)
+    mfgid = models.CharField(db_index=True, max_length=150, blank=True)
     manufacturer = models.IntegerField(null=True, blank=True)
     distributor = models.IntegerField(null=True, blank=True)
     cost = models.DecimalField(null=True, max_digits=21, decimal_places=4, blank=True)

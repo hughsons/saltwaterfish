@@ -1,9 +1,7 @@
-{% extends 'base.html' %}
-{% block content %}
+ 
 {% load tagsfilter %}
 <link type="text/css" rel="stylesheet" href="/misc/css3/style.css" />
- 
- 
+
  <script src="/misc/tabcontent.js" type="text/javascript"></script>
 <script type="text/javascript">
 	;(function($) {
@@ -178,7 +176,7 @@ width: auto;
 <div class="float-left padtop1 padleft15 pwid9">
 <div class="price clr"><span class="price1">Price Elsewhere: ${{products.price2|floatformat:2}}</span></div>
 <div class="sale-price clr padtop10">Sale Price: ${{products.saleprice|floatformat:2}}</div>
-<div class="price clr padtop10"><span >Savings: ${{products.price2|subtractval:products.saleprice|floatformat:2}}</span></div>
+<div class="price clr padtop10"><span >Savings: ${{products.price|subtractval:products.saleprice|floatformat:2}}</span></div>
 <div class="clr padtop27">
 <div class="quantity float-left product-height">Quantity</div>
 <div class="float-left padleft8"><form action="/addtocart" method="GET" name="form">{% csrf_token %}<input type="hidden" size="10" value="{{products.catalogid}}" name="item_id"><input name="quantity" type="text" class="text-box" value=1 /></div>
@@ -377,8 +375,11 @@ and Florida Locations</div>
 <!-- Bottom area ends -->
 </div>
 </div>
- 
+<div id="popup" style="left: -700px; position: absolute; top: 1177px; z-index: 9999; opacity: 1; display: none;min-height:200px;">
+        
+        <div id="contentss" style="height: auto; width: auto;"></div>
+</div>
 <div class="float-left wid20">&nbsp;&nbsp;</div>
 <div class="float-left wid20">&nbsp;&nbsp;</div>
 </div>
-{% endblock content %}
+ 

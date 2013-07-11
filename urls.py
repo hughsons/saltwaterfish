@@ -56,6 +56,9 @@ urlpatterns = patterns('',
     url(r'shippingcalander', ShippingCalander.as_view(), name="ShippingCalander"),
 	url(r'buygift', GiftCertificateView.as_view(), name = 'GiftCertificateView'),
 	url(r'AddReefPackages', AddReefPackagesActionClass.as_view(), name='AddReefPackages'),
+	url(r'paypalcheckout', PaypalCheckoutAction.as_view(), name='checkout'),
+	url(r'paypalcallback', PaypalCallBackView.as_view(), name='PaypalCallBack'),
+	url(r'fedexlocations', FedexLocationsViewClass.as_view(), name='FedexLocations'),
     
 
 # Murthy URLS ENDS HERE	
@@ -91,6 +94,8 @@ urlpatterns = patterns('',
 	url(r'^addressbook', AddressBookViewClass.as_view(), name='MyOrdersViewClass'),
 	url(r'^addaddressbook', AddAddressBookViewClass.as_view(), name='AddAddressBookViewClass'),
 	url(r'^fishschool', FishSchoolViewClass.as_view(), name='FishSchoolViewClass'),
+	url(r'^dupeproduct', ProductDupeInfoViewClass.as_view(), name='ProductInfoViewClass'),
+	url(r'^noimageproduct', ProductDupeimagesViewClass.as_view(), name='ProductInfoViewClass'),
 # Simon URLS HERE
 
     url(r'^apanel', ApanelViewClass.as_view(), name='apanel'),

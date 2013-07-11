@@ -118,7 +118,7 @@
   </div>
   <div class="clr">&nbsp;&nbsp;</div>
   <div class="clr">
-    <div class="float-left pwid12" align="left">Address Line2<span class="red_star"></span></div>
+    <div class="float-left pwid12" align="left">Address Line2<span class="red_star">*</span></div>
     <div class="float-left">{{ form.shipping_address2}}</div>
   </div>
   <div class="clr">&nbsp;&nbsp;</div>
@@ -183,7 +183,7 @@
     </div>
     <div class="clr">&nbsp;&nbsp;</div>
     <div class="clr">
-      <div class="float-left pwid12" align="left">Address Line2<span class="red_star"></span></div>
+      <div class="float-left pwid12" align="left">Address Line2<span class="red_star">*</span></div>
       <div class="float-left">{{ form.billing_address2 }}</div>
     </div>
     <div class="clr">&nbsp;&nbsp;</div>
@@ -268,7 +268,7 @@
           </div>
           <div class="clr">&nbsp;&nbsp;</div>
           <div class="clr">
-            <div class="float-left pwid12" align="left">Address Line2<span class="red_star"></span></div>
+            <div class="float-left pwid12" align="left">Address Line2<span class="red_star">*</span></div>
             <div class="float-left">{{ form.shipping_address2 }}</div>
           </div>
           <div class="clr">&nbsp;&nbsp;</div>
@@ -330,7 +330,7 @@
             </div>
             <div class="clr">&nbsp;&nbsp;</div>
             <div class="clr">
-              <div class="float-left pwid12" align="left">Address Line2<span class="red_star"></span></div>
+              <div class="float-left pwid12" align="left">Address Line2<span class="red_star">*</span></div>
               <div class="float-left">{{ form.billing_address2 }}</div>
             </div>
             <div class="clr">&nbsp;&nbsp;</div>
@@ -403,7 +403,7 @@
                   </div>
                   <div id = "ShippingCategoryContent{{i}}" align="left" style="display:none" >
                     <div class="padtop10 padbottom5"><strong>{{value.category_name}} Shipping method:</strong></div>
-                    <div>{{value.category_name}} Arrival Date</div>
+                    <div><strong>{{value.category_name}} Arrival Date</strong></div>
                     <div>
                       <p>Unless you request a specific date, we will ship your {{value.category_name}} order to arrive at
                         the earliest possible date. We will notify you by e-mail, if for some reason, your 
@@ -418,7 +418,7 @@
                       <input type="radio" name="OverNightShipping{{ key }}"/>
                       &nbsp;&nbsp;<strong>Overnight Shipping with Priority Upgrade (${{value.priority_shipping|floatformat:2}})</strong><br />
                     </div>
-                    <div class="padbottom25">This Category Requires a Fuel Surcharge of $9.99</div>
+                    <div class="padbottom25"><strong>. This Category Requires a Fuel Surcharge of $9.99</strong></div>
                     <div class="clr">
                       <div class="float-left"></div>
                       <div class="float-right"></div>
@@ -439,6 +439,14 @@
 					  <input type="hidden" name="FedexLocationCode{{key}}" id="FedexLocationCode{{i}}" value="" />
                       <div class="clr">&nbsp;</div>
                     </div>
+                    <div class="marbottom15 martop10"><strong>Delivery Notifications:</strong></div>
+                    <input type="checkbox" name="ReceiveDeliveryNotificationEMail" />
+                    &nbsp;&nbsp;Receive Delivery Notifications Via Email<br />
+                    <input type="checkbox" name="ReceiveDeliveryNotificationSMS"/>
+                    &nbsp;&nbsp;Receive Delivery Notifications Via SMS<br />
+                    <div class="padleft23 padtop5">Enter your mobile number:&nbsp;&nbsp;
+                      <input type="text" value="" name="MobileNo" />
+                    </div>
                     <div class="clr">&nbsp;</div>
                     {% if next_index > 0 %}
                     <div class="clr">
@@ -458,12 +466,6 @@
               {% endfor %}</div>
           </div>
         </div>
-		<div class="marbottom15 martop10"><strong>Delivery Notifications:</strong></div>
-		<table border=0 cellpadding="2" cellspacing="1">
-		  <tr><td><input type="checkbox" name="ReceiveDeliveryNotificationEMail" /></td><td>Receive Delivery Notifications Via Email</td></tr>
-		  <tr><td><input type="checkbox" name="ReceiveDeliveryNotificationSMS" /></td><td>Receive Delivery Notifications Via SMS</td></tr>
-		  <tr><td colspan="2">Enter your mobile number: <input type="text" value="" name="MobileNo" /></td></tr>
-        </table>
         <div class="clr martop10 marbottom20">
           <div class="button" align="center">
             <input type="button" id="ContinueToPaymentInfo" value="Continue To Payment Information">
@@ -544,7 +546,7 @@
               {% if request.session.PaymentGateway == 'AUTHORIZENET' %}
               <!-- Begin Credit Card Information -->
               <div class="clr">
-                <div id="CreditCardPanel"><strong>ENTER YOUR CREDIT CARD INFORMATION</strong></div>
+                <div id="CreditCardPanel"> Enter your Credit card Information:</div>
 				{% if request.session.IsLogin %}
 	  			  {% if form.previous_cards %}
                     <div class="clr">Use Previously Saved Credit Card:</div>
@@ -577,7 +579,7 @@
                     </tr>
                     <tr>
                       <td class="padleft10" align="left" valign="top">CVN</td>
-                      <td colspan="4" align="left" valign="top">{{ form.card_cvn }}<span class="blue_link" onclick="OpenWhatIsCVV()" style="cursor: pointer;">What's this?</span></td>
+                      <td colspan="4" align="left" valign="top">{{ form.card_cvn }}<span class="blue_link"><a href="#">What's this?</a></span></td>
                       <td align="right" valign="top">&nbsp;</td>
                     </tr>
                     <tr>
@@ -599,15 +601,11 @@
                   <table id="NewAccountForm">
                     <tr>
                       <td class="clr padbottom10">Email</td>
-                      <td>{{ form.username1 }} </td>
+                      <td>{{ form.username }} </td>
                     </tr>
                     <tr>
                       <td class="clr padbottom10">Password</td>
-                      <td> {{ form.password1 }}</td>
-                    </tr>
-                    <tr>
-                      <td class="clr padbottom10">Confirm Password</td>
-                      <td> {{ form.confirm_password1 }}</td>
+                      <td> {{ form.password }}</td>
                     </tr>
                   </table>
                 </div>
@@ -620,7 +618,7 @@
                 <div class="clr">&nbsp;</div>
                 <div class="clr">
                   <div class="button">
-                    <input type="submit" name="submit" value="Place Order" onclick="return ValidateAllForms()">
+                    <input type="submit" name="submit" value="Place Order">
                   </div>
                 </div>
                 <div class="clr">&nbsp;</div>
@@ -716,7 +714,7 @@
 /* Toggle Panel end */
 
 /* Below Java Script is added by Murthy */
-function IsAddressFormValid()
+function IsFormValid()
 {
     //alert($("#id_shipping_first_name").val());
 	//alert($("#IsBillingAddressSame").val());
@@ -745,12 +743,12 @@ function IsAddressFormValid()
 	 return false;
    }
 
-   /*if ($("#id_shipping_address2").val().match(/^\s*$/gi))
+   if ($("#id_shipping_address2").val().match(/^\s*$/gi))
    {
 	 alert("Address is needed.");
 	 $("#id_shipping_address2").focus();
 	 return false;
-   }*/
+   }
 
    if ($("#id_shipping_city").val().match(/^\s*$/gi))
    {
@@ -794,7 +792,7 @@ function IsAddressFormValid()
 	 return false;
    }
 
-   //If billing address is not same as shipping address, validating billing address
+
    if (!element.checked)
    {
 	   if ($("#id_billing_first_name").val().match(/^\s*$/gi))
@@ -818,12 +816,12 @@ function IsAddressFormValid()
 		 return false;
 	   }
 	
-	   /*if ($("#id_billing_address2").val().match(/^\s*$/gi))
+	   if ($("#id_billing_address2").val().match(/^\s*$/gi))
 	   {
 		 alert("Address is needed.");
 		 $("#id_billing_address2").focus();
 		 return false;
-	   }*/
+	   }
 	
 	   if ($("#id_billing_city").val().match(/^\s*$/gi))
 	   {
@@ -933,7 +931,6 @@ $(document).ready(function(){
   });
 
   $("#ShippingMethods").click(function(){ 
-    if (!IsAddressFormValid()) return false;
   	if (!$("#ShippingAddressPanel").is(":hidden"))
 	{
       $("#ShippingAddressPanel").slideToggle("slow");
@@ -953,7 +950,6 @@ $(document).ready(function(){
   });
 
   $("#PaymentInfo").click(function(){ 
-    if (!IsAddressFormValid()) return false;
   	if (!$("#ShippingAddressPanel").is(":hidden"))
 	{
       $("#ShippingAddressPanel").slideToggle("slow");
@@ -969,7 +965,7 @@ $(document).ready(function(){
   });
   
   $("#ContinueToShippingMethod").click(function(){
-    if (!IsAddressFormValid()) return false;
+    if (!IsFormValid()) return false;
 	if (!$("#ShippingAddressPanel").is(":hidden"))
 	{
       $("#ShippingAddressPanel").slideToggle("slow");
@@ -988,86 +984,6 @@ $(document).ready(function(){
 
 });
 
-function OpenWhatIsCVV()
-{
-   w = 300;
-   h = 500;
-   var left = (screen.width/2)-(w/2);
-   var top = (screen.height/2)-(h/2);
-   //alert("Opening window");
-   window.open("https://www.saltwaterfish.com/assets/templates/common/images/cvv2.gif", "", 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
-}
-
-function ValidateAllForms()
-{
-  if (!IsAddressFormValid()) return false;
-
-  element = document.getElementById("id_card_holder_name");
-
-  if (element)
-  {
-      if ($("#id_card_holder_name").val().match(/^\s*$/gi))
-	  {
-		 alert("Please enter Card Holder Name.");
-		 $("#id_card_holder_name").focus();
-		 return false;
-	  }
-
-      if ($("#id_card_number").val().match(/^\s*$/gi))
-	  {
-		 alert("Please enter valid credit card number.");
-		 $("#id_card_number").focus();
-		 return false;
-	  }
-
-      if (! $("#id_card_expdate").val().match(/^\d+\/\d+$/gi))
-	  {
-		 alert("Expiry Date is required or invalid.");
-		 $("#id_card_expdate").focus();
-		 return false;
-	  }
-	  
-      if (! $("#id_card_cvn").val().match(/^\d+$/gi))
-	  {
-		 alert("Please enter CVN.");
-		 $("#id_card_cvn").focus();
-		 return false;
-	  }
-  }
-
-
-  if ($("#id_username1").val().match(/^\s*$/gi))
-  {
-	 alert("Please enter valid EMailID.");
-	 $("#id_username1").focus();
-	 return false;
-  }
-  
-    
-  if ($("#id_password1").val().match(/^\s*$/gi))
-  {
-	 alert("Please enter the password.");
-	 $("#id_password1").focus();
-	 return false;
-  }
-
-
-  
-  if ($("#id_confirm_password1").val().match(/^\s*$/gi))
-  {
-	 alert("Please reenter the password.");
-	 $("#id_confirm_password1").focus();
-	 return false;
-  }
-
-  if ($("#id_password1").val() != $("#id_confirm_password1").val())
-  {
-	 alert("Your password is not mached. Plese re-enter");
-	 $("#id_password1").focus();
-	 return false;
-  }
-  return true;
-}
 </script>
 </div>
 <div class="clr">&nbsp;</div>

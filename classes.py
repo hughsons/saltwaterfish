@@ -1,6 +1,7 @@
 from models import *
 from django.db import connection
 import collections
+import logging
 
 import time
 import calendar
@@ -121,6 +122,21 @@ def GetAlaskaShippingCharge(category_id):
   shipping_cat_obj = ShippingCategory.objects.filter(id = category_id, status='ACTIVE')[0]
   return shipping_cat_obj.alaska_delivery 
 
+def GetParentCategory(category_id):
+  cursor = connection.cursor()
+  parent_id = 99999
+  levels = 0
+  while (parent_id > 0 and levels < 100):
+    cursor.execute("SELECT id, category_name, category_parent from category where id = %d" %category_id)
+    row = cursor.fetchone()
+    category_id = row[0]
+    category_name = row[1]
+    parent_id = row[2]
+    category_id = parent_id
+    levels += 1
+
+  return (category_id, category_name, parent_id)
+
 
 class Error(object):
   def __init__(self):
@@ -142,6 +158,7 @@ class StoreCredit(object):
     def __init__(self):
       self.id = 0
       self.credit_value = 0.0
+      self.credits_applied = 0.0
 
 class MyShippingCategory(object):
   
@@ -168,6 +185,7 @@ class CartInfo(Error):
     self.tax_total = 0.0
     self.promotions_total = 0
     self.store_credit = 0.0
+    self.credits_applied = 0.0
     self.order_total = 0.0
 
     self.is_storecredit_applied = False
@@ -215,9 +233,11 @@ class CartInfo(Error):
     credit_value = obj.credit_value
     self.store_credit = credit_value
     if self.order_total >= self.store_credit:
+      self.credits_applied = self.order_total - self.store_credit  
       self.order_total -= self.store_credit
       self.store_credit = 0 
     elif self.order_total < self.store_credit and self.order_total > 0:
+      self.credits_applied = self.order_total
       self.store_credit -=  self.order_total
       self.order_total = 0
 
@@ -409,7 +429,15 @@ class CartInfo(Error):
     return (shipping_charge, fuel_charge, free_shipping_diff)
  
  
-  def GetItemsByShippingCategory(self, cart_dict, customer=None):
+  def GetItemsByShippingCategory(self, cart_dict, customer=None, request=None):
+    promotions = []
+    coupon_code = ""
+    if "Promotions" in request.session:
+      promotions = request.session["Promotions"]
+      
+    if "CouponCode" in request.session:
+      coupon_code = request.session["CouponCode"]
+      
     items_dict = cart_dict
     tax_list = []
     excluded_zips = []
@@ -430,6 +458,7 @@ class CartInfo(Error):
     for key, item in items_dict.items():
       item.CalculateTotals()
       shipping_category_id = item.shipping_category
+      #product_category_list = item.product_category_list
       if item.shipping_category in shipping_categories_dict:
         shipping_categories_dict[item.shipping_category].append(item)
       else:
@@ -457,18 +486,47 @@ class CartInfo(Error):
       shipping_category.tax = tax
       shipping_category.tax_value = (shipping_category.shipping_value * shipping_category.tax)/100
       
+      if coupon_code.lower() == "freefedex":       
+        if shipping_category.shipping_value >= 99 and shipping_category.id == 8:
+          shipping_category.shipping_charge = 0
+      elif coupon_code.lower() == "allfree":
+        # Checking whether the Reef Package is added to the cart or not
+        if shipping_categories_dict.has_key(12):
+          shipping_category.shipping_charge = 0
+      elif coupon_code.lower() == "atlantareefclub":
+        if shipping_category.shipping_value >= 1000 and shipping_category.id == 8:
+          shipping_category.shipping_value -= shipping_category.shipping_value * 20/100
+      elif coupon_code.lower() == "welcome":
+          shipping_category.shipping_value -= shipping_category.shipping_value * 15/100
+
       shipping_category.supplies_total = (shipping_category.shipping_value + 
                                           shipping_category.shipping_charge +
                                           shipping_category.fuel_charge +
                                           shipping_category.tax_value -
                                           shipping_category.promotions)                                    
                                             
-      
-      self.subtotal += shipping_category.shipping_value
+      self.subtotal += shipping_category.shipping_value      
+      promotion_prod_cat_list = []
+
+ 
+      #for promotion in promotions:
+      #  if promotion.by_category:
+      #    cat_list = promotion.by_category.split(",")
+      #    for cat in cat_list:
+      #      if cat: promotion_prod_cat_list.append(GetParentCategory(cat))
+      #    is_free_shipping = False
+      #    for cat in promotion_prod_cat_list:
+      #      shp_cat_id = self.product_shipping_cat_map[int(cat)]
+      #      if (shipping_category.id == shp_cat_id and 
+      #          shipping_category.shipping_value >= promotion.by_amount and
+      #          promotion.promotion_freeshipping == 1):
+      #        shipping_category.shipping_charge = 0             
+
       self.shipping_total +=  shipping_category.shipping_charge
       self.fuelcharge_total += shipping_category.fuel_charge
       self.tax_total += shipping_category.tax_value
       self.promotions_total += shipping_category.promotions
+      
       
       my_shipping_obj_list.append(shipping_category)
     
@@ -482,6 +540,85 @@ class CartInfo(Error):
  
     return my_shipping_obj_list
   
+#============
+#  def GetItemsByShippingCategory(self, cart_dict, customer=None):
+#    promotions = []
+#    if "Promotions" in request.session:
+#      promotions = request.session["Promotions"]
+#      
+#    items_dict = cart_dict
+#    tax_list = []
+#    excluded_zips = []
+#    state = 'FL'
+#    if customer:
+#      state = customer.billing_state  
+#      tax_list = Tax.objects.filter(tax_country = 'US', tax_state = state)
+#
+#    if tax_list:
+#      tax = tax_list[0].tax_value1
+#    else:
+#      tax = 0.0
+#
+#    # Dictionary contains shipping category id as a key and a list of items as values.
+#    shipping_categories_dict = {}
+#    shipping_cat_names_hash = {}
+#    # Collecting Category wise Items 
+#    for key, item in items_dict.items():
+#      item.CalculateTotals()
+#      shipping_category_id = item.shipping_category
+#      if item.shipping_category in shipping_categories_dict:
+#        shipping_categories_dict[item.shipping_category].append(item)
+#      else:
+#        shipping_categories_dict[item.shipping_category] = [item]
+#        shipping_cat_names_hash[item.shipping_category] = item.shipping_category_name
+# 
+#
+#    # Calculating Shipping Charge, Fuel Charge and Tax for each category
+#    my_shipping_obj_list = [] 
+#    for key, value in shipping_categories_dict.items():
+#      shipping_category = MyShippingCategory()
+#      shipping_category.id = key
+#      shipping_category.name = shipping_cat_names_hash[key]
+#      shipping_category.shipping_items = value
+#      # Calculating Shipping Value
+#      for item in shipping_category.shipping_items:
+#        shipping_category.shipping_value += float(item.subtotal)
+#      
+#   
+#      (shipping_category.shipping_charge, shipping_category.fuel_charge, 
+#       shipping_category.freeshipping_diff) =  self.GetShippingCharge(shipping_category.id, 
+#                                                           shipping_category.shipping_value, 
+#                                                           state, excluded_zips)
+#      
+#      shipping_category.tax = tax
+#      shipping_category.tax_value = (shipping_category.shipping_value * shipping_category.tax)/100
+#      
+#      shipping_category.supplies_total = (shipping_category.shipping_value + 
+#                                          shipping_category.shipping_charge +
+#                                          shipping_category.fuel_charge +
+#                                          shipping_category.tax_value -
+#                                          shipping_category.promotions)                                    
+#                                            
+#      
+#      self.subtotal += shipping_category.shipping_value
+#      self.shipping_total +=  shipping_category.shipping_charge
+#      self.fuelcharge_total += shipping_category.fuel_charge
+#      self.tax_total += shipping_category.tax_value
+#      self.promotions_total += shipping_category.promotions
+#      
+#      my_shipping_obj_list.append(shipping_category)
+#    
+#
+#    self.order_total = self.subtotal + self.shipping_total + self.fuelcharge_total + self.tax_total - self.promotions_total
+#    
+#    # Applying Store Credit        
+#    #if self.is_storecredit_applied:
+#     
+#    #od = collections.OrderedDict(sorted(shipping_categories_dict.items()))
+# 
+#    return my_shipping_obj_list
+
+#========
   def GetNumberOfItems(self, p_dict):
     cart_dict = p_dict;
     item_count = 0
@@ -502,8 +639,10 @@ class CartItem(Error):
     self.saleprice = 0.0
     self.quantity = 0
     self.qoh = 0 # (Quantity on Hand)
+    self.product_cat_list = []
     self.shipping_category = 0
     self.shipping_category_name = ''
+    self.product_shipping_cat_map = {}
     self.shipping_charge = 0
     self.tax_percent = 0.0
     self.tax_value = 0.0
@@ -559,6 +698,17 @@ class CartItem(Error):
     self.onsale = product.onsale
     self.saleprice = product.saleprice
     self.qoh = product.stock # (Quantity on Hand)
+    
+    product_cats = ProductCategory.objects.filter(catalogid=p_catalog_id)
+    
+    for product_cat in product_cats:
+      self.product_cat_list.append(product_cat.categoryid)
+      #logging.info("\n\n\n\n")
+      #logging.info(product_cat.categoryid)
+      #logging.info("\n\n\n\n")
+      #prod_shp_cat_obj = ProductShippingCategories.objects.filter(product_category_id = product_cat.categoryid)[0]
+      #self.product_shipping_cat_map[category_id] = prod_shp_cat_obj.shipping_category_id 
+      
     
     # No need to fill the values. Will be calculated for every category.
     self.shipping_category = 0

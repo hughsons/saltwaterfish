@@ -158,8 +158,9 @@ class CreditCardForm(forms.Form):
  
   
 class NewAccountForm(forms.Form):
-  username = forms.CharField(widget=forms.TextInput(attrs={'class' : 'txt-box1', 'autocomplete':'OFF', 'placeholder':'Email Address'}),max_length = 50)
-  password = forms.CharField(widget=forms.PasswordInput(render_value=False,attrs={'class' : 'txt-box1', 'autocomplete':'OFF', 'placeholder':'Password'}), max_length=25)
+  username1 = forms.CharField(widget=forms.TextInput(attrs={'class' : 'txt-box1', 'autocomplete':'OFF', 'placeholder':'Email Address'}),max_length = 50)
+  password1 = forms.CharField(widget=forms.PasswordInput(render_value=False,attrs={'class' : 'txt-box1', 'autocomplete':'OFF', 'placeholder':'Password'}), max_length=25)
+  confirm_password1 = forms.CharField(widget=forms.PasswordInput(render_value=False,attrs={'class' : 'txt-box1', 'autocomplete':'OFF', 'placeholder':'Confirm Password'}), max_length=25) 
   
 class PaypalOrderFormNoLogin(BillingShippingAddressForm, NewAccountForm):
   comment = forms.CharField(widget=forms.Textarea, max_length = 255L, required=False)

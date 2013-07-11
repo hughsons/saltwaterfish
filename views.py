@@ -26,38 +26,19 @@ import urllib2
 import urllib
 import httplib
 from xml.dom import minidom
+from datetime import datetime as dt
+import time
+from google.appengine.api import memcache
 PERPAGE=50
 class CsrfExemptMixin(object):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(CsrfExemptMixin, self).dispatch(request, *args, **kwargs)
 
-def refresh_Token(token_type):
-    tokens = AccessTokens.objects.filter(token_type=token_type)
-    access_token = tokens[0].access_token
-    refresh_token = tokens[0].refresh_key
-    #client_id = tokens[0].client_id
-    #client_secret = tokens[0].client_secret
-    #refresh_token = "1/bAocHPlne_VV3HFSuQQmksILtJ-Q92-shyMy2PSz8aw"
-    client_id = "246972017795.apps.googleusercontent.com"
-    client_secret = "Kc_X6Ap4dd0ubr60t5-pT9BJ"
-    access_tokens = ""
-    data = {}
-    data['refresh_token'] = refresh_token
-    data['client_id'] = client_id
-    data['client_secret'] = client_secret
-    data['grant_type'] = 'refresh_token'
-    req = urllib2.Request('https://accounts.google.com/o/oauth2/token', urllib.urlencode(data))
-    socket = urllib2.urlopen(req)
-    html = socket.read()
-    socket.close()
-    refresh_json = json.loads(html)
-    access_tokens = refresh_json['access_token']
-    token_expiry = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.localtime(time.time() + 3000))
-    logging.info('Access Token-------------------')
-    logging.info(access_tokens)
-    logging.info('Access Token-------------------')
-    return access_tokens
+def now_str():
+    """Return hh:mm:ss string representation of the current time."""
+    t = dt.now().time()
+    return t.strftime("%H:%M:%S")
 
 def GetRecaptcha(request):
     value = random.randrange(10000, 99999, 1)
@@ -107,7 +88,7 @@ def relatedproditems(pid,noi):
             pcats += str(pwcats.categoryid)+", "
         pcats = pcats[:-2]+''
         logging.info('categoryid:: %s',pcats)
-        relateditems=Products.objects.raw('select * from product_category,products where products.catalogid!='+pid+' and product_category.catalogid=products.catalogid and hide=0 and categoryid in ('+pcats+')')[:noi]
+        relateditems=Products.objects.raw('select distinct products.catalogid,products.name,products.onsale,products.saleprice,products.price from product_category,products where products.catalogid!='+pid+' and product_category.catalogid=products.catalogid and hide=0 and categoryid in ('+pcats+')')[:noi]
     else:
         relateditems=""
         
@@ -573,6 +554,7 @@ class ReefPackageViewClass(TemplateView):
 
 class ProductInfoViewClass(TemplateView):
     def get(self, request, *args, **kwargs):
+        logging.info('Fetch Started::  %s', now_str())
         pid = request.GET['pid']
         product_list = Products.objects.get(catalogid=pid)
         product_reviews = ProductReview.objects.all().filter(catalogid=pid, approved=1)
@@ -585,7 +567,44 @@ class ProductInfoViewClass(TemplateView):
                    'relateditems':relatedproditems(pid,8),'product_reviews':product_reviews,}
         content.update(leftwidget(request))
         logging.info('totalreviews:: %s',totreviews)
+        logging.info('Fetch Ended::  %s', now_str())
         return render_template(request, 'product.htm', content)
+
+class ProductDupeInfoViewClass(TemplateView):
+    def get(self, request, *args, **kwargs):
+        logging.info('Fetch Started::  %s', now_str())
+        pid = request.GET['pid']
+        product_list = Products.objects.get(catalogid=pid)
+        product_reviews = ProductReview.objects.all().filter(catalogid=pid, approved=1)
+        totalreviews = ProductReview.objects.filter(catalogid=pid,approved=1).aggregate(Sum('rating'))
+        if product_reviews.count() >=1:
+            totreviews = totalreviews['rating__sum']/product_reviews.count()
+        else:
+            totreviews = 0
+        content = {'page_title': product_list.name,"products":product_list,'totalreviews':totreviews,
+                   'relateditems':relatedproditems(pid,8),'product_reviews':product_reviews,}
+        content.update(leftwidget(request))
+        logging.info('totalreviews:: %s',totreviews)
+        logging.info('Fetch Ended::  %s', now_str())
+        return render_template(request, 'product.htm', content)
+
+class ProductDupeimagesViewClass(TemplateView):
+    def get(self, request, *args, **kwargs):
+        logging.info('Fetch Started::  %s', now_str())
+        pid = request.GET['pid']
+        product_list = Products.objects.get(catalogid=pid)
+        product_reviews = ProductReview.objects.all().filter(catalogid=pid, approved=1)
+        totalreviews = ProductReview.objects.filter(catalogid=pid,approved=1).aggregate(Sum('rating'))
+        if product_reviews.count() >=1:
+            totreviews = totalreviews['rating__sum']/product_reviews.count()
+        else:
+            totreviews = 0
+        content = {'page_title': product_list.name,"products":product_list,'totalreviews':totreviews,
+                   'product_reviews':product_reviews,'relateditems':relatedproditems(pid,8)}
+        #content.update(leftwidget(request))
+        logging.info('totalreviews:: %s',totreviews)
+        logging.info('Fetch Ended Started::  %s', now_str())
+        return render_template(request, 'product_nodesign.htm', content)
 
 class OrderInfoViewClassold(LoginRequiredMixin,TemplateView):
     def get(self, request, *args, **kwargs):
@@ -602,6 +621,7 @@ class OrderInfoViewClassold(LoginRequiredMixin,TemplateView):
 
 class OrderInfoViewClass(LoginRequiredMixin,TemplateView):
     def get(self, request, *args, **kwargs):
+        logging.info('Fetch Started::  %s', now_str())
         oid = request.GET['oid']
         product_list = Orders.objects.get(orderid=oid,
                                           ocustomerid = request.session['Customer'].contactid)
@@ -615,6 +635,7 @@ class OrderInfoViewClass(LoginRequiredMixin,TemplateView):
         content = {'page_title': 'Orders Page',"item":product_list,'alloiitems':alloiitems,
                    'totalamt':totalamt,'rmaitems':rmaitems,}
         content.update(leftwidget(request))
+        logging.info('Fetch Ended ::  %s', now_str())
         return render_template(request, 'orderinfo.htm', content)
 
 class RMARequestViewClass(TemplateView):

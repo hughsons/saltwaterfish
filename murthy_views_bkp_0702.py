@@ -540,7 +540,7 @@ class OrderConfirmationView(TemplateView):
     else:
       logging.info("Non Login traverse or No customer information in the session")
       data = {'contact_id':0,
-          'username1': request.session['GuestEMail']
+          'username': request.session['GuestEMail']
           }
 
       temp_data = {'card_holder_name':'John Doe', 'card_number': '4111111111111111', 
@@ -626,13 +626,9 @@ class CheckOutLoginViewClass(TemplateView):
       return value
 
   def get(self, request, *args, **kwargs):
-    error_message = ''
-    error_message2 = ''
+    error_message = ""
     if 'ErrorMessage' in request.session:
       error_message = request.session['ErrorMessage']
-      
-    if 'ErrorMessage2' in request.session:
-      error_message2 = request.session['ErrorMessage2']
     
     if 'gateway' in request.GET:
       request.session['PaymentGateway'] = request.GET['gateway']    
@@ -641,7 +637,6 @@ class CheckOutLoginViewClass(TemplateView):
                'LoginForm':LoginForm,
                'recaptcha':"https://chart.googleapis.com/chart?chst=d_text_outline&chld=FFCC33|16|h|FF0000|b|%s" %self.GetRecaptcha(request),
                'error_message': error_message,
-               'error_message2' : error_message2
               }
     content.update(leftwidget(request))
     return render_template(request,'CheckOutLogin.html', content)
@@ -795,19 +790,18 @@ class CheckOutCallBackViewClass(TemplateView):
     amount = request.GET['amt']
     currency = request.GET['cc']
     item_number = request.GET['item_number']
-    invoice_no = request.GET['invoice_no']
     
-#    tran_list = Transactions.objects.filter(transactionid = tx)
-#
-#    invoice_no = ""
-#    if not tran_list:
-#      order_id = SaveOrder(request, tx)
-#      oobj = Orders.objects.get(orderid = order_id)
-#      invoice_no = oobj.invoicenum_prefix + str(oobj.invoicenum)
-#    else:
-#      tran_obj = tran_list[0]
-#      order_id = tran_obj.orderid
-#      error_message = "Transaction is already recorded. Please find the order number below"  
+    tran_list = Transactions.objects.filter(transactionid = tx)
+
+    invoice_no = ""
+    if not tran_list:
+      order_id = SaveOrder(request, tx)
+      oobj = Orders.objects.get(orderid = order_id)
+      invoice_no = oobj.invoicenum_prefix + str(oobj.invoicenum)
+    else:
+      tran_obj = tran_list[0]
+      order_id = tran_obj.orderid
+      error_message = "Transaction is already recorded. Please find the order number below"  
     
     
     content = {'page_title': "Payment Confirmation",

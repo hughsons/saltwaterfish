@@ -726,7 +726,7 @@ class GuestLoginActionClass(TemplateView):
            guest_email = request.POST['EMail']
            customer_list = customers.objects.filter(email = guest_email) 
            if customer_list:
-             request.session['ErrorMessage2'] = "You are already a registered customer.Please login from the returning customers section."
+             request.session['ErrorMessage2'] = "You are already a registered customer. Please login from left pane."
              return HttpResponseRedirect('/checkoutlogin');
 
        return HttpResponseRedirect('/orderconfirmation');
@@ -1000,8 +1000,8 @@ class CommitOrderActionClass(TemplateView):
         customer = request.session['Customer']        
       elif is_guest:
         customer = customers()
-        customer.email = form.cleaned_data['username1'].strip()
-        customer.pass_field = form.cleaned_data['password1'].strip()
+        customer.email = form.cleaned_data['username'].strip()
+        customer.pass_field = form.cleaned_data['password'].strip()
 
       customer.shipping_firstname = form.cleaned_data['shipping_first_name'].strip()
       customer.shipping_lastname = form.cleaned_data['shipping_last_name'].strip()
@@ -1089,11 +1089,6 @@ class CommitOrderActionClass(TemplateView):
       request.session['CartInfo'] = cart
       request.session['ShippingMethod'] = shipping_method_hash 
       request.session['OrderComment'] = form.cleaned_data['comment'].strip()
-
-      if request.session['PaymentGateway'] != 'None':
-        payment_method = PaymentMethods.objects.filter(payment_gateway=request.session['PaymentGateway'])[0].gateway_id
-      else:
-        payment_method = -1
      
       if is_guest:
         customer = customers.objects.all().latest('contactid')
@@ -1143,58 +1138,17 @@ class CommitOrderActionClass(TemplateView):
         gateway = AimGateway(settings.AUTHORIZENET_API_LOGIN_ID, settings.AUTHORIZENET_API_PASSWORD)
         gateway.use_test_mode = settings.TEST_MODE
         gateway.use_test_url = settings.TEST_MODE_URL
-        
-        c = ANCustomer()
-        c.ip = ''
-        c.email = customer.email
-        c.cust_id = customer.contactid
-        c.phone = customer.billing_phone
-        c.fax = ''
-        
-        c.billing_address = Address()
-        c.billing_address.first_name = customer.billing_firstname
-        c.billing_address.last_name = customer.billing_lastname
-        c.billing_address.address1 = customer.billing_address
-        c.billing_address.address2 = customer.billing_address2
-        c.billing_address.city = customer.billing_city
-        c.billing_address.state_province = customer.billing_state
-        c.billing_address.postal_code = customer.billing_zip
-        c.billing_address.country = customer.billing_country
-        c.billing_address.phone = customer.billing_phone
-        
-        c.shipping_address = Address()
-        c.shipping_address.first_name = customer.shipping_firstname
-        c.shipping_address.last_name = customer.shipping_lastname
-        c.shipping_address.address1 = customer.shipping_address
-        c.shipping_address.address2 = customer.shipping_address2
-        c.shipping_address.city = customer.shipping_city
-        c.shipping_address.state_province = customer.shipping_state
-        c.shipping_address.postal_code = customer.shipping_zip
-        c.shipping_address.country = customer.shipping_country
-        c.shipping_address.phone = customer.shipping_phone        
-        
-        #o.order_id = 9999
-        #o.description = 'Murthy Order Description'      
-        
-        response = gateway.authorize(cart.order_total, card, order=None, customer = c)
+        response = gateway.authorize(1, card)
         #return HttpResponse("<h1>Done</h1>")
         
         if response.status_strings[response.status] == "Approved":
-          order_obj = SaveOrder(request)
-          ord = OrderInfo()
-          ord.order_id = order_obj.invoicenum_prefix + str(order_obj.invoicenum)
-          ord.description = ''
-          response = gateway.sale("%8.2f" %cart.order_total, card, ord, c)
+          response = gateway.sale("%8.2f" %cart.order_total, card)
           if response.status_strings[response.status] == "Approved":
             if is_save_card:
               # This will trigger the save credit card option in Call Back Code.
               request.session['CreditCard'] = card.__dict__
-            
-            SaveTransaction(order_obj, response.trans_id, cart.order_total)
-            #return HttpResponse("<h1>Payment though Authroize.Net is success</h1>")
-            invoice_no = order_obj.invoicenum_prefix + str(order_obj.invoicenum)
-            return HttpResponseRedirect(settings.CALLBACK_URL + '?tx=%s&st=Approved&amt=%s&cc=USD&item_number=&invoice_no=%s' %(response.trans_id,
-                                                                                                                  "%8.2f" %cart.order_total, invoice_no))
+            return HttpResponseRedirect(settings.CALLBACK_URL + '?tx=%s&st=Approved&amt=%s&cc=USD&item_number=' %(response.trans_id,
+                                                                                                                  "%8.2f" %request.session['CartInfo'].order_total))
           else:
             request.session['ErrorMessage'] =  "<h5>%s - %s: %s</h5>" %(response.trans_id, response.status_strings[response.status], response.message)
         else:
@@ -1206,21 +1160,13 @@ class CommitOrderActionClass(TemplateView):
         p = request.session['P']
         token = request.session["PaypalToken"]
         payer_id = request.session["PaypalPayerID"]  
-        success = p.DoExpressCheckoutPayment("USD", "%8.2f" %cart.order_total, token, payer_id)
+        success = p.DoExpressCheckoutPayment("USD", str(cart.order_total), token, payer_id)
         if success:
-          order_obj = SaveOrder(request)
           tx = p.api_response['TRANSACTIONID']
-          amount = p.api_response['AMT']
-          SaveTransaction(order_obj, tx, amount)
-          invoice_no = order_obj.invoicenum_prefix + str(order_obj.invoicenum)     
-          return HttpResponseRedirect(settings.CALLBACK_URL + '?tx=%s&st=Approved&amt=%s&cc=USD&item_number=&invoice_no=%s' %(tx, amount, invoice_no))
+          amount = p.api_response['AMT']        
+          return HttpResponseRedirect(settings.CALLBACK_URL + '?tx=%s&st=Approved&amt=%s&cc=USD&item_number=' %(tx, amount))
         else:
           request.session["ErrorMessage"] = "Paypal Transaction is Failed: %s" %p.apierror
-          logging.info("\n\nPaypal Transaction Failure")
-          logging.info("Order Total: %8.2f" %cart.order_total)
-          logging.info(p.apierror)
-          logging.info("\n\n")
-          #time.sleep(10)
           return HttpResponseRedirect("/viewcart") 
 
       elif is_login and gateway == 'None':
@@ -1282,222 +1228,3 @@ class PaypalCheckoutAction(TemplateView):
     papal_auth_url = settings.PAYPAL_AUTHORIZATION_URL + "&token=%s" %token
     request.session['P'] = p
     return HttpResponseRedirect(papal_auth_url)
-
-#----------------------------------------------------------------------------------------------
-#Payment Gateway Operations
-#----------------------------------------------------------------------------------------------
-class Address(object):
-  '''Address class to store billing and shipping information in Authorize.Net'''
-
-  def __init__(self, p_first_name='', p_last_name='', p_company = '',
-               p_address1='', p_address2='', p_city='',
-               p_state_province='', p_postal_code='', p_country='US',
-               p_phone = '', p_fax = ''):
-
-    self.first_name = p_first_name
-    self.last_name = p_last_name
-    self.company = p_company
-    self.address1 = p_address1
-    self.address2 = p_address2
-    self.city = p_city
-    self.state_province = p_state_province
-    self.postal_code = p_postal_code
-    self.country = p_country
-    self.phone = p_phone
-    self.fax = p_fax
-
-class ANCustomer(object):
-  '''Customer class to store custmer information in Authorize.Net'''
-
-  def __init__(self):
-    self.ip = ''
-    self.email = ''
-    self.cust_id = ''
-    self.billing_address = None
-    self.shipping_address = None
-    self.phone = ''
-    self.fax = ''
-
-class OrderInfo(object):
-  '''Order class for Authorize.Net'''
-
-  def __init__(self):
-    self.order_id = ''
-    self.description = ''
-    self.items = []
-
-
-def SaveTransaction(order_obj, transactionid, amount):
-    # Updating Transaction Details
-    transaction = Transactions()
-    transaction.orderid = order_obj.orderid # Recent order ID
-    transaction.amount = amount
-    transaction.transactionid = transactionid # Function Parameter
-    transaction.paymenttype = order_obj.opaymethod
-    transaction.save()
-
-def CartSessions(request):
-  if 'CartItems' in request.session:
-    del request.session['CartItems']
-    
-  if 'PaymentGateway' in request.session:
-    del request.session['PaymentGateway']
-    
-  if 'GuestEMail' in request.session:
-    del request.session['GuestEMail']  
-
-  if 'CartInfo' in request.session:
-    del request.session["CartInfo"]
-    
-def SaveOrder(request):
-    customer = request.session['Customer']
-    cart_items = request.session['CartItems']
-
-    if request.session['PaymentGateway'] != 'None':
-      payment_method = PaymentMethods.objects.filter(payment_gateway=request.session['PaymentGateway'])[0].gateway_id
-    else:
-      payment_method = -1
-    
-    order = Orders()
-    if customer.contactid == -1:
-      # For guest login
-      order.oemail = request.session['GuestEMail']
-    else:
-      # For customer login
-      order.oemail = customer.email
-
-    order.ocustomerid = customer.contactid
-    order.ofirstname = customer.billing_firstname
-    order.olastname = customer.billing_lastname
-    order.oaddress = customer.billing_address
-    order.oaddress2 = customer.billing_address2
-    order.ocity = customer.billing_city
-    order.ostate = customer.billing_state
-    order.ocountry = customer.billing_country
-    order.ozip = customer.billing_zip
-    order.ophone = customer.billing_phone
-
-    order.oshipfirstname = customer.shipping_firstname
-    order.oshiplastname = customer.shipping_lastname
-    order.oshipaddress = customer.shipping_address
-    order.oshipaddress2 = customer.shipping_address2
-    order.oshipcity = customer.shipping_city
-    order.oshipstate = customer.shipping_state
-    order.oshipcountry = customer.shipping_country
-    order.oshipzip = customer.shipping_zip
-    order.oshipphone = customer.shipping_phone
-
-    order.opaymethod = payment_method
-    order.odate = datetime.datetime.now()
-    order.date_started  = datetime.datetime.now()
-    order.orderamount = request.session["CartInfo"].order_total
-    order.otax = request.session["CartInfo"].tax_total
-    order.oshipcost = request.session["CartInfo"].shipping_total
-    order.ocomment = request.session['OrderComment']
-    order.order_status = 1
-    
-    if request.session["PaymentGateway"] == 'AUTHORIZENET' and 'CreditCard' in request.session:
-      card_dict = request.session['CreditCard']
-      order.ocardno = card_dict['number'] 
-      order.ocardname = card_dict['first_name'] + " " + card_dict['last_name'] 
-      order.ocardexpiresmonth = card_dict['month']
-      order.ocardexpiresyear = card_dict['year']
-      order.ocardverification =  card_dict['code']
-    
-    if 'CouponCode' in request.session:
-      order.coupon = request.session['CouponCode']
-      order.coupondiscount = request.session["PromotionsTotal"]
-
-    order.oprocessed = 0
-
-    max_invoice =  Orders.objects.aggregate(Max('invoicenum'))['invoicenum__max']   
-    
-    order.invoicenum_prefix = 'SWF-'
-    order.invoicenum = max_invoice + 1 
-    
-    invoice_no = 'SWF-%d' %order.invoicenum
-    
-    order.save()
-    obj = Orders.objects.all().latest('orderid')
-    
-    
-    reward_points_total = 0 
-    # Adding Items.    
-    for item_id, item in cart_items.items():
-      oitem = Oitems()
-      oitem.orderid = obj.orderid # Recent order ID
-      oitem.catalogid = item.catalog_id
-      oitem.itemid = item.catalog_id
-      oitem.orderitemid = item.catalog_id
-      oitem.itemname = item.item_name
-      oitem.numitems = item.quantity
-      
-      reward_points_total += item.reward_points * item.quantity
-
-      if item.onsale > 0:
-        oitem.unitprice = item.saleprice
-      else:
-        oitem.unitprice = item.price
-        
-      oitem.save()
-      
-      # Calculating Rewards and Adding to the customer_rewards tables
-      customer_reward = CustomerRewards()
-      customer_reward.contactid = customer.contactid
-      customer_reward.orderid = obj.orderid
-      customer_reward.points = reward_points_total
-      customer_reward.datetime = datetime.datetime.now()
-      customer_reward.giftcertid = 0
-      
-      customer_reward.save()
-      
-      if "ShippingMethod" in request.session:
-        shipping_method_hash = request.session['ShippingMethod']
-        for key, value in shipping_method_hash.items():
-          shp_cat_id = key
-          user_inputs = value
-          for input_field, input_value in user_inputs.items():
-            shipping_tupple = Shippingtuple()
-            shipping_tupple.shippingcategoryid = shp_cat_id
-            shipping_tupple.orderid = obj.orderid
-            shipping_tupple.name =  input_field
-            shipping_tupple.stringvalue = input_value
-
-            shipping_tupple.save()
-        del request.session['ShippingMethod']
-      
-      if 'ReceiveDeliveryNotificationEMail' in request.POST:
-        isEmail = request.POST['ReceiveDeliveryNotificationEMail']
-        shipping_tupple = Shippingtuple()
-        shipping_tupple.shippingcategoryid = -1
-        shipping_tupple.orderid = obj.orderid
-        shipping_tupple.name =  'Notify by Email'
-        shipping_tupple.stringvalue = 'Yes'
-        shipping_tupple.save()
-        
-      if 'ReceiveDeliveryNotificationSMS' in  request.POST:
-        isSMS =  request.POST['ReceiveDeliveryNotificationSMS']
-        mobile_no = request.POST['MobileNo']
-        shipping_tupple = Shippingtuple()
-        shipping_tupple.shippingcategoryid = -1
-        shipping_tupple.orderid = obj.orderid
-        shipping_tupple.name =  'Notify by SMS'
-        shipping_tupple.stringvalue = mobile_no
-        shipping_tupple.save()
-
-
-      if 'StoreCredit' in request.session:
-        cart_info = request.session['CartInfo']
-        #swf_cust_credit_obj = SwfCustomerCreditsLog.objects.filter(id = cart_info.store_credit_id)[0]
-        swf_cust_credit_obj = SwfCustomerCreditsLog()
-        swf_cust_credit_obj.customers_credit = cart_info.credits_applied
-        swf_cust_credit_obj.customers_credit_applied = datetime.datetime.now()
-        swf_cust_credit_obj.save()
-        del  request.session['CartInfo']
-        del  request.session['StoreCredit']
-        
-      
-      request.session["CartItems"]  = {}
-      order.orderid = obj.orderid 
-    return order # Returning Order Object
-

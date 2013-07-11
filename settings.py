@@ -61,8 +61,9 @@ MIDDLEWARE_CLASSES = (
 	'django.contrib.sessions.middleware.SessionMiddleware',
     'autoload.middleware.AutoloadMiddleware',
 	'django.middleware.csrf.CsrfViewMiddleware',
+	'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
-    
+    'django.middleware.cache.FetchFromCacheMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
 	'django.contrib.messages.middleware.MessageMiddleware',
 	'django.middleware.doc.XViewMiddleware',
@@ -87,7 +88,8 @@ TEST_RUNNER = 'djangotoolbox.test.CapturingTestSuiteRunner'
 
 ADMIN_MEDIA_PREFIX = '/media/admin/'
 TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), 'templates'),)
-
+CACHE_BACKEND = 'memcached://?timeout=0'
+CACHE_MIDDLEWARE_SECONDS = 0
 ROOT_URLCONF = 'urls'
 
 LOGOUT_URL = '/logout'
@@ -121,15 +123,25 @@ LOGGING = {
     }
 }
 
-SESSION_COOKIE_AGE = 1200
+PAYPAL_AUTHORIZATION_URL = "https://www.sandbox.paypal.com/webscr?cmd=_express-checkout"
+PAYPAL_USER  = "tito-facilitator_api1.mvisolutions.com"
+PAYPAL_PASSWORD = "1372433519"
+PAYPAL_SIGNATURE = "AiPC9BjkCyDFQXbSkoZcgqH3hpacAGLS2Iyg9WsFRmYH6gRF7dAThlWb"
+PAYPAL_DEBUG = True # Change it to False in Product for using Paypal Live URLs
+
+
+
+SESSION_COOKIE_AGE = 3000
 PAYPAL_URL  = 'https://www.sandbox.paypal.com/us/cgi-bin/webscr'
 PAYPAL_MERCHANT_EMAIL = 'swfmerchant@expertsden.com'
 if(os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine')):
     
     CALLBACK_URL = 'http://saltwaterfish-com.appspot.com/checkoutcallback'
+    PAYPAL_CALLBACK_URL = 'http://saltwaterfish-com.appspot.com/paypalcallback'
     PAYPAL_CANCEL_URL = 'http://saltwaterfish-com.appspot.com/viewcart'
 else:
     CALLBACK_URL = 'http://localhost:8000/checkoutcallback'
+    PAYPAL_CALLBACK_URL = 'http://localhost:8000/paypalcallback'
     PAYPAL_CANCEL_URL = 'http://localhost:8000/viewcart'
  
 
@@ -137,4 +149,3 @@ AUTHORIZENET_API_LOGIN_ID = "2SzzM45p"
 AUTHORIZENET_API_PASSWORD = "425hScrL9qHX37g3"
 TEST_MODE = False  # Change it to False when transaction has to record in Sandbox Instance. You will get Transaction ID.
 TEST_MODE_URL = True # Boolean Value for Authorize.net to call Production URL or Sandbox URL.
-

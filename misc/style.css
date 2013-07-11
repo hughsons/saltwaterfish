@@ -2590,7 +2590,7 @@ margin:0px auto}
 	-moz-border-radius:10px 10px 0px 0px;
 	-webkit-border-radius:10px 10px 0px 0px;
 	border-radius:10px 10px 0px 0px;
-	behavior: url(pie.htc);
+	/*behavior: url(pie.htc);*/
 	position:relative;
 	-webkit-box-shadow: inset 0px 2px 0px #05acf3, 0px 1px 0px #088ac1;
 	-moz-box-shadow: inset 0px 2px 0px #05acf3, 0px 1px 0px #088ac1;

@@ -105,6 +105,7 @@ def orderdiscount(oid):
 
 @register.filter("rmastatus")
 def rmastatus(statusid):
+    logging.info('RMA Started::  %s', now_str())
     result = ""
     try:
         crm_obj = Rmastatus.objects.all().filter(idrmastatus = statusid)
@@ -113,6 +114,7 @@ def rmastatus(statusid):
     except Exception as e:
         crm_id = e
         logging.info('LoginfoMessage:: %s',e)
+    logging.info('RMA Ended::  %s', now_str())
     return result
 
 @register.filter("rmamethods")
@@ -194,11 +196,11 @@ def productsdisplay(category,count="",noi=""):
     try:
         if count =="":
             if category != '':
-                result = Products.objects.raw('select * from product_category,products where product_category.catalogid=products.catalogid and hide=0 and categoryid = %s',category)
+                result = Products.objects.raw('select products.catalogid,products.name,products.onsale,products.saleprice,products.price,products.description,products.stock from product_category,products where product_category.catalogid=products.catalogid and hide=0 and categoryid = %s',category)
             else:
                 result = Products.objects.all()
         else:
-            result = Products.objects.raw('select * from product_category,products where product_category.catalogid=products.catalogid and hide=0 and categoryid = %s',category)
+            result = Products.objects.raw('select products.catalogid,products.name,products.onsale,products.saleprice,products.price,products.description,products.stock from product_category,products where product_category.catalogid=products.catalogid and hide=0 and categoryid = %s',category)
             result = sum(1 for result in result)
             logging.info('count:: %s',result)
     except Exception as e:
@@ -216,7 +218,7 @@ def featureddisplay(category,count="",noi=""):
                 catparent = Category.objects.all().filter(id = category, category_parent=1).count()
                 logging.info('Category_Parent:: %s',catparent)
                 if catparent ==0:
-                    result = Products.objects.raw('select * from product_category,products where product_category.catalogid=products.catalogid and products.categoryspecial=1 and hide=0 and categoryid = %s',category)[:noi]
+                    result = Products.objects.raw('select products.catalogid,products.name,products.onsale,products.saleprice,products.price,products.description,products.stock from product_category,products where product_category.catalogid=products.catalogid and products.categoryspecial=1 and hide=0 and categoryid = %s',category)[:noi]
                 else:
                     product_category = Category.objects.all().filter(category_parent = catparent, hide=0)
                     pcats =""
@@ -224,11 +226,11 @@ def featureddisplay(category,count="",noi=""):
                         pcats += str(pwcats.id)+", "
                     pcats = pcats[:-2]+''
                     logging.info('Category_Products:: %s',pcats)
-                    result = Products.objects.raw('select * from product_category,products where product_category.catalogid=products.catalogid and products.categoryspecial=1 and hide=0 and categoryid in ('+pcats+') ORDER BY RAND()')[:noi]
+                    result = Products.objects.raw('select products.catalogid,products.name,products.onsale,products.saleprice,products.price,products.description,products.stock from product_category,products where product_category.catalogid=products.catalogid and products.categoryspecial=1 and hide=0 and categoryid in ('+pcats+') ORDER BY RAND()')[:noi]
             else:
                 result = Products.objects.all()
         else:
-            result = Products.objects.raw('select * from product_category,products where product_category.catalogid=products.catalogid  and hide=0 and categoryid = %s ORDER BY RAND()',category)
+            result = Products.objects.raw('select products.catalogid,products.name,products.onsale,products.saleprice,products.price,products.description,products.stock from product_category,products where product_category.catalogid=products.catalogid  and hide=0 and categoryid = %s ORDER BY RAND()',category)
             result = sum(1 for result in result)
             logging.info('count:: %s',result)
     except Exception as e:
@@ -240,7 +242,7 @@ def featureddisplay(category,count="",noi=""):
 def featuredcount(category,count=""):
     logging.info('field name:: %s',category)
     try:
-        results = Products.objects.raw('select * from product_category,products where product_category.catalogid=products.catalogid and hide=0 and products.categoryspecial=1 and categoryid = %s',category)
+        results = Products.objects.raw('select products.catalogid,products.name,products.onsale,products.saleprice,products.price,products.description,products.stock from product_category,products where product_category.catalogid=products.catalogid and hide=0 and products.categoryspecial=1 and categoryid = %s',category)
         result = sum(1 for result in results)
         logging.info('sum total:: %s',result)
     except Exception as e:
@@ -355,7 +357,7 @@ def fetchrmaoitem(pid):
 def featuredcount(category,count=""):
     logging.info('field name:: %s',category)
     try:
-        results = Products.objects.raw('select * from product_category,products where product_category.catalogid=products.catalogid and hide=0 and products.categoryspecial=1 and categoryid = %s',category)
+        results = Products.objects.raw('select products.catalogid,product_category.id,product_category.categoryid from product_category,products where product_category.catalogid=products.catalogid and hide=0 and products.categoryspecial=1 and categoryid = %s',category)
         result = sum(1 for result in results)
         logging.info('sum total:: %s',result)
     except Exception as e:
@@ -365,9 +367,9 @@ def featuredcount(category,count=""):
 
 @register.filter("relatedpitems")
 def relatedpitems(pid,count=""):
-    logging.info('field name:: %s',pid)
+    
     try:
-        results = Products.objects.raw('select * from product_category,products where product_category.catalogid=products.catalogid and hide=0 and products.catalogid = %s',pid)[:1]
+        results = Products.objects.raw('select products.catalogid,product_category.id,product_category.categoryid from product_category,products where product_category.catalogid=products.catalogid and hide=0 and products.catalogid = %s',pid)[:1]
         for prods in results:
             result=prods.categoryid
         categoryid, category_name, parent_id = GetParentCategory(result)

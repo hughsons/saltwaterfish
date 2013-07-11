@@ -14,17 +14,7 @@ $(function() {
 		scroll: 2
     });
 });
-
-function ValidateCouponCode()
-{
-   if ($("#txtCoupon").val().match(/^\s*$/gi))
-   {
-     alert("Please enter coupon code.");
-     return false;   
-   }
-   return true;
-}
-
+	 
 </script>
  <style type="text/css">
  .wid270 {
@@ -286,7 +276,7 @@ function ValidateCouponCode()
 	{%endif%}
 {%endif%}
 <tr>
-	<td><b>{{shippingCategory.name}} Total</b></td>
+	<td><b>Supplies Total</b></td>
 	<td>$<b>{{shippingCategory.supplies_total|floatformat:2}}</b></td>
 </tr>
 </table>
@@ -384,13 +374,13 @@ Cart is Empty
 <div class="clr    " align="left">
 {% if request.session.StoreCredit %} 
   {% if request.session.CartInfo.order_total > 0 %}
-  	 <form method="GET" action="/paypalcheckout"><input type="image" src="/misc/images/new-paypal.jpg" width="140" height="40px" /></form>
+     <a href="/{{NextPage}}?gateway=paypal"><img src="https://www.paypalobjects.com/webstatic/mktg/merchant/pages/express-checkout/express-checkout-hero-sg.png" width="140" height="40px" /></a>
   {% else %}
      &nbsp;
   {% endif %}
 {% else %}
   {% if request.session.CartInfo.order_total > 0 %}
-     <br><form method="GET" action="/paypalcheckout"><input type="image" src="/misc/images/new-paypal.jpg" width="140" height="40px" /></form></a>
+     <br><a href="/{{NextPage}}?gateway=paypal"><img src="/misc/images/new-paypal.jpg" width="140" height="40px" /></a>
   {% else %}
      &nbsp;
   {% endif %}
@@ -418,26 +408,17 @@ would you like to apply it to this order?</div>
 <div class="clr wid160 blue_text_new padtop10 padbottom15"><a href="/login" style="color: #EC5E00;">Login to View Any Store Credits</a></div>
 {% endif %}
 
-
 <form name="CouponForm" method="GET" action="/cartaction">
-{% if not request.session.CouponCode %}
 <div class="clr padtop10">
 <div class="toggle_right_title wid240 padbottom5" align="left"><font size="3"><strong>Discount Codes</strong></font></div>
 <div align="justify" class="wid240 padbottom5">Enter your coupon code if you have one.<br /></div>
-<input name="txtCoupon" id="txtCoupon" type="text" value="" size="20" />
-<div class="clr padtop10" align="left"><input type="submit" name="cmdApplyCoupon" value="Apply Coupon" class="button22" style="background-color:#01AED6;cursor: pointer;" onclick="return ValidateCouponCode()"/></div>
+<input name="txtCoupon" type="text" value="" size="20" />
+
+<div class="clr padtop10" align="left"><input type="submit" name="cmdApplyCoupon" value="Apply Coupon" class="button22" style="background-color:#01AED6;"/></div>
 </div>
  <br>&nbsp;<br>&nbsp;
 </div>
-{% else %}
-<div class="clr padtop10">
-<div class="toggle_right_title wid240 padbottom5" align="left"><font size="3"><strong>Discount Codes</strong></font></div>
-<div align="justify" class="wid240 padbottom5">Coupon <b>{{request.session.CouponCode}}</b> is applied<br /></div>
-<div class="clr padtop10" align="left"><input type="submit" name="cmdClearCoupon" value="Clear Coupon" class="button22" style="background-color:#01AED6;cursor: pointer;"/></div>
-</div>
- <br>&nbsp;<br>&nbsp;
-</div>
-{% endif %}
+ 
 </form>
 
 </div><div class="clr">&nbsp;</div>

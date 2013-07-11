@@ -27,7 +27,6 @@ from django.db.models import Max
 
 import time
 import calendar
-from paypal.driver import PayPal
 
 PERPAGE=50
 class CsrfExemptMixin(object):
@@ -181,21 +180,10 @@ class ViewCartViewClass(TemplateView):
     if "Customer" in request.session:
       next_page = 'orderconfirmation'
       customer = request.session['Customer']    
-      #swf_custcredits_objects = SwfCustomerCreditsLog.objects.filter(customers_email_address = customer.email)
-      #if swf_custcredits_objects:
-      #  store_credit_id = swf_custcredits_objects[0].id
-      #  store_credits = swf_custcredits_objects[0].customers_credit
-      sc_promotions = Promotions.objects.filter(promotion_name = customer.email).aggregate(Sum('promotion_amount'))['promotion_amount__sum']
-      store_credits = 0
-      credits_consumed = 0
-      if sc_promotions:
-        store_credits = sc_promotions 
-
-      credits_applied = SwfCustomerCreditsLog.objects.filter(customers_email_address = customer.email).aggregate(Sum('customers_credit'))['customers_credit__sum']
-      if credits_applied:
-        credits_consumed = credits_applied 
-      
-      store_credits -= credits_consumed 
+      swf_custcredits_objects = SwfCustomerCreditsLog.objects.filter(customers_email_address = customer.email)
+      if swf_custcredits_objects:
+        store_credit_id = swf_custcredits_objects[0].id
+        store_credits = swf_custcredits_objects[0].customers_credit
         
     cart_dict = {}
     if 'CartItems' in request.session:
@@ -214,7 +202,7 @@ class ViewCartViewClass(TemplateView):
 
 
     cart = CartInfo()
-    shipping_items = cart.GetItemsByShippingCategory(cart_dict, customer, request)
+    shipping_items = cart.GetItemsByShippingCategory(cart_dict, customer)
 
     shipping_method_hash = {}
     
@@ -534,42 +522,31 @@ class OrderConfirmationView(TemplateView):
           #'billing_phone_ext': customer.billing_phone          
 
           }
+      
       temp_data = {'card_holder_name':'John Doe', 'card_number': '4111111111111111', 
                    'card_type':'Master', 'card_expdate':'10/20', 'card_cvn':'123'}
       data.update(temp_data)
     else:
       logging.info("Non Login traverse or No customer information in the session")
       data = {'contact_id':0,
-          'username1': request.session['GuestEMail']
+          'username': request.session['GuestEMail']
           }
 
       temp_data = {'card_holder_name':'John Doe', 'card_number': '4111111111111111', 
                    'card_type':'Master', 'card_expdate':'10/20', 'card_cvn':'123'}
       data.update(temp_data)
-      
-    logging.info("CHECKING PaypalReponse")
-    if "PaypalResponse" in request.session:
-      paypal_response = request.session["PaypalResponse"]
-      shipping_address = {
-        'shipping_first_name':paypal_response['FIRSTNAME'][0],
-        'shipping_last_name':paypal_response['LASTNAME'][0],
-        'shipping_address1':paypal_response['SHIPTOSTREET'][0],
-        'shipping_address2':'',
-        'shipping_city': paypal_response['SHIPTOCITY'][0],
-        'shipping_state': paypal_response['SHIPTOSTATE'][0],
-        'shipping_zip': paypal_response['SHIPTOZIP'][0],
-        #'shipping_country': customer.shipping_country,
-        'shipping_company': '',
-        'shipping_phone_part1': '',
-        'shipping_phone_part2': '',
-        'shipping_phone_part3': '',
-        }
-      data.update(shipping_address)
 
     if is_login:
       if gateway == 'paypal':
         form = PaypalOrderFormLoggedIn(initial=data)
       elif gateway == 'AUTHORIZENET':
+        #address_form = BillingShippingAddressForm(initial=data, bstate='FL', shpstate='FL')              
+        #form = AuthorizeNetFormLoggedIn(data, card_list = GetCreditCardList(customer.contactid))
+        #form = AuthorizeNetFormLoggedIn(initial = data, 
+        #                                card_list = GetCreditCardList(customer.contactid), 
+        #                                bstate=customer.billing_state, 
+                                        #bcountry='UK', 
+        #                                shpstate=customer.shipping_state)
         form = AuthorizeNetFormLoggedIn(initial = data, card_list = GetCreditCardList(customer.contactid))
       else:
         form = NoGateWay(data)  
@@ -626,13 +603,9 @@ class CheckOutLoginViewClass(TemplateView):
       return value
 
   def get(self, request, *args, **kwargs):
-    error_message = ''
-    error_message2 = ''
+    error_message = ""
     if 'ErrorMessage' in request.session:
       error_message = request.session['ErrorMessage']
-      
-    if 'ErrorMessage2' in request.session:
-      error_message2 = request.session['ErrorMessage2']
     
     if 'gateway' in request.GET:
       request.session['PaymentGateway'] = request.GET['gateway']    
@@ -641,7 +614,6 @@ class CheckOutLoginViewClass(TemplateView):
                'LoginForm':LoginForm,
                'recaptcha':"https://chart.googleapis.com/chart?chst=d_text_outline&chld=FFCC33|16|h|FF0000|b|%s" %self.GetRecaptcha(request),
                'error_message': error_message,
-               'error_message2' : error_message2
               }
     content.update(leftwidget(request))
     return render_template(request,'CheckOutLogin.html', content)
@@ -770,9 +742,8 @@ def SaveOrder(request, transactionid):
       
       if 'StoreCredit' in request.session:
         cart_info = request.session['CartInfo']
-        #swf_cust_credit_obj = SwfCustomerCreditsLog.objects.filter(id = cart_info.store_credit_id)[0]
-        swf_cust_credit_obj = SwfCustomerCreditsLog()
-        swf_cust_credit_obj.customers_credit = cart_info.credits_applied
+        swf_cust_credit_obj = SwfCustomerCreditsLog.objects.filter(id = cart_info.store_credit_id)[0]
+        swf_cust_credit_obj.customers_credit = cart_info.store_credit
         swf_cust_credit_obj.customers_credit_applied = datetime.datetime.now()
         swf_cust_credit_obj.save()
         del  request.session['CartInfo']
@@ -795,19 +766,18 @@ class CheckOutCallBackViewClass(TemplateView):
     amount = request.GET['amt']
     currency = request.GET['cc']
     item_number = request.GET['item_number']
-    invoice_no = request.GET['invoice_no']
     
-#    tran_list = Transactions.objects.filter(transactionid = tx)
-#
-#    invoice_no = ""
-#    if not tran_list:
-#      order_id = SaveOrder(request, tx)
-#      oobj = Orders.objects.get(orderid = order_id)
-#      invoice_no = oobj.invoicenum_prefix + str(oobj.invoicenum)
-#    else:
-#      tran_obj = tran_list[0]
-#      order_id = tran_obj.orderid
-#      error_message = "Transaction is already recorded. Please find the order number below"  
+    tran_list = Transactions.objects.filter(transactionid = tx)
+
+    invoice_no = ""
+    if not tran_list:
+      order_id = SaveOrder(request, tx)
+      oobj = Orders.objects.get(orderid = order_id)
+      invoice_no = oobj.invoicenum_prefix + str(oobj.invoicenum)
+    else:
+      tran_obj = tran_list[0]
+      order_id = tran_obj.orderid
+      error_message = "Transaction is already recorded. Please find the order number below"  
     
     
     content = {'page_title': "Payment Confirmation",
@@ -877,7 +847,7 @@ class MurthyTestViewCalss(TemplateView):
       html = "<font color='red'> 4884" + cart.Error() +  "</font>"
       return HttpResponse(html)
 
-    shipping_items = cart.GetItemsByShippingCategory(cart_dict, None, request)
+    shipping_items = cart.GetItemsByShippingCategory(cart_dict)
     for myShipping in shipping_items:
       html += "<h3>%s</h3>" %myShipping.id
       if myShipping.shipping_items:
@@ -991,32 +961,3 @@ class GiftCertificateView(TemplateView):
     #cart_item = CartItem(item_id)
     content["item_id"] = 11
     return render_template(request, 'BuyGift.html', content)
-
-
-class PaypalCallBackView(TemplateView):
-  #BuyGift
-  
-  @csrf_exempt
-  def get(self, request, *args, **kwargs):
-    data = {}
-    content = {}
-    
-    token = request.GET['token']
-    payer_id = request.GET['PayerID']
-
-    
-    p = request.session['P']
-    if not p.GetExpressCheckoutDetails(token, payer_id):
-      return HttpResponse("<h3> Failed.</h3>")
-    
-    request.session['PaymentGateway'] = "paypal"
-    request.session["PaypalResponse"] = p.api_response 
-    request.session["PaypalToken"] = token
-    request.session["PaypalPayerID"] = payer_id 
-    next_page = ''
-    if "IsLogin" in request.session:
-      next_page = "/orderconfirmation"
-    else:
-      next_page = "/checkoutlogin"
-      
-    return HttpResponseRedirect(next_page)

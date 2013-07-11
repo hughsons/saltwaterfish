@@ -5,8 +5,8 @@
 {% load tagsfilter %}
 <div class="float-left width10">&nbsp;&nbsp;</div>
 <div class="float-left wid748 padtop5">
-<div class="clr my_account_link padbottom13">Home  <span> &gt; My Account </span><span> &gt; Recent Orders </span></div>
- <div class="clr my_account_title padtop5 padbottom13">RECENT ORDERS </div>
+<div class="clr my_account_link padbottom13"><span><a href="/">Home</a> &gt; <a href="/myaccount">My Account</a></span><span> &gt; Track Your Orders </span></div>
+ <div class="clr my_account_title padtop5 padbottom13">TRACK YOUR ORDERS </div>
 <div class="clr myaccount_bg1">
  
 {% include 'myaccount_links.htm' %}
@@ -15,14 +15,14 @@
  {% if product_list %}
 <table width="700" border="0" cellpadding="3" cellspacing="1" bgcolor="#EFEFEF">
   <tr style='background-image: url("/misc/images/content_menu.jpg");height: 31px;'>
-     <td width="150"><b>Date</b></td>
-    <td width="240"><b>Order # -- Full Name</b></td>
+     <td width="100"><b>Date</b></td>
+    <td width="100"><b>Order #</b></td>
     <td width="80"><b>Amount</b></td>
-    <td width="250"><b>Status</b></td>
-	<td width="150"><b>Details / RMA</b></td>
+    <td width="350"><b>Status & Tracking #</b></td>
+	<td width="210"><b>RMA # - Guarantee Request</b></td>
   </tr>
 {% for item in product_list %}
-	<tr bgcolor="#FFFFFF"><td align=left>{{item.date_started|date:"F j, Y"}}</td> <td>{{item.invoicenum_prefix}}{{item.invoicenum}} -- {{item.ofirstname}}  {{item.olastname}}</td><td>${{item.orderamount|floatformat:"2"}}</td><td>
+	<tr bgcolor="#FFFFFF"><td align=left>{{item.date_started|date:"m/j/Y"}}</td> <td><a href="/orderinfo?oid={{item.orderid}}">{{item.invoicenum_prefix}}{{item.invoicenum}} </td><td>${{item.orderamount|floatformat:"2"}}</a></td><td>
 	{% for linkitem in order_links %}
 		{% if item.order_status == linkitem.id %}
 			{{linkitem.statustext}}

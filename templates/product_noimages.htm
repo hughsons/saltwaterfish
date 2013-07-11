@@ -1,10 +1,6 @@
-{% extends 'base.html' %}
-{% block content %}
+ 
 {% load tagsfilter %}
-<link type="text/css" rel="stylesheet" href="/misc/css3/style.css" />
  
- 
- <script src="/misc/tabcontent.js" type="text/javascript"></script>
 <script type="text/javascript">
 	;(function($) {
          $(function() {
@@ -64,7 +60,7 @@ $(function() {
 });
 </script>
 
-    <link href="/misc/tabcontent.css" rel="stylesheet" type="text/css" />
+ 
 	 {% block css %}
 
 	<style>
@@ -126,22 +122,22 @@ width: auto;
    <span class="tag-txt">{{products.description}}</span></div>
 <div class="clr padtop21">
 <div class="float-left pwid3">
-<div class="clr" id="image1hid"><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.image1|strreplace:"assets/images/" }}' width="302" height="297" border="0" /></div>
-<div class="clr" id="image2hid" style="display:none"><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.image2|strreplace:"assets/images/" }}' width="302" height="297" border="0" /></div>
-<div class="clr" id="image3hid" style="display:none"><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.image3|strreplace:"assets/images/" }}' width="302" height="297" border="0" /></div>
+<div class="clr" id="image1hid"> </div>
+<div class="clr" id="image2hid" style="display:none"></div>
+<div class="clr" id="image3hid" style="display:none"></div>
 
 <div class="clr martop16">
 
 <div class="float-left pwid4">&nbsp;</div>
-<div class="float-left"><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.image1|strreplace:"assets/images/" }}' id=simage1hid width="54" height="54" border="0" /></div>
+<div class="float-left"> </div>
 {%if products.image2 %}
 <div class="float-left pwid5">&nbsp;</div>
-<div class="float-left"><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.image2|strreplace:"assets/images/" }}' id=simage2hid width="54" height="54" border="0" /></div>
+<div class="float-left"> </div>
 {%endif%}
 {%if products.image3 %}
 
 <div class="float-left pwid5">&nbsp;</div>
-<div class="float-left"><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.image3|strreplace:"assets/images/" }}' id=simage3hid width="54" height="54" border="0" /></div>
+<div class="float-left"> </div>
 {%endif%}
 <div class="float-left"></div>
 
@@ -149,7 +145,7 @@ width: auto;
 <div class="clr">&nbsp;</div>
 <div class="clr">
 <div class="float-left pwid6">&nbsp;</div><div class="float-left pwid6">&nbsp;</div>
-<div class="float-left"><img src="http://commondatastorage.googleapis.com/swf_product_images/staticswf/{{products.extra_field_10}}"  height="30" border="0" /></div>
+<div class="float-left"> </div>
 
 </div>
  
@@ -172,24 +168,24 @@ width: auto;
 <div class="pwid7 float-left">&nbsp;</div>
 <div class="float-left pwid8">
 {% if totalreviews %}
-<div align="left" class="float-left clr padbottom10"><span class="price1" style="text-decoration: None !important;">Customer Reviews:</span>	<img  border="0" src="misc/images/star{{totalreviews}}.gif"></div>
+<div align="left" class="float-left clr padbottom10"><span class="price1" style="text-decoration: None !important;">Customer Reviews:</span>	< </div>
 {%endif%}
 <div class="free-shipping clr">
 <div class="float-left padtop1 padleft15 pwid9">
 <div class="price clr"><span class="price1">Price Elsewhere: ${{products.price2|floatformat:2}}</span></div>
 <div class="sale-price clr padtop10">Sale Price: ${{products.saleprice|floatformat:2}}</div>
-<div class="price clr padtop10"><span >Savings: ${{products.price2|subtractval:products.saleprice|floatformat:2}}</span></div>
+<div class="price clr padtop10"><span >Savings: ${{products.price|subtractval:products.saleprice|floatformat:2}}</span></div>
 <div class="clr padtop27">
 <div class="quantity float-left product-height">Quantity</div>
 <div class="float-left padleft8"><form action="/addtocart" method="GET" name="form">{% csrf_token %}<input type="hidden" size="10" value="{{products.catalogid}}" name="item_id"><input name="quantity" type="text" class="text-box" value=1 /></div>
 </div>
-<div class="clr padtop10"><input type=image src="misc/images/addtotank.jpg" width="181" height="35" border="0"  id="/addtocart?item_id={{ products.catalogid }}" class="pop4"  /></form></div>
+<div class="clr padtop10"></form></div>
 
 </div>
 <div class="float-left product-sale-line">&nbsp;</div>
 <div class="float-left">
-<div class="clr"><img src="misc/images/free-shipping.jpg" width="132" height="32" border="0" /></div>
-<div class="clr"><img src="misc/images/free-shipping-image.jpg" width="131" height="80" border="0" /></div>
+<div class="clr"></div>
+<div class="clr"></div>
 <div class="clr"><span class="marine">On All Marine Life</span><br />
 Orders Over <span class="marine">$199.99</span> <br />
 
@@ -199,95 +195,23 @@ and Florida Locations</div>
 
 </div>
 
-{%comment%}
-<div class="free-ship2 clr">
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td class="height25 tab-title padleft5">Description</td>
-    <td class="height25 tab-title padleft5">Price</td>
-    <td class="height25 tab-title padleft5">Quantity</td>
-    <td class="height25 tab-title padleft5">Stock Status</td>
-  </tr>
-  <tr>
-    <td class="height35 padleft10">Yellow Tang  Small</td>
-    <td class="height35 padleft10">$229.95</td>
-    <td class="height35 padleft10"><input name="" type="text" class="text-box1" /></td>
-    <td class="height35"><img src="misc/images/instock.jpg" width="62" height="21" border="0" /></td>
-  </tr>
-  <tr>
-    <td class="height35 padleft10">Yellow Tang  Juvenile</td>
-    <td class="height35 padleft10">$279.95</td>
-  <td class="height35 padleft10"><input name="" type="text" class="text-box1" /></td>
-      <td class="height35"><img src="misc/images/instock.jpg" width="62" height="21" border="0" /></td>
-  </tr>
-  <tr>
-    <td class="height35 padleft10">Yellow Tang Large</td>
-    <td class="height35 padleft10">$399.95</td>
-    <td class="height35">&nbsp;</td>
-    <td class="height35"><img src="misc/images/wishlist.jpg" width="95" height="15" border="0" /></td>
-  </tr>
-  <tr>
-   <td class="height35 padleft10">Yellow Mimic Tang </td>
-    <td class="height35 padleft10">$499.95</td>
-    <td class="height35">&nbsp;</td>
-    <td class="height35"><img src="misc/images/wishlist.jpg" width="95" height="15" border="0" /></td>
-  </tr>
-  <tr>
-    <td class="height35 padleft10">Juvenile</td>
-    <td class="height35 padleft10">$699.95</td>
-    <td class="height35">&nbsp;</td>
-        <td class="height35"><img src="misc/images/wishlist.jpg" width="95" height="15" border="0" /></td>
-  </tr>
-</table>
-
-
-
-</div>
-{%endcomment%}
+ 
 <div class="orange-txt1 clr padtop20 padbottom20 product-align">Tank Stats </div>
 <div class="clr">
 <div class="clr quest " align=left>
 {{products.extra_field_7|safe}}
-{%comment%}
-<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
-  <tr>
-    <td class="details height25 product-align1 valign-top"><span class="quest">Size:</span> {{products.extra_field_3}}</td>
-    <td class="height25 product-align1 valign-top">&nbsp;</td>
-    <td class="details height25 product-align1 valign-top"><span class="quest">Origin:</span> Hawaii</td>
-  </tr>
-  <tr>
-    <td class="details height25 product-align1 valign-top"><span class="quest">Care Level:</span> Easy</td>
-    <td class="height25 product-align1 valign-top">&nbsp;</td>
-    <td class="details height25 product-align1 valign-top"><span class="quest">Acclimation Time:</span> 2+ hours</td>
-  </tr>
-  <tr>
-    <td class="details height25 product-align1 valign-top"><span class="quest">Temperament:</span> Bold</td>
-    <td class="height25 product-align1 valign-top">&nbsp;</td>
-    <td class="details height25 product-align1 valign-top"><span class="quest">Coral Safe:</span></td>
-  </tr>
-  <tr>
-    <td class="details height25 product-align1 valign-top"><span class="quest">Reef Safe:</span> Yes</td>
-    <td class="height25 product-align1 valign-top">&nbsp;</td>
-    <td class="details height25 product-align1 valign-top"><span class="quest">Invertabrate Safe:</span></td>
-  </tr>
-  <tr>
-    <td class="details height25 product-align1 valign-top"><span class="quest">Diet:</span> Greens, Flake, Pellet</td>
-    <td class="height25 product-align1 valign-top">&nbsp;</td>
-    <td class="details height25 product-align1 valign-top"><span class="quest">Minimum Tank Size:</span></td>
-  </tr>
-</table>
-{%endcomment%}
+ 
 </div>
 <div class="clr">
-<div class="float-left padleft15 padtop20"><a href="#" id="/emailfriendpopup?itemid={{ products.catalogid }}" class="pop2"><img src="misc/images/emailafriend.jpg" width="150" height="30" border="0" /></a></div>
-<div class="float-right padtop20" ><a href="#" id="/waitpopup?itemid={{ products.catalogid }}" class="pop1"><img src="misc/images/addtowishlist.jpg" width="160" height="30" border="0" /></a></div>
+<div class="float-left padleft15 padtop20"><a href="#" id="/emailfriendpopup?itemid={{ products.catalogid }}" class="pop2"> </a></div>
+<div class="float-right padtop20" ><a href="#" id="/waitpopup?itemid={{ products.catalogid }}" class="pop1"> </a></div>
 </div>
 <div class="clr padtop20">
 <div class="float-left pwid10">
-<div class="float-left padleft15"><img src="misc/images/star.jpg" width="20" height="20" border="0" /></div>
+<div class="float-left padleft15"> </div>
 <div class="free-shipping1 float-left padleft7"><a href="#" id="/waitpopup?itemid={{ products.catalogid }}" class="pop3">Write a review</a></div>
 </div>
-<div class="float-right"><img src="misc/images/share-button.jpg" width="161" height="22" border="0" /></div>
+<div class="float-right"> </div>
 </div>
 
 
@@ -317,7 +241,7 @@ and Florida Locations</div>
 			{% for items in product_reviews %}
                          <table width="100%" cellpadding="4" cellspacing="0">
                         <tbody><tr>
-                          <td class="start">{{items.short_review}} <img src="misc/images/star{{items.rating}}.gif"></td>
+                          <td class="start">{{items.short_review}}  </td>
                         </tr>
                         <tr>
                           <td class="item">{{items.long_review}}</td>
@@ -354,7 +278,7 @@ and Florida Locations</div>
 <td>
 <table width="100%" border="0" cellspacing="0" cellpadding="0"  style="width:22% !important;margin-left:14px;margin-bottom:14px;min-height:196px !important;">
   <tr>
-    <td><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ items.image1|strreplace:"assets/images/" }}' width="158" height="146" border="0" /></td>
+    <td> </td>
   </tr>
   <tr>
     <td class="product-align padtop25 valign-middle"><a href="/product?pid={{ items.catalogid }}">{{items.name}}</a><br />
@@ -377,8 +301,11 @@ and Florida Locations</div>
 <!-- Bottom area ends -->
 </div>
 </div>
- 
+<div id="popup" style="left: -700px; position: absolute; top: 1177px; z-index: 9999; opacity: 1; display: none;min-height:200px;">
+        
+        <div id="contentss" style="height: auto; width: auto;"></div>
+</div>
 <div class="float-left wid20">&nbsp;&nbsp;</div>
 <div class="float-left wid20">&nbsp;&nbsp;</div>
 </div>
-{% endblock content %}
+ 
