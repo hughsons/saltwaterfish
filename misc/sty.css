@@ -201,14 +201,14 @@ padding-left:20px;}
 .card5_title{ font-family:"Myriad Pro"; font-weight:400; font-size:34px; color:#3c3c3c;}
 .card5_mar180{ margin-left:180px}
 .card5_line_shade{ box-shadow: 0px -3px 3px rgba(0,0,0,0.1);}
-.card5_mon{ width:87px; float:left; text-align:center; font-family:"Myriad Pro"; font-weight:400; font-size:14px; color:#b8b8b8;}
-.card5_grey{ width:87px; height:57px; line-height:57px; float:left; text-align:center; font-family:"Myriad Pro"; font-weight:400; font-size:26px; color:#b8b8b8; background-color:#cecdcb;}
-.card5_color2{ width:87px; height:57px; line-height:57px; float:left; text-align:center; font-family:"Myriad Pro"; font-weight:400; font-size:26px; color:#b8b8b8; background-color:#faefd3;}
-.card5_color3{ width:87px; height:57px; line-height:57px; float:left; text-align:center; font-family:"Myriad Pro"; font-weight:400; font-size:26px; color:#b8b8b8; background-color:#ebfded;}
-.card5_color4{ width:87px; height:57px; line-height:57px; float:left; text-align:center; font-family:"Myriad Pro"; font-weight:400; font-size:26px; color:#b8b8b8; background-color:#efb0e9;}
-.card5_color5{ width:87px; height:57px; line-height:57px; float:left; text-align:center; font-family:"Myriad Pro"; font-weight:400; font-size:26px; color:#b8b8b8; background-color:#fafbc2;}
-.card5_color6{ width:87px; height:57px; line-height:57px; float:left; text-align:center; font-family:"Myriad Pro"; font-weight:400; font-size:26px; color:#b8b8b8; background-color:#fac2c5;}
-.card5_color7{ width:87px; height:57px; line-height:57px; float:left; text-align:center; font-family:"Myriad Pro"; font-weight:400; font-size:26px; color:#b8b8b8; background-color:#c3f2fa;}
+.card5_mon{ width:67px; float:left; text-align:center; font-family:"Myriad Pro"; font-weight:400; font-size:14px; color:#b8b8b8;}
+.card5_grey{ width:67px; height:57px; line-height:57px; float:left; text-align:center; font-family:"Myriad Pro"; font-weight:400; font-size:26px; color:#b8b8b8; background-color:#cecdcb;}
+.card5_color2{ width:67px; height:57px; line-height:57px; float:left; text-align:center; font-family:"Myriad Pro"; font-weight:400; font-size:26px; color:#b8b8b8; background-color:#faefd3;}
+.card5_color3{ width:67px; height:57px; line-height:57px; float:left; text-align:center; font-family:"Myriad Pro"; font-weight:400; font-size:26px; color:#b8b8b8; background-color:#ebfded;}
+.card5_color4{ width:67px; height:57px; line-height:57px; float:left; text-align:center; font-family:"Myriad Pro"; font-weight:400; font-size:26px; color:#b8b8b8; background-color:#efb0e9;}
+.card5_color5{ width:67px; height:57px; line-height:57px; float:left; text-align:center; font-family:"Myriad Pro"; font-weight:400; font-size:26px; color:#b8b8b8; background-color:#fafbc2;}
+.card5_color6{ width:67px; height:57px; line-height:57px; float:left; text-align:center; font-family:"Myriad Pro"; font-weight:400; font-size:26px; color:#b8b8b8; background-color:#fac2c5;}
+.card5_color7{ width:67px; height:57px; line-height:57px; float:left; text-align:center; font-family:"Myriad Pro"; font-weight:400; font-size:26px; color:#b8b8b8; background-color:#c3f2fa;}
 .card5_height1{height:1px;}
 .card5_txt1{ font-family:"Myriad Pro"; font-weight:400; font-size:12px; color:#3c3c3c;}
 .card5_txt2{ font-family:"Myriad Pro"; font-weight:400; font-size:13px; color:#3c3c3c;}
@@ -663,7 +663,7 @@ padding-right:20px;
 	float: right;
 	height: 25px;
 	width: 87px;
-	font-family: "Open Sans";
+	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	color: #434343;
 	line-height:25px;

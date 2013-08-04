@@ -224,7 +224,7 @@ function ValidateCouponCode()
 
 <div class="clr">
 <div class="float-left wid470"><div class="toggle_left2 border">
-<div align="left" class="clr master-link padtop10 padbottom10"><span class="padleft17">Home &nbsp;&gt;&nbsp;My Cart</span> <br>
+<div align="left" class="clr master-link padtop10 padbottom10"><span class="padleft17"><a href="/">Home</a> &nbsp;&gt;&nbsp;<a href="/viewcart">My Cart</a></span> <br>
   <span class="orange-txt2">My Cart</span>
 </div>
 {% for shippingCategory in MyCartItems %}
@@ -438,6 +438,11 @@ would you like to apply it to this order?</div>
  <br>&nbsp;<br>&nbsp;
 </div>
 {% endif %}
+
+{% if request.session.IsLogin and ReefRewards > 0 %}
+  <div class="toggle_right_title wid240 padbottom5" align="left"><font size="3"><strong>Reef Rewards</strong></font></div>
+  <div align="justify" class="wid240 padbottom5">You have Reef Rewards of {{ReefRewards}} points<br /></div>
+{% endif %}
 </form>
 
 </div><div class="clr">&nbsp;</div>
@@ -465,7 +470,7 @@ You have not yet qualified for this promtion</font></div></div>
 	<div class="float_right ">
 	<div class="price-final">${% if items.onsale > 0 %}{{items.saleprice|floatformat:2}}{% else %}{{items.price|floatformat:2}} 
 				{% endif %}</div>
-	<div class="clr"><a href="/addtocart?item_id={{ items.catalogid }}"><img border="0" src="misc/images/add_tant.png"></a></div>
+	<div class="clr"><a  href="##" id="/addtocart?item_id={{ items.catalogid }}" class="pop1"> <img border="0" src="misc/images/add_tant.png"></a></div>
 	</div>
 	</div>
 	<div class="clr">&nbsp;</div>

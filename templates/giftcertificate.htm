@@ -137,7 +137,39 @@ font-weight: bold;
  
 border-spacing: 2px;
 border-color: gray;
-}</style>
+}
+.btn33-large {
+    border-radius: 2px 2px 2px 2px;
+    font-size: 17.5px;
+    padding: 11px 19px;
+}
+.btn33 {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #F5F5F5;
+    background-image: linear-gradient(to bottom, #FFFFFF, #E6E6E6);
+    background-repeat: repeat-x;
+    border-color: #BBBBBB #BBBBBB #A2A2A2;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+    color: #333333;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 0;
+	margin-top: 20px;
+    padding: 4px 12px;
+    text-align: center;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+    vertical-align: middle;
+}
+</style>
  {% endblock %}
 <div class="float-left wid20">&nbsp;&nbsp;</div>
 <div class="float-left pwid2">
@@ -208,7 +240,7 @@ border-color: gray;
 Orders Over <span class="marine">$199.99</span> <br />
 
 and Florida Locations</div>
-<div class="clr padtop5 padbottom5 more">more details</div>
+<div class="clr padtop5 padbottom5 more"><a href="/pages?pageid=45" target=blank>more details</a></div>
 </div>
 
 </div>
@@ -251,17 +283,17 @@ and Florida Locations</div>
                             <!--START: option-->
                             <option value="" [selected]="">Gift Certificate Amount </option>
                             
-                            <option value="10.00">10.00 [+$10.00]</option>
+                            <option value="10.00">$10.00</option>
                             
-                            <option value="25.00">25.00 [+$25.00]</option>
+                            <option value="25.00">$25.00</option>
                             
-                            <option value="50.00">50.00 [+$50.00]</option>
+                            <option value="50.00">$50.00</option>
                             
-                            <option value="100.00">100.00 [+$100.00]</option>
+                            <option value="100.00">$100.00</option>
                             
-                            <option value="250.00">250.00 [+$250.00]</option>
+                            <option value="250.00">$250.00</option>
                             
-                            <option value="500.00">500.00 [+$500.00]</option>
+                            <option value="500.00">$500.00</option>
                             <!--END: option-->
                           </select>
                           
@@ -324,9 +356,11 @@ and Florida Locations</div>
 <div class="float-left padleft15 padtop20"><a href="#" id="/emailfriendpopup?itemid={{ products.catalogid }}" class="pop2"><img src="misc/images/emailafriend.jpg" width="150" height="30" border="0" /></a></div>
 
 						{% if request.session.IsLogin %}
-							<div class="float-right padtop20" ><a href="#" id="/addtowatchlist?itemid={{products.catalogid}}" class="pop1"><img src="misc/images/addtowishlist.jpg" width="160" height="30" border="0" /></a></div>
+							<!--<div class="float-right padtop20" ><a href="#" id="/addtowatchlist?itemid={{products.catalogid}}" class="pop1"><img src="misc/images/addtowishlist.jpg" width="160" height="30" border="0" /></a></div>-->
+							<div class=" btn33 btn33-large "><a  href="##" id="/addtowatchlist?itemid={{products.catalogid}}" class="pop1">Add To Waiting List</a></div>
 						{% else %}
-							<div class="float-right padtop20" ><a href="#" id="/waitpopup?itemid={{ products.catalogid }}" class="pop1"><img src="misc/images/addtowishlist.jpg" width="160" height="30" border="0" /></a></div>
+							<!--<div class="float-right padtop20" ><a href="#" id="/waitpopup?itemid={{ products.catalogid }}" class="pop1"><img src="misc/images/addtowishlist.jpg" width="160" height="30" border="0" /></a></div>-->
+							<div class="  btn33 btn33-large "><a  href="##" id="/waitpopup?itemid={{ products.catalogid }}" class="pop1">Add To Waiting List</a></div>
 							 
 						{% endif %}
  
@@ -335,7 +369,7 @@ and Florida Locations</div>
 <div class="clr padtop20">
 <div class="float-left pwid10">
 <div class="float-left padleft15"><img src="misc/images/star.jpg" width="20" height="20" border="0" /></div>
-<div class="free-shipping1 float-left padleft7"><a href="#" id="/waitpopup?itemid={{ products.catalogid }}" class="pop3">Write a review</a></div>
+<div class="free-shipping1 float-left padleft7"><a href="#" id="/writereviewpopup?itemid={{ products.catalogid }}" class="pop3">Write a review</a></div>
 </div>
 <div class="float-right"><img src="misc/images/share-button.jpg" width="161" height="22" border="0" /></div>
 </div>
@@ -395,15 +429,9 @@ and Florida Locations</div>
 </div>
 
  
-<div id="popup" style="left: -700px; position: absolute; top: 1177px; z-index: 9999; opacity: 1; display: none;min-height:200px;">
-        
-        <div id="contentss" style="height: auto; width: auto;"></div>
-</div>
+ 
 <div class="float-left wid20">&nbsp;&nbsp;</div>
 <div class="float-left wid20">&nbsp;&nbsp;</div>
 </div>
-<div id="popup" style="left: -700px; position: absolute; top: 1177px; z-index: 9999; opacity: 1; display: none;min-height:200px;">
-        
-        <div id="contentss" style="height: auto; width: auto;"></div>
-</div>
+ 
 {% endblock content %}

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load tagsfilter %} 
+ 
+ <link type="text/css" rel="stylesheet" href="/misc/category.css" />
+
+ 
+<style>
+ 
+#popup, #popup2, .bMulti {
+background-color: #fff;
+border-radius: 10px 10px 10px 10px;
+box-shadow: 0 0 25px 5px #999;
+color: #111;
+display: none;
+min-width: 450px;
+padding: 1px;
+}
+</style>
+<div class="float-left wid20">&nbsp;&nbsp;</div>
+<div class="float-left wid725">
+<div class="clr" style="line-height:20px;">
+<div class="clr pad-tb product-align1 marleft10 master-link"><a href="/">Home</a> &gt; <a href="/category?id={{cat.id}}">{{cat.category_name}} </a></div>
+<div class="clr">
+
+<div class="orange-txt2"> {{cat.category_name}} </div>
+</div>
+ 
+<div class="clr pad-tb marleft10" align="justify">
+{{cat.category_header|safe}}
+</div>
+
+<div align="left" class="clr wid748"> 
+<div class="orange-txt2"> Sub-Categories  </div>
+</div>
+
+<div class="clr padtop20 padbottom20">
+<div class="clr">
+<table width="100%"  border="0"   cellspacing="0" cellpadding="0" class="alternative">
+{% for products in scat|categoriesdisplay %}
+
+{% if forloop.counter0|divisibleby:3 %}<tr>{% endif %}
+<td >
+<div class="float_left blue_boxs" align="center"  style="width:180px !important;min-height:156px !important;">
+<div class="clr product_heading product-align">{{ products.name|truncatechars:50 }}</div>
+<div class="clr  product-align">{{ products.description }}&nbsp;</div>
+<div class="clr pad-tb"><span class="clr "><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.iconimage|strreplace:"assets/images/" }}' width="125" height="125" /></span></div>
+				<div class="clr product_heading product-align"><a href="/category?id={{ products.id}}">{{ products.category_name}}</a></div>
+
+
+ 
+</div>
+</td>
+{% if forloop.counter|divisibleby:3 %}</tr>{% endif %}
+{% endfor %}
+
+ </table>
+  
+ <div class="clr"></div>
+</div>
+
+ 
+
+</div>
+</div>
+<div class="float-left"></div>
+
+</div></div>
+ 
+{% endblock content %}

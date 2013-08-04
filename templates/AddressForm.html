@@ -55,9 +55,9 @@ $(document).ready(function(){
 {% csrf_token %}
 <div class="form_top">
 <div class="clr">
-<div class="form_left">
+<div class="form_left padleft20">
 <div class="clear">{{ form.contact_id }}{{ form.address_type }}
-<div class="left_label txt4">First:</div>
+<div class="left_label txt4 ">First:</div>
 <div >{{ form.first_name }}</div>
 </div>
 <div class="clear padtop10">
@@ -120,6 +120,10 @@ $(document).ready(function(){
 
     <tr>
       <td colspan="3" bgcolor="#FFFFFF"><table width="100%" border="0">
+	  <tr>
+      <td width="87" bgcolor="#FFFFFF">Address Type</td>
+      <td width="396" bgcolor="#FFFFFF"><span class="style4"><input type="text" name="customers_addressbook"> </span></td>
+    </tr>
         <tr>
           <td>First Name </td>
           <td><span class="style4">{{ form.first_name }}{{ form.contact_id }}{{ form.address_type }}</span></td>

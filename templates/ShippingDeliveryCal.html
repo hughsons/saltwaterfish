@@ -1,7 +1,7 @@
 <html>
 <head>
-<link href="http://saltwater2013.dev.mvisolutions.com/sitemap/style.css" rel="stylesheet" type="text/css" />
-<link href="http://saltwater2013.dev.mvisolutions.com/sitemap/sty.css" rel="stylesheet" type="text/css" />
+<link href="/misc/style.css" rel="stylesheet" type="text/css" />
+<link href="/misc/sty.css" rel="stylesheet" type="text/css" />
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js">
 </script>
 
@@ -10,6 +10,7 @@
 function OnConfim()
 {
   element = document.getElementById("hdnShippingDate");
+  //opener.document.OrderConfirmationForm.SaturdayDelivery{{category_id}}.value= element.value;
   opener.document.OrderConfirmationForm.ReqDeliveryDate{{category_id}}.value= element.value;
   window.close()
 }
@@ -74,18 +75,25 @@ function SetDeliveryDate(pInputField, day, shipping_date, method)
         <div class="clr card5_line_shade">
           <table width="100%" border="0" cellpadding="3" cellspacing="3">
             <tr class="clr card5_line_shade">
-              <td class="card5_mon marright5">Mon</td>
-              <td class="card5_mon marright5">Tue</td>
-              <td class="card5_mon marright5">Wed</td>
-              <td class="card5_mon marright5">Thu</td>
-              <td class="card5_mon marright5">Fri</td>
-              <td class="card5_mon marright5">Sat</td>
-              <td class="card5_mon marright5">Sun</td>
+              <td class="card5_mon ">Mon</td>
+              <td class="card5_mon ">Tue</td>
+              <td class="card5_mon ">Wed</td>
+              <td class="card5_mon ">Thu</td>
+              <td class="card5_mon ">Fri</td>
+              <td class="card5_mon ">Sat</td>
+              <td class="card5_mon ">Sun</td>
             </tr>
             {% for week in cal %}
             <tr>{% for day in week %}
+			{% if day.bgcolor %}
               <td class="{{day.bgcolor}}">{% if day.script %}<a href="javascript:SetDeliveryDate('ReqDeliveryDate-{{category_id}}',{{day.day}}, '{{day.script}}', '{{day.method}}')">{{day.day}}</a>{% else %}{{day.day}}{% endif %}</td>
-              {% endfor %}</tr>
+              {%else%}
+			  <td class=card5_mon></td>
+			  {%endif%}
+			  
+			  {% endfor %}
+			  
+			  </tr>
             {% endfor %}
           </table>
           <div class="clr card5_height1"></div>

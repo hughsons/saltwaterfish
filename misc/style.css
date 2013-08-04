@@ -1026,7 +1026,7 @@ background-repeat:repeat-y
 	border-left-color: #d2d2d2;
 }
 .home-txt {
-	font-family: "PT Sans";
+	font-family:Arial, Helvetica, sans-serif;
 	font-size: 14px;
 	line-height: normal;
 	font-weight: normal;
@@ -1036,7 +1036,7 @@ background-repeat:repeat-y
 	text-align: left;
 }
 .home-txt-arrow {
-	font-family: "PT Sans";
+	font-family:Arial, Helvetica, sans-serif;
 	font-size: 14px;
 	line-height: normal;
 	font-weight: normal;
@@ -1049,7 +1049,7 @@ background-repeat:repeat-y
 	border: 1px solid #d9d9d9;
 	height: 194px;
 	width: 372px;
-	font-family: "Open Sans Light";
+	font-family:Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	line-height: normal;
 	font-weight: normal;
@@ -1061,7 +1061,7 @@ background-repeat:repeat-y
 	border: 1px solid #d9d9d9;
 	height: 194px;
 	width: 372px;
-	font-family: "Open Sans Light";
+	font-family:Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	line-height: normal;
 	font-weight: normal;
@@ -1070,7 +1070,7 @@ background-repeat:repeat-y
 	text-decoration: none;
 }
 .free-shipping1 {
-	font-family: "PT Sans";
+	font-family:Arial, Helvetica, sans-serif;
 	font-size: 13px;
 	line-height: normal;
 	font-weight: normal;
@@ -1089,7 +1089,7 @@ background-repeat:repeat-y
 	text-align: left;
 }
 .quest {
-	font-family: "PT Sans";
+	font-family:Arial, Helvetica, sans-serif;
 	font-size: 13px;
 	line-height: normal;
 	font-weight: normal;
@@ -1097,7 +1097,7 @@ background-repeat:repeat-y
 	text-decoration: none;
 }
 .read {
-	font-family: "PT Sans";
+	font-family:Arial, Helvetica, sans-serif;
 	font-size: 13px;
 	line-height: normal;
 	font-weight: bold;
@@ -1108,7 +1108,7 @@ background-repeat:repeat-y
 
 
 .details{
-	font-family: "PT Sans";
+	font-family:Arial, Helvetica, sans-serif;
 	font-size: 13px;
 	line-height: normal;
 	font-weight: normal;
@@ -3934,7 +3934,7 @@ background-color:#FFFFFF}
 	text-align:right;
 }*/
 .product_option_txt1{
-	font-family: "PT Sans";
+	font-family:Arial, Helvetica, sans-serif;
 	font-weight: bold;
 	text-transform: none;
 	color: #000;
@@ -4004,7 +4004,7 @@ line-height:normal
 }
 .order_shipped_style2 {
 	color: #000000;
-	font-family: "Open Sans Light";
+	font-family:Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	font-weight: bold;
 }
@@ -4015,7 +4015,7 @@ line-height:normal
 .new-orders-text {
 	color: #000000;
 	font-weight: normal;
-	font-family: "Open Sans Light";
+	font-family:Arial, Helvetica, sans-serif;
 	font-size: 13px;
 	text-decoration: none;
 }
@@ -4246,7 +4246,7 @@ line-height:normal
 /*may-8 css*/
 
 .cate2{
-	font-family: "PT Sans";
+	font-family:Arial, Helvetica, sans-serif;
 	line-height: normal;
 	font-weight: bold;
 	text-transform: none;
@@ -4288,7 +4288,7 @@ line-height:normal
 	text-align:right;
 }*/
 .product_option_txt1{
-	font-family: "PT Sans";
+	font-family:Arial, Helvetica, sans-serif;
 	font-weight: bold;
 	text-transform: none;
 	color: #000;
@@ -4454,7 +4454,7 @@ line-height:normal
 .backcolor{background-color:#f7f7f7; clear:both}
 
 .guaran{
-	font-family: "Open Sans Semibold";
+	font-family:Arial, Helvetica, sans-serif;
 	font-size: 14px;
 	line-height: normal;
 	font-weight: bold;
@@ -4464,7 +4464,7 @@ line-height:normal
 }
 
 .vie-details{
-	font-family: "PT Sans";
+	font-family:Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	line-height: normal;
 	font-weight: bold;
@@ -4493,7 +4493,7 @@ line-height:normal
 }
 
 .content-account{
-	font-family: "PT Sans";
+	font-family:Arial, Helvetica, sans-serif;
 	font-size: 13px;
 	line-height: normal;
 	font-weight: normal;
@@ -4506,7 +4506,7 @@ line-height:normal
 }
 
 .content-label{
-	font-family: "PT Sans";
+	font-family:Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	line-height: normal;
 	font-weight: bold;

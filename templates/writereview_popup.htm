@@ -1,0 +1,122 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="/misc/style.css" rel="stylesheet" type="text/css" />
+<link href="/misc/sty.css" rel="stylesheet" type="text/css" /> 
+<link type="text/css" rel="stylesheet" href="/misc/myaccount.css" />
+
+<title>Saltwaterfish.com | Email A friend</title>
+ </head>
+ {% load tagsfilter %}
+ 
+<script>
+$(document).ready(function(){
+  $("#cmdUpdateAddress").click(function(){
+	var formData = $('#formsss').serialize();
+	alert("here");
+	 var user_name = $('#user_name').val();
+	var user_email = $('input[name="user_email"]').val();
+	var short_review = $('input[name="short_review"]').val();
+	var user_city = $('input[name="user_city"]').val();
+	var long_review = $('#long_review').val();
+	var rating = $('input[name=rating]:radio:checked').val();
+	 
+	$("#BillingAddressForm").load("/freegeneralactions?action=crreview&catalogid={{products.catalogid}}&user_name="+user_name+"&user_email="+user_email+"&user_city="+user_city+"&short_review="+short_review+"&long_review="+long_review+"&rating="+rating+"", formData, function(responseText, textStatus, xmlHttpRequest) {
+    html = responseText;
+    });
+	$("#ShippingAddressView").hide();
+	$("#BillingAddressForm").html(responseText);
+	return false;
+  });
+});
+</script>
+<body leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">
+<table width="100%" border="0" align="center" cellpadding="5" cellspacing="0" class="data">
+	<tr>
+		<td><table width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					<td class="page_headers" colspan="2">Add Review</td>
+				</tr>
+				<tr>
+					<td valign="top" class="item"><div class="orange-txt1 clr padtop10 padbottom10 product-align">{{products.name}} </div></td>
+				</tr>
+				 
+			</table><div id="BillingAddressForm"></div>
+			<br>
+			<!--START: newReviewForm-->
+			<table width="100%" cellpadding="0" cellspacing="0" id="ShippingAddressView" border="0">
+				<form method="get" action="/freegeneralactions?action=crreview" name="formsss" id="formsss">
+				<input type=hidden name="action" id="action" value="crreview">
+				<input type=hidden name="catalogid" id="itemid" value="{{products.catalogid}}">
+					<tr>
+						<td colspan="4"><table width="100%" cellpadding="3" cellspacing="2">
+								<tr>
+									<td width="70" class="price-info">Name: </td>
+									<td class="price-info" width="160"><!--START: nameTxt-->
+										{% if request.session.IsLogin %}
+										<input type="text" value="{{ request.session.Customer.billing_firstname }} {{ request.session.Customer.billing_lastname }}" name="user_name" maxlength="50" class="txtBoxStyle" size="20">
+										{%else%}
+										<input type="text" value="" name="user_name" maxlength="50" id="user_name" class="txtBoxStyle" size="20">
+										{%endif%}
+										&nbsp;<img src="/misc/images/error2.png" width="9" height="12">
+										<!--END: nameTxt-->
+										<!--START: nameHdn--><!--END: nameHdn-->
+									</td>
+									<td class="price-info" width="30">Email: </td>
+									<td class="price-info"><!--START: emailTxt-->
+										<input type="text" value="{{ request.session.Customer.email }}" name="user_email" maxlength="50" class="txtBoxStyle" size="20">
+										&nbsp;<img src="/misc/images/error2.png" width="12" height="12">
+										<!--END: emailTxt-->
+										<!--START: emailHdn--><!--END: emailHdn-->
+									</td>
+								</tr>
+								<tr>
+									<td class="price-info">Location: </td>
+									<td class="price-info" colspan="3"><input type="text" name="user_city" maxlength="50" class="txtBoxStyle" size="60">
+										&nbsp;<img src="/misc/images/error2.png" width="12" height="12"></td>
+								</tr>
+								<tr>
+									<td class="price-info">Title:</td>
+									<td class="price-info" colspan="3" align="center"><p align="left">
+											<input type="text" size="60" name="short_review" maxlength="100" id="Text4" class="txtBoxStyle">
+											&nbsp;<img src="/misc/images/error2.png" width="12" height="12"></P></td>
+								<tr>
+								<tr>
+									<td class="price-info">Review:</td>
+									<td colspan="3"><textarea cols=38 rows="10" name=long_review id=long_review></textarea>
+										&nbsp;<img src="/misc/images/error2.png" width="12" height="12"></td>
+								</tr>
+								<tr>
+									<td class="price-info">Rating:</td>
+									<td class="price-info" colspan="3" align="left"><input type="radio" name="rating" value="1">
+										<img src="/misc/images/star1.gif">
+										<input type="radio" name="rating" value="2" id="Radio1">
+										<img src="/misc/images/star2.gif">&nbsp;
+										<input type="radio" name="rating" value="3" id="Radio2">
+										<img src="/misc/images/star3.gif">&nbsp;
+										<input type="radio" name="rating" value="4">
+										<img src="/misc/images/star4.gif">&nbsp;
+										<input type="radio" name="rating" value="5" id="Radio4" checked>
+										<img src="/misc/images/star5.gif" >&nbsp; </td>
+								</tr>
+								 
+							</table>
+							<br>
+						</td>
+					</tr>
+					 
+					<tr>
+						<td height="50"><span class="error"><img src="/misc/images/error2.png"> = Required</span></td>
+						<td align="right"><input type="submit" value="Add Review" class="btn"  id="cmdUpdateAddress" >&nbsp;&nbsp;<input name="cancel" type="button" value="Cancel" class=" b-close"></td>
+					</tr>
+				</form>
+			</table>
+			 
+			 
+		</td>
+	</tr>
+</table>
+</body>
+</html>

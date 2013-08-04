@@ -17,8 +17,8 @@
 {% load tagsfilter %}
 <div class="float-left width10">&nbsp;&nbsp;</div>
 <div class="float-left wid748 padtop5">
-<div class="clr my_account_link padbottom13"><span><a href="/">Home</a> &gt; <a href="/myaccount">My Account</a></span><span> &gt; My Wish List </span></div>
- <div class="clr my_account_title padtop5 padbottom13">MY WISH LIST </div>
+<div class="clr my_account_link padbottom13"><span><a href="/">Home</a> &gt; <a href="/myaccount">My Account</a></span><span> &gt; My Waiting List </span></div>
+ <div class="clr my_account_title padtop5 padbottom13">MY WAITING LIST </div>
 <div class="clr myaccount_bg1">
  
 {% include 'myaccount_links.htm' %}
@@ -35,7 +35,20 @@
 	<td width="100">Add to Cart </td>
   </tr>
 {% for item in product_list %}
-	<tr bgcolor="#FFFFFF"><td align=center><a href="/product?pid={{ item.catalogid }}"><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ item.thumbnail|strreplace:"assets/images/" }}' width="55" height="55" /></td><td><a href="/product?pid={{ item.catalogid }}">{{item.name}}</a></td><td>${{item.price|floatformat:"2"}}</td><td><a href='/deletewishlist?wsh_id={{item.id}}&catalogid={{item.catalogid}}' onclick="javascript: return confirm('Are you sure you want to delete this item ?');">Delete</a></td><td><div class="blue-button"><a href="/addtocart?item_id={{ item.catalogid }}">Add to Tank</a></div></td></tr>
+	<tr bgcolor="#FFFFFF"><td align=center><a href="/product?pid={{ item.catalogid }}"><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ item.thumbnail|strreplace:"assets/images/" }}' width="55" height="55" /></td><td><a href="/product?pid={{ item.catalogid }}">{{item.name}}</a></td><td>${{item.price|floatformat:"2"}}</td><td><a href='/deletewishlist?wsh_id={{item.id}}&catalogid={{item.catalogid}}' onclick="javascript: return confirm('Are you sure you want to delete this item ?');"><font color=blue>Delete</font></a></td><td>
+	
+ 	{% if item.stock >= 1 %}
+					<div class="blue-button "><a href="##"  class="pop1" id="/addtocart?item_id={{ item.catalogid }}">Add to Tank</a></div>
+				{% else %}
+						{% if request.session.IsLogin %}
+							<div class="wish-button "><a href="##" id="/addtowatchlist?itemid={{item.catalogid}}&name=" class="pop1">Waiting List</a></div>
+						{% else %}
+							<div class="wish-button"><a id="/waitpopup?itemid={{ item.catalogid }}" href="#" class="pop1">Waiting List</a></div>
+							 
+						{% endif %}
+					 
+				{% endif %}
+	</td></tr>
 
 {% empty %}
 	<em class="formee-req">No Records</em>
@@ -81,7 +94,10 @@
 	<td width="100">Add to Cart </td>
   </tr>
 {% for item in product_list %}
-	<tr bgcolor="#FFFFFF"><td align=center><img src="{{item.thumbnail}}" width="55" height="55" /></td><td>{{item.name}}</td><td>${{item.price|floatformat:"2"}}</td><td><a href='/deletewishlist?wsh_id={{item.id}}&catalogid={{item.catalogid}}' onclick="javascript: return confirm('Are you sure you want to delete this item ?');">Delete</a></td><td><div class="blue-button"><a href="/addtocart?item_id={{ item.catalogid }}">Add to Tank</a></div></td></tr>
+	<tr bgcolor="#FFFFFF"><td align=center><img src="{{item.thumbnail}}" width="55" height="55" /></td><td>{{item.name}}</td><td>${{item.price|floatformat:"2"}}</td><td><a href='/deletewishlist?wsh_id={{item.id}}&catalogid={{item.catalogid}}' onclick="javascript: return confirm('Are you sure you want to delete this item ?');">Delete</a></td><td>
+	<div class="blue-button"><a href="/addtocart?item_id={{ item.catalogid }}">Add to Tank</a></div>
+	
+	</td></tr>
 {% endfor %}
 </table>
 {% endif %}

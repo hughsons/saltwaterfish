@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
- <script language="javascript" type="text/javascript" src="/misc/js/imagetooltip.js"></script>
- <script language="javascript" type="text/javascript" src="/misc/js/jquery.bpopup.min.js"></script>
  <link type="text/css" rel="stylesheet" href="/misc/style_new.css" />
+
+ <script language="javascript" type="text/javascript" src="/misc/js/imagetooltip.js"></script>
+{%comment%}
+<script language="javascript" type="text/javascript" src="/misc/js/jquery.bpopup.min.js"></script>
 <script type="text/javascript">
 	;(function($) {
          $(function() {
@@ -19,7 +21,7 @@
     })(jQuery);
 
 </script>
-
+{%endcomment%}
 <style>
 
 .buttons {
@@ -89,22 +91,24 @@ img{border:none;}
 	margin-top:150px;
 	z-index: 1000;
 	}
-
+.float-left {
+    font-family: Arial, Helvetica, sans-serif;
+}
 /*  */
 </style>
 {% load tagsfilter %}
 <div class="float-left wid20">&nbsp;&nbsp;</div>
 <div class="float-left wid748 padtop20">
-<div align="left" class="clr master-link"><a href="/">Home</a> &gt; <a href="/">CMS Pages </a> &gt; <a href="/quicklist?cat={{cat}}">Quick List </a></div>
+<div align="left" class="clr master-link"><a href="/">Home</a> &gt; <a href="/quicklist?cat={{cat}}">Quick List </a></div>
 <div class="clr">&nbsp;&nbsp;</div>
 {% if cat|categoriesdisplay|length < 1 %}
 <div class="feature-bg1-new">Featured Products</div>
 <div class="clr height15" >&nbsp;&nbsp;</div>
 {% for products in cat|featureddisplay %}
 	 
-		<div align="center" class="float_left orang_boxs" style="min-height:330px !important;">
-		<div class="clr product_heading product-align" style="min-height:60px !important;">{{ products.name }}</div>
-		<div class="clr product-align">{{ products.description }}</div>
+		<div align="center" class="float_left orang_boxs" style="min-height:320px !important;">
+		<div class="clr product_heading product-align" style="min-height:60px !important;">{{ products.name|truncatechars:50 }}</div>
+		<div class="clr product-align"style="min-height:15px !important;">{{ products.description|truncatechars:20 }}</div>
 		<div class="clr pad-tb"><img width="125" height="125" src='http://commondatastorage.googleapis.com/swf_product_images/{{  products.thumbnail|strreplace:"assets/images/" }}'></div>
 		{% if products.onsale > 0 %}
 			<div class="clr " style="font-size:13px !important;"><strong>Sale:&nbsp;</strong><span class="line-through">${{products.price|floatformat:2}}&nbsp;</span><strong class="orange_text">&nbsp;${{products.saleprice|floatformat:2}}</strong></div>
@@ -115,11 +119,11 @@ img{border:none;}
 				{% if products.stock >= 1 %}
 					<div class="blue-button marleft25"><a href="##"  class="pop1" id="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
 				{% else %}
-					<div class="wish-button marleft25"><a href="/waitpopup?itemid={{ products.catalogid }}" class="pop1">WISH LIST</a></div>
+					<div class="wish-button marleft25"><a href="/waitpopup?itemid={{ products.catalogid }}" class="pop1">Waiting List</a></div>
 				{% endif %}
 
 		<div class="clr">&nbsp;</div>
-		<div class="hash-button1"><a href="/product?pid={{ products.catalogid }}">more details...</a></div>
+		<div class="hash-button1"><a href="/product?pid={{ products.catalogid }}">More Details...</a></div>
 		</div>
 		</div>
 	
@@ -136,12 +140,13 @@ img{border:none;}
 	</tbody></table>
 	</td></tr>
 	</tbody></table>
+	
 </div>
-	<div class=" clr float_left">
+	<div class=" clr float_left"><small><font color=red>To See Image of Item Mouse Over the Underline Product </font></small>
 	<table width="100%" border="0" align="left" cellpadding="10" cellspacing="0" class="table-bg1" >
 		{% for products in cat|productsdisplay %}
 			  <tr>
-				<td class="table-text1" width="276"><a href="/product?pid={{ products.catalogid }}"  class="screenshot" rel='http://commondatastorage.googleapis.com/swf_product_images/{{ products.image1|strreplace:"assets/images/" }}'>{{ products.name }}</a></td>
+				<td class="table-text1" width="276"><a href="/product?pid={{ products.catalogid }}"  class="screenshot" rel='http://commondatastorage.googleapis.com/swf_product_images/{{ products.image1|strreplace:"assets/images/" }}' width=100>{{ products.name }}</a></td>
 				<td width="103" valign=middle>
 				{% if products.onsale == 1 %}
 					${{products.saleprice|floatformat:2}} <img src="/misc/images/quick-sale-img.png" width="33" height="21" border="0"  />
@@ -153,9 +158,9 @@ img{border:none;}
 					<div class="blue-button"><a href="##"  class="pop1" id="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
 				{% else %}
 					{% if request.session.IsLogin %}
-							<div class="wish-button "><a href="##" id="/addtowatchlist?itemid={{products.catalogid}}&name=" class="pop1">WISH LIST</a></div>
+							<div class="wish-button "><a href="##" id="/addtowatchlist?itemid={{products.catalogid}}&name=" class="pop1">Waiting List</a></div>
 						{% else %}
-							<div class="wish-button"><a id="/waitpopup?itemid={{ products.catalogid }}" href="#" class="pop1">WISH LIST</a></div>
+							<div class="wish-button"><a id="/waitpopup?itemid={{ products.catalogid }}" href="#" class="pop1">Waiting List</a></div>
 							 
 						{% endif %}
 					
@@ -172,9 +177,9 @@ img{border:none;}
 <div class="clr height15" >&nbsp;&nbsp;</div>
 {% for products in cat|featureddisplay %}
 	  
-		<div align="center" class="float_left orang_boxs" style="min-height:330px !important;">
-		<div class="clr product_heading product-align" style="min-height:60px !important;">{{ products.name }}</div>
-		<div class="clr product-align">{{ products.description }}</div>
+		<div align="center" class="float_left orang_boxs" style="min-height:320px !important;">
+		<div class="clr product_heading product-align" style="min-height:50px !important;">{{ products.name|truncatechars:40 }}</div>
+		<div class="clr product-align" style="min-height:15px !important;font-size:12px;">{{ products.description|truncatechars:20 }}</div>
 		<div class="clr pad-tb"><img width="125" height="125" src='http://commondatastorage.googleapis.com/swf_product_images/{{  products.thumbnail|strreplace:"assets/images/" }}'></div>
 		{% if products.onsale > 0 %}
 			<div class="clr" style="font-size:13px !important;"><strong>Sale:&nbsp;</strong><span class="line-through">${{products.price|floatformat:2}}&nbsp;</span><strong class="orange_text">&nbsp;${{products.saleprice|floatformat:2}}</strong></div>
@@ -186,14 +191,14 @@ img{border:none;}
 					<div class="blue-button marleft25"><a href="##"  class="pop1" id="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
 				{% else %}
 					{% if request.session.IsLogin %}
-						<div class="wish-button marleft25"><a href="/addtowatchlist?itemid={{products.catalogid}}&name=" class="pop1">WISH LIST</a></div>
+						<div class="wish-button marleft25"><a href="/addtowatchlist?itemid={{products.catalogid}}&name=" class="pop1">Waiting List</a></div>
 					{% else %}
-					<div class="wish-button marleft25"><a href="/waitpopup?itemid={{ products.catalogid }}" class="pop1">WISH LIST</a></div>
+					<div class="wish-button marleft25"><a href="/waitpopup?itemid={{ products.catalogid }}" class="pop1">Waiting List</a></div>
 					{% endif %}
 				{% endif %}
 
 		<div class="clr">&nbsp;</div>
-		<div class="hash-button1"><a href="/product?pid={{ products.catalogid }}">more details...</a></div>
+		<div class="hash-button1"><a href="/product?pid={{ products.catalogid }}">More Details...</a></div>
 		</div>
 		</div>
 	 
@@ -219,10 +224,11 @@ img{border:none;}
 	
 	</div>
 	<div class=" clr float_left">
+	<small><font color=red>To See Image of Item Mouse Over the Underline Product </font></small>
 	<table width="100%" border="0" align="left" cellpadding="10" cellspacing="0" class="table-bg1" >
 	{% for products in cats.id|productsdisplay %}
 	  <tr>
-		<td class="table-text1" width="276"><a href="/product?pid={{ products.catalogid }}"  class="screenshot" rel='http://commondatastorage.googleapis.com/swf_product_images/{{ products.image1|strreplace:"assets/images/" }}'>{{ products.name }}</a></td>
+		<td class="table-text1" width="276"><a href="/product?pid={{ products.catalogid }}"  class="screenshot" rel='http://commondatastorage.googleapis.com/swf_product_images/{{ products.image1|strreplace:"assets/images/" }}' width="100" height="100">{{ products.name }}</a></td>
 		<td>
 					{% if products.onsale == 1 %}
 						${{products.saleprice|floatformat:2}} <img src="/misc/images/quick-sale-img.png" width="33" height="21" border="0"  />
@@ -235,9 +241,9 @@ img{border:none;}
 						<div class="clr orange_text1">&nbsp;&nbsp;<a href="/product?pid={{ products.catalogid }}" class="clr orange_text1">More Details </a></div>
 					{% else %}
 						{% if request.session.IsLogin %}
-							<div class="wish-button "><a href="##" id="/addtowatchlist?itemid={{products.catalogid}}&name=" class="pop1">WISH LIST</a></div>
+							<div class="wish-button "><a href="##" id="/addtowatchlist?itemid={{products.catalogid}}&name=" class="pop1">Waiting List</a></div>
 						{% else %}
-							<div class="wish-button "><a href="##" id="/waitpopup?itemid={{ products.catalogid }}" class="pop1">WISH LIST</a></div>
+							<div class="wish-button "><a href="##" id="/waitpopup?itemid={{ products.catalogid }}" class="pop1">Waiting List</a></div>
 							 
 						{% endif %}
 						

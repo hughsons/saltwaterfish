@@ -1,0 +1,56 @@
+            <table width="100%" border="1" cellspacing="0" cellpadding="0">
+              <tr class="blue_bg">
+                <td width="10%" align="center" valign="top" class="border"><strong>QTY</strong></td>
+                <td width="67%" align="let" valign="top" class="border padleft10"><strong>Item</strong></td>
+                <td width="22%" align="left" valign="top" class="border padleft10"><strong>Price</strong></td>
+              </tr>
+              {% for item in Items %}
+              <tr>
+                <td align="center" valign="top" class="border">{{item.quantity}}</td>
+                <td align="let" valign="top" class="border padleft10">{{item.item_name}}</td>
+                <td align="left" valign="top" class="border padleft10">{% if item.saleprice > 0 %} ${{ item.saleprice|floatformat:2 }} {% else %} ${{ item.price|floatformat:2 }} {% endif %}</td>
+              </tr>
+              {% endfor %}
+              <tr>
+                <td align="center" valign="top" class="border">&nbsp;</td>
+                <td align="right" valign="top" class="border padright10">&nbsp;</td>
+                <td align="left" valign="top" class="border padleft10">&nbsp;</td>
+              </tr>
+              <tr>
+                <td align="center" valign="top" class="border">&nbsp;</td>
+                <td align="right" valign="top" class="border padright10">Subtotal:</td>
+                <td align="left" valign="top" class="border padleft10">${{request.session.CartInfo.subtotal|floatformat:2 }}</td>
+              </tr>
+			  {% for item in request.session.OtherCharges %}
+              <tr>
+                <td align="center" valign="top" class="border">&nbsp;</td>
+                <td align="right" valign="top" class="border padright10">{{item.0}}:</td>
+                <td align="left" valign="top" class="border padleft10">${{item.1|floatformat:2 }}</td>
+              </tr>
+              {% endfor %}
+              <tr>
+                <td align="center" valign="top" class="border">&nbsp;</td>
+                <td align="right" valign="top" class="border padright10">Shipping Total:</td>
+                <td align="left" valign="top" class="border padleft10">${{request.session.CartInfo.shipping_total|floatformat:2 }}</td>
+              </tr>
+              <tr>
+                <td align="center" valign="top" class="border">&nbsp;</td>
+                <td align="right" valign="top" class="border padright10">Fuel Surcharge:</td>
+                <td align="left" valign="top" class="border padleft10">${{request.session.CartInfo.fuelcharge_total|floatformat:2 }}</td>
+              </tr>
+              <tr class="border orange_text padright10">
+                <td align="center" valign="top" class="border">&nbsp;</td>
+                <td align="right" valign="top" class="border padright10">Discounts Applied:</td>
+                <td align="left" valign="top" class="border padleft10">(${{request.session.CartInfo.promotions_total|floatformat:2 }})</td>
+              </tr>
+              <tr class="border green_text padright10">
+                <td align="center" valign="top" class="border">&nbsp;</td>
+                <td align="right" valign="top" class="border padright10">Gift Certificate Applied:</td>
+                <td align="left" valign="top" class="border padleft10">-</td>
+              </tr>
+              <tr>
+                <td align="center" valign="top" class="border">&nbsp;</td>
+                <td align="right" valign="top" class="border padright10">Total:</td>
+                <td align="left" valign="top" class="border padleft10">${{request.session.CartInfo.order_total|floatformat:2 }}</td>
+              </tr>
+            </table>

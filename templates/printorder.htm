@@ -1,0 +1,233 @@
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"" />
+<title>{{page_title}}</title>
+<meta name="google-site-verification" content="BbwSDh1SDDpdP3_gyoshb1LudI14GjdHTP5GlQyROaw" />
+<link href="/misc/style.css" rel="stylesheet" type="text/css" />
+<link href="/misc/sty.css" rel="stylesheet" type="text/css" />
+{% block content %}
+{% load tagsfilter %}
+<link type="text/css" rel="stylesheet" href="/misc/myaccount.css" />
+
+<style>
+.bod-bg1 {
+    background-color: #CCCCCC;
+    height: 1px;
+}
+.my_account_link_new {
+    color: #144789;
+}
+.my_account_link_new {
+    color: #144789;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 14px;
+    text-align: left;
+}
+.myaccount_txt1 {
+    color: #010000;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: left;
+    text-decoration: none;
+}
+.padbottom13 {
+    padding-bottom: 13px;
+}
+.myaccount_txt2 {
+    color: #010000;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    height: 31px;
+    line-height: 31px;
+    text-align: center;
+    text-decoration: none;
+}
+.bod-title3 {
+    color: #434343;
+    float: left;
+    font-family: 'Open Sans',sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+}
+.bod-title4 {
+    color: #434343;
+    float: right;
+    font-family: 'Open Sans',sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+}
+</style>
+<div class="float-left width10">&nbsp;&nbsp;</div>
+<div class="float-left wid748 padtop15 padright20">
+<div class="clr my_account_link_new">
+ 
+
+</div>
+<div class="clr height10">&nbsp;</div>
+<div class="clr bod-bg1"></div>
+<div class="clr myaccount_txt2" align="center">Order {{item.invoicenum_prefix}}{{item.invoicenum}} </div>
+
+<div class="clr bod-bg1"></div>
+<div class="clr">
+<div class="float-left">
+<div class="clr"><img src="misc/images/log-n.jpg" width="331" height="57" border="0" /></div>
+<div class="clr"><div class="myaccount_txt1 padtop0 padbottom13">Saltwaterfish.com<br />
+<div class="bod-title3">920 Valley Lane<br />
+
+Fort Pierce, FL 34946</div></div></div>
+</div>
+<div class="float-right bod-title4">
+<div class="clr"><br><strong>Date Ordered</strong>:&nbsp;{{item.odate}}<br />
+
+<strong>Order Number</strong>::{{item.invoicenum_prefix}}{{item.invoicenum}}</div>
+</div>
+
+
+</div>
+
+<div class="clr">&nbsp;&nbsp;</div>
+<div class="clr">
+<div class="float-left">
+
+<div class="clr"><div class="myaccount_txt1 padtop0 padbottom13">
+<div class="bod-title3">
+<strong>Billing/Payment Information</strong><br />{{item.ofirstname}}{{item.olastname}}<br />
+
+{{item.oaddress}} {{item.oaddress2}}<br />
+
+{{item.ocity}},{{item.ostate}} {{item.ozip}} -<br />
+
+{{item.ophone}}<br />
+
+{{item.oemail}}
+</div></div></div>
+</div>
+<div class="float-right bod-title4">
+<div class="clr">
+
+<strong>Delivery/Shipping Information</strong><br />
+
+{{item.oshipfirstname}}{{item.oshiplastname}}<br />
+
+{{item.oshipaddress}}<br />
+
+{{item.oshipcity}},{{item.oshipstate}} {{item.oshipzip}} - {{item.oshipcountry}}</div>
+</div>
+
+
+</div>
+
+<div class="clr">&nbsp;</div>
+
+<div class="clr bod-title3"><strong>Shipping</strong>&nbsp;:&nbsp;{{item.oshipmethod}}<br />
+  <br />
+
+ 
+    <strong>Tracking Number</strong>&nbsp;:&nbsp;{{item.trackingcode}}<br />
+<br />
+
+
+<strong>Shipped on</strong>&nbsp;:&nbsp;{{item.oshippeddate}}<br />
+<br />
+
+
+<strong>Payment Type&nbsp;</strong>: {{paymenttype.payment_description}}<br />
+<br />
+
+
+<strong>Discount(s)</strong>: 
+{% for item in discountpoints %}
+${{item.discount_amount|floatformat:"2"}}<br>
+{% endfor %}
+<br />
+ 
+</div>
+{% if alloiitems|length > 0 %}
+<div class="clr">&nbsp;</div>
+<div class="float-left rightcontent-latest3">
+ <table width="750" border="0" cellpadding="3" cellspacing="1" bgcolor="#EFEFEF" style="color: #434343 !important;font-size: 12px !important;">
+  <tr style='background-image: url("/misc/images/content_menu.jpg");height: 31px;'>
+     <td width="100"><b>Item ID</b></td>
+    <td width="300"><b>ITEMS</b></td>
+    <td width="100"><b>PRICE</b></td>
+	<td width="100"><b>QTY</b></td>
+    <td width="100"><b>Total</b></td>
+	
+  </tr>
+{% for item in alloiitems %}
+	<tr bgcolor="#FFFFFF" ><td align=left>{{item.itemid}}</td> 
+	<td>{{item.itemname|safe}}</td>
+	<td>${{item.unitprice|floatformat:"2"}}</td>
+	<td>{{item.numitems}}</td>
+	<td>${{item.numitems|multiplyval:item.unitprice|floatformat:"2"}}</td>
+	</tr>
+{% endfor %}
+<tr bgcolor="#FFFFFF"><td colspan=5><table width="740" bgcolor="#EFEFEF" cellpadding="3" cellspacing="1"  style="color: #434343 !important;font-size: 12px !important;">
+<tr bgcolor="#FFFFFF"><td rowspan=6 width=555><b>Order Comments:</b><br>{{item.ocomment}}</td></tr>
+	<tr bgcolor="#FFFFFF" > 
+	 
+	<td width="100"><strong>Subtotal:</strong></td>
+	<td width="100">${{totalamt|floatformat:"2"}}</td>
+	</tr>
+ 
+	<tr bgcolor="#FFFFFF" > 
+	 
+	<td><strong>Discount(s):</strong></td>
+	<td>${{item.coupondiscount|floatformat:"2"}}</td>
+	</tr>
+	<tr bgcolor="#FFFFFF" > 
+	<td><strong>Taxes:</strong></td>
+	<td>${{item.otax}}</td>
+	</tr>
+	<tr bgcolor="#FFFFFF" > 
+	<td><strong>Shipping:</strong></td>
+	<td>${{item.oshipcost|floatformat:"2"}}</td>
+	</tr>
+	{%comment%}<tr bgcolor="#FFFFFF" > 
+	<td><strong>Fuel Charge:</strong></td>
+	<td>$2.99</td>
+	</tr>{%endcomment%}
+	<tr bgcolor="#FFFFFF" > 
+	<td><strong>Total:</strong></td>
+	<td>${{item.orderamount|floatformat:"2"}}</td>
+	</tr>
+</table>
+</td></tr>
+</table>
+<div>
+ 
+ 
+ 
+ 
+</div>
+</div>
+{%endif%}<br>&nbsp;
+<table width="750" border="0" cellpadding="3" cellspacing="1" bgcolor="#EFEFEF" style="color: #434343 !important;font-size: 12px !important;">
+  <tr style='background-image: url("/misc/images/content_menu.jpg");height: 31px;'>
+     <td><b>Reward Points</b></td>
+     
+	
+  </tr>
+<tr bgcolor="#FFFFFF">
+<td valign="top" align="left" colspan="8"><b>Points rewarded:</b> {{rewardpoints.points__sum}}   
+					</td>
+</tr></table>
+
+ 
+</div>
+ 
+<div class="clr my_account_title padtop27 padbottom13">
+</div>
+ 
+<div class="float-left wid10"></div>
+
+ 
+{% endblock content %}
+</body>
+</html>

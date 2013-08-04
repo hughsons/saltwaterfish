@@ -428,7 +428,8 @@ class CartInfo(Error):
     
     return (shipping_charge, fuel_charge, free_shipping_diff)
  
- 
+
+  
   def GetItemsByShippingCategory(self, cart_dict, customer=None, request=None):
     promotions = []
     coupon_code = ""
@@ -442,9 +443,11 @@ class CartInfo(Error):
     tax_list = []
     excluded_zips = []
     state = 'FL'
+
     if customer:
       state = customer.billing_state  
       tax_list = Tax.objects.filter(tax_country = 'US', tax_state = state)
+      state = customer.shipping_state
 
     if tax_list:
       tax = tax_list[0].tax_value1
@@ -498,6 +501,10 @@ class CartInfo(Error):
           shipping_category.shipping_value -= shipping_category.shipping_value * 20/100
       elif coupon_code.lower() == "welcome":
           shipping_category.shipping_value -= shipping_category.shipping_value * 15/100
+      elif coupon_code.lower() == "freeship":
+        if shipping_category.shipping_value >= 89:
+          shipping_category.shipping_charge = 0
+        
 
       shipping_category.supplies_total = (shipping_category.shipping_value + 
                                           shipping_category.shipping_charge +

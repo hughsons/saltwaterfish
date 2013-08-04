@@ -416,6 +416,7 @@
                     </div>
                     <div class="padbottom8">
                       <input type="radio" name="OverNightShipping{{ key }}"/>
+					  <input type="hidden" name"SaturdayDelivery{{ key }}"/>
                       &nbsp;&nbsp;<strong>Overnight Shipping with Priority Upgrade (${{value.priority_shipping|floatformat:2}})</strong><br />
                     </div>
                     <div class="padbottom25">This Category Requires a Fuel Surcharge of $9.99</div>
@@ -485,55 +486,9 @@
             <div class="order_detail">Order Details</div>
           </div>
           <div class="clr">
-            <table width="100%" border="1" cellspacing="0" cellpadding="0">
-              <tr class="blue_bg">
-                <td width="10%" align="center" valign="top" class="border"><strong>QTY</strong></td>
-                <td width="67%" align="let" valign="top" class="border padleft10"><strong>Item</strong></td>
-                <td width="22%" align="left" valign="top" class="border padleft10"><strong>Price</strong></td>
-              </tr>
-              {% for item in Items %}
-              <tr>
-                <td align="center" valign="top" class="border">{{item.quantity}}</td>
-                <td align="let" valign="top" class="border padleft10">{{item.item_name}}</td>
-                <td align="left" valign="top" class="border padleft10">{% if item.saleprice > 0 %} ${{ item.saleprice|floatformat:2 }} {% else %} ${{ item.price|floatformat:2 }} {% endif %}</td>
-              </tr>
-              {% endfor %}
-              <tr>
-                <td align="center" valign="top" class="border">&nbsp;</td>
-                <td align="right" valign="top" class="border padright10">&nbsp;</td>
-                <td align="left" valign="top" class="border padleft10">&nbsp;</td>
-              </tr>
-              <tr>
-                <td align="center" valign="top" class="border">&nbsp;</td>
-                <td align="right" valign="top" class="border padright10">Subtotal:</td>
-                <td align="left" valign="top" class="border padleft10">${{request.session.CartInfo.subtotal|floatformat:2 }}</td>
-              </tr>
-              <tr>
-                <td align="center" valign="top" class="border">&nbsp;</td>
-                <td align="right" valign="top" class="border padright10">Shipping Total:</td>
-                <td align="left" valign="top" class="border padleft10">${{request.session.CartInfo.shipping_total|floatformat:2 }}</td>
-              </tr>
-              <tr>
-                <td align="center" valign="top" class="border">&nbsp;</td>
-                <td align="right" valign="top" class="border padright10">Fuel Surcharge:</td>
-                <td align="left" valign="top" class="border padleft10">${{request.session.CartInfo.fuelcharge_total|floatformat:2 }}</td>
-              </tr>
-              <tr class="border orange_text padright10">
-                <td align="center" valign="top" class="border">&nbsp;</td>
-                <td align="right" valign="top" class="border padright10">Discounts Applied:</td>
-                <td align="left" valign="top" class="border padleft10">(${{request.session.CartInfo.promotions_total|floatformat:2 }})</td>
-              </tr>
-              <tr class="border green_text padright10">
-                <td align="center" valign="top" class="border">&nbsp;</td>
-                <td align="right" valign="top" class="border padright10">Gift Certificate Applied:</td>
-                <td align="left" valign="top" class="border padleft10">-</td>
-              </tr>
-              <tr>
-                <td align="center" valign="top" class="border">&nbsp;</td>
-                <td align="right" valign="top" class="border padright10">Total:</td>
-                <td align="left" valign="top" class="border padleft10">${{request.session.CartInfo.order_total|floatformat:2 }}</td>
-              </tr>
-            </table>
+		    <!--- BEGIN AJAX FILL -->
+            <div class="clr" id="OrderSummaryPanel"></div>
+		    <!--- END AJAX FILL -->
             <div class="order_detail_content">
 			  {% if GiftCertificateBalance > 0 %}
               <div class="order_content_heading">Gift Certificate</div>
@@ -759,9 +714,9 @@ function IsAddressFormValid()
 	 return false;
    }
 
-   if ($("#id_shipping_zip").val().match(/^\s*$/gi))
+   if ($("#id_shipping_zip").val().match(/^\s*$/gi) || !$("#id_shipping_zip").val().match(/^\d{5}$/gi))
    {
-	 alert("Zip Code is mandatory.");
+	 alert("Zip Code is mandatory or invaid.");
 	 $("#id_shipping_zip").focus();
 	 return false;
    }
@@ -832,7 +787,7 @@ function IsAddressFormValid()
 		 return false;
 	   }
 	
-	   if ($("#id_billing_zip").val().match(/^\s*$/gi))
+	   if ($("#id_billing_zip").val().match(/^\s*$/gi) || !$("#id_billing_zip").val().match(/^\d{5}$/gi))
 	   {
 		 alert("Zip Code is mandatory.");
 		 $("#id_billing_zip").focus();
@@ -868,6 +823,25 @@ function IsAddressFormValid()
 	   }
 
    }
+   
+   var shipping_firstname = $("#id_billing_first_name").val();
+   var shipping_lastname = $("#id_billing_last_name").val()
+   var shipping_state = $("#id_shipping_state").val()
+   
+   var url = "/setshippingaddress?s_fname=" + shipping_firstname + "&s_lname=" + shipping_lastname + "&s_state=" + shipping_state
+
+   $.get(url, function(data, status){
+	  if (status == "success" && data == 'done')
+	  {
+	    return true;
+	  }
+	  else
+	  {
+		alert("Sorry, your request could not be processed. Please try again.\n" + data);
+		return false;
+	  }
+	}); 
+
   return true;
 }
 var flag = true
@@ -954,17 +928,51 @@ $(document).ready(function(){
 
   $("#PaymentInfo").click(function(){ 
     if (!IsAddressFormValid()) return false;
-  	if (!$("#ShippingAddressPanel").is(":hidden"))
+ 	if (!$("#ShippingAddressPanel").is(":hidden"))
 	{
       $("#ShippingAddressPanel").slideToggle("slow");
 	}
 
-  	if (!$("#ShippingMethodsPanel").is(":hidden"))
-	{
-      $("#ShippingMethodsPanel").slideToggle("slow");
+    overnight_shipping_list = document.querySelectorAll('[name^="OverNightShipping"]');
+	reqdelivery_list = document.querySelectorAll('[name^="ReqDeliveryDate"]');
+	
+	query = '/updateshipping?'
+	
+    for(var i = 0; i < overnight_shipping_list.length; i++)
+    {
+    	if (overnight_shipping_list[i].checked)
+		{
+		  query += overnight_shipping_list[i].name +"=true&";
+		}
+		
+    	if (reqdelivery_list[i].value.match(/^\w+/gi))
+		{
+		  query += reqdelivery_list[i].name + "=" + reqdelivery_list[i].value + "&";
+		}
+
+	    //alert(overnight_shipping_list[i].checked);
+		//alert(reqdelivery_list[i].value);
 	}
 
-    $("#PaymentInfoPanel").slideToggle("slow");
+    //alert(query);
+	$.get(query, function(data,status){
+	  if (status == "success" && data == 'ok')
+	  {
+        //alert("Data: " + data + "\nStatus: " + status);
+
+		if (!$("#ShippingMethodsPanel").is(":hidden"))
+		{
+          $("#ShippingMethodsPanel").slideToggle("slow");
+	    }
+		$("#OrderSummaryPanel").load("/ordersummary");
+        $("#PaymentInfoPanel").slideToggle("slow");
+	  }
+	  else
+	  {
+	    alert("Sorry, your request could not be processed. Please try again.\n" + data);
+		return false;
+	  }
+    }); 
 
   });
   

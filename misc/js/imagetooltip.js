@@ -22,7 +22,7 @@ this.screenshotPreview = function(){
 		this.t = this.title;
 		this.title = "";	
 		var c = (this.t != "") ? "<br/>" + this.t : "";
-		$("body").append("<p id='screenshot'><img src='"+ this.rel +"' alt='url preview' />"+ c +"</p>");								 
+		$("body").append("<p id='screenshot'><img src='"+ this.rel +"' alt='url preview' width=200 height=200 />"+ c +"</p>");								 
 		$("#screenshot")
 			.css("top",$(window).scrollTop() + "px")
 			.css("left",(e.pageX + yOffset) + "px")

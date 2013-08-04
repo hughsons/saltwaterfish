@@ -2,7 +2,6 @@
 {% block content %}
 {% load tagsfilter %}
 <link type="text/css" rel="stylesheet" href="/misc/myaccount.css" />
-<script language="javascript" type="text/javascript" src="/misc/js/imagetooltip.js"></script>
  <script language="javascript" type="text/javascript" src="/misc/js/jquery.bpopup.min.js"></script>
  <link type="text/css" rel="stylesheet" href="/misc/style_new.css" />
 <script type="text/javascript">
@@ -47,13 +46,13 @@ padding: 1px;
 </style>
 <div class="float-left width10">&nbsp;&nbsp;</div>
 <div class="float-left wid748 padtop5">
-<div class="clr my_account_link">Home  <span>&gt; My Account</span><span> &gt; Address Book</span></div>
+<div class="clr my_account_link"><span><a href="/">Home</a> &gt; <a href="/myaccount">My Account</a></span><span> &gt; Address Book</span></div>
  <div class="clr my_account_link padtop20 padbottom13">My Addresses <span style="float:right;" class="my_account_link"><a id="/addaddressbook" href="#" class="pop1">Add New Address</a></span></div>
 <div class="clr myaccount_bg1">
  
 {% include 'myaccount_links.htm' %}
 <div class="clr">&nbsp;&nbsp;</div>
-  
+  <div class="clr my_account_link padtop10 padbottom13"><a id="/addaddressbook" href="#" class="pop1">Add New Address</a> </div>
  {% if product_list %}
 <table  border="0" cellpadding="0" cellspacing="3" bgcolor="#EFEFEF"> 
  <tr>
@@ -77,23 +76,32 @@ padding: 1px;
         {% endif %}
 {% endfor %}
 </table>
+{%else%}
+
+<div class="special toggle_right_title padtop10 padbottom5" style="width:62% !important;" align="center">
+<table border="0" width="450" cellspacing="0" cellpadding="4" class="alternative">
+	<tbody><tr>
+		<td class="titles" width="26" align="center"><img src="misc/images/error2.png" align="absmiddle" width="26"></td>
+		<td class="titles" align="left" width="418">AddressBook</td>
+	</tr>
+	<tr>
+		<td class="item" colspan="2"> You don't have any addresses in your AddressBook.<br><br>
+		To update your Billing and Shipping Information Please go to your <a href="/myaccount">My Account</a> page and click Edit.
+		</td>
+	</tr>
+	<tr>
+		<td align="left" colspan="2"><!--START: RETURNMESSAGE-->
+			<input type="button" value="Click here to continue" class="btn" onclick="location.href='/myaccount';"  >
+			<!--END: RETURNMESSAGE-->
+		</td>
+	</tr>
+</tbody></table>
+</div>
 {% endif %}
 
  
  </div>
 </div>
-
-
-
-
-
-
 <div class="float-left wid10"></div>
-
 </div>
- <div id="popup" style="left: -700px; position: absolute; top: 1177px; z-index: 9999; opacity: 1; display: none;min-height:200px;">
-        
-        <div id="contentss" style="height: auto; width: auto;"></div>
-</div>
-
 {% endblock content %}

@@ -1,0 +1,544 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load tagsfilter %}
+<link type="text/css" rel="stylesheet" href="/misc/css3/style.css" />
+ <link type="text/css" rel="stylesheet" href="/misc/myaccount.css" />
+ <link type="text/css" rel="stylesheet" href="/misc/css/style.css" />
+ <script type="text/javascript" src="/misc/js/jcarousellite_1.0.1.pack.js"></script>
+<script type="text/javascript">
+	 
+$(function() {
+    $(".anyClass").jCarouselLite({
+        btnNext: ".next",
+        btnPrev: ".prev",
+		scroll: 2
+    });
+});
+
+function ValidateCouponCode()
+{
+   if ($("#txtCoupon").val().match(/^\s*$/gi))
+   {
+     alert("Please enter coupon code.");
+     return false;   
+   }
+   return true;
+}
+
+</script>
+ <style type="text/css">
+ .wid270 {
+    width: 140px !important;
+}
+.wid165 {
+    width: 152px !important;
+}
+.wid240 {
+    width: 140px !important;
+}
+.button33 a {
+    font-family: 'Open Sans',sans-serif;
+    font-size: 12px !important;
+    text-align: center;
+    text-transform: uppercase;
+	padding: 8px 10px;
+	
+}
+.order_left1 {
+    color: #434343;
+    float: left;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    width: 57%;
+}
+ .order_left1 {
+    color: #434343;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+}
+.order_right {
+    color: #434343;
+    
+    font-family: 'Open Sans',sans-serif;
+    font-size: 13px;
+    width: 35%;
+}
+.order_right {
+    color: #434343;
+	float: right;
+    font-family: 'Open Sans',sans-serif;
+    font-size: 13px;
+	width:35% !important;
+}
+.slide_top1 {
+    background-color: #F79B49;
+    background-image: url("/misc/images/cart-bg1.jpg");
+    background-position: left top;
+    background-repeat: no-repeat;
+    border-bottom: 1px solid #000000;
+    border-top: 1px solid #000000;
+    clear: both;
+    height: 176px;
+    padding-bottom: 1px;
+    padding-top: 2px;
+    width: 660px;
+}
+.button44 a {
+    background: -moz-linear-gradient(center top , #9BDCFA, #74C7E5) repeat scroll 0 0 transparent;
+    border: 0 solid #017DB1;
+    border-radius: 10px 10px 10px 10px;
+    color: #FFFFFF;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    height: 25px;
+    line-height: 25px;
+    padding: 4px 25px;
+    text-align: center;
+    text-transform: uppercase;
+    width: auto;
+}
+.slide_middle {
+    background:  linear-gradient(center top , #FAF8E3, #FFFFFF) repeat scroll 0 0 transparent;
+    height: 174px;
+    margin: 0 auto;
+    width: 602px !important;
+}
+.cart_bottom {
+    clear: both;
+    padding-top: 10px !important;
+}
+.slide_middle1 {
+    background: -moz-linear-gradient(center top , #FAF8E3, #FFFFFF) repeat scroll 0 0 transparent;
+    height: 173px;
+    margin: -15px auto 0;
+    width: 600px;
+}
+.slide_middle1 li:first-child {
+    border-left: 0 dotted #A5A5A5;
+    float: left;
+    height: 160px;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 31%;
+}
+.slide_middle1 li:first-child {
+    margin-left: -30px;
+}
+.slide_middle1 li {
+    border-right: 1px dotted #A5A5A5;
+}
+.slide_middle1 li {
+    border-left: 1px dotted #A5A5A5;
+    float: left;
+    height: 160px;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 31%;
+}
+.slide_middle1 li {
+    border-right: 1px dotted #A5A5A5;
+}
+.toggle_right11{ clear:both; width:240px; height:auto; border:1px solid #e4e4e4; padding:5px; margin-left:2px !important;}
+.prev1 {  
+		 
+		position:relative;
+		width:30px;
+		 
+		background:url("/misc/images/btn_prev.gif") no-repeat 0 0;	
+		}	
+	.next1{
+		 
+		position:relative;
+		width:30px;
+		 
+		background:url("/misc/images/btn_next.gif") no-repeat 0 0;	
+		}
+.toggle_right_title {
+    color: #434343;
+    font-family: 'Open Sans',sans-serif;
+    font-size: 15px;
+    text-transform: capitalize;
+}
+.blue_text_new {
+    color: #EC5E00;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    width: 158px;
+}
+.blue_text_new a:link {
+    color: #EC5E00;
+    text-decoration: none;
+}
+#new-arr {
+    margin-left: 5px;
+    margin-right: 8px;
+    margin-top: 65px;
+}
+#new-arr1 {
+    margin-right: 5px;
+    margin-top: 65px;
+}
+ .slide_top2 {
+    background-image: url("http://saltwater2013.dev.mvisolutions.com/sitemap/image/cart-bg.jpg");
+    background-position: left top;
+    background-repeat: no-repeat;
+    border-bottom: 1px solid #000000;
+    border-top: 1px solid #000000;
+    clear: both;
+    height: 174px;
+    padding-bottom: 0;
+    padding-top: 0;
+    width: 87%;
+}
+.slide_middle2 {
+   background: -moz-linear-gradient(center top , #FAF8E3, #FFFFFF) repeat scroll 0 0 transparent;
+	background-color:#FAF8E3;
+    height: 174px;
+    margin: 0 auto;
+    width: 649px;
+}
+.slide_middle2 li:first-child {
+    border-left: 0 dotted #A5A5A5;
+    float: left;
+    height: 172px;
+    padding-left: 5px;
+    padding-right: 5px;
+    width: 31%;
+}
+.slide_middle2 li {
+    border-left: 1px dotted #A5A5A5;
+    float: left;
+    height: 172px;
+    padding-left: 5px;
+    padding-right: 5px;
+    width: 31%;
+}
+</style>
+ <div class="float-left wid768 padleft5">
+
+
+{%if MyCartItems|length > 0 %}
+
+<div class="clr">
+<div class="float-left wid470"><div class="toggle_left2 border">
+<div align="left" class="clr master-link padtop10 padbottom10"><span class="padleft17">Home &nbsp;&gt;&nbsp;My Cart</span> <br>
+  <span class="orange-txt2">My Cart</span>
+</div>
+{% for shippingCategory in MyCartItems %}
+<form name="form" method="GET" action="/cartaction">
+{% csrf_token %}
+<div class="clr">
+<div class="view_cart_heading carttop-bg">
+<div class="clr card2_100">
+<div class="float_left card2_alignC wid140 blue_text_new1"><div class="padtop10">{{shippingCategory.name}}</div></div>
+<div class="float_left card2_alignC wid150"><strong>Description</strong></div>
+<div class="float_left card2_alignC wid100"><strong>Price</strong></div>
+<div class="float_left card2_alignC wid100"><strong>Quantity</strong></div>
+<div class="float_left card2_alignR padright10 wid5"><strong>Subtotal</strong></div>
+<div class="clr"></div>
+</div>
+</div>
+ 
+
+{% for item in shippingCategory.shipping_items %}
+<div class="clr card2_100 padtop10">
+<input type="hidden" name="itemid" value="{{ item.catalog_id }}" size="10" />
+<div class="float_left card2_alignC wid140 blue_text_new1"><img src="http://www.saltwaterfish.com/{{item.thumbnail}}" width=60 height=60 alt="{{item.catalog_id}}"/></div>
+<div class="float_left card2_alignC padleft5 wid150">{{item.item_name}}<br>{{item.extra_fied_3}}</div>
+<div class="float_left card2_alignC wid100"><span {% if item.onsale == 1 %}class="card2_strike" {% endif %}>${{item.price|floatformat:2}}<br></span>{% if item.onsale == 1 %} <span class="orange_text">${{ item.saleprice|floatformat:2 }}</span>{% endif %}</div>
+<div class="float_left card2_alignC wid100"><input type="text" name="quantity" value="{{ item.quantity }}" size="1" /><br><input type="submit" name="cmdUpdate" value="Update"><br /><input type="submit" name="cmdDelete" value="Delete" onclick="javascript:return confirm('Are you sure you want to delete this item from your cart ?')"></div>
+<div class="float_left card2_alignC wid5 padleft7">${{item.subtotal|floatformat:2}}</div>
+<div class="clr"></div>
+</div>
+<div class="clr card2_hor_line"></div>
+{% endfor %}
+<div class="clr card2_100 padtop10 padbottom10">
+
+<div class="float_left product_heading card2_58" style=" padding-left:40px !important;" ><div class="float_left product_heading card2_58">{% if shippingCategory.freeshipping_diff > 0 %}Add ${{shippingCategory.freeshipping_diff|floatformat:2}} more to<br> qualify for free shiping!{% endif %}&nbsp;</div><br></div>
+
+<div class="float_left wid1-130  padtop10 card2_alignL " style=" padding-left:25px !important;" align=right>
+<table width=170 align=right>
+<tr>
+	<td>Subtotal</td>
+	<td>${{shippingCategory.shipping_value|floatformat:2}}</td>
+</tr>
+<tr>
+   <td>Est.Shipping</td>
+   <td>${{shippingCategory.shipping_charge|floatformat:2}}</td>
+</tr>
+<tr>
+	<td>Fuel Surcharge</td>
+	<td>${{shippingCategory.fuel_charge|floatformat:2}}</td>
+</tr>
+<tr>
+	<td>Promotions:</td>
+	<td>$0.00</td>
+</tr>
+{% if request.session.IsLogin %}
+	{% if request.session.Customer.billing_state == "FL"  %}
+		<tr>
+			<td>{{shippingCategory.tax|floatformat:2}}% of Tax</td>
+			<td>$<b>{{shippingCategory.tax_value|floatformat:2}}</td>
+		</tr>
+	{%endif%}
+{%endif%}
+<tr>
+	<td><b>{{shippingCategory.name}} Total</b></td>
+	<td>$<b>{{shippingCategory.supplies_total|floatformat:2}}</b></td>
+</tr>
+</table>
+</form>
+&nbsp;</div>
+<div class="clr"></div>
+</div>
+ 
+ {% empty%}
+Cart is Empty
+ {% endfor %}
+ 
+</div> </div> 
+<div class="clr card2_hor_line"></div>
+ 
+		</div> 
+  
+<div class="float-right">
+ 
+<div class="toggle_right11 wid165">
+<div class=""><div class="order_heading"><font size="2"><strong>Order Details:</strong></font></div></div>
+<div class="clr"></div>
+ 
+
+
+<div class="clr padtop5">
+<div class="order_left1" align="left">Subtotal</div>
+<div class="order_right">
+<div class="float_right">${{CartInfo.subtotal|floatformat:2}}</div>
+
+</div>
+<div class="clr"></div>
+</div>
+<div class="clr padtop5">
+<div class="order_left1 " align="left">Est.Shipping</div>
+<div class="order_right">
+<div class="float_right">${{CartInfo.shipping_total|floatformat:2}}</div>
+
+</div>
+<div class="clr"></div>
+</div>
+
+<div class="clr padtop5">
+<div class="order_left1" align="left">Fuel Surcharge</div>
+<div class="order_right">
+<div class="float_right">${{CartInfo.fuelcharge_total|floatformat:2}}</div>
+
+</div>
+<div class="clr"></div>
+</div>
+{% if request.session.IsLogin %}
+{% if request.session.Customer.billing_state == "FL"  %}
+<div class="clr padtop5">
+<div class="order_left1" align="left">Est.Tax</div>
+<div class="order_right">
+<div class="float_right">${{CartInfo.tax_total|floatformat:2}}</div>
+
+</div>
+<div class="clr"></div>
+</div>
+{%endif%}
+{%endif%}
+<div class="clr padtop10 padbottom10">
+<div class="order_left" align="left"><span>Discounts:</span></div>
+<div class="order_right">
+<div class="float_right"><span>${{CartInfo.promotions_total|floatformat:2}}</span></div>
+</div>
+<div class="clr"></div>
+</div>
+<div class="border"></div>
+<div class="clr">
+<div class="order_left" align="left"><strong>TOTAL</strong></div>
+<div class="order_right">
+<div class="float_right"><strong>${{CartInfo.order_total|floatformat:2}}</strong></div>
+</div>
+<div class="clr"></div>
+</div>
+{% if MyCartItems %}
+<div class="clr padtop15 padbottom15" align="left"><img width="156" border="0" height="24" src="misc/images/paypal_icon1.jpg"> </div>
+<div class="wid270 pad-tb"><div class="button33 padbottom20">
+{% if request.session.StoreCredit %} 
+  {% if request.session.CartInfo.order_total > 0 %}
+     <a href="/{{NextPage}}?gateway=AUTHORIZENET"><font color="#FFFFFF"><strong>Secure Checkout</strong></font></a></div>
+  {% else %}
+     <a href="/{{NextPage}}?gateway=None"><font color="#FFFFFF"><strong>Checkout Store Credit</strong></font></a></div>
+  {% endif %}
+{% else %}
+  {% if request.session.CartInfo.order_total > 0 %}
+     <a href="/{{NextPage}}?gateway=AUTHORIZENET"><font color="#FFFFFF"><strong>Secure Checkout</strong></font></a></div>
+  {% else %}
+     <a href="/{{NextPage}}?gateway=None"><font color="#FFFFFF"><strong>Prmotions Checkout</strong></font></a></div>
+  {% endif %}
+{% endif %}
+ </div>
+<div class="clr    " align="left">
+{% if request.session.StoreCredit %} 
+  {% if request.session.CartInfo.order_total > 0 %}
+  	 <form method="GET" action="/paypalcheckout"><input type="image" src="/misc/images/new-paypal.jpg" width="140" height="40px" /></form>
+  {% else %}
+     &nbsp;
+  {% endif %}
+{% else %}
+  {% if request.session.CartInfo.order_total > 0 %}
+     <br><form method="GET" action="/paypalcheckout"><input type="image" src="/misc/images/new-paypal.jpg" width="140" height="40px" /></form></a>
+  {% else %}
+     &nbsp;
+  {% endif %}
+{% endif %}
+</div>
+ 
+{% endif %} <!-- END IF to check Empty Cart Items -->
+<div class="clr " >
+{% if request.session.IsLogin %} 
+{% if StoreCredit > 0  %}
+<div class="wid240">
+<div class="toggle_right_title" align="left"><font size="3"><strong>Store Credit</strong></font></div>
+<div align="justify" class="clr">You have a store credit of ${{StoreCredit|floatformat:2}} available
+would you like to apply it to this order?</div>
+<form id="form1" name="form1" method="get" action="/applystorecredit">
+{% csrf_token %}
+<div class="clr padtop10" align="left"><input type="image" src="misc/images/cart2-apply1.jpg" width="137" height="21" name="cmdApplyStoreCredit" {% if request.session.CartInfo.order_total == 0 %} disabled="disabled" {% endif %} />
+ <input type="hidden" name="hdnStoreCredit" value="{{StoreCredit}}"/>
+ <input type="hidden" name="hdnStoreCreditID" value="{{StoreCreditID}}" />
+  </div>
+ </form>
+</div>
+{% endif %}
+{%else%}
+<div class="clr wid160 blue_text_new padtop10 padbottom15"><a href="/login" style="color: #EC5E00;">Login to View Any Store Credits</a></div>
+{% endif %}
+
+
+<form name="CouponForm" method="GET" action="/cartaction">
+{% if not request.session.CouponCode %}
+<div class="clr padtop10">
+<div class="toggle_right_title wid240 padbottom5" align="left"><font size="3"><strong>Discount Codes</strong></font></div>
+<div align="justify" class="wid240 padbottom5">Enter your coupon code if you have one.<br /></div>
+<input name="txtCoupon" id="txtCoupon" type="text" value="" size="20" />
+<div class="clr padtop10" align="left"><input type="submit" name="cmdApplyCoupon" value="Apply Coupon" class="button22" style="background-color:#01AED6;cursor: pointer;" onclick="return ValidateCouponCode()"/></div>
+</div>
+ <br>&nbsp;<br>&nbsp;
+</div>
+{% else %}
+<div class="clr padtop10">
+<div class="toggle_right_title wid240 padbottom5" align="left"><font size="3"><strong>Discount Codes</strong></font></div>
+<div align="justify" class="wid240 padbottom5">Coupon <b>{{request.session.CouponCode}}</b> is applied<br /></div>
+<div class="clr padtop10" align="left"><input type="submit" name="cmdClearCoupon" value="Clear Coupon" class="button22" style="background-color:#01AED6;cursor: pointer;"/></div>
+</div>
+ <br>&nbsp;<br>&nbsp;
+</div>
+{% endif %}
+</form>
+
+</div><div class="clr">&nbsp;</div>
+<div class="toggle_right11 wid165"><div align="left" class="padtop5 padleft5 padright5"><font color="#FF6600"><strong><font size="3">Promotional Discounts:</font></strong><br>
+<u>Free Standard Shipping On $49! Exclusions Apply.?</u><br>
+You have not yet qualified for this promtion</font></div></div>
+</div><div class="clr"><div class="cart_bottom">
+<div class="cart_bottom_heading  " align="left">You May Also Like</div>
+
+<div class="slide_top2">
+
+<div class="float-left"><img width="19" border="0" height="30" class="prev" id="new-arr" src="http://saltwater2013.dev.mvisolutions.com/sitemap/image/new-arrow-left.png"></div>
+
+<div class="float-left">
+<div class="slide_middle">
+<div class="anyClass">
+
+<ul>
+{% for items in relateditems %}
+	<li>
+	<div class="clr">
+	<div class="clr" style="min-height:50px;"><span class="product_heading">{{items.name}}</span><br>{{items.extra_field_3}}</div>
+	<div class="clr padtop15">
+	<div class="float_left"><img width="78" border="0" height="86" src='http://commondatastorage.googleapis.com/swf_product_images/{{  items.thumbnail|strreplace:"assets/images/" }}'></div>
+	<div class="float_right ">
+	<div class="price-final">${% if items.onsale > 0 %}{{items.saleprice|floatformat:2}}{% else %}{{items.price|floatformat:2}} 
+				{% endif %}</div>
+	<div class="clr"><a href="/addtocart?item_id={{ items.catalogid }}"><img border="0" src="misc/images/add_tant.png"></a></div>
+	</div>
+	</div>
+	<div class="clr">&nbsp;</div>
+	</div>
+	</li>
+{%endfor%} 
+</ul>
+</div></div></div> 
+
+<div class="float-right"><img width="19" border="0" height="30" class="next" id="new-arr1" src="http://saltwater2013.dev.mvisolutions.com/sitemap/image/new-arrow-right.png"></div> 
+
+
+</div>
+{%comment%}
+   <div class="slide_top1">
+<div class="slide_middle">
+<div class="anyClass">
+    <ul>
+        {% for items in relateditems %}
+				 
+ <li>
+<div class="clr">
+<div class="clr"><span class="product_heading">{{items.name}}</span></div>
+<div class="clr padtop25">
+<div class="float_left"><img width="71" border="0" height="86" src='http://commondatastorage.googleapis.com/swf_product_images/{{  items.thumbnail|strreplace:"assets/images/" }}'></div>
+<div class="float_right ">
+<div class="price-final">${% if items.onsale > 0 %}{{items.saleprice|floatformat:2}}{% else %}{{items.price|floatformat:2}} 
+				{% endif %}</div>
+<div class="clr"><a href="/addtocart?item_id={{ items.catalogid }}"><img border="0" src="misc/images/add_tant.png"></a></div>
+</div>
+</div>
+
+</div>
+ 
+
+</li>
+ 
+{%endfor%}
+    </ul>
+</div>
+
+</div>
+ 
+</div>
+{%endcomment%}
+ 
+</div></div> 
+</div>
+
+{%else%}
+<div class="clr"></div><br><br>&nbsp;<br>
+<div class="special toggle_right_title padtop10 padbottom5" style="width:62% !important;" align="center">
+<table border="0" width="450" cellspacing="0" cellpadding="4" class="alternative">
+	<tbody><tr>
+		<td class="titles" width="26" align="center"><img src="misc/images/error2.png" align="absmiddle" width="26"></td>
+		<td class="titles" align="left" width="418">View Cart</td>
+	</tr>
+	<tr>
+		<td class="item" colspan="2"> You don't have any products in your shopping cart.</td>
+	</tr>
+	<tr>
+		<td align="left" colspan="2"><!--START: RETURNMESSAGE-->
+			<input type="button" value="Click here to continue" class="btn" onclick="location.href='/';"  >
+			<!--END: RETURNMESSAGE-->
+		</td>
+	</tr>
+</tbody></table>
+
+{%endif%}
+
+</div><div class="clr"></div>
+
+<div class="float-left wid10"></div>
+</div>
+</div>
+{% endblock content %}

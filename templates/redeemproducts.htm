@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load tagsfilter %} 
+ 
+ <link type="text/css" rel="stylesheet" href="/misc/category.css" />
+
+ 
+<style>
+ 
+#popup, #popup2, .bMulti {
+background-color: #fff;
+border-radius: 10px 10px 10px 10px;
+box-shadow: 0 0 25px 5px #999;
+color: #111;
+display: none;
+min-width: 450px;
+padding: 1px;
+}
+</style>
+<div class="float-left wid20">&nbsp;&nbsp;</div>
+<div class="float-left wid725">
+<div class="clr" style="line-height:20px;">
+<div class="clr pad-tb product-align1 marleft10 master-link"><a href="/">Home</a> &gt; <a class="master-link" href="/myaccount">My Account </a> </div>
+<div class="clr">
+ 
+<div class="orange-txt2"> MY REWARDS - DETAIL </div>
+</div>
+ 
+<div class="clr pad-tb marleft10" align="justify">
+Reminder: Redemption is only valid with a separate purchase. Reef Rewards must be redeemed at the same time as a separate purchase as they will not be shipped on their own.<br>&nbsp;<br>
+Free Reef Rewards items are not guaranteed, and rewards points are not re-issued.
+</div>
+ 
+ 
+<div class="clr padtop20 padbottom20">
+<div class="clr">
+<table width="100%"  border="0"   cellspacing="0" cellpadding="0" class="alternative">
+{% for products in cat %}
+
+{% if forloop.counter0|divisibleby:3 %}<tr>{% endif %}
+<td >
+<div class="float_left blue_boxs" align="center"  style="width:200px !important;min-height:256px !important;">
+<div class="clr product_heading product-align">{{ products.name|truncatechars:50 }}</div>
+<div class="clr  product-align">{{ products.description }}&nbsp;</div>
+<div class="clr pad-tb"><span class="clr "><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.thumbnail|strreplace:"assets/images/" }}' width="125" height="125" /></span> <br>&nbsp;<br><span style="font-size:12px !important" class="orange-txt1"> {{products.reward_redeem}} points&nbsp;</span>
+</div>
+				<div style="width:115px !important"><div class="hash-button"><a  href="##" id="/popredeem?itemid={{ products.catalogid }}" class="pop1">Redeem</a></div>  </div>
+
+ 				
+ </div>
+</td>
+{% if forloop.counter|divisibleby:3 %}</tr>{% endif %}
+{% endfor %}
+
+ </table>
+  
+ <div class="clr"></div>
+</div>
+
+ </div>
+
+
+</div>
+<div class="float-left"></div>
+
+</div></div>
+ 
+{% endblock content %}

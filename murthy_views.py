@@ -253,6 +253,11 @@ class ViewCartViewClass(TemplateView):
     content.update(csrf(request))
     content.update(leftwidget(request))
     logging.info('field name:: %s',cart_dict)
+    
+    totalrewards = 0
+    if customer:
+      totalrewards = CustomerRewards.objects.filter(contactid=customer.contactid).aggregate(Sum('points'))
+      content['ReefRewards'] = totalrewards['points__sum']
     return render_template(request,'ViewCart.html', content)
 
 
@@ -301,156 +306,6 @@ class ForgetPasswordClass(LoginRequiredMixin,TemplateView):
       c.update(csrf(request))
       return render_to_response('login.htm', c)
 
-class OrderConfirmationViewolder(TemplateView):
-
-  @csrf_exempt
-  def get(self, request, *args, **kwargs):
-    data = {}
-    content = {'page_title': "Order Confirmation"}
-    is_login = False;
-    is_guest = False;
-    gateway = ''
-    error_message = ''
-    # Adding 3 days to the current date
-    est_delivery_date = time.strftime("%m/%d/%Y", time.localtime(time.time() + 172800))
-    
-    if 'ErrorMessage' in request.session:
-      error_message = request.session['ErrorMessage']
-      del request.session['ErrorMessage']
-
-    if 'IsLogin' in request.session:
-      if request.session['IsLogin']:
-        is_login = True;
-        is_guest = False;
-
-    if 'IsGuest' in request.session:
-      if request.session['IsGuest'] and not is_login:
-        is_guest = True;
-
-    # If there is no login and no guest, then redirect to checkoutlogin page.
-    if not is_login and not is_guest:
-      return HttpResponseRedirect('/checkoutlogin')
-     
-    
-    if 'gateway' in request.GET:
-      request.session['PaymentGateway'] = request.GET['gateway']
-      gateway = request.GET['gateway']
-      
-    if 'PaymentGateway' in request.session:
-      gateway = request.session['PaymentGateway']
-
-    cart_items = request.session['CartItems']
-    cart_info = request.session['CartInfo'] # Holds grand totals
-    
-    item_list = []
-    
-    for key, value in cart_items.items():
-      item_list.append(value) 
-
-    data = {}
-    # Populating Customer Information if user is logged in.
-    if is_login or 'Customer' in request.session:
-      logging.info("Logged in or Customer info is found in the session")
-      customer = request.session['Customer']
-      data = {'contact_id':customer.contactid,
-          'shipping_first_name':customer.shipping_firstname,
-          'shipping_last_name':customer.shipping_lastname,
-          'shipping_address1':customer.shipping_address,
-          'shipping_address2':customer.shipping_address2,
-          'shipping_city': customer.shipping_city,
-          'shipping_state': customer.shipping_state,
-          'shipping_zip': customer.shipping_zip,
-          'shipping_country': customer.shipping_country,
-          'shipping_company': customer.shipping_company,
-          'shipping_phone_part1': customer.shipping_phone[0:3],
-          'shipping_phone_part2': customer.shipping_phone[3:6],
-          'shipping_phone_part3': customer.shipping_phone[6:],
-
-          'billing_first_name':customer.billing_firstname,
-          'billing_last_name':customer.billing_lastname,
-          'billing_address1':customer.billing_address,
-          'billing_address2':customer.billing_address2,
-          'billing_city': customer.billing_city,
-          'billing_state': customer.billing_state,
-          'billing_zip': customer.billing_zip,
-          'billing_country': customer.billing_country,
-          'billing_company': customer.billing_company,
-          'billing_phone_part1': customer.billing_phone[0:3],
-          'billing_phone_part2': customer.billing_phone[3:6],
-          'billing_phone_part3': customer.billing_phone[6:],
-          #'billing_phone_ext': customer.billing_phone          
-
-          }
-      
-      temp_data = {'card_holder_name':'John Doe', 'card_number': '4111111111111111', 
-                   'card_type':'Master', 'card_expdate':'10/20', 'card_cvn':'123'}
-      data.update(temp_data)
-    else:
-      logging.info("Non Login traverse or No customer information in the session")
-      data = {'contact_id':0,
-          'username': request.session['GuestEMail']
-          }
-
-      temp_data = {'card_holder_name':'John Doe', 'card_number': '4111111111111111', 
-                   'card_type':'Master', 'card_expdate':'10/20', 'card_cvn':'123'}
-      data.update(temp_data)
-
-    if is_login:
-      if gateway == 'paypal':
-        form = PaypalOrderFormLoggedIn(initial=data)
-      elif gateway == 'AUTHORIZENET':
-        #address_form = BillingShippingAddressForm(initial=data, bstate='FL', shpstate='FL')              
-        #form = AuthorizeNetFormLoggedIn(data, card_list = GetCreditCardList(customer.contactid))
-        #form = AuthorizeNetFormLoggedIn(initial = data, 
-        #                                card_list = GetCreditCardList(customer.contactid), 
-        #                                bstate=customer.billing_state, 
-                                        #bcountry='UK', 
-        #                                shpstate=customer.shipping_state)
-        form = AuthorizeNetFormLoggedIn(initial = data, card_list = GetCreditCardList(customer.contactid))
-      else:
-        form = NoGateWay(data)  
-
-    elif is_guest:
-      if gateway == 'paypal':
-        form = PaypalOrderFormNoLogin(initial = data)
-      elif gateway == 'AUTHORIZENET':
-        form = AuthorizeNetFormNoLogin(initial = data, card_list = [])
-        #form.fields['previous_cards'].choices = [('1', 'Account Ending in xxx - xxx - 2003'), ('2', 'Account Ending in xxx - xxx - 1099')]
-      else:
-        form = NoGateWay()
-
-    index = 1
-    shipping_method_list = []
-    # Creating Linked List
-    num_cats = len(request.session["ShippingMethod"])
-    for key, value in request.session["ShippingMethod"].items():
-      if num_cats > 1 and index <> num_cats: 
-        shipping_method_list.append((index, value, index + 1))
-      elif index == num_cats:
-        shipping_method_list.append((index, value, 0))
-      
-      index += 1
-        
-      #  shipping_method_list.append((index, value, 0))
-      #else:
-      #  shipping_method_list.append((index, value, index + 1))
-      #index+=1
-      
- 
-
-    content['order_error_message'] = error_message
-    #content['address_form'] = address_form
-    content['form'] = form
-    content['Items'] = item_list
-    content['DeliveryDate'] = est_delivery_date
-    content['ShippingMethodList'] = shipping_method_list
-    content['cal'] = GenerateShippingCalander()
-    content['Settings'] = settings
-    
-    content.update(csrf(request))
-    content.update(leftwidget(request))
-    return render_template(request,'OrderConfirmation.html', content)
-
 class OrderConfirmationView(TemplateView):
 
   @csrf_exempt
@@ -462,9 +317,22 @@ class OrderConfirmationView(TemplateView):
     gift_cert_balance = 0
     gateway = ''
     error_message = ''
+    customer = None
+    
+    if 'Customer' in request.session:
+      customer = request.session['Customer']
+      
     # Adding 3 days to the current date
     est_delivery_date = time.strftime("%m/%d/%Y", time.localtime(time.time() + 172800))
-    
+
+    cart_dict = request.session['CartItems']
+    cart = CartInfo()
+    shipping_items = cart.GetItemsByShippingCategory(cart_dict, customer, request)
+    request.session['CartInfo'] = cart
+
+    if 'OtherCharges' in request.session:
+      request.session['OtherCharges'] = []
+
     if 'ErrorMessage' in request.session:
       error_message = request.session['ErrorMessage']
       del request.session['ErrorMessage']
@@ -578,6 +446,7 @@ class OrderConfirmationView(TemplateView):
       if gateway == 'paypal':
         form = PaypalOrderFormNoLogin(initial = data)
       elif gateway == 'AUTHORIZENET':
+        logging.info("\n\nGuest Login")
         form = AuthorizeNetFormNoLogin(initial = data, card_list = [])
         #form.fields['previous_cards'].choices = [('1', 'Account Ending in xxx - xxx - 2003'), ('2', 'Account Ending in xxx - xxx - 1099')]
       else:
@@ -646,143 +515,166 @@ class CheckOutLoginViewClass(TemplateView):
     content.update(leftwidget(request))
     return render_template(request,'CheckOutLogin.html', content)
 
-def SaveOrder(request, transactionid):
-    customer = request.session['Customer']
+#def SaveOrder(request, transactionid):
+#    customer = request.session['Customer']
+#    cart_items = request.session['CartItems']
+#
+#    if request.session['PaymentGateway'] != 'None':
+#      payment_method = PaymentMethods.objects.filter(payment_gateway=request.session['PaymentGateway'])[0].gateway_id
+#    else:
+#      payment_method = -1
+#    
+#    order = Orders()
+#    if customer.contactid == -1:
+#      # For guest login
+#      order.oemail = request.session['GuestEMail']
+#    else:
+#      # For customer login
+#      order.oemail = customer.email
+#
+#    order.ocustomerid = customer.contactid
+#    order.ofirstname = customer.billing_firstname
+#    order.olastname = customer.billing_lastname
+#    order.oaddress = customer.billing_address
+#    order.oaddress2 = customer.billing_address2
+#    order.ocity = customer.billing_city
+#    order.ostate = customer.billing_state
+#    order.ocountry = customer.billing_country
+#    order.ozip = customer.billing_zip
+#    order.ophone = customer.billing_phone
+#
+#    order.oshipfirstname = customer.shipping_firstname
+#    order.oshiplastname = customer.shipping_lastname
+#    order.oshipaddress = customer.shipping_address
+#    order.oshipaddress2 = customer.shipping_address2
+#    order.oshipcity = customer.shipping_city
+#    order.oshipstate = customer.shipping_state
+#    order.oshipcountry = customer.shipping_country
+#    order.oshipzip = customer.shipping_zip
+#    order.oshipphone = customer.shipping_phone
+#
+#    order.opaymethod = payment_method
+#    order.odate = datetime.datetime.now()
+#    order.date_started  = datetime.datetime.now()
+#    order.orderamount = request.session["CartInfo"].order_total
+#    order.otax = request.session["CartInfo"].tax_total
+#    order.oshipcost = request.session["CartInfo"].shipping_total
+#    order.ocomment = request.session['OrderComment']
+#    order.order_status = 1
+#    
+#    if request.session["PaymentGateway"] == 'AUTHORIZENET' and 'CreditCard' in request.session:
+#      card_dict = request.session['CreditCard']
+#      order.ocardno = card_dict['number'] 
+#      order.ocardname = card_dict['first_name'] + " " + card_dict['last_name'] 
+#      order.ocardexpiresmonth = card_dict['month']
+#      order.ocardexpiresyear = card_dict['year']
+#      order.ocardverification =  card_dict['code']
+#    
+#    if 'CouponCode' in request.session:
+#      order.coupon = request.session['CouponCode']
+#      order.coupondiscount = request.session["PromotionsTotal"]
+#
+#    order.oprocessed = 0
+#
+#    max_invoice =  Orders.objects.aggregate(Max('invoicenum'))['invoicenum__max']   
+#    
+#    order.invoicenum_prefix = 'SWF-'
+#    order.invoicenum = max_invoice + 1 
+#    
+#    order.save()
+#    obj = Orders.objects.all().latest('orderid')
+#    
+#    # Updating Transaction Details
+#    transaction = Transactions()
+#    transaction.orderid = obj.orderid # Recent order ID
+#    transaction.amount = order.orderamount
+#    transaction.transactionid = transactionid # Function Parameter
+#    transaction.paymenttype = order.opaymethod
+#    transaction.save()
+#    
+#    reward_points_total = 0 
+#    # Adding Items.    
+#    for item_id, item in cart_items.items():
+#      oitem = Oitems()
+#      oitem.orderid = obj.orderid # Recent order ID
+#      oitem.catalogid = item.catalog_id
+#      oitem.itemid = item.catalog_id
+#      oitem.orderitemid = item.catalog_id
+#      oitem.itemname = item.item_name
+#      oitem.numitems = item.quantity
+#      
+#      reward_points_total += item.reward_points * item.quantity
+#
+#      if item.onsale > 0:
+#        oitem.unitprice = item.saleprice
+#      else:
+#        oitem.unitprice = item.price
+#        
+#      oitem.save()
+#      
+#      # Calculating Rewards and Adding to the customer_rewards tables
+#      customer_reward = CustomerRewards()
+#      customer_reward.contactid = customer.contactid
+#      customer_reward.orderid = obj.orderid
+#      customer_reward.points = reward_points_total
+#      customer_reward.datetime = datetime.datetime.now()
+#      customer_reward.giftcertid = 0
+#      
+#      customer_reward.save()
+#      
+#      if "ShippingMethod" in request.session:
+#        shipping_method_hash = request.session['ShippingMethod']
+#        for key, value in shipping_method_hash.items():
+#          shp_cat_id = key
+#          user_inputs = value
+#          for input_field, input_value in user_inputs.items():
+#            shipping_tupple = Shippingtuple()
+#            shipping_tupple.shippingcategoryid = shp_cat_id
+#            shipping_tupple.orderid = obj.orderid
+#            shipping_tupple.name =  input_field
+#            shipping_tupple.stringvalue = input_value
+#
+#            shipping_tupple.save()
+#        del request.session['ShippingMethod']
+#      
+#      if 'StoreCredit' in request.session:
+#        cart_info = request.session['CartInfo']
+#        #swf_cust_credit_obj = SwfCustomerCreditsLog.objects.filter(id = cart_info.store_credit_id)[0]
+#        swf_cust_credit_obj = SwfCustomerCreditsLog()
+#        swf_cust_credit_obj.customers_credit = cart_info.credits_applied
+#        swf_cust_credit_obj.customers_credit_applied = datetime.datetime.now()
+#        swf_cust_credit_obj.save()
+#        del  request.session['CartInfo']
+#        del  request.session['StoreCredit']
+#        
+#      
+#      request.session["CartItems"]  = {}
+#      
+#    return obj.orderid
+
+class OrderSummaryViewClass(TemplateView):
+
+  @csrf_exempt
+  def get(self, request, *args, **kwargs):
+    content = {}
+    customer = None
+    if 'Customer' in request.session:
+      customer = request.session['Customer']
+
+    #request.session['CartInfo'].shipping_total = 0
     cart_items = request.session['CartItems']
-
-    if request.session['PaymentGateway'] != 'None':
-      payment_method = PaymentMethods.objects.filter(payment_gateway=request.session['PaymentGateway'])[0].gateway_id
-    else:
-      payment_method = -1
+    other_charges = request.session['OtherCharges']
     
-    order = Orders()
-    if customer.contactid == -1:
-      # For guest login
-      order.oemail = request.session['GuestEMail']
-    else:
-      # For customer login
-      order.oemail = customer.email
+    #cart = CartInfo()
+    #shipping_items = cart.GetItemsByShippingCategory(cart_items, customer, request)
 
-    order.ocustomerid = customer.contactid
-    order.ofirstname = customer.billing_firstname
-    order.olastname = customer.billing_lastname
-    order.oaddress = customer.billing_address
-    order.oaddress2 = customer.billing_address2
-    order.ocity = customer.billing_city
-    order.ostate = customer.billing_state
-    order.ocountry = customer.billing_country
-    order.ozip = customer.billing_zip
-    order.ophone = customer.billing_phone
+    item_list = []
+    for key, value in cart_items.items():
+      item_list.append(value) 
 
-    order.oshipfirstname = customer.shipping_firstname
-    order.oshiplastname = customer.shipping_lastname
-    order.oshipaddress = customer.shipping_address
-    order.oshipaddress2 = customer.shipping_address2
-    order.oshipcity = customer.shipping_city
-    order.oshipstate = customer.shipping_state
-    order.oshipcountry = customer.shipping_country
-    order.oshipzip = customer.shipping_zip
-    order.oshipphone = customer.shipping_phone
-
-    order.opaymethod = payment_method
-    order.odate = datetime.datetime.now()
-    order.date_started  = datetime.datetime.now()
-    order.orderamount = request.session["CartInfo"].order_total
-    order.otax = request.session["CartInfo"].tax_total
-    order.oshipcost = request.session["CartInfo"].shipping_total
-    order.ocomment = request.session['OrderComment']
-    order.order_status = 1
-    
-    if request.session["PaymentGateway"] == 'AUTHORIZENET' and 'CreditCard' in request.session:
-      card_dict = request.session['CreditCard']
-      order.ocardno = card_dict['number'] 
-      order.ocardname = card_dict['first_name'] + " " + card_dict['last_name'] 
-      order.ocardexpiresmonth = card_dict['month']
-      order.ocardexpiresyear = card_dict['year']
-      order.ocardverification =  card_dict['code']
-    
-    if 'CouponCode' in request.session:
-      order.coupon = request.session['CouponCode']
-      order.coupondiscount = request.session["PromotionsTotal"]
-
-    order.oprocessed = 0
-
-    max_invoice =  Orders.objects.aggregate(Max('invoicenum'))['invoicenum__max']   
-    
-    order.invoicenum_prefix = 'SWF-'
-    order.invoicenum = max_invoice + 1 
-    
-    order.save()
-    obj = Orders.objects.all().latest('orderid')
-    
-    # Updating Transaction Details
-    transaction = Transactions()
-    transaction.orderid = obj.orderid # Recent order ID
-    transaction.amount = order.orderamount
-    transaction.transactionid = transactionid # Function Parameter
-    transaction.paymenttype = order.opaymethod
-    transaction.save()
-    
-    reward_points_total = 0 
-    # Adding Items.    
-    for item_id, item in cart_items.items():
-      oitem = Oitems()
-      oitem.orderid = obj.orderid # Recent order ID
-      oitem.catalogid = item.catalog_id
-      oitem.itemid = item.catalog_id
-      oitem.orderitemid = item.catalog_id
-      oitem.itemname = item.item_name
-      oitem.numitems = item.quantity
-      
-      reward_points_total += item.reward_points * item.quantity
-
-      if item.onsale > 0:
-        oitem.unitprice = item.saleprice
-      else:
-        oitem.unitprice = item.price
-        
-      oitem.save()
-      
-      # Calculating Rewards and Adding to the customer_rewards tables
-      customer_reward = CustomerRewards()
-      customer_reward.contactid = customer.contactid
-      customer_reward.orderid = obj.orderid
-      customer_reward.points = reward_points_total
-      customer_reward.datetime = datetime.datetime.now()
-      customer_reward.giftcertid = 0
-      
-      customer_reward.save()
-      
-      if "ShippingMethod" in request.session:
-        shipping_method_hash = request.session['ShippingMethod']
-        for key, value in shipping_method_hash.items():
-          shp_cat_id = key
-          user_inputs = value
-          for input_field, input_value in user_inputs.items():
-            shipping_tupple = Shippingtuple()
-            shipping_tupple.shippingcategoryid = shp_cat_id
-            shipping_tupple.orderid = obj.orderid
-            shipping_tupple.name =  input_field
-            shipping_tupple.stringvalue = input_value
-
-            shipping_tupple.save()
-        del request.session['ShippingMethod']
-      
-      if 'StoreCredit' in request.session:
-        cart_info = request.session['CartInfo']
-        #swf_cust_credit_obj = SwfCustomerCreditsLog.objects.filter(id = cart_info.store_credit_id)[0]
-        swf_cust_credit_obj = SwfCustomerCreditsLog()
-        swf_cust_credit_obj.customers_credit = cart_info.credits_applied
-        swf_cust_credit_obj.customers_credit_applied = datetime.datetime.now()
-        swf_cust_credit_obj.save()
-        del  request.session['CartInfo']
-        del  request.session['StoreCredit']
-        
-      
-      request.session["CartItems"]  = {}
-      
-    return obj.orderid
-
+    content['Items'] = item_list 
+    content['OtherCharges'] = other_charges
+    return render_template(request,'OrderSummary.html', content)
 
 class CheckOutCallBackViewClass(TemplateView):
 

@@ -22,6 +22,19 @@ padding: 1px;
 <div class="clr" style="line-height:20px;">
 <div class="clr pad-tb product-align1 marleft10 master-link"><a href="/">Home</a> &gt; <a class="master-link" href="/">{{catparent}} </a> &gt; <a href="/category?id={{cat.id}}">{{cat.category_name}} </a></div>
 <div class="clr">
+{%if cat.id == 2 %}
+<div class="wid100 float-right"> <table border="0" width="106" cellspacing="0" cellpadding="4" class="alternative">
+	<tbody> 
+	<tr>
+		<td align="left" colspan="2" class="btn"><!--START: RETURNMESSAGE-->
+			<a href="/reefpackages"><font color=white>BUILD YOUR OWN <br>
+   REEF PACKAGE<br>
+      Click Here</font></a><br>
+
+			<!--END: RETURNMESSAGE-->
+		</td>
+	</tr>
+</tbody></table></div>{% endif %}
 <div class="orange-txt2"> {{cat.category_name}} </div>
 </div>
  
@@ -35,11 +48,13 @@ padding: 1px;
 
 <div class="clr padtop20 padbottom20">
 <div class="clr">
-
-{% for products in cat.id|productsdisplay %}
+<table width="100%"  border="0"   cellspacing="0" cellpadding="0" class="alternative">
+{% for products in cat.id|featureddisplaynew %}
 	 {% if products.categoryspecial >= 1 %}
-		<div class="float_left orange_boxs " align="center" style="width:26% !important;min-height:266px !important;">
-		<div class="clr product_heading product-align">{{ products.name }}</div>
+{% if forloop.counter0|divisibleby:3 %}<tr>{% endif %}<td style="width:22% !important;min-height:266px !important;">
+	 
+		<div class="float_left orange_boxs " align="center" style="width:200px !important;min-height:265px !important;">
+		<div class="clr product_heading product-align" style="min-height:50px !important;">{{ products.name|truncatechars:50 }}</div>
 		<div class="clr product-align">{{ products.description }}</div>
 		<div class="clr pad-tb"><span class="clr "><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.thumbnail|strreplace:"assets/images/" }}' width="125" height="125" /></span></div>
 		
@@ -55,20 +70,26 @@ padding: 1px;
 				{% if products.stock >= 1 %}
 					<div class="blue-button"><a href="##"  class="pop1" id="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
 				{% else %}
-					<div class="wish-button"><a href="/addtowatchlist?itemid={{ products.catalogid }}">WISH LIST</a></div>
+					<div class="wish-button"><a href="/addtowatchlist?itemid={{ products.catalogid }}">Waiting List</a></div>
 				{% endif %}
-		<div class="hash-button"><a href="/product?pid={{ products.catalogid }}">more details...</a></div>
+		<div class="hash-button"><a href="/product?pid={{ products.catalogid }}">More details...</a></div>
 		</div>
 		</div>
+		</td>
+	{% if forloop.counter|divisibleby:3 %}</tr>{% endif %}
+
 	{% endif %}
 {% endfor %}
+</table>
 </div>
 
 <div class="clr"></div>
 </div>
 </div>
 {%endif%}
-<div align="left" class="clr wid748"><div align="center" class="blue-button-master-new">{{cat.id|productsdisplay:":yes"}} {{cat.category_name}}</div></div>
+<div align="left" class="clr wid748">{%comment%}<div align="center" class="blue-button-master-new">{{cat.id|productsdisplay:":yes"}} {{cat.category_name}}</div>{%endcomment%}
+<div class="orange-txt2"> {{cat.category_name}} (Total Items: {{cat.id|productsdisplay:":yes"}})  </div>
+</div>
 
 <div class="clr padtop20 padbottom20">
 <div class="clr">
@@ -78,7 +99,7 @@ padding: 1px;
 {% if forloop.counter0|divisibleby:3 %}<tr>{% endif %}
 <td >
 <div class="float_left blue_boxs" align="center"  style="width:200px !important;min-height:256px !important;">
-<div class="clr product_heading product-align">{{ products.name }}</div>
+<div class="clr product_heading product-align">{{ products.name|truncatechars:50 }}</div>
 <div class="clr  product-align">{{ products.description }}&nbsp;</div>
 <div class="clr pad-tb"><span class="clr "><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.thumbnail|strreplace:"assets/images/" }}' width="125" height="125" /></span></div>
 				{% if products.onsale > 0 %}
@@ -92,14 +113,14 @@ padding: 1px;
 					<div class="blue-button"><a href="##"  class="pop1" id="/addtocart?item_id={{ products.catalogid }}" >Add to Tank</a></div>
 				{% else %}
 						{% if request.session.IsLogin %}
-							<div class="wish-button "><a href="##" id="/addtowatchlist?itemid={{products.catalogid}}&name=" class="pop1">WISH LIST</a></div>
+							<div class="wish-button "><a href="##" id="/addtowatchlist?itemid={{products.catalogid}}&name=" class="pop1">Waiting List</a></div>
 						{% else %}
-							<div class="wish-button"><a  href="##" id="/waitpopup?itemid={{ products.catalogid }}" class="pop1">WISH LIST</a></div>
+							<div class="wish-button"><a  href="##" id="/waitpopup?itemid={{ products.catalogid }}" class="pop1">Waiting List</a></div>
 							 
 						{% endif %}
 					
 				{% endif %}
- <div class="hash-button"><a href="/product?pid={{ products.catalogid }}">more details...</a></div>
+ <div class="hash-button"><a href="/product?pid={{ products.catalogid }}">More details...</a></div>
 </div>
 </div>
 </td>

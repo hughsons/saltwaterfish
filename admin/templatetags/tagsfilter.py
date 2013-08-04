@@ -7,7 +7,12 @@ import logging
 register = template.Library()
 
 
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
+
+def now_str():
+    """Return hh:mm:ss string representation of the current time."""
+    t = datetime.now().time()
+    return t.strftime("%H:%M:%S")
 
 def GetParentCategory(category_id):
     #SELECT category_name, category_parent from category where id = 4
@@ -191,12 +196,12 @@ def categoriesdisplay(parent):
 
 @register.filter("productsdisplay")
 def productsdisplay(category,count="",noi=""):
-    logging.info('field name:: %s',category)
+    logging.info('Category ID:: %s',category)
     noi = noi if noi !="" else 12
     try:
         if count =="":
             if category != '':
-                result = Products.objects.raw('select products.catalogid,products.name,products.onsale,products.saleprice,products.price,products.description,products.stock from product_category,products where product_category.catalogid=products.catalogid and hide=0 and categoryid = %s',category)
+                result = Products.objects.raw("select products.catalogid,products.name,products.onsale,products.saleprice,products.price,products.description,products.stock from product_category,products where product_category.catalogid=products.catalogid and hide=0 and categoryid = "+str(category)+" order by stock DESC, products.name asc")
             else:
                 result = Products.objects.all()
         else:
@@ -227,6 +232,36 @@ def featureddisplay(category,count="",noi=""):
                     pcats = pcats[:-2]+''
                     logging.info('Category_Products:: %s',pcats)
                     result = Products.objects.raw('select products.catalogid,products.name,products.onsale,products.saleprice,products.price,products.description,products.stock from product_category,products where product_category.catalogid=products.catalogid and products.categoryspecial=1 and hide=0 and categoryid in ('+pcats+') ORDER BY RAND()')[:noi]
+            else:
+                result = Products.objects.all()
+        else:
+            result = Products.objects.raw('select products.catalogid,products.name,products.onsale,products.saleprice,products.price,products.description,products.stock from product_category,products where product_category.catalogid=products.catalogid  and hide=0 and categoryid = %s ORDER BY RAND()',category)
+            result = sum(1 for result in result)
+            logging.info('count:: %s',result)
+    except Exception as e:
+        result = e
+        logging.info('LoginfoMessage:: %s',e)
+    return result
+
+@register.filter("featureddisplaynew")
+def featureddisplaynew(category,count="",noi=""):
+    logging.info('Category name:: %s',category)
+    noi = noi if noi !="" else 3
+    try:
+        if count == "":
+            if category != '':
+                catparent = Category.objects.all().filter(id = category, category_parent=1).count()
+                logging.info('Category_Parent:: %s',catparent)
+                if catparent ==0:
+                    result = Products.objects.raw('select products.catalogid,products.name,products.onsale,products.saleprice,products.price,products.description,products.stock from product_category,products where product_category.catalogid=products.catalogid and products.categoryspecial=1 and hide=0 and categoryid = %s',category)
+                else:
+                    product_category = Category.objects.all().filter(category_parent = catparent, hide=0)
+                    pcats =""
+                    for pwcats in product_category:
+                        pcats += str(pwcats.id)+", "
+                    pcats = pcats[:-2]+''
+                    logging.info('Category_Products:: %s',pcats)
+                    result = Products.objects.raw('select products.catalogid,products.name,products.onsale,products.saleprice,products.price,products.description,products.stock from product_category,products where product_category.catalogid=products.catalogid and products.categoryspecial=1 and hide=0 and categoryid in ('+pcats+') ORDER BY RAND()')
             else:
                 result = Products.objects.all()
         else:
@@ -378,4 +413,38 @@ def relatedpitems(pid,count=""):
     except Exception as e:
         result = e
         logging.info('LoginfoMessage:: %s',e)
+    return result
+
+@register.filter("ftrackingcode")
+def ftrackingcode(objid):
+    result=""
+    try:
+        results = OrdersShipments.objects.raw('select id,orderid,trackingcode from orders_shipments where orderid = %s',objid)
+        for prods in results:
+            result=prods.trackingcode
+        logging.info('result:: %s',result)
+        result = result
+        
+    except Exception as e:
+        result = e
+        logging.info('LoginfoMessage:: %s',e)
+    return result
+
+@register.filter("selectrmaoitems")
+def selectrmaoitems(objid):
+    logging.info('Check RMA for product :: %s',objid)
+    result= ""
+    try:
+        if objid != '':
+            results = Rma.objects.raw("select idRma, idrma, orderid, rmadate from rma where orderid=%s",objid)
+            for prods in results:
+                result=prods.idrma
+                logging.info('result:: %s',result)
+            result = result
+        else:
+            result = Rma.objects.all()
+    except Exception as e:
+        result = e
+        logging.info('LoginfoMessage:: %s',e)
+    logging.info('filter tag result:: %s',result)
     return result

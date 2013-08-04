@@ -49,9 +49,21 @@ $(document).ready(function(){
 <div class="float-left wid725">
   <div class="clr">
     <div class="clr pad-tb reef_package_link"><a href="#">Home</a> &gt; <a href="#">Search</a> &gt; <a href="#">Create A Reef Package</a> </div>
-    <div class="clr blue_heading1 reef_package_link">Create A Reef Package - No Additional Shipping Cost </div>
+    <div class="clr blue_heading1 reef_package_link float-left wid400">Create A Reef Package - No Additional Shipping Cost </div><div class="wid100 float-right"> <table border="0" width="450" cellspacing="0" cellpadding="4" class="alternative">
+	<tbody> 
+	<tr>
+		<td align="left" colspan="2" class="btn"><!--START: RETURNMESSAGE-->
+			<a href="/reefpackages"><font color=white>BUILD YOUR OWN <br>
+   REEF PACKAGE<br>
+      Click Here</font></a><br>
+
+			<!--END: RETURNMESSAGE-->
+		</td>
+	</tr>
+</tbody></table></div>
     <div class="clr pad-tb reef_package_link">
       <p>Add the items to your Tank from the list below with $75.00 or more worth and we'll ship them to you at no additional shipping charge. When you select the item and the quantity the page will automatically totalize your order.   You can place any items on this page into the yourReef Package and add other items after you have exceeded he minimum quota. *Shipping charges will still be assessed to any other items ordered. You can not use items not on this page to fulfill your minimum quota of $75. </p>
+	 
     </div>
     <form method="post" action="AddReefPackages" name="formsss" id="formsss">
       {% csrf_token %}

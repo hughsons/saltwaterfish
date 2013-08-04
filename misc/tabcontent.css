@@ -67,7 +67,7 @@ ul.tabs li.selected a:hover
 div.tabcontent
 {
 	display: block;
-	font-family: "PT Sans";
+	font-family:Arial, Helvetica, sans-serif;
 	font-size: 13px;
 	line-height: normal;
 	font-weight: normal;

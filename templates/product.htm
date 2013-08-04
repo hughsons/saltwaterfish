@@ -126,9 +126,11 @@ width: auto;
    <span class="tag-txt">{{products.description}}</span></div>
 <div class="clr padtop21">
 <div class="float-left pwid3">
-<div class="clr" id="image1hid"><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.image1|strreplace:"assets/images/" }}' width="302" height="297" border="0" /></div>
-<div class="clr" id="image2hid" style="display:none"><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.image2|strreplace:"assets/images/" }}' width="302" height="297" border="0" /></div>
-<div class="clr" id="image3hid" style="display:none"><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.image3|strreplace:"assets/images/" }}' width="302" height="297" border="0" /></div>
+<div class="clr" id="image1hid"><a href="#" id='fullimage?itemid=http://commondatastorage.googleapis.com/swf_product_images/{{ products.image1|strreplace:"assets/images/" }}' class="pop1"><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.image1|strreplace:"assets/images/" }}'   border="0" width="302" /></a></div>
+
+<div class="clr" id="image2hid" style="display:none"><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.image2|strreplace:"assets/images/" }}' width="302"   border="0" /></div>
+
+<div class="clr" id="image3hid" style="display:none"><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.image3|strreplace:"assets/images/" }}' width="302"   border="0" /></div>
 
 <div class="clr martop16">
 
@@ -194,7 +196,7 @@ width: auto;
 Orders Over <span class="marine">$199.99</span> <br />
 
 and Florida Locations</div>
-<div class="clr padtop5 padbottom5 more">more details</div>
+<div class="clr padtop5 padbottom5 more"><a href="/pages?pageid=45" target=blank>more details</a></div>
 </div>
 
 </div>
@@ -244,40 +246,16 @@ and Florida Locations</div>
 
 </div>
 {%endcomment%}
+{%if products.extra_field_7|length > 25 %}
 <div class="orange-txt1 clr padtop20 padbottom20 product-align">Tank Stats </div>
-<div class="clr">
+
 <div class="clr quest " align=left>
+{{products.extra_field_7|length}}
 {{products.extra_field_7|safe}}
-{%comment%}
-<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
-  <tr>
-    <td class="details height25 product-align1 valign-top"><span class="quest">Size:</span> {{products.extra_field_3}}</td>
-    <td class="height25 product-align1 valign-top">&nbsp;</td>
-    <td class="details height25 product-align1 valign-top"><span class="quest">Origin:</span> Hawaii</td>
-  </tr>
-  <tr>
-    <td class="details height25 product-align1 valign-top"><span class="quest">Care Level:</span> Easy</td>
-    <td class="height25 product-align1 valign-top">&nbsp;</td>
-    <td class="details height25 product-align1 valign-top"><span class="quest">Acclimation Time:</span> 2+ hours</td>
-  </tr>
-  <tr>
-    <td class="details height25 product-align1 valign-top"><span class="quest">Temperament:</span> Bold</td>
-    <td class="height25 product-align1 valign-top">&nbsp;</td>
-    <td class="details height25 product-align1 valign-top"><span class="quest">Coral Safe:</span></td>
-  </tr>
-  <tr>
-    <td class="details height25 product-align1 valign-top"><span class="quest">Reef Safe:</span> Yes</td>
-    <td class="height25 product-align1 valign-top">&nbsp;</td>
-    <td class="details height25 product-align1 valign-top"><span class="quest">Invertabrate Safe:</span></td>
-  </tr>
-  <tr>
-    <td class="details height25 product-align1 valign-top"><span class="quest">Diet:</span> Greens, Flake, Pellet</td>
-    <td class="height25 product-align1 valign-top">&nbsp;</td>
-    <td class="details height25 product-align1 valign-top"><span class="quest">Minimum Tank Size:</span></td>
-  </tr>
-</table>
-{%endcomment%}
+ 
 </div>
+{%endif%}
+<div class="clr">
 <div class="clr">
 <div class="float-left padleft15 padtop20"><a href="#" id="/emailfriendpopup?itemid={{ products.catalogid }}" class="pop2"><img src="misc/images/emailafriend.jpg" width="150" height="30" border="0" /></a></div>
 <div class="float-right padtop20" ><a href="#" id="/waitpopup?itemid={{ products.catalogid }}" class="pop1"><img src="misc/images/addtowishlist.jpg" width="160" height="30" border="0" /></a></div>
@@ -285,7 +263,7 @@ and Florida Locations</div>
 <div class="clr padtop20">
 <div class="float-left pwid10">
 <div class="float-left padleft15"><img src="misc/images/star.jpg" width="20" height="20" border="0" /></div>
-<div class="free-shipping1 float-left padleft7"><a href="#" id="/waitpopup?itemid={{ products.catalogid }}" class="pop3">Write a review</a></div>
+<div class="free-shipping1 float-left padleft7"><a href="#" id="/writereviewpopup?itemid={{ products.catalogid }}" class="pop3">Write a review</a></div>
 </div>
 <div class="float-right"><img src="misc/images/share-button.jpg" width="161" height="22" border="0" /></div>
 </div>

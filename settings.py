@@ -35,6 +35,7 @@ else:
             #'NAME': 'saltwaterfish',
         }
     }
+
 SETTINGS_MODE='prod' 
 SECRET_KEY = '=r-$b*8hglm+858&9t043hlm6-&6-3d3vfc4((7yd0dbrakhvi'
 #SETTINGS_MODE='prod' python manage.py syncdb
@@ -131,7 +132,7 @@ PAYPAL_DEBUG = True # Change it to False in Product for using Paypal Live URLs
 
 
 
-SESSION_COOKIE_AGE = 3000
+SESSION_COOKIE_AGE = 4000
 PAYPAL_URL  = 'https://www.sandbox.paypal.com/us/cgi-bin/webscr'
 PAYPAL_MERCHANT_EMAIL = 'swfmerchant@expertsden.com'
 if(os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine')):

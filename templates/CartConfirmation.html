@@ -1,10 +1,14 @@
  
 {% block content %}
 {% load tagsfilter %}
- 
+ <script language="javascript" type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
 <script type="text/javascript" src="/misc/js/jcarousellite_1.0.1.pack.js"></script>
 <script type="text/javascript">
-	 
+$(window).load(function() {  document.getElementById("hideAll").style.display = "none"; });
+$(document).ready(function(){	
+	$('#page_effect').fadeIn(2000);
+});
 $(function() {
     $(".anyClass").jCarouselLite({
         btnNext: ".next",
@@ -14,6 +18,7 @@ $(function() {
 });
 	 
 </script>
+ 
 <link type="text/css" rel="stylesheet" href="/misc/css/style.css" />
 <link type="text/css" rel="stylesheet" href="/misc/css3/style.css" />
 <style type="text/css">
@@ -31,6 +36,9 @@ $(function() {
 }
  .wid270 {
     width: 140px !important;
+}
+.anyClass {
+    width: 640px !important;
 }
 .wid240 {
     width: 140px !important;
@@ -153,8 +161,9 @@ $(function() {
 		background:url("/misc/images/btn_next.gif") no-repeat 0 0;	
 		}	
 </style>
-<div class="float-left width4">&nbsp;&nbsp;</div>
-<div class="float-left wid748" style="width:712px !important;">
+<body style="display:none" onload="unhideBody()">
+<div id="page_effect" style="display:none;">
+ <div class="float-left wid748" style="width:712px !important;">
 {% if error_message %}
 <div class='alert-danger alert-error' style='width:300px;'><button data-dismiss='alert' class='close' type='button'>*</button><h5>Error! {{error_message}}</h5></div>
 {% endif %}
@@ -205,13 +214,15 @@ Your Cart Contains {{ItemCount}} items<br />
 {% for items in relateditems %}
 	<li>
 	<div class="clr">
-	<div class="clr" style="min-height:50px;"><span class="product_heading">{{items.name}}</span><br>{{items.extra_field_3}}</div>
+	<div class="clr" style="min-height:50px;"><span class="product_heading">{{items.name|truncatechars:50}}</span>
+	<br>{{items.extra_field_3|truncatechars:30}}</div>
 	<div class="clr padtop15">
 	<div class="float_left"><img width="78" border="0" height="86" src='http://commondatastorage.googleapis.com/swf_product_images/{{  items.thumbnail|strreplace:"assets/images/" }}'></div>
 	<div class="float_right ">
 	<div class="price-final">${% if items.onsale > 0 %}{{items.saleprice|floatformat:2}}{% else %}{{items.price|floatformat:2}} 
 				{% endif %}</div>
-	<div class="clr"><a href="/addtocart?item_id={{ items.catalogid }}"><img border="0" src="misc/images/add_tant.png"></a></div>
+<div class="hash-button"><a href="/product?pid={{ items.catalogid }}">More Details..</a></div>
+	<!--<div class="clr"><a href="/addtocart?item_id={{ items.catalogid }}"><img border="0" src="misc/images/add_tant.png"></a></div>-->
 	</div>
 	</div>
 	<div class="clr">&nbsp;</div>
@@ -272,4 +283,5 @@ Your Cart Contains {{ItemCount}} items<br />
 <div class="float-left wid10"></div>
 
 </div>
+</body>
 {% endblock content %}

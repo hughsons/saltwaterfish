@@ -59,7 +59,7 @@
 <div class="clr">
 <div class="float-left wid103">
 <div class="float-left"><img src="misc/images/print1.jpg" /></div>
-<div class="float-right"><span><a href="#">Print version</a></span></div>
+<div class="float-right"><span><a href="#" id="/printorder?oid={{ item.orderid }}" class="pop1">Print version</a></span></div>
 </div>
 <div class="float-right wid160"><div class="float-left"><img src="misc/images/arro.jpg" /></div>
 <div class="float-right"><span><a href="/orderstatus">Click here to go back</a></span></div>
@@ -68,7 +68,7 @@
 </div>
 <div class="clr height10">&nbsp;</div>
 <div class="clr bod-bg1"></div>
-<div class="clr myaccount_txt2" align="center">Order {{item.invoicenum_prefix}}{{item.invoicenum}} {% if item.order_status == 4 %} <span style="float:right;">(<a href="/addrma?oid={{item.orderid}}">Add New Guarantee Request</a>)</span>{%endif%}</div>
+<div class="clr myaccount_txt2" align="center">Order {{item.invoicenum_prefix}}{{item.invoicenum}} </div>
 
 <div class="clr bod-bg1"></div>
 <div class="clr">
@@ -125,21 +125,30 @@ Fort Pierce, FL 34946</div></div></div>
 <div class="clr bod-title3"><strong>Shipping</strong>&nbsp;:&nbsp;{{item.oshipmethod}}<br />
   <br />
 
-{%comment%}
-    <strong>Tracking Number</strong>&nbsp;:&nbsp;413421878179<br />
+ 
+    <strong>Tracking Number</strong>&nbsp;:&nbsp;{{item.trackingcode}}<br />
 <br />
 
 
-<strong>Shipped on</strong>&nbsp;:&nbsp;03/18/2013<br />
+<strong>Shipped on</strong>&nbsp;:&nbsp;{{item.oshippeddate}}<br />
 <br />
 
 
-<strong>Payment Type&nbsp;</strong>: Testing - Nothing Will Ship<br />
-{%endcomment%}
+<strong>Payment Type&nbsp;</strong>: {{paymenttype.payment_description}}<br />
+<br />
+
+
+<strong>Discount(s)</strong>: 
+{% for item in discountpoints %}
+${{item.discount_amount|floatformat:"2"}}
+{% endfor %}
+<br />
+ 
 </div>
 {% if alloiitems|length > 0 %}
 <div class="clr">&nbsp;</div>
 <div class="float-left rightcontent-latest3">
+{% if item.order_status == 4 %} <span style="float:right;">(<a href="/addrma?oid={{item.orderid}}">Add New Guarantee Request</a>)</span>{%endif%}
 <table width="750" border="0" cellpadding="3" cellspacing="1" bgcolor="#EFEFEF" style="color: #434343 !important;font-size: 12px !important;">
   <tr style='background-image: url("/misc/images/content_menu.jpg");height: 31px;'>
      <td width="100"><b>Item ID</b></td>
@@ -157,33 +166,37 @@ Fort Pierce, FL 34946</div></div></div>
 	<td>${{item.numitems|multiplyval:item.unitprice|floatformat:"2"}}</td>
 	</tr>
 {% endfor %}
+<tr bgcolor="#FFFFFF"><td colspan=5><table width="740" bgcolor="#EFEFEF" cellpadding="3" cellspacing="1"  style="color: #434343 !important;font-size: 12px !important;">
+<tr bgcolor="#FFFFFF"><td rowspan=6 width=555><b>Order Comments:</b><br>{{item.ocomment}}</td></tr>
 	<tr bgcolor="#FFFFFF" > 
-	<td colspan=3></td>
-	<td><strong>Subtotal:</strong></td>
-	<td>${{totalamt|floatformat:"2"}}</td>
+	 
+	<td width="100"><strong>Subtotal:</strong></td>
+	<td width="100">${{totalamt|floatformat:"2"}}</td>
 	</tr>
  
 	<tr bgcolor="#FFFFFF" > 
-	<td colspan=3></td>
+	 
 	<td><strong>Discount(s):</strong></td>
 	<td>${{item.coupondiscount|floatformat:"2"}}</td>
 	</tr>
-	<tr bgcolor="#FFFFFF" ><td colspan=3></td>
+	<tr bgcolor="#FFFFFF" > 
 	<td><strong>Taxes:</strong></td>
 	<td>${{item.otax}}</td>
 	</tr>
-	<tr bgcolor="#FFFFFF" ><td colspan=3></td>
+	<tr bgcolor="#FFFFFF" > 
 	<td><strong>Shipping:</strong></td>
 	<td>${{item.oshipcost|floatformat:"2"}}</td>
 	</tr>
-	<tr bgcolor="#FFFFFF" ><td colspan=3></td>
+	{%comment%}<tr bgcolor="#FFFFFF" > 
 	<td><strong>Fuel Charge:</strong></td>
 	<td>$2.99</td>
-	</tr>
-	<tr bgcolor="#FFFFFF" ><td colspan=3></td>
+	</tr>{%endcomment%}
+	<tr bgcolor="#FFFFFF" > 
 	<td><strong>Total:</strong></td>
 	<td>${{item.orderamount|floatformat:"2"}}</td>
 	</tr>
+</table>
+</td></tr>
 </table>
 <div>
  
@@ -192,7 +205,18 @@ Fort Pierce, FL 34946</div></div></div>
  
 </div>
 </div>
-{%endif%}
+{%endif%}<br>&nbsp;
+<table width="750" border="0" cellpadding="3" cellspacing="1" bgcolor="#EFEFEF" style="color: #434343 !important;font-size: 12px !important;">
+  <tr style='background-image: url("/misc/images/content_menu.jpg");height: 31px;'>
+     <td><b>Reward Points</b></td>
+     
+	
+  </tr>
+<tr bgcolor="#FFFFFF">
+<td valign="top" align="left" colspan="8"><b>Points rewarded:</b> {{rewardpoints.points__sum}}   <!--START: rwdPointsDetailsLink-->[<a href="/myreefs">view points details</a>]					
+					</td>
+</tr></table>
+
 <div class="clr">
  <div class="clr dot">&nbsp;</div>
  <div class="clr myaccount_txt1">Guarantee Request Service</div>

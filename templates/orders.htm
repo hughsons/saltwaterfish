@@ -25,12 +25,35 @@
 	<tr bgcolor="#FFFFFF"><td align=left>{{item.date_started|date:"m/j/Y"}}</td> <td><a href="/orderinfo?oid={{item.orderid}}">{{item.invoicenum_prefix}}{{item.invoicenum}} </td><td>${{item.orderamount|floatformat:"2"}}</a></td><td>
 	{% for linkitem in order_links %}
 		{% if item.order_status == linkitem.id %}
-			{{linkitem.statustext}}
+			{{linkitem.statustext}} 
+		
 		{%endif%}
+
 	{% endfor %}
-	</td><td><a href="/orderinfo?oid={{item.orderid}}">View order</a></td></tr>
+	{% if item.order_status == 4 %}
+			{{item.orderid|ftrackingcode}} 
+		
+	{%endif%}
+	</td><td>
+	{% if item.orderid|selectrmaoitems != "" %}<a href="/rmarequest?crmid={{item.orderid|selectrmaoitems}}">View RMA</a>
+	{%else%}
+	{% if item.order_status == 4 %}
+			<a href="/addrma?oid={{item.orderid}}">Add New Guarantee Request</a>
+	{%else%}
+	<a href="/orderinfo?oid={{item.orderid}}">View Order</a>
+	{%endif%}
+	
+	{%endif%} </td></tr>
 {% endfor %}
 </table>
+{%else%}
+<table width="90%" border="0" cellpadding="3" cellspacing="1" bgcolor="#EFEFEF">
+				<tbody><tr>
+					 
+					<td class="checkout-headers">My Last Orders 0 (30 days)  <a href="/ordertracking?viewall=all">View All</a></td>
+				</tr>
+			</tbody></table>
+
 {% endif %}
 
  

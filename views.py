@@ -18,6 +18,7 @@ from models import *
 from django.db.models import Count, Min, Sum, Max, Avg
 from django.db import connection
 import random, logging, datetime, json, functools
+from datetime import datetime, timedelta
 from functools import wraps
 from django.core.context_processors import csrf
 from google.appengine.api import memcache
@@ -207,6 +208,15 @@ class ViewCategoryClass(TemplateView):
         content.update(leftwidget(request))
         return render_template(request, "category.htm", content)
 
+class SubCategoryIndexClass(TemplateView):
+    def get(self, request, *args, **kwargs):
+        scat = request.GET['scat'] if 'scat' in request.GET else 15
+        category = Category.objects.get(id=scat)
+        content = {'page_title': category.category_name,'cat': category,'scat': scat,'catparent':category.category_name,}
+        content.update(leftwidget(request))
+        return render_template(request, "subcat.htm", content)
+
+
 class ViewCategoryOnSaleClass(TemplateView):
     def get(self, request, *args, **kwargs):
         cat = request.GET['id'] if 'id' in request.GET else 3
@@ -220,7 +230,7 @@ class ViewCategoryOnSaleClass(TemplateView):
         try:
             prods = Products.objects.raw('''select * from product_category,products
                                          where product_category.catalogid=products.catalogid and hide=0 and categoryspecial=0 and
-                                         product_category.categoryid =%s order by name''',cat)
+                                         product_category.categoryid =%s order by stock DESC, name''',cat)
         except Exception as e:
             logging.info('Product Fetch Error:: %s',e)
         content = {'title': "Quick List",'catparent':category_name,
@@ -472,8 +482,13 @@ class EditRequestFormClass(LoginRequiredMixin,TemplateView):
 
 class MyOrdersViewClass(LoginRequiredMixin,TemplateView):
     def get(self, request, *args, **kwargs):
+        viewall = request.GET['viewall'] if 'viewall' in request.GET else ""
+        last_month = datetime.today() - timedelta(days=30)
         order_status_links = OrderStatus.objects.all().filter(visible='1')
-        product_list = Orders.objects.filter(ocustomerid=request.session['Customer'].contactid).order_by('-orderid')
+        if viewall != "all":
+            product_list = Orders.objects.filter(ocustomerid=request.session['Customer'].contactid, odate__gte=last_month).order_by('-orderid')
+        else:
+            product_list = Orders.objects.filter(ocustomerid=request.session['Customer'].contactid).order_by('-orderid')
         content = {'page_title': "My Orders",'order_links':order_status_links,'product_list':product_list,}
         content.update(leftwidget(request))
         return render_template(request, 'orders.htm', content)
@@ -533,6 +548,22 @@ class WaitingPopupViewClass(TemplateView):
         content.update(leftwidget(request))
         return render_template(request, 'waitinglist_popup.htm', content)
 
+class WriteReviewPopupViewClass(TemplateView):
+    def get(self, request, *args, **kwargs):
+        product_list = Products.objects.all().get(catalogid=request.GET['itemid'])
+        content = {'page_title': "My Support Requests","products":product_list}
+        content.update(leftwidget(request))
+        return render_template(request, 'writereview_popup.htm', content)
+
+
+class FullImagePopupViewClass(TemplateView):
+    def get(self, request, *args, **kwargs):
+        #product_list = Products.objects.all().get(catalogid=request.GET['itemid'])
+        content = {'page_title': "Full Image","image":request.GET['itemid']}
+        content.update(leftwidget(request))
+        return render_template(request, 'fullimage_popup.htm', content)
+
+
 class EmailFriendPopupViewClass(TemplateView):
     def get(self, request, *args, **kwargs):
         product_list = Products.objects.all().get(catalogid=request.GET['itemid'])
@@ -550,7 +581,7 @@ class ReefPackageViewClass(TemplateView):
     def get(self, request, *args, **kwargs):
         content = {'title': "Quick List",}
         content.update(leftwidget(request))
-        return render_template(request, "reefpackage.htm", content)
+        return render_template(request, "buildreef.htm", content)
 
 class ProductInfoViewClass(TemplateView):
     def get(self, request, *args, **kwargs):
@@ -632,11 +663,37 @@ class OrderInfoViewClass(LoginRequiredMixin,TemplateView):
           
         #totalamt = Oitems.objects.filter(orderid=oid).aggregate(Sum('unitprice'))
         rmaitems = Rma.objects.all().filter(orderid=oid)
-        content = {'page_title': 'Orders Page',"item":product_list,'alloiitems':alloiitems,
-                   'totalamt':totalamt,'rmaitems':rmaitems,}
+        paymenttype= OnlinePayments.objects.get(id=product_list.opaymethod)
+        rewardpoints = CustomerRewards.objects.filter(contactid=request.session['Customer'].contactid, orderid=oid).aggregate(Sum('points'))
+        discountpoints = OrderDiscounts.objects.filter(orderid=oid)
+        content = {'page_title': 'Orders Page',"item":product_list,'alloiitems':alloiitems,"discountpoints":discountpoints,
+                   'totalamt':totalamt,'rmaitems':rmaitems,'paymenttype':paymenttype,"rewardpoints":rewardpoints}
         content.update(leftwidget(request))
         logging.info('Fetch Ended ::  %s', now_str())
         return render_template(request, 'orderinfo.htm', content)
+
+class PrintOrderInfoViewClass(LoginRequiredMixin,TemplateView):
+    def get(self, request, *args, **kwargs):
+        logging.info('Fetch Started::  %s', now_str())
+        oid = request.GET['oid']
+        product_list = Orders.objects.get(orderid=oid,
+                                          ocustomerid = request.session['Customer'].contactid)
+        alloiitems = Oitems.objects.all().filter(orderid=oid)
+        totalamt = 0.0
+        for item in alloiitems:
+          totalamt += float(item.numitems) * float(item.unitprice)
+          
+        #totalamt = Oitems.objects.filter(orderid=oid).aggregate(Sum('unitprice'))
+        rmaitems = Rma.objects.all().filter(orderid=oid)
+        paymenttype= OnlinePayments.objects.get(id=product_list.opaymethod)
+        rewardpoints = CustomerRewards.objects.filter(contactid=request.session['Customer'].contactid, orderid=oid).aggregate(Sum('points'))
+        discountpoints = OrderDiscounts.objects.filter(orderid=oid)
+        content = {'page_title': 'Orders Page',"item":product_list,'alloiitems':alloiitems,"discountpoints":discountpoints,
+                   'totalamt':totalamt,'rmaitems':rmaitems,'paymenttype':paymenttype,"rewardpoints":rewardpoints}
+        content.update(leftwidget(request))
+        logging.info('Fetch Ended ::  %s', now_str())
+        return render_template(request, 'printorder.htm', content)
+
 
 class RMARequestViewClass(TemplateView):
     def get(self, request, *args, **kwargs):
@@ -804,6 +861,16 @@ class SearchViewClass(TemplateView):
         content.update(leftwidget(request))
         return render_template(request, 'search.htm', content)
         return HttpResponse(bucket_list)        
+
+class ViewRedeemProductsClass(TemplateView):
+    def get(self, request, *args, **kwargs):
+        cat = request.GET['id'] if 'id' in request.GET else 3
+        category = Products.objects.all().filter(reward_redeem__gt=1)
+        categoryid, category_name, parent_id = BreadParentCategory(cat)
+        content = {'title': "Redeem Rewards List",'catparent':category_name,
+                   'cat': category,}
+        content.update(leftwidget(request))
+        return render_template(request, "redeemproducts.htm", content)
 
 #======================================================================
 class CartItems(object):

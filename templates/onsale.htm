@@ -3,26 +3,8 @@
  
  
  <link type="text/css" rel="stylesheet" href="/misc/category.css" />
+<link type="text/css" rel="stylesheet" href="/misc/style_new.css" />
 
- <script language="javascript" type="text/javascript" src="/misc/js/imagetooltip.js"></script>
- <script language="javascript" type="text/javascript" src="/misc/js/jquery.bpopup.min.js"></script>
- <link type="text/css" rel="stylesheet" href="/misc/style_new.css" />
-<script type="text/javascript">
-	;(function($) {
-         $(function() {
-            $('.pop1').bind('click', function(e) {
-                e.preventDefault();
-				var a_href = $(this).attr('id');
-				$("#contentss").load(a_href);
-                $('#popup').bPopup({
-				});
-			});
-			 
-        });
-
-    })(jQuery);
-
-</script>
 {% load tagsfilter %} 
 <div class="float-left wid20">&nbsp;&nbsp;</div>
 <div class="float-left wid725">
@@ -46,8 +28,8 @@
 {% if forloop.counter0|divisibleby:3 %}<tr>{% endif %}
 <td >
 <div class="float_left blue_boxs" align="center"  style="width:200px !important;min-height:256px !important;">
-<div class="clr product_heading product-align">{{ products.name }}</div>
-<div class="clr  product-align">{{ products.description }}&nbsp;</div>
+<div class="clr product_heading product-align" style="min-height:45px !important;">{{ products.name|truncatechars:50 }}</div>
+<div class="clr  product-align" style="min-height:15px !important;">{{ products.description }}&nbsp;</div>
 <div class="clr pad-tb"><span class="clr "><img src='http://commondatastorage.googleapis.com/swf_product_images/{{ products.thumbnail|strreplace:"assets/images/" }}' width="125" height="125" /></span></div>
 				{% if products.onsale > 0 %}
 					<div class="clr " style="font-size:13px !important;"><strong>Sale:&nbsp;</strong><span class="line-through">${{products.price|floatformat:2}}&nbsp;</span><strong class="orange_text">&nbsp;${{products.saleprice|floatformat:2}}</strong><img src="/misc/images/quick-sale-img.png" width="33" height="21" border="0"  /></div>
@@ -59,7 +41,7 @@
 				{% if products.stock >= 1 %}
 					<div class="blue-button"><a href="##"  class="pop1" id="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
 				{% else %}
-					<div class="wish-button"><a href="/addtowatchlist?itemid={{ products.catalogid }}">WISH LIST</a></div>
+					<div class="wish-button"><a href="##" id="/addtowatchlist?itemid={{ products.catalogid }}" class="pop1">Waiting List</a></div>
 				{% endif %}
  <div class="hash-button"><a href="/product?pid={{ products.catalogid }}">more details...</a></div>
 </div>

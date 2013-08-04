@@ -43,7 +43,7 @@
 <li class="padtop24"><a href="/productindex"  >Product Index</a></li>
 <li><a href="/categoriesindex"  >Cateogry Index</a></li>
 <li><a href="/pages?pageid=48"  >Acclimation Video</a></li>
-<li><a href="http://forums.saltwaterfish.com/f/"  target=blank>Forum</a></li>
+<li><a href="http://forums.saltwaterfish.com/"  target=blank>Forum</a></li>
 
 </ul>
 </div>
@@ -81,6 +81,7 @@ Copyright 2013 Saltwaterfish.com  All Rights Reserved</div>
 </div>
 </div>
 </div>
+<script type="text/javascript" src="/misc/js/jcarousellite_1.0.1.pack.js"></script>
  <script language="javascript" type="text/javascript" src="/misc/js/jquery.bpopup.min.js"></script>
  
 <script type="text/javascript">
@@ -89,7 +90,16 @@ Copyright 2013 Saltwaterfish.com  All Rights Reserved</div>
             $('.pop1').bind('click', function(e) {
                 e.preventDefault();
 				var a_href = $(this).attr('id');
-				$("#contentss").load(a_href);
+				var conlen = $('#contentss').text().length
+				 if(conlen>100){
+					$('#contentss').empty();
+					$('#contentss').html('<img src="misc/images/ajax_loader.gif">');
+                
+					$("#contentss").load(a_href);
+				}else{
+					$("#contentss").load(a_href);
+				}
+				
                 $('#popup').bPopup({
 				});
 			});
@@ -100,7 +110,7 @@ Copyright 2013 Saltwaterfish.com  All Rights Reserved</div>
 
 </script>
 
-<div id="popup" style="left: -700px; position: absolute; top: 1177px; z-index: 9999; opacity: 1; display: none;min-height:200px;">
+<div id="popup" style="left: -700px; position: absolute; top: 1007px; z-index: 9999; opacity: 1; display: none;min-height:200px;">
         
         <div id="contentss" style="height: auto; width: auto;"><img src="misc/images/ajax_loader.gif"></div>
 </div>

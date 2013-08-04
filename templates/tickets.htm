@@ -6,8 +6,8 @@
 {% load tagsfilter %}
 <div class="float-left width10">&nbsp;&nbsp;</div>
 <div class="float-left wid748 padtop5">
-<div class="clr my_account_link">Home  <span>&gt; My Account</span><span> &gt; Support Requests</span></div>
- <div class="clr my_account_link padtop20 padbottom13">My Last Support Requests <span style="float:right;" class="my_account_link"><a href="/addrequest">Add Support Request</a></span></div>
+<div class="clr my_account_link padbottom13"><span><a href="/">Home</a> &gt; <a href="/myaccount">My Account</a></span><span> &gt; Support Requests </span></div>
+ <div class="clr my_account_link padtop10 padbottom13">MY REPORT REQUESTS <span style="float:right;" class="my_account_link"><a href="/addrequest">Add Support Request</a></span></div>
 <div class="clr myaccount_bg1">
  
 {% include 'myaccount_links.htm' %}
@@ -32,7 +32,28 @@
 	<td>{% for dep in item.id|crmlastmessage %} {%if dep.sender == 1 %}Customer {%else%} Staff{% endif %} {% endfor %}</td></tr>
 {% endfor %}
 </table>
-{% endif %}
+{%else%}
+ <table width="90%" border="0" cellpadding="3" cellspacing="1" bgcolor="#EFEFEF">
+				<tbody><tr>
+					 
+					<td class="checkout-headers">My Last Support Requests (30 days)  <a href="crm.asp?action=add">Add Support Request</a></td>
+				</tr>
+			</tbody></table>
+<table width="90%" cellpadding="0" cellspacing="0" class="alternative" border="0">
+				<tbody><tr style='background-image: url("/misc/images/content_menu.jpg");height: 31px;'>
+     <td width="100"><b>Id</b></td>
+    <td width="170"><b>Dept</b></td>
+    <td width="300"><b>Subject</b></td>
+    <td width="100"><b>Status</b></td>
+	<td width="120"><b>Last Action</b></td>
+  </tr>
+				<!--START: crmMessagesDetailNoReq-->
+				<tr class="alternative">
+					<td class="item" colspan="5" align="center">No Support Requests in last 30 days</td>
+				</tr>
+				<!--END: crmMessagesDetailNoReq-->
+				<!--START: crmMessagesDetail--><!--END: crmMessagesDetail-->
+			</tbody></table>{% endif %}
 
  
  </div>

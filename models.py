@@ -319,6 +319,49 @@ class Oitems(models.Model):
         db_table = u'oitems'
         app_label = ''
 
+class OnlinePayments(models.Model):
+    id = models.IntegerField(primary_key=True)
+    payment_id = models.IntegerField(null=True, blank=True)
+    payment_description = models.TextField(blank=True)
+    payment_confirmation_message = models.TextField(blank=True)
+    payment_hide = models.IntegerField(null=True, blank=True)
+    payment_sort = models.IntegerField(null=True, blank=True)
+    payment_login = models.CharField(max_length=150, blank=True)
+    payment_password = models.CharField(max_length=765, blank=True)
+    payment_url = models.CharField(max_length=150, blank=True)
+    authorizeonly = models.IntegerField(null=True, blank=True)
+    lowerol = models.IntegerField(null=True, db_column='LowerOL', blank=True) # Field name made lowercase.
+    upperol = models.IntegerField(null=True, db_column='UpperOL', blank=True) # Field name made lowercase.
+    enabled = models.IntegerField(null=True, db_column='Enabled', blank=True) # Field name made lowercase.
+    usage = models.IntegerField(null=True, blank=True)
+    paymentcountry = models.CharField(max_length=150, db_column='PaymentCountry', blank=True) # Field name made lowercase.
+    paymentstate = models.CharField(max_length=150, db_column='PaymentState', blank=True) # Field name made lowercase.
+    discountgroup = models.IntegerField(null=True, blank=True)
+    payment_description_message = models.TextField(blank=True)
+    payment_status = models.IntegerField(null=True, blank=True)
+    payment_signature = models.CharField(max_length=765, blank=True)
+    testmode = models.IntegerField(null=True, blank=True)
+    class Meta:
+        db_table = u'online_payments'
+        app_label = ''
+
+class OrderDiscounts(models.Model):
+    id = models.IntegerField(primary_key=True)
+    orderid = models.IntegerField(null=True, blank=True)
+    discount_id = models.IntegerField(null=True, blank=True)
+    discount_amount = models.DecimalField(null=True, max_digits=21, decimal_places=4, blank=True)
+    discount_freeship = models.IntegerField(null=True, blank=True)
+    discount_freeprod = models.CharField(max_length=150, blank=True)
+    coupon = models.CharField(max_length=150, blank=True)
+    freeprod = models.IntegerField(null=True, blank=True)
+    giftcert = models.IntegerField(null=True, blank=True)
+    applied = models.DateTimeField(null=True, blank=True)
+    promo_amount = models.FloatField(null=True, blank=True)
+    promo_qty = models.IntegerField(null=True, blank=True)
+    class Meta:
+        db_table = u'order_discounts'
+        app_label = ''
+
 class OrderQuestions(models.Model):
     id = models.IntegerField(primary_key=True)
     questionid = models.IntegerField(null=True, blank=True)
@@ -432,6 +475,40 @@ class Orders(models.Model):
         db_table = u'orders'
         app_label = ''
         ordering = ["-odate"]
+
+class OrdersShipments(models.Model):
+    id = models.IntegerField(primary_key=True)
+    orderid = models.IntegerField(null=True, blank=True)
+    address_id = models.IntegerField(null=True, blank=True)
+    oshippeddate = models.CharField(max_length=150, blank=True)
+    oshipmethod = models.CharField(max_length=450, blank=True)
+    oshipmethodid = models.IntegerField(null=True, blank=True)
+    oshipcost = models.FloatField(null=True, blank=True)
+    trackingcode = models.CharField(max_length=300, blank=True)
+    oshipalias = models.CharField(max_length=300, blank=True)
+    oshipfirstname = models.CharField(max_length=300, blank=True)
+    oshiplastname = models.CharField(max_length=150, blank=True)
+    oshipcompany = models.CharField(max_length=600, blank=True)
+    oshipemail = models.CharField(max_length=300, blank=True)
+    oshipaddress = models.CharField(max_length=765, blank=True)
+    oshipaddress2 = models.CharField(max_length=150, blank=True)
+    oshipcity = models.CharField(max_length=150, blank=True)
+    oshipzip = models.CharField(max_length=60, blank=True)
+    oshipstate = models.CharField(max_length=150, blank=True)
+    oshipcountry = models.CharField(max_length=150, blank=True)
+    oshipphone = models.CharField(max_length=150, blank=True)
+    order_status = models.IntegerField(null=True, blank=True)
+    distributor_id = models.IntegerField(null=True, blank=True)
+    userid = models.CharField(max_length=150, blank=True)
+    last_update = models.DateTimeField(null=True, blank=True)
+    oweight = models.FloatField(null=True, blank=True)
+    oboxes = models.IntegerField(null=True, blank=True)
+    otax = models.FloatField(null=True, blank=True)
+    ointernalcomment = models.TextField(blank=True)
+    shipping_id = models.IntegerField(null=True, blank=True)
+    class Meta:
+        db_table = u'orders_shipments'
+        app_label = ''
 
 class OrderStatus(models.Model):
     id = models.IntegerField()

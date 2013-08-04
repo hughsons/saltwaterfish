@@ -3,6 +3,7 @@
  
  
  <link type="text/css" rel="stylesheet" href="/misc/category.css" />
+ {%comment%}
 <script language="javascript" type="text/javascript" src="/misc/js/imagetooltip.js"></script>
  <script language="javascript" type="text/javascript" src="/misc/js/jquery.bpopup.min.js"></script>
  
@@ -22,6 +23,7 @@
     })(jQuery);
 
 </script>
+{%endcomment%}
 <style>
  
 #popup, #popup2, .bMulti {
@@ -65,9 +67,9 @@ padding: 1px;
 					<div class="blue-button"><a href="##"  class="pop1" id="/addtocart?item_id={{ products.catalogid }}">Add to Tank</a></div>
 				{% else %}
 						{% if request.session.IsLogin %}
-							<div class="wish-button "><a href="##" id="/addtowatchlist?itemid={{products.catalogid}}&name=" class="pop1">WISH LIST</a></div>
+							<div class="wish-button "><a href="##" id="/addtowatchlist?itemid={{products.catalogid}}&name=" class="pop1">Waiting List</a></div>
 						{% else %}
-							<div class="wish-button"><a  href="##" id="/waitpopup?itemid={{ products.catalogid }}" class="pop1">WISH LIST</a></div>
+							<div class="wish-button"><a  href="##" id="/waitpopup?itemid={{ products.catalogid }}" class="pop1">Waiting List</a></div>
 							 
 						{% endif %}
 				{% endif %}

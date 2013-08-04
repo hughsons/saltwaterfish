@@ -612,8 +612,37 @@ class DeleteWishListActionClass(LoginRequiredMixin,TemplateView):
         else:
             return HttpResponseRedirect('/mywishlist?&err=Problem occured while deleting')
 
+class FreeGeneralActionClass(TemplateView):
+    def get (self, request, *args, **kwargs):
+        if "action" in request.GET and request.GET['action'] == "crreview":
+            try:
+                s = ProductReview(catalogid = request.GET['catalogid'],user_name = request.GET['user_name'], user_email=request.GET['user_email'],
+                                  user_city=request.GET['user_city'],short_review = request.GET['short_review'],long_review = request.GET['long_review'],
+                                  rating = request.GET['rating'], review_date = datetime.datetime.now(), approved="0")
+                s.save()
+                return HttpResponse('<h2>Your Review has been received. Thanks!</h2><input name="cancel" type="button" value="Close Window" class=" b-close">')
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+            return HttpResponse('<h2>Problem Occured</h2><input name="cancel" type="button" value="Close Window" class=" b-close">')
+        else:
+            return HttpResponseRedirect('/?err=Proccessing Errors')
+
 
 class GeneralActionClass(LoginRequiredMixin,TemplateView):
+    def get (self, request, *args, **kwargs):
+        if "action" in request.GET and request.GET['action'] == "crreview":
+            try:
+                s = ProductReview(catalogid = request.GET['catalogid'],user_name = request.GET['user_name'], user_email=request.GET['user_email'],
+                                  user_city=request.GET['user_city'],short_review = request.POST['short_review'],long_review = request.POST['long_review'],
+                                  rating = request.POST['rating'], review_date = datetime.datetime.now(), approved="0")
+                s.save()
+                return HttpResponse('<h2>Your Review has been received. Thanks!</h2><input name="cancel" type="button" value="Close Window" class=" b-close">')
+            except Exception, e:
+                logging.info('LoginfoMessage:: %s',e)
+            return HttpResponse('<h2>Problem Occured</h2><input name="cancel" type="button" value="Close Window" class=" b-close">')
+        else:
+            return HttpResponseRedirect('/?err=Proccessing Errors')
+        
     def post(self, request, *args, **kwargs):
         if "action" in request.POST and request.POST['action'] == "massaction":
             logging.info('status type:: %s',request.POST['status'])
@@ -696,6 +725,7 @@ class GeneralActionClass(LoginRequiredMixin,TemplateView):
             except Exception, e:
                 logging.info('LoginfoMessage:: %s',e)
                 return HttpResponseRedirect('/rmaservice?crmid='+rmaid+'&err=Form Field Errors')
+        
         elif "action" in request.POST and request.POST['action'] == "addaddressbook":
             
             try:
@@ -1501,3 +1531,68 @@ def SaveOrder(request):
       order.orderid = obj.orderid 
     return order # Returning Order Object
 
+class SetShippingActionClass(TemplateView):
+
+  def get(self, request, *args, **kwargs):
+    customer = None
+
+    if "Customer" in request.session:
+      customer = request.session['Customer']
+    else:
+      customer = customers()
+      customer.contactid = -1
+    
+
+    customer.shipping_firstname = request.GET['s_fname']
+    customer.shipping_lastname = request.GET['s_lname']
+    customer.shipping_state = request.GET['s_state']
+    request.session['Customer'] = customer
+    return HttpResponse('done')
+
+class UpdateShippingActionClass(TemplateView):
+  
+  def get(self, request, *args, **kwargs):
+    customer = None
+    if "Customer" in request.session:
+      customer = request.session['Customer']
+
+    cart_items = request.session['CartItems']
+    cart = CartInfo()
+    shipping_items = cart.GetItemsByShippingCategory(cart_items, customer, request)
+    logging.info("\n\nShipping Total: %8.2f" %cart.shipping_total)
+    #cart = request.session['CartInfo']
+    html = ''
+    pattern = re.compile("^([^0-9]+)(\d+)")
+    response = 'ok'
+    other_charges = []
+    logging.info("\n\nOrder Total %f" %cart.order_total)
+    shipping_cats_hash = request.session['ShippingMethod']
+    for input, value in request.GET.items():
+      key = ''
+      matched = pattern.search(input)
+      if matched:
+        input = matched.group(1)
+        key = int(matched.group(2))
+        if input.__contains__('OverNightShipping'):
+          overnight_shipping_value = GetPriorityShippingCharge(key)
+          cart.order_total += overnight_shipping_value
+          cart.shipping_total += overnight_shipping_value
+          other_charges.append(("%s - Over Night Shipping" %shipping_cats_hash[key].category_name, overnight_shipping_value))
+          logging.info("Adding overnight shipping")
+
+        if input.__contains__('ReqDeliveryDate'):
+          if time.strptime(value, "%m/%d/%Y").tm_wday == 5:
+            sat_delivery_value = GetSaturdayShippingCharge(key)
+            cart.order_total += sat_delivery_value
+            cart.shipping_total += sat_delivery_value
+            other_charges.append(("%s - Saturday Delivery" %shipping_cats_hash[key].category_name, sat_delivery_value))
+            logging.info("Adding Saturday Delivery")
+        
+        response = 'ok'       
+    
+    logging.info("\n\nOrder Total %f" %cart.order_total)
+    #time.sleep(5)
+    request.session['CartInfo'] = cart
+    request.session['OtherCharges'] = other_charges
+   
+    return HttpResponse(response)
