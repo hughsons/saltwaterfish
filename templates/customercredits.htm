@@ -23,29 +23,41 @@ REDEEM REEF REWARDS</font></a><br>
 	</tr>
 </tbody></table><br>&nbsp;</div> 
  {% if product_list %}
-<table width="700" border="0" cellpadding="3" cellspacing="1" bgcolor="#EFEFEF">
-  <tr style='background-image: url("/misc/images/content_menu.jpg");height: 31px;'>
-    <td width="200"><b>Date</b></td>
-    <td width="100"><b>Points</b></td>
-    <td width="400"><b>Reference</b></td>
-     
-  </tr>
-{% for item in product_list %}
-	<tr bgcolor="#FFFFFF"><td align=left>{{item.datentime}}</td> 
-	<td>{{item.points}}</td>
-	<td>
-	{% if item.reference == "" %}
-		<a href="/orderinfo?oid={{item.orderid}}"> {{item.orderid|rmaordervalues:"invoicenum_prefix"}}{{item.orderid|rmaordervalues:"invoicenum"}}
-		</a>
-	{%else%}
-		{{item.reference}}
-	{%endif%}
-	</td>
-	 
-	</tr>
-{% endfor %}
-<tr bgcolor="#ff9900;"><td align=left>Total Rewards</td><td colspan=2>{{totalrewards.points__sum}}</td></tr>
-</table>
+<table border="0" width="450" cellspacing="0" cellpadding="4" class="alternative">
+                  <tbody><tr>
+                    <td class="titles" align="center"></td>
+                    <td class="titles" align="left" width="418">Credit Amount </td>
+                  </tr>
+                  <tr>
+                    <td class="item" colspan="2">
+You currently have the following Credit/Gift Certificate(s) available to you:<br><br>SWF Credits:  <strong>$0.99</strong> &nbsp;&nbsp;&nbsp;&nbsp;Coupon Code: <strong>sc00095696peter</strong><br><br><br><br> To redeem your coupon code(s), make a Marine Life purchase and use the coupon code in the <strong>Apply Coupon</strong> area at the bottom of your shopping cart. <br><br> Thanks for your patronage!
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="left" colspan="2"><!--START: RETURNMESSAGE-->
+                      <input type="button" value="Click here to continue" class="btn" onclick="location.href='myaccount.asp';" onmouseover="this.className='btn_over'" onmouseout="this.className='btn'">
+                      <!--END: RETURNMESSAGE-->
+                    </td>
+                  </tr>
+                </tbody></table>
+{%else%}
+<table border="0" width="450" cellspacing="0" cellpadding="4" class="alternative">
+                  <tbody><tr>
+                    <td class="titles" align="center"></td>
+                    <td class="titles" align="left" width="418">Credit Amount </td>
+                  </tr>
+                  <tr>
+                    <td class="item" colspan="2">
+You currently do not have any credits outstanding with us.<br>If you feel this is an error please contact support@saltwaterfish.com
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="left" colspan="2"><!--START: RETURNMESSAGE-->
+                      <input type="button" value="Click here to continue" class="btn" onclick="location.href='/myaccount';" onmouseover="this.className='btn_over'" onmouseout="this.className='btn'">
+                      <!--END: RETURNMESSAGE-->
+                    </td>
+                  </tr>
+                </tbody></table>
 {% endif %}
  </div>
 </div>
